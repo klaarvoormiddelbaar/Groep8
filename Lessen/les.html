@@ -157,6 +157,25 @@
       pointer-events: none; z-index: 0;
       line-height: 1;
     }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+    .hero-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255,255,255,0.45); border-radius: var(--r-pill);
+      padding: 11px 24px;
+      font-family: inherit; font-size: 14px; font-weight: 700; color: white;
+      text-decoration: none; cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .hero-btn:hover { background: rgba(255,255,255,0.30); transform: translateY(-2px); }
+    .hero-btn-live {
+      background: white; border: none;
+      color: #1e4a8a;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .hero-btn-live:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.20); }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #ef4444; animation: liveDotPulse 1.6s infinite; flex-shrink: 0; }
+    @keyframes liveDotPulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(0.78); } }
 
     /* ── CONTENT GRID ── */
     .content-grid {
@@ -485,6 +504,14 @@
             <div class="hero-chips">
               <div class="hero-chip">⏱ 50–60 min</div>
               <div class="hero-chip">📋 Docentenhandleiding</div>
+            </div>
+            <div class="hero-btns">
+              <a class="hero-btn hero-btn-live" href="/quiz?les=les-${L.n}&titel=${encodeURIComponent(L.title)}" target="_blank" rel="noopener">
+                <span class="live-dot"></span> Start live quiz
+              </a>
+              <a class="hero-btn" href="/poll?les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}" target="_blank" rel="noopener">
+                🗳️ Start live poll
+              </a>
             </div>
           </div>
           <div class="hero-emoji" aria-hidden="true">${L.emoji}</div>
