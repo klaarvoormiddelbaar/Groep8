@@ -700,8 +700,11 @@
         <select class="modal-select" id="p-groep">
           <option value="8A">Groep 8A</option>
           <option value="8B">Groep 8B</option>
+          <option value="8C">Groep 8C</option>
           <option value="8">Groep 8</option>
+          <option value="anders">Anders, namelijk…</option>
         </select>
+        <input class="modal-input" id="p-groep-anders" type="text" placeholder="Vul je groepsnaam in" style="display:none;margin-top:-12px">
         <label class="modal-label" for="p-school">School</label>
         <input class="modal-input" id="p-school" type="text" placeholder="Bijv. De Zonnewijzer">
         <button type="submit" class="modal-btn-save" id="profielSlaOp">Opslaan</button>
@@ -762,10 +765,29 @@
     }
 
     /* ── Profiel modal ── */
+    const vaste_groepen = ['8A', '8B', '8C', '8'];
+
+    document.getElementById('p-groep').addEventListener('change', function() {
+      const anders = document.getElementById('p-groep-anders');
+      anders.style.display = this.value === 'anders' ? '' : 'none';
+      if (this.value === 'anders') anders.focus();
+    });
+
     window.openProfielModal = function(verplicht = false) {
       document.getElementById('p-naam').value   = profiel.naam   || '';
-      document.getElementById('p-groep').value  = profiel.groep  || '8A';
       document.getElementById('p-school').value = profiel.school || '';
+
+      const groepSelect = document.getElementById('p-groep');
+      const groepAnders = document.getElementById('p-groep-anders');
+      if (vaste_groepen.includes(profiel.groep)) {
+        groepSelect.value      = profiel.groep;
+        groepAnders.style.display = 'none';
+        groepAnders.value      = '';
+      } else {
+        groepSelect.value         = 'anders';
+        groepAnders.value         = profiel.groep || '';
+        groepAnders.style.display = '';
+      }
       const modal = document.getElementById('profielModal');
       modal.classList.add('open');
       if (verplicht) {
@@ -788,10 +810,15 @@
       const btn = document.getElementById('profielSlaOp');
       btn.textContent = 'Opslaan…'; btn.disabled = true;
 
+      const groepSelect = document.getElementById('p-groep');
+      const groepWaarde = groepSelect.value === 'anders'
+        ? document.getElementById('p-groep-anders').value.trim() || '8'
+        : groepSelect.value;
+
       const nieuwProfiel = {
         id:     userId,
         naam:   document.getElementById('p-naam').value.trim(),
-        groep:  document.getElementById('p-groep').value,
+        groep:  groepWaarde,
         school: document.getElementById('p-school').value.trim(),
       };
 
