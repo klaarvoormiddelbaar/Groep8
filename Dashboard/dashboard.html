@@ -977,8 +977,8 @@
       document.getElementById('dashboard-view').classList.add('hidden');
       document.getElementById('bc-current').textContent = `Les ${L.n}: ${L.title}`;
 
-      const liveSessieUrl = `/quiz?les=les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
-      const livePollUrl   = `/poll?les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
+      const liveSessieUrl = `/Kahoot/docent-sessie.html?les=les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
+      const livePollUrl   = `/Live%20poll/docent-poll.html?les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
 
       const dv = document.getElementById('detail-view');
       dv.innerHTML = `
