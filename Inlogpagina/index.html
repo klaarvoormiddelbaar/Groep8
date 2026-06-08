@@ -637,7 +637,13 @@
     </div>
   </footer>
 
-  <script>
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     /* ── Password toggle ─────────────────────────────────────────── */
     const pwField   = document.getElementById('password');
     const pwToggle  = document.getElementById('pwToggle');
@@ -733,53 +739,22 @@
 
       setLoading(true);
 
-      /* ── Supabase integration – uncomment to activate ────────────
-       *
-       * import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
-       *
-       * const supabase = createClient(
-       *   'https://YOUR_PROJECT.supabase.co',
-       *   'YOUR_ANON_KEY'
-       * )
-       *
-       * const { data, error } = await supabase.auth.signInWithPassword({
-       *   email:    emailEl.value.trim(),
-       *   password: passwordEl.value,
-       * })
-       *
-       * if (error) {
-       *   emailEl.classList.add('is-error')
-       *   passwordEl.classList.add('is-error')
-       *   showMsg('is-error', 'E-mailadres of wachtwoord is onjuist. Probeer het opnieuw of klik op "Wachtwoord vergeten?".')
-       *   setLoading(false)
-       *   return
-       * }
-       *
-       * showMsg('is-success', 'Inloggen gelukt! Je wordt doorgestuurd naar het portaal…')
-       * setTimeout(() => { window.location.href = '/portaal' }, 1400)
-       * ─────────────────────────────────────────────────────────── */
+      const { error } = await supabase.auth.signInWithPassword({
+        email:    emailEl.value.trim(),
+        password: passwordEl.value,
+      });
 
-      /* Demo simulation (remove once Supabase is wired up) */
-      try {
-        await new Promise(r => setTimeout(r, 1700));
-
-        const demoSuccess = emailEl.value.trim() === 'docent@school.nl';
-
-        if (demoSuccess) {
-          showMsg('is-success', 'Inloggen gelukt! Je wordt doorgestuurd naar het portaal…');
-          /* setTimeout(() => { window.location.href = '/portaal' }, 1400) */
-        } else {
-          emailEl.classList.add('is-error');
-          passwordEl.classList.add('is-error');
-          showMsg('is-error',
-            'E-mailadres of wachtwoord is onjuist. Probeer het opnieuw of klik op "Wachtwoord vergeten?".');
-          setLoading(false);
-          emailEl.focus();
-        }
-      } catch {
-        showMsg('is-error', 'Er is een verbindingsprobleem. Controleer je internet en probeer het opnieuw.');
+      if (error) {
+        emailEl.classList.add('is-error');
+        passwordEl.classList.add('is-error');
+        showMsg('is-error', 'E-mailadres of wachtwoord is onjuist. Probeer het opnieuw of klik op "Wachtwoord vergeten?".');
         setLoading(false);
+        emailEl.focus();
+        return;
       }
+
+      showMsg('is-success', 'Inloggen gelukt! Je wordt doorgestuurd naar het dashboard…');
+      setTimeout(() => { window.location.href = '../Dashboard/dashboard.html'; }, 1400);
     });
 
     /* Clear errors as the user types */
