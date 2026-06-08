@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live poll — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --card-bg:      #ffffff;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:        #10a37f;
+      --green-dark:   #0c8268;
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --border:       #eceeee;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+      --shadow-blue:  0 10px 20px rgba(78,142,243,0.30);
+      --max-w:        640px;
+      --r-card:       40px;
+      --r-pill:       9999px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      background-color: #eef4fe;
+      background-image:
+        radial-gradient(ellipse at 12% -10%, rgba(114,168,249,0.28) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 110%, rgba(16,163,127,0.14) 0%, transparent 48%),
+        radial-gradient(ellipse at 88% 5%,   rgba(251,191,36,0.12)  0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    /* ── TOPBAR ──────────────────────────────────────────────────── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: var(--max-w); margin: 0 auto; padding: 28px 24px 0;
+    }
+    .topbar-logo { display: flex; align-items: center; gap: 10px; }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 12px; font-weight: 700;
+      box-shadow: var(--shadow-blue);
+    }
+    .topbar-text { font-size: 14px; font-weight: 700; line-height: 1.2; }
+    .topbar-text span { display: block; font-size: 11px; font-weight: 400; color: var(--muted); }
+    .topbar-naam-chip {
+      display: flex; align-items: center; gap: 8px;
+      background: white; border: 1px solid var(--border); border-radius: var(--r-pill);
+      padding: 7px 14px 7px 8px; font-size: 14px; font-weight: 700;
+    }
+    .topbar-avatar {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 11px; font-weight: 700; flex-shrink: 0;
+    }
+
+    /* ── MAIN ─────────────────────────────────────────────────────── */
+    .main { max-width: var(--max-w); margin: 0 auto; padding: 28px 24px 80px; }
+    .view { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(16px);} to{opacity:1;transform:translateY(0);} }
+
+    /* ── KAART (base) ─────────────────────────────────────────────── */
+    .kaart {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--r-card); box-shadow: var(--shadow-card);
+      padding: 40px 36px;
+    }
+
+    /* ── LOADING / FOUT ──────────────────────────────────────────── */
+    .laad-kaart {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 16px; padding: 56px 36px;
+    }
+    .spinner {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 4px solid var(--primary-soft); border-top-color: var(--primary);
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to{transform:rotate(360deg);} }
+    .laad-kaart p { color: var(--muted); font-size: 15px; }
+    .fout-icoon  { font-size: 36px; }
+    .fout-titel  { font-size: 22px; font-weight: 700; }
+
+    /* ── WACHTKAMER ──────────────────────────────────────────────── */
+    .wk-kaart {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+    }
+    .wk-avatar {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 38px; box-shadow: 0 14px 28px rgba(78,142,243,0.28);
+      margin-bottom: 24px;
+    }
+    .wk-titel { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+    .wk-sub   { font-size: 15px; color: var(--muted); line-height: 1.65; max-width: 360px; margin-bottom: 28px; }
+    .wk-naam-badge {
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
+      border-radius: var(--r-pill); padding: 10px 22px;
+      font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 28px;
+    }
+    .wk-pulse { display: flex; gap: 10px; margin-bottom: 8px; }
+    .wk-dot {
+      width: 13px; height: 13px; border-radius: 50%;
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .wk-dot:nth-child(1) { background: var(--primary);  animation-delay: 0s; }
+    .wk-dot:nth-child(2) { background: var(--green);    animation-delay: 0.15s; }
+    .wk-dot:nth-child(3) { background: #f59e0b;         animation-delay: 0.30s; }
+    @keyframes bounce { 0%,80%,100%{transform:scale(0.65);opacity:0.45;} 40%{transform:scale(1);opacity:1;} }
+    .wk-hint { font-size: 13px; color: var(--muted); }
+
+    /* ── STELLING-BADGE (boven de kaart) ─────────────────────────── */
+    .stelling-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .stelling-stap-badge {
+      font-size: 13px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+      color: var(--primary); background: var(--primary-soft);
+      border-radius: var(--r-pill); padding: 7px 16px;
+    }
+    .stelling-deelnemers {
+      font-size: 13px; font-weight: 700; color: var(--muted);
+    }
+
+    /* ── STELLING KAART ──────────────────────────────────────────── */
+    .stem-kaart { position: relative; overflow: hidden; }
+    .stem-kaart::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--green));
+    }
+    .stem-type-badge {
+      display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--primary); background: var(--primary-soft);
+      border-radius: var(--r-pill); padding: 5px 12px; margin-bottom: 14px;
+    }
+    .stem-tekst {
+      font-size: 22px; font-weight: 700; line-height: 1.42; color: var(--dark);
+      margin-bottom: 32px;
+    }
+
+    /* ── 5-PUNT SCHAAL ───────────────────────────────────────────── */
+    .schaal-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+    }
+    .schaal-btn {
+      border: 2px solid var(--border);
+      background: #f7f8f9;
+      border-radius: 22px; padding: 18px 8px 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      cursor: pointer; font-family: inherit;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+                  border-color 0.18s, background 0.18s, box-shadow 0.2s;
+      position: relative; overflow: hidden;
+    }
+    .schaal-btn:hover:not(:disabled) {
+      transform: translateY(-6px) scale(1.04);
+      border-color: var(--schaal-kleur);
+      background: var(--schaal-soft);
+      box-shadow: 0 12px 24px -6px rgba(0,0,0,0.14);
+    }
+    .schaal-btn.gekozen {
+      border-color: var(--schaal-kleur);
+      background: var(--schaal-soft);
+      transform: translateY(-8px) scale(1.06);
+      box-shadow: 0 0 0 4px var(--schaal-soft), 0 14px 28px -6px rgba(0,0,0,0.16);
+    }
+    .schaal-btn:disabled { cursor: default; }
+    .schaal-btn.vervaagd:not(.gekozen) { opacity: 0.38; transform: none; }
+    .schaal-emoji {
+      font-size: 36px; line-height: 1;
+      transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1);
+      display: block;
+    }
+    .schaal-btn:hover:not(:disabled) .schaal-emoji { transform: scale(1.18); }
+    .schaal-btn.gekozen .schaal-emoji { transform: scale(1.22); }
+    .schaal-cirkel {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--schaal-kleur); color: white;
+      font-size: 16px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .schaal-lbl {
+      font-size: 10px; font-weight: 700; text-align: center; color: var(--muted);
+      line-height: 1.3; letter-spacing: 0.3px;
+      transition: color 0.18s;
+    }
+    .schaal-btn.gekozen .schaal-lbl { color: var(--dark); }
+    .schaal-check {
+      position: absolute; top: 8px; right: 8px;
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--schaal-kleur); color: white;
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0.4);
+      transition: opacity 0.25s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .schaal-btn.gekozen .schaal-check { opacity: 1; transform: scale(1); }
+
+    /* ── STATUS BERICHT ──────────────────────────────────────────── */
+    .status-bericht {
+      margin-top: 20px; border-radius: 18px; padding: 16px 20px;
+      font-size: 15px; font-weight: 700; text-align: center; line-height: 1.5;
+      opacity: 0; transform: translateY(8px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .status-bericht.zichtbaar { opacity: 1; transform: translateY(0); }
+    .status-bericht.verzonden {
+      background: var(--primary-soft); color: var(--primary-dark);
+      border: 1.5px solid rgba(78,142,243,0.25);
+    }
+
+    /* ── GESTEMD (wachten op resultaten) ─────────────────────────── */
+    .gestemd-kaart {
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px;
+    }
+    .gestemd-bol {
+      width: 96px; height: 96px; border-radius: 50%;
+      background: rgba(16,163,127,0.10); border: 3px solid rgba(16,163,127,0.25);
+      display: flex; align-items: center; justify-content: center; font-size: 44px;
+      animation: bol-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes bol-in { from{transform:scale(0.3);opacity:0;} to{transform:scale(1);opacity:1;} }
+    .gestemd-titel { font-size: 24px; font-weight: 700; }
+    .gestemd-jouw-stem {
+      display: flex; align-items: center; gap: 12px;
+      background: #f7f8f9; border: 1px solid var(--border); border-radius: 20px; padding: 14px 22px;
+    }
+    .gstem-emoji { font-size: 28px; }
+    .gstem-info  { text-align: left; }
+    .gstem-lbl   { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; }
+    .gstem-tekst { font-size: 17px; font-weight: 700; color: var(--dark); }
+    .gestemd-sub  { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 320px; }
+    .wacht-pulse { display: flex; gap: 8px; }
+    .wacht-pulse span {
+      width: 10px; height: 10px; border-radius: 50%;
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .wacht-pulse span:nth-child(1) { background: var(--primary); }
+    .wacht-pulse span:nth-child(2) { background: var(--green);   animation-delay: 0.15s; }
+    .wacht-pulse span:nth-child(3) { background: #f59e0b;        animation-delay: 0.30s; }
+
+    /* ── RESULTATEN (leerlingweergave) ───────────────────────────── */
+    .res-tekst {
+      font-size: 18px; font-weight: 700; line-height: 1.42; color: var(--dark);
+      margin-bottom: 24px;
+    }
+    .res-kop {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; margin-bottom: 22px; flex-wrap: wrap;
+    }
+    .res-gem-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, rgba(78,142,243,0.08), rgba(16,163,127,0.08));
+      border: 1px solid rgba(78,142,243,0.18); border-radius: var(--r-pill);
+      padding: 10px 18px;
+    }
+    .rgb-lbl { font-size: 12px; font-weight: 700; color: var(--muted); }
+    .rgb-nr  { font-size: 22px; font-weight: 700; color: var(--primary); }
+
+    /* Mini-chart */
+    .mini-chart { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .mc-rij { display: flex; align-items: center; gap: 10px; }
+    .mc-links {
+      display: flex; align-items: center; gap: 8px; width: 150px; flex-shrink: 0;
+    }
+    .mc-circ {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: white;
+    }
+    .mc-emoji { font-size: 18px; flex-shrink: 0; }
+    .mc-lbl   { font-size: 12px; font-weight: 700; color: var(--dark); }
+    .mc-track { flex: 1; height: 28px; background: #f0f2f5; border-radius: var(--r-pill); overflow: hidden; }
+    .mc-balk  {
+      height: 100%; border-radius: var(--r-pill); width: 0%;
+      transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+    .mc-rechts { width: 48px; flex-shrink: 0; text-align: right; font-size: 12px; font-weight: 700; color: var(--muted); }
+
+    .jouw-stem-info {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.25);
+      border-radius: 18px; padding: 14px 18px; margin-bottom: 24px;
+    }
+    .jsi-emoji { font-size: 24px; }
+    .jsi-txt   { font-size: 15px; font-weight: 700; color: var(--primary-dark); }
+
+    .wacht-volgend {
+      display: flex; align-items: center; gap: 10px; justify-content: center;
+      padding: 14px 18px; background: #f7f8f9; border-radius: 18px;
+      font-size: 14px; font-weight: 700; color: var(--muted);
+    }
+
+    /* ── EINDSCHERM ──────────────────────────────────────────────── */
+    .eind-kaart {
+      display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px;
+    }
+    .eind-emoji { font-size: 72px; animation: bol-in 0.5s cubic-bezier(0.34,1.56,0.64,1) both; }
+    .eind-titel { font-size: 30px; font-weight: 700; }
+    .eind-sub   { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 360px; }
+    .eind-divider {
+      width: 48px; height: 4px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--primary), var(--green));
+    }
+    .eind-bedankt {
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
+      border-radius: 20px; padding: 16px 24px;
+      font-size: 16px; font-weight: 700; color: var(--primary-dark);
+    }
+
+    @media (max-width: 480px) {
+      .kaart { padding: 32px 22px; }
+      .stem-tekst { font-size: 18px; }
+      .schaal-emoji { font-size: 28px; }
+      .schaal-btn { padding: 14px 6px 12px; border-radius: 16px; }
+      .schaal-lbl { font-size: 9px; }
+      .mc-links { width: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── TOPBAR ──────────────────────────────────────────────────── -->
+  <div class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-mark">KvM</div>
+      <div class="topbar-text">Klaar voor Middelbaar <span>Klassenpoll · Live</span></div>
+    </div>
+    <div class="topbar-naam-chip" id="naam-chip" style="display:none">
+      <div class="topbar-avatar" id="naam-avatar">?</div>
+      <span id="naam-label">…</span>
+    </div>
+  </div>
+
+  <!-- ── MAIN ────────────────────────────────────────────────────── -->
+  <main class="main" id="app">
+    <div class="view">
+      <div class="kaart laad-kaart">
+        <div class="spinner"></div>
+        <p>Sessie laden…</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    const SCHAAL = [
+      { score: 1, label: 'Helemaal\nmee oneens', emoji: '😞', kleur: '#ef4444', soft: 'rgba(239,68,68,0.10)' },
+      { score: 2, label: 'Mee\noneens',          emoji: '😕', kleur: '#f97316', soft: 'rgba(249,115,22,0.10)' },
+      { score: 3, label: 'Neutraal',              emoji: '😐', kleur: '#eab308', soft: 'rgba(234,179,8,0.10)'  },
+      { score: 4, label: 'Mee\neens',             emoji: '🙂', kleur: '#22c55e', soft: 'rgba(34,197,94,0.10)'  },
+      { score: 5, label: 'Helemaal\nmee eens',    emoji: '😊', kleur: '#10a37f', soft: 'rgba(16,163,127,0.10)' },
+    ];
+
+    // ── State ────────────────────────────────────────────────────────────────
+    const params      = new URLSearchParams(window.location.search);
+    const code        = params.get('code');
+    const deelnemerId = params.get('deelnemer');
+
+    const app = document.getElementById('app');
+    let sessie          = null;
+    let deelnemer       = null;
+    let huidigeStelling = null;
+    let mijnStem        = null;
+    let huidigView      = 'loading';
+
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = String(s);
+      return d.innerHTML;
+    }
+
+    function toonFout(msg) {
+      app.innerHTML = `
+        <div class="view">
+          <div class="kaart laad-kaart">
+            <div class="fout-icoon">😕</div>
+            <div class="fout-titel">Oeps!</div>
+            <p>${esc(msg)}</p>
+          </div>
+        </div>`;
+    }
+
+    // ── Init ─────────────────────────────────────────────────────────────────
+    async function init() {
+      if (!code || !deelnemerId) {
+        toonFout('Ongeldige link. Ga terug naar de join-pagina en probeer opnieuw.');
+        return;
+      }
+
+      const { data: s, error: se } = await db
+        .from('sessions').select().eq('code', code).maybeSingle();
+      if (se || !s) { toonFout('Kon de sessie niet laden. Vraag je docent om de code opnieuw.'); return; }
+      sessie = s;
+
+      const { data: d, error: de } = await db
+        .from('participants').select().eq('id', deelnemerId).maybeSingle();
+      if (de || !d) { toonFout('Kon je deelnemer-informatie niet laden.'); return; }
+      deelnemer = d;
+
+      // Naam-chip tonen
+      document.getElementById('naam-chip').style.display = '';
+      document.getElementById('naam-label').textContent = deelnemer.naam;
+      document.getElementById('naam-avatar').textContent = deelnemer.naam.slice(0, 1).toUpperCase();
+
+      if (sessie.status === 'ended') { toonEinde(); return; }
+
+      // Check bestaande actieve stelling
+      const { data: actief } = await db.from('poll_statements')
+        .select().eq('session_id', sessie.id).eq('status', 'active').maybeSingle();
+
+      if (actief) {
+        huidigeStelling = actief;
+        // Check of al gestemd
+        const { data: bestaand } = await db.from('poll_responses')
+          .select().eq('statement_id', actief.id).eq('participant_id', deelnemerId).maybeSingle();
+        if (bestaand) {
+          mijnStem = bestaand.score;
+          toonGestemd();
+        } else {
+          toonStemmen();
+        }
+      } else if (sessie.status === 'lobby') {
+        toonWachtkamer();
+      } else {
+        // Sessie actief maar geen actieve stelling → wacht op volgende
+        toonWachtenTussen();
+      }
+
+      abonneerOpAlles();
+    }
+
+    // ── Realtime ─────────────────────────────────────────────────────────────
+    function abonneerOpAlles() {
+      db.channel(`leerling-sessie-${sessie.id}`)
+        .on('postgres_changes', {
+          event: 'UPDATE', schema: 'public', table: 'sessions', filter: `id=eq.${sessie.id}`
+        }, p => {
+          sessie = { ...sessie, ...p.new };
+          if (sessie.status === 'ended') toonEinde();
+        })
+        .subscribe();
+
+      db.channel(`leerling-stellingen-${sessie.id}`)
+        .on('postgres_changes', {
+          event: 'UPDATE', schema: 'public', table: 'poll_statements',
+          filter: `session_id=eq.${sessie.id}`
+        }, async p => {
+          if (p.new.status === 'active') {
+            mijnStem = null;
+            huidigeStelling = p.new;
+            toonStemmen();
+          } else if (p.new.status === 'closed') {
+            if (huidigeStelling && p.new.id === huidigeStelling.id) {
+              huidigeStelling = p.new;
+              await toonResultaten();
+            }
+          }
+        })
+        .subscribe();
+    }
+
+    // ── Wachtkamer ────────────────────────────────────────────────────────────
+    function toonWachtkamer() {
+      huidigView = 'wachtkamer';
+      app.innerHTML = `
+        <div class="view">
+          <div class="kaart wk-kaart">
+            <div class="wk-avatar">🗳️</div>
+            <div class="wk-titel">Je doet mee! 🙌</div>
+            <div class="wk-naam-badge">👋 ${esc(deelnemer.naam)}</div>
+            <div class="wk-sub">Je docent start zo de poll. Elke stelling beantwoord je met een schaal van 1 tot 5. Er is geen goed of fout — gewoon jouw eerlijke mening!</div>
+            <div class="wk-pulse">
+              <div class="wk-dot"></div>
+              <div class="wk-dot"></div>
+              <div class="wk-dot"></div>
+            </div>
+            <div class="wk-hint">Wachten op de docent…</div>
+          </div>
+        </div>`;
+    }
+
+    function toonWachtenTussen() {
+      huidigView = 'wachten';
+      app.innerHTML = `
+        <div class="view">
+          <div class="kaart wk-kaart">
+            <div class="wk-avatar">⏳</div>
+            <div class="wk-titel">Volgende stelling…</div>
+            <div class="wk-sub">Je docent gaat de resultaten bespreken. Daarna krijg je de volgende stelling te zien.</div>
+            <div class="wk-pulse">
+              <div class="wk-dot"></div>
+              <div class="wk-dot"></div>
+              <div class="wk-dot"></div>
+            </div>
+            <div class="wk-hint">Wachten op de docent…</div>
+          </div>
+        </div>`;
+    }
+
+    // ── Stemmen ───────────────────────────────────────────────────────────────
+    function toonStemmen() {
+      huidigView = 'stemmen';
+      if (!huidigeStelling) return;
+
+      app.innerHTML = `
+        <div class="view">
+          <div class="stelling-meta">
+            <div class="stelling-stap-badge">🗳️ Stelling ${(huidigeStelling.volgorde || 0) + 1}</div>
+          </div>
+
+          <div class="kaart stem-kaart">
+            <div class="stem-type-badge">Geef jouw mening</div>
+            <div class="stem-tekst">${esc(huidigeStelling.tekst)}</div>
+
+            <div class="schaal-grid">
+              ${SCHAAL.map(s => `
+                <button
+                  class="schaal-btn"
+                  style="--schaal-kleur:${s.kleur};--schaal-soft:${s.soft}"
+                  onclick="stemUitbrengen(${s.score})"
+                  data-score="${s.score}"
+                  aria-label="${s.score} – ${s.label.replace('\n', ' ')}"
+                >
+                  <span class="schaal-emoji">${s.emoji}</span>
+                  <div class="schaal-cirkel">${s.score}</div>
+                  <div class="schaal-lbl">${s.label.replace('\n', '<br>')}</div>
+                  <div class="schaal-check">✓</div>
+                </button>`).join('')}
+            </div>
+
+            <div class="status-bericht verzonden" id="status-bericht"></div>
+          </div>
+        </div>`;
+    }
+
+    async function stemUitbrengen(score) {
+      if (mijnStem !== null) return;
+      mijnStem = score;
+
+      // Visuele feedback direct
+      document.querySelectorAll('.schaal-btn').forEach(btn => {
+        btn.disabled = true;
+        if (Number(btn.dataset.score) === score) btn.classList.add('gekozen');
+        else btn.classList.add('vervaagd');
+      });
+      const bericht = document.getElementById('status-bericht');
+      if (bericht) {
+        bericht.textContent = `Jouw stem (${score}) is ontvangen! Wacht op de docent voor de resultaten.`;
+        setTimeout(() => bericht.classList.add('zichtbaar'), 80);
+      }
+
+      // Opslaan in Supabase
+      try {
+        const { error } = await db.from('poll_responses').insert({
+          session_id:    sessie.id,
+          statement_id:  huidigeStelling.id,
+          participant_id: deelnemerId,
+          score
+        });
+        if (error && !error.message.includes('duplicate')) {
+          console.error('Kon stem niet opslaan:', error.message);
+        }
+      } catch (e) {
+        console.error('Stem opslaan mislukt:', e);
+      }
+
+      // Na korte delay naar gestemd-scherm
+      setTimeout(() => toonGestemd(), 900);
+    }
+
+    // ── Gestemd (wacht op resultaten) ────────────────────────────────────────
+    function toonGestemd() {
+      huidigView = 'gestemd';
+      const optie = mijnStem ? SCHAAL.find(s => s.score === mijnStem) : null;
+
+      app.innerHTML = `
+        <div class="view">
+          <div class="kaart gestemd-kaart">
+            <div class="gestemd-bol">✅</div>
+            <div class="gestemd-titel">Stem ontvangen!</div>
+
+            ${optie ? `
+              <div class="gestemd-jouw-stem">
+                <div class="gstem-emoji">${optie.emoji}</div>
+                <div class="gstem-info">
+                  <div class="gstem-lbl">Jouw antwoord</div>
+                  <div class="gstem-tekst">${optie.score} — ${optie.label.replace('\n', ' ')}</div>
+                </div>
+              </div>` : ''}
+
+            <div class="gestemd-sub">Super! Je docent gaat de resultaten van de klas laten zien. Even wachten…</div>
+            <div class="wacht-pulse">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    // ── Resultaten ────────────────────────────────────────────────────────────
+    async function toonResultaten() {
+      huidigView = 'resultaten';
+      if (!huidigeStelling) return;
+
+      const { data: stemmen } = await db
+        .from('poll_responses').select('score').eq('statement_id', huidigeStelling.id);
+
+      const tellingen = [0, 0, 0, 0, 0];
+      (stemmen || []).forEach(r => { if (r.score >= 1 && r.score <= 5) tellingen[r.score - 1]++; });
+      const totaal = tellingen.reduce((a, b) => a + b, 0);
+      const gemiddelde = totaal === 0 ? 0 : tellingen.reduce((a, c, i) => a + c * (i + 1), 0) / totaal;
+      const mijnOptie = mijnStem ? SCHAAL.find(s => s.score === mijnStem) : null;
+
+      app.innerHTML = `
+        <div class="view">
+          <div class="kaart" style="position:relative;overflow:hidden">
+            <div style="position:absolute;top:0;left:0;right:0;height:5px;background:linear-gradient(90deg,var(--green),#4ade80,var(--primary))"></div>
+
+            <div class="res-kop">
+              <div>
+                <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:8px">✓ Resultaten</div>
+                <div class="res-tekst">${esc(huidigeStelling.tekst)}</div>
+              </div>
+            </div>
+
+            ${totaal > 0 ? `
+              <div class="res-gem-badge" style="margin-bottom:20px">
+                <div class="rgb-lbl">Klasgemiddelde</div>
+                <div class="rgb-nr">${gemiddelde.toFixed(1)} / 5</div>
+                <div style="font-size:18px">${SCHAAL[Math.min(4, Math.max(0, Math.round(gemiddelde) - 1))].emoji}</div>
+              </div>` : ''}
+
+            ${mijnOptie ? `
+              <div class="jouw-stem-info">
+                <div class="jsi-emoji">${mijnOptie.emoji}</div>
+                <div class="jsi-txt">Jouw stem: ${mijnOptie.score} — ${mijnOptie.label.replace('\n', ' ')}</div>
+              </div>` : `
+              <div style="background:#fef9e9;border:1px solid #f8d760;border-radius:14px;padding:12px 16px;margin-bottom:20px;font-size:14px;font-weight:700;color:#92400e">
+                Je hebt deze stelling niet beantwoord.
+              </div>`}
+
+            <div class="mini-chart" id="mini-chart">
+              ${SCHAAL.map((s, i) => {
+                const cnt = tellingen[i];
+                const pct = totaal === 0 ? 0 : Math.round((cnt / totaal) * 100);
+                const isMijn = mijnStem === s.score;
+                return `
+                  <div class="mc-rij">
+                    <div class="mc-links">
+                      <div class="mc-circ" style="background:${s.kleur}">${s.score}</div>
+                      <div class="mc-emoji">${s.emoji}</div>
+                      <div class="mc-lbl" style="${isMijn ? 'color:'+s.kleur+';font-weight:700' : ''}">${s.label.replace('\n', '<br>')}</div>
+                    </div>
+                    <div class="mc-track" style="${isMijn ? 'box-shadow:0 0 0 2px '+s.kleur : ''}">
+                      <div class="mc-balk" id="mcb-${i}" style="background:${s.kleur}"></div>
+                    </div>
+                    <div class="mc-rechts">${cnt}</div>
+                  </div>`;
+              }).join('')}
+            </div>
+
+            <div class="wacht-volgend">
+              <div class="wacht-pulse">
+                <span style="background:var(--primary)"></span>
+                <span style="background:var(--green)"></span>
+                <span style="background:#f59e0b"></span>
+              </div>
+              Docent bespreekt de uitkomst…
+            </div>
+          </div>
+        </div>`;
+
+      requestAnimationFrame(() => setTimeout(() => {
+        tellingen.forEach((cnt, i) => {
+          const balk = document.getElementById(`mcb-${i}`);
+          if (!balk) return;
+          const pct = totaal === 0 ? 0 : Math.round((cnt / totaal) * 100);
+          balk.style.width = `${pct}%`;
+        });
+      }, 120));
+    }
+
+    // ── Eindscherm ────────────────────────────────────────────────────────────
+    function toonEinde() {
+      if (huidigView === 'einde') return;
+      huidigView = 'einde';
+
+      app.innerHTML = `
+        <div class="view">
+          <div class="kaart eind-kaart">
+            <div class="eind-emoji">🎉</div>
+            <div class="eind-titel">Super gedaan, ${esc(deelnemer ? deelnemer.naam : 'je')}!</div>
+            <div class="eind-divider"></div>
+            <div class="eind-sub">
+              Je hebt alle stellingen beantwoord. Jouw mening telt mee voor de klasbespreking.
+              Goed bezig!
+            </div>
+            <div class="eind-bedankt">
+              Bedankt voor je deelname aan de poll! 🗳️
+            </div>
+          </div>
+        </div>`;
+    }
+
+    init();
+  </script>
+</body>
+</html>

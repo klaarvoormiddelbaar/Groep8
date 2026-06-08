@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doe mee — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --card-bg: #ffffff;
+      --primary: #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green: #10a37f;
+      --green-dark: #0c8268;
+      --dark: #191c1d;
+      --muted: #6d747a;
+      --border: #eceeee;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+      --shadow-btn-green: 0 10px 15px -3px rgba(0,0,0,0.18), 0 4px 6px -4px rgba(0,0,0,0.10);
+      --r-card: 40px;
+      --r-pill: 9999px;
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 32px;
+      background-color: #eef4fe;
+      background-image:
+        radial-gradient(ellipse at 12% -10%, rgba(114,168,249,0.30) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 110%, rgba(16,163,127,0.16) 0%, transparent 48%),
+        radial-gradient(ellipse at 90% 0%, rgba(251,191,36,0.14) 0%, transparent 40%);
+      background-attachment: fixed;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .join-card {
+      width: 100%; max-width: 460px;
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 48px 44px;
+      animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+    .join-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .logo-mark {
+      width: 40px; height: 40px; border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 14px; font-weight: 700;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+    }
+    .join-logo-text { font-size: 15px; font-weight: 700; line-height: 1.2; }
+    .join-logo-text span { display: block; font-size: 12px; font-weight: 400; color: var(--muted); }
+
+    .join-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; }
+    .join-title { font-size: 30px; font-weight: 700; line-height: 1.25; margin-bottom: 10px; }
+    .join-sub { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 32px; }
+
+    .field { margin-bottom: 20px; }
+    .field label { display: block; font-size: 13px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); margin-bottom: 9px; }
+    .field input {
+      width: 100%; font-family: inherit; color: var(--dark);
+      background: #f7f8f9; border: 1.5px solid var(--border); border-radius: 18px;
+      padding: 16px 18px; font-size: 18px; font-weight: 700;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .field input::placeholder { color: rgba(109,116,122,0.55); font-weight: 400; }
+    .field input:focus {
+      outline: none; background: white; border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(78,142,243,0.16);
+    }
+    #code-input { letter-spacing: 9px; font-variant-numeric: tabular-nums; }
+
+    .btn-meedoen {
+      width: 100%; border: none; border-radius: var(--r-pill); cursor: pointer;
+      font-family: inherit; font-size: 19px; font-weight: 700; color: white;
+      background: var(--green); box-shadow: var(--shadow-btn-green);
+      padding: 18px; margin-top: 4px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, background 0.2s;
+    }
+    .btn-meedoen:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-3px); box-shadow: 0 18px 30px rgba(16,163,127,0.34); }
+    .btn-meedoen:disabled { opacity: 0.6; cursor: progress; }
+    .btn-arrow { transition: transform 0.2s; }
+    .btn-meedoen:hover:not(:disabled) .btn-arrow { transform: translateX(4px); }
+
+    .feedback {
+      margin-top: 18px; border-radius: 16px; padding: 14px 18px;
+      font-size: 14px; font-weight: 700; line-height: 1.5; display: none;
+    }
+    .feedback.fout { display: block; background: #fef2f2; border: 1.5px solid #fecaca; color: #b91c1c; }
+    .feedback.bezig { display: block; background: var(--primary-soft); border: 1.5px solid rgba(78,142,243,0.25); color: var(--primary-dark); }
+
+    .join-footnote { margin-top: 28px; text-align: center; font-size: 13px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="join-card">
+    <div class="join-logo">
+      <div class="logo-mark">KvM</div>
+      <div class="join-logo-text">Klaar voor Middelbaar<span>Live klasquiz</span></div>
+    </div>
+
+    <div class="join-eyebrow">Doe mee</div>
+    <div class="join-title">Vul de code van je docent in en doe mee! 🙌</div>
+    <div class="join-sub">Je hoeft niets te installeren — vul je sessiecode en je voornaam in en je staat zo bij de klas.</div>
+
+    <form id="join-form" autocomplete="off">
+      <div class="field">
+        <label for="code-input">Sessiecode</label>
+        <input id="code-input" name="code" type="text" inputmode="numeric" maxlength="6"
+               placeholder="123456" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="naam-input">Jouw voornaam</label>
+        <input id="naam-input" name="naam" type="text" maxlength="24"
+               placeholder="Bijvoorbeeld: Sem" autocomplete="off">
+      </div>
+      <button class="btn-meedoen" id="btn-meedoen" type="submit">
+        Meedoen <span class="btn-arrow">→</span>
+      </button>
+      <div class="feedback" id="feedback"></div>
+    </form>
+
+    <div class="join-footnote">Vraag je docent om de 6-cijferige code als je die nog niet hebt.</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    const form = document.getElementById('join-form');
+    const codeInput = document.getElementById('code-input');
+    const naamInput = document.getElementById('naam-input');
+    const knop = document.getElementById('btn-meedoen');
+    const feedback = document.getElementById('feedback');
+
+    codeInput.addEventListener('input', () => {
+      codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
+      verbergFeedback();
+    });
+    naamInput.addEventListener('input', verbergFeedback);
+
+    function toonFeedback(soort, bericht) {
+      feedback.className = `feedback ${soort}`;
+      feedback.textContent = bericht;
+    }
+    function verbergFeedback() {
+      feedback.className = 'feedback';
+      feedback.textContent = '';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = codeInput.value.trim();
+      const naam = naamInput.value.trim();
+
+      if (code.length !== 6) {
+        toonFeedback('fout', 'Een sessiecode bestaat uit 6 cijfers. Controleer de code die je docent op het bord laat zien.');
+        return;
+      }
+      if (!naam) {
+        toonFeedback('fout', 'Vul je voornaam in, zodat je docent en klasgenoten kunnen zien dat je meedoet.');
+        return;
+      }
+
+      knop.disabled = true;
+      toonFeedback('bezig', 'Even kijken of deze sessie bestaat…');
+
+      try {
+        const { data: sessie, error: zoekFout } = await db
+          .from('sessions')
+          .select('id, status')
+          .eq('code', code)
+          .neq('status', 'ended')
+          .maybeSingle();
+
+        if (zoekFout) throw new Error(zoekFout.message);
+
+        if (!sessie) {
+          toonFeedback('fout', 'Deze code klopt niet (meer), of de sessie is al afgelopen. Vraag je docent om de juiste code.');
+          knop.disabled = false;
+          return;
+        }
+
+        toonFeedback('bezig', 'Je wordt aangemeld…');
+
+        const { data: deelnemer, error: meldFout } = await db
+          .from('participants')
+          .insert({ session_id: sessie.id, naam })
+          .select()
+          .single();
+
+        if (meldFout) throw new Error(meldFout.message);
+
+        const url = new URL('leerling-sessie.html', window.location.href);
+        url.searchParams.set('code', code);
+        url.searchParams.set('deelnemer', deelnemer.id);
+        window.location.href = url.href;
+      } catch (fout) {
+        toonFeedback('fout', 'Er ging iets mis bij het meedoen: ' + fout.message);
+        knop.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

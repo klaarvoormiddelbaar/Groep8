@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live les — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --card-bg: #ffffff;
+      --primary: #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green: #10a37f;
+      --dark: #191c1d;
+      --muted: #6d747a;
+      --border: #eceeee;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+      --shadow-btn-blue: 0 10px 20px rgba(78,142,243,0.30);
+      --max-w: 640px;
+      --r-card: 40px;
+      --r-pill: 9999px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      background-color: #eef4fe;
+      background-image:
+        radial-gradient(ellipse at 12% -10%, rgba(114,168,249,0.26) 0%, transparent 50%),
+        radial-gradient(ellipse at 100% 110%, rgba(16,163,127,0.14) 0%, transparent 48%),
+        radial-gradient(ellipse at 90% 6%, rgba(251,191,36,0.12) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    .topbar { display:flex; align-items:center; gap:12px; max-width: var(--max-w); margin: 0 auto; padding: 28px 24px 0; }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      display:flex; align-items:center; justify-content:center;
+      color:white; font-size:12px; font-weight:700;
+      box-shadow: var(--shadow-btn-blue);
+    }
+    .topbar-text { font-size: 14px; font-weight:700; line-height:1.2; }
+    .topbar-text span { display:block; font-size:11px; font-weight:400; color: var(--muted); }
+
+    .main { max-width: var(--max-w); margin: 0 auto; padding: 28px 24px 80px; }
+    .view { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+
+    .btn-pill {
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      border:none; border-radius: var(--r-pill); cursor:pointer; text-decoration:none;
+      font-family:inherit; font-size:16px; font-weight:700; padding:16px 32px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, background 0.2s;
+    }
+    .btn-start { background: var(--primary); color:white; box-shadow: var(--shadow-btn-blue); }
+    .btn-start:hover { background: var(--primary-dark); transform: translateY(-3px); }
+
+    /* ── LADEN / FOUT ── */
+    .loading-card, .error-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 56px 40px; text-align:center;
+      display:flex; flex-direction:column; align-items:center; gap:16px;
+    }
+    .loading-spinner { width:40px; height:40px; border-radius:50%; border:4px solid var(--primary-soft); border-top-color: var(--primary); animation: spin 0.9s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-card div:last-child, .error-body { color: var(--muted); font-size:15px; }
+    .error-icon { font-size:36px; }
+    .error-title { font-size:22px; font-weight:700; }
+
+    /* ── WACHTKAMER ── */
+    .wachtkamer-view {
+      background: var(--card-bg); border:1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 56px 36px;
+      display:flex; flex-direction:column; align-items:center; text-align:center;
+    }
+    .wk-avatar {
+      width:84px; height:84px; border-radius:50%;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary)); color:white;
+      font-size:32px; font-weight:700; display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 14px 28px rgba(78,142,243,0.30); margin-bottom:24px;
+    }
+    .wk-titel { font-size:25px; font-weight:700; margin-bottom:10px; }
+    .wk-sub { font-size:15px; color: var(--muted); max-width:400px; line-height:1.6; }
+    .wk-pulse { display:flex; gap:10px; margin: 30px 0 8px; }
+    .wk-pulse span { width:13px; height:13px; border-radius:50%; background: var(--primary); animation: wk-bounce 1.2s infinite ease-in-out; }
+    .wk-pulse span:nth-child(2) { animation-delay: 0.15s; background: var(--green); }
+    .wk-pulse span:nth-child(3) { animation-delay: 0.3s; background: #f59e0b; }
+    @keyframes wk-bounce { 0%, 80%, 100% { transform: scale(0.6); opacity:0.45; } 40% { transform: scale(1); opacity:1; } }
+    .wk-count { margin-top:14px; font-size:14px; font-weight:700; color: var(--primary); background: var(--primary-soft); border-radius: var(--r-pill); padding:9px 20px; }
+
+    /* ── VRAAGSCHERM ── */
+    .vraag-head { margin-bottom: 20px; }
+    .vraag-stap { font-size:13px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color: var(--primary); margin-bottom:10px; }
+    .vraag-timer-track { height:8px; background: var(--border); border-radius: var(--r-pill); overflow:hidden; }
+    .vraag-timer-fill { height:100%; width:100%; background: linear-gradient(90deg, var(--green), var(--primary)); border-radius: var(--r-pill); transition: width 0.08s linear; }
+
+    .vraag-card {
+      background: var(--card-bg); border:1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 32px 32px;
+    }
+    .vraag-type-badge {
+      display:inline-block; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+      color: var(--primary); background: var(--primary-soft); border-radius: var(--r-pill);
+      padding:6px 14px; margin-bottom:14px;
+    }
+    .vraag-tekst { font-size:21px; font-weight:700; line-height:1.4; }
+    .vraag-afbeelding { display:flex; justify-content:center; margin-top:18px; }
+    .vraag-afbeelding svg { width:130px; height:auto; }
+
+    .opties-grid { display:grid; grid-template-columns: 1fr 1fr; gap:14px; margin-top:22px; }
+    @media (max-width: 520px) { .opties-grid { grid-template-columns: 1fr; } }
+    .optie-knop {
+      display:flex; align-items:center; gap:14px;
+      background: white; border:2px solid var(--border); border-radius:22px;
+      padding: 20px 20px; cursor:pointer; text-align:left;
+      font-family:inherit; font-size:16px; font-weight:700; color: var(--dark);
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), border-color 0.2s, box-shadow 0.2s, background 0.2s, opacity 0.2s;
+    }
+    .optie-knop:hover:not(:disabled) { transform: translateY(-3px); border-color: var(--optie-kleur); box-shadow: 0 14px 26px -8px rgba(0,0,0,0.16); }
+    .optie-knop:disabled { cursor:default; opacity:0.5; }
+    .optie-knop.gekozen { border-color: var(--optie-kleur); background: var(--optie-kleur-zacht); opacity:1; box-shadow: 0 0 0 4px var(--optie-kleur-zacht); }
+    .optie-letter {
+      width:36px; height:36px; border-radius:11px; flex-shrink:0;
+      background: var(--optie-kleur); color:white;
+      display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700;
+    }
+
+    .vraag-status {
+      margin-top:20px; padding:16px 20px; border-radius:18px;
+      font-size:14.5px; font-weight:700; text-align:center; line-height:1.55;
+      opacity:0; transform: translateY(8px); transition: opacity 0.3s, transform 0.3s; min-height: 0;
+    }
+    .vraag-status.zichtbaar { opacity:1; transform: translateY(0); }
+    .vraag-status.verzonden { background: var(--primary-soft); color: var(--primary-dark); border:1.5px solid rgba(78,142,243,0.25); }
+    .vraag-status.goed { background: rgba(16,163,127,0.10); color:#0c6750; border:1.5px solid rgba(16,163,127,0.28); }
+    .vraag-status.fout { background:#fef2f2; color:#b91c1c; border:1.5px solid #fecaca; }
+    .vraag-status.te-laat { background:#fffbeb; color:#92400e; border:1.5px solid #fde68a; }
+
+    /* ── EINDSCHERM ── */
+    .eind-view {
+      background: var(--card-bg); border:1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 52px 36px;
+      display:flex; flex-direction:column; align-items:center; text-align:center;
+    }
+    .eind-medaille { font-size:54px; margin-bottom:16px; }
+    .eind-titel { font-size:24px; font-weight:700; margin-bottom:8px; }
+    .eind-sub { font-size:15px; color: var(--muted); margin-bottom:26px; }
+    .score-chip-groot {
+      font-size:21px; font-weight:700; color: var(--primary);
+      background:#f1f5f9; border:1px solid rgba(78,142,243,0.18);
+      border-radius: var(--r-pill); padding:14px 30px; margin-bottom:14px;
+    }
+    .score-chip-groot span { color: var(--dark); }
+    .eind-positie { font-size:15px; font-weight:700; color: var(--dark); margin-bottom:18px; }
+    .eind-afsluiting { font-size:16px; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo-mark">KvM</div>
+    <div class="topbar-text">Klaar voor Middelbaar<span>Live klasquiz</span></div>
+  </div>
+
+  <main class="main" id="app">
+    <div class="view">
+      <div class="loading-card">
+        <div class="loading-spinner"></div>
+        <div>Je wordt verbonden met de sessie…</div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = (params.get('code') || '').trim();
+    const deelnemerId = (params.get('deelnemer') || '').trim();
+
+    const app = document.getElementById('app');
+
+    if (!code || !deelnemerId) {
+      window.location.href = 'join.html';
+    }
+
+    let sessie = null;
+    let eigenDeelnemer = null;
+    let vragen = [];
+    let huidigeView = 'loading';
+    let huidigeVraagIndex = -1;
+    let vraagStartTijd = 0;
+    let vraagTimerId = null;
+    let alAntwoordIngediend = false;
+    let aantalDeelnemers = 1;
+
+    function escapeHtml(tekst) {
+      const d = document.createElement('div');
+      d.textContent = String(tekst);
+      return d.innerHTML;
+    }
+    function typeLabel(type) {
+      return {
+        multiple_choice: 'Meerkeuzevraag',
+        true_false: 'Waar of niet waar',
+        image: 'Beeldvraag',
+        poll: 'Poll · jouw mening telt'
+      }[type] || 'Vraag';
+    }
+
+    // ── Opstarten ────────────────────────────────────────────────────────────
+    async function init() {
+      const { data: sessieData, error: sessieFout } = await db
+        .from('sessions').select('*').eq('code', code).maybeSingle();
+
+      if (sessieFout || !sessieData) {
+        toonFout('Deze sessie bestaat niet (meer). Vraag je docent om een nieuwe code en doe opnieuw mee.');
+        return;
+      }
+      sessie = sessieData;
+
+      const { data: deelnemerData, error: deelnemerFout } = await db
+        .from('participants').select('*').eq('id', deelnemerId).maybeSingle();
+
+      if (deelnemerFout || !deelnemerData) {
+        toonFout('We konden je niet meer terugvinden in deze sessie. Ga terug en doe opnieuw mee.');
+        return;
+      }
+      eigenDeelnemer = deelnemerData;
+
+      const { data: vragenData } = await db
+        .from('questions').select('*').eq('session_id', sessie.id).order('volgorde');
+      vragen = vragenData || [];
+
+      const { count } = await db
+        .from('participants').select('id', { count: 'exact', head: true }).eq('session_id', sessie.id);
+      aantalDeelnemers = count || 1;
+
+      abonneerOpSessie();
+      abonneerOpDeelnemers();
+      reageerOpSessieStatus();
+    }
+
+    function abonneerOpSessie() {
+      db.channel(`leerling-sessie-${sessie.id}-${deelnemerId}`)
+        .on('postgres_changes', {
+          event: 'UPDATE', schema: 'public', table: 'sessions', filter: `id=eq.${sessie.id}`
+        }, (payload) => {
+          sessie = { ...sessie, ...payload.new };
+          reageerOpSessieStatus();
+        })
+        .subscribe();
+    }
+
+    function abonneerOpDeelnemers() {
+      db.channel(`leerling-deelnemers-${sessie.id}-${deelnemerId}`)
+        .on('postgres_changes', {
+          event: 'INSERT', schema: 'public', table: 'participants', filter: `session_id=eq.${sessie.id}`
+        }, () => {
+          aantalDeelnemers++;
+          ververDeelnemerAantal();
+        })
+        .subscribe();
+    }
+
+    function reageerOpSessieStatus() {
+      if (sessie.status === 'lobby') toonWachtkamer();
+      else if (sessie.status === 'active') toonVraag(sessie.huidige_vraag_index);
+      else if (sessie.status === 'ended') toonEinde();
+    }
+
+    // ── Wachtkamer ───────────────────────────────────────────────────────────
+    function toonWachtkamer() {
+      if (huidigeView === 'wachtkamer') { ververDeelnemerAantal(); return; }
+      huidigeView = 'wachtkamer';
+      app.innerHTML = `
+        <div class="view">
+          <div class="wachtkamer-view">
+            <div class="wk-avatar">${escapeHtml(eigenDeelnemer.naam.slice(0, 1).toUpperCase())}</div>
+            <div class="wk-titel">Welkom, ${escapeHtml(eigenDeelnemer.naam)}! 👋</div>
+            <div class="wk-sub">Je staat klaar om mee te doen. Zodra je docent de sessie start, verschijnt de eerste vraag hier vanzelf — je hoeft verder niets te doen.</div>
+            <div class="wk-pulse"><span></span><span></span><span></span></div>
+            <div class="wk-count" id="wk-deelnemers"></div>
+          </div>
+        </div>`;
+      ververDeelnemerAantal();
+    }
+
+    function ververDeelnemerAantal() {
+      const el = document.getElementById('wk-deelnemers');
+      if (el) el.textContent = `👥 ${aantalDeelnemers} ${aantalDeelnemers === 1 ? 'klasgenoot doet' : 'klasgenoten doen'} mee`;
+    }
+
+    // ── Vraagscherm ──────────────────────────────────────────────────────────
+    function toonVraag(index) {
+      if (huidigeView === 'vraag' && huidigeVraagIndex === index) return;
+      if (vraagTimerId) { clearInterval(vraagTimerId); vraagTimerId = null; }
+
+      huidigeView = 'vraag';
+      huidigeVraagIndex = index;
+      alAntwoordIngediend = false;
+      vraagStartTijd = Date.now();
+
+      const vraag = vragen[index];
+      if (!vraag) { toonWachtkamer(); return; }
+
+      const kleuren = ['#72a8f9', '#10a37f', '#f59e0b', '#ef4444'];
+      const kleurenZacht = ['rgba(114,168,249,0.16)', 'rgba(16,163,127,0.16)', 'rgba(245,158,11,0.16)', 'rgba(239,68,68,0.16)'];
+      const letters = ['A', 'B', 'C', 'D'];
+      const limietMs = vraag.tijdslimiet_seconden * 1000;
+
+      app.innerHTML = `
+        <div class="view">
+          <div class="vraag-head">
+            <div class="vraag-stap">Vraag ${index + 1} van ${vragen.length} · ${typeLabel(vraag.type)}</div>
+            <div class="vraag-timer-track"><div class="vraag-timer-fill" id="timer-fill"></div></div>
+          </div>
+          <div class="vraag-card">
+            <div class="vraag-type-badge">${typeLabel(vraag.type)}</div>
+            <div class="vraag-tekst">${escapeHtml(vraag.vraag)}</div>
+            ${vraag.afbeelding ? `<div class="vraag-afbeelding">${vraag.afbeelding}</div>` : ''}
+            <div class="opties-grid">
+              ${vraag.opties.map((optie, i) => `
+                <button class="optie-knop" style="--optie-kleur:${kleuren[i]}; --optie-kleur-zacht:${kleurenZacht[i]}" onclick="kiesAntwoord(${i})">
+                  <span class="optie-letter">${letters[i]}</span>
+                  <span class="optie-tekst">${escapeHtml(optie)}</span>
+                </button>`).join('')}
+            </div>
+            <div class="vraag-status" id="vraag-status"></div>
+          </div>
+        </div>`;
+
+      startAftellen(limietMs);
+    }
+
+    function startAftellen(limietMs) {
+      const fill = document.getElementById('timer-fill');
+      const start = Date.now();
+      if (fill) fill.style.width = '100%';
+      vraagTimerId = setInterval(() => {
+        const verstreken = Date.now() - start;
+        const over = Math.max(0, 1 - verstreken / limietMs);
+        if (fill) fill.style.width = `${over * 100}%`;
+        if (verstreken >= limietMs) {
+          clearInterval(vraagTimerId);
+          vraagTimerId = null;
+          if (!alAntwoordIngediend) tijdVerstreken();
+        }
+      }, 80);
+    }
+
+    function tijdVerstreken() {
+      alAntwoordIngediend = true;
+      document.querySelectorAll('.optie-knop').forEach(b => b.disabled = true);
+      toonVraagStatus('te-laat', '⏰ De tijd is voorbij — je kon geen antwoord meer geven. Wacht tot de docent doorgaat naar de volgende vraag.');
+    }
+
+    function toonVraagStatus(soort, bericht) {
+      const status = document.getElementById('vraag-status');
+      if (!status) return;
+      status.className = `vraag-status zichtbaar ${soort}`;
+      status.textContent = bericht;
+    }
+
+    async function kiesAntwoord(optieIndex) {
+      if (alAntwoordIngediend) return;
+      alAntwoordIngediend = true;
+      if (vraagTimerId) { clearInterval(vraagTimerId); vraagTimerId = null; }
+
+      document.querySelectorAll('.optie-knop').forEach((knop, i) => {
+        knop.disabled = true;
+        if (i === optieIndex) knop.classList.add('gekozen');
+      });
+
+      const vraagIndexBijInzending = huidigeVraagIndex;
+      const vraag = vragen[huidigeVraagIndex];
+      const tijdMs = Math.min(vraag.tijdslimiet_seconden * 1000, Date.now() - vraagStartTijd);
+      const isPoll = vraag.goed_index === null || vraag.goed_index === undefined;
+      const isCorrect = !isPoll && optieIndex === vraag.goed_index;
+
+      let punten = 0;
+      if (!isPoll) {
+        const tijdsfractie = Math.max(0, 1 - tijdMs / (vraag.tijdslimiet_seconden * 1000));
+        punten = isCorrect ? Math.round(500 + 500 * tijdsfractie) : 0;
+      }
+
+      toonVraagStatus('verzonden', '✓ Antwoord verzonden — wacht tot de docent doorgaat…');
+
+      try {
+        await db.from('answers').insert({
+          session_id: sessie.id,
+          question_id: vraag.id,
+          participant_id: eigenDeelnemer.id,
+          optie_index: optieIndex,
+          tijd_ms: tijdMs,
+          punten
+        });
+
+        if (punten > 0) {
+          const nieuweScore = (eigenDeelnemer.score || 0) + punten;
+          await db.from('participants').update({ score: nieuweScore }).eq('id', eigenDeelnemer.id);
+          eigenDeelnemer.score = nieuweScore;
+        }
+
+        setTimeout(() => {
+          // Toon de uitslag alleen nog als de docent niet inmiddels is doorgegaan
+          // naar een andere vraag (anders zou de feedback over de nieuwe vraag heen vallen).
+          if (huidigeView !== 'vraag' || huidigeVraagIndex !== vraagIndexBijInzending) return;
+          if (isPoll) {
+            toonVraagStatus('verzonden', '🙌 Bedankt voor je stem! Wacht tot de docent doorgaat naar de volgende vraag.');
+          } else if (isCorrect) {
+            toonVraagStatus('goed', `✅ Goed zo! Je verdiende ${punten} punten. Wacht tot de docent doorgaat…`);
+          } else {
+            const goedeOptie = vraag.opties[vraag.goed_index];
+            toonVraagStatus('fout', `❌ Helaas, dat klopte niet. Het juiste antwoord was: "${escapeHtml(goedeOptie)}". Wacht tot de docent doorgaat…`);
+          }
+        }, 450);
+      } catch (fout) {
+        toonVraagStatus('fout', 'Er ging iets mis bij het versturen van je antwoord: ' + fout.message);
+      }
+    }
+
+    // ── Eindscherm ───────────────────────────────────────────────────────────
+    async function toonEinde() {
+      if (huidigeView === 'einde') return;
+      huidigeView = 'einde';
+      if (vraagTimerId) { clearInterval(vraagTimerId); vraagTimerId = null; }
+
+      const { data } = await db
+        .from('participants').select('id, naam, score').eq('session_id', sessie.id).order('score', { ascending: false });
+
+      const lijst = data || [];
+      const positie = lijst.findIndex(d => d.id === eigenDeelnemer.id) + 1;
+      const eigenItem = lijst.find(d => d.id === eigenDeelnemer.id);
+      const eigenScore = eigenItem ? eigenItem.score : (eigenDeelnemer.score || 0);
+      const medaille = positie === 1 ? '🥇' : positie === 2 ? '🥈' : positie === 3 ? '🥉' : '🎓';
+
+      app.innerHTML = `
+        <div class="view">
+          <div class="eind-view">
+            <div class="eind-medaille">${medaille}</div>
+            <div class="eind-titel">Bedankt voor het meedoen, ${escapeHtml(eigenDeelnemer.naam)}!</div>
+            <div class="eind-sub">De sessie is afgelopen. Hier is hoe je het hebt gedaan:</div>
+            <div class="score-chip-groot">Score: <span>${eigenScore}</span></div>
+            ${positie > 0 ? `<div class="eind-positie">Je eindigde op plek ${positie} van ${lijst.length}.</div>` : ''}
+            <div class="eind-afsluiting">Goed gedaan! Tot de volgende les. 👋</div>
+          </div>
+        </div>`;
+    }
+
+    // ── Foutscherm ───────────────────────────────────────────────────────────
+    function toonFout(bericht) {
+      app.innerHTML = `
+        <div class="view">
+          <div class="error-card">
+            <div class="error-icon">⚠️</div>
+            <div class="error-title">Er ging iets mis</div>
+            <div class="error-body">${escapeHtml(bericht)}</div>
+            <a class="btn-pill btn-start" href="join.html">← Terug naar de deelnamepagina</a>
+          </div>
+        </div>`;
+    }
+
+    init();
+  </script>
+</body>
+</html>

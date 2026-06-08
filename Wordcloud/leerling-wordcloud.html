@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Woordenwolk — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --card-bg: #ffffff;
+      --primary: #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green: #10a37f;
+      --green-dark: #0c8268;
+      --dark: #191c1d;
+      --muted: #6d747a;
+      --border: #eceeee;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+      --shadow-btn-blue: 0 10px 20px rgba(78,142,243,0.30);
+      --shadow-btn-green: 0 10px 15px -3px rgba(0,0,0,0.18), 0 4px 6px -4px rgba(0,0,0,0.10);
+      --max-w: 700px;
+      --r-card: 40px;
+      --r-pill: 9999px;
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      background-color: #eef4fe;
+      background-image:
+        radial-gradient(ellipse at 10% -8%,  rgba(114,168,249,0.28) 0%, transparent 50%),
+        radial-gradient(ellipse at 102% 105%, rgba(16,163,127,0.15)  0%, transparent 48%),
+        radial-gradient(ellipse at 88% 4%,   rgba(251,191,36,0.13)   0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      display: flex; align-items: center; gap: 12px;
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 24px 24px 0;
+    }
+    .logo-mark {
+      width: 36px; height: 36px; border-radius: 11px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 12px; font-weight: 700;
+      box-shadow: var(--shadow-btn-blue); flex-shrink: 0;
+    }
+    .topbar-naam { font-size: 14px; font-weight: 700; line-height: 1.2; }
+    .topbar-naam span { display: block; font-size: 11px; font-weight: 400; color: var(--muted); }
+    .naam-badge {
+      margin-left: auto;
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.25);
+      color: var(--primary-dark); font-size: 13px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 6px 14px;
+    }
+
+    /* ── HOOFD ── */
+    .main { max-width: var(--max-w); margin: 0 auto; padding: 24px 24px 80px; }
+    .view { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+
+    /* ── KNOPPEN ── */
+    .btn-pill {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      border: none; border-radius: var(--r-pill); cursor: pointer; text-decoration: none;
+      font-family: inherit; font-weight: 700; font-size: 17px;
+      padding: 16px 32px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, background 0.2s, opacity 0.2s;
+    }
+    .btn-green { background: var(--green); color: white; box-shadow: var(--shadow-btn-green); width: 100%; justify-content: center; }
+    .btn-green:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-3px); box-shadow: 0 18px 30px rgba(16,163,127,0.34); }
+    .btn-green:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-blue  { background: var(--primary); color: white; box-shadow: var(--shadow-btn-blue); }
+    .btn-blue:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+    /* ── LOADING / FOUT ── */
+    .loading-card, .error-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 56px 36px; text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .loading-spinner {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 4px solid var(--primary-soft); border-top-color: var(--primary);
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-label { color: var(--muted); font-size: 15px; }
+    .error-icon  { font-size: 36px; }
+    .error-title { font-size: 22px; font-weight: 700; }
+    .error-body  { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 360px; }
+
+    /* ── JOIN KAART ── */
+    .join-kaart {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 44px 40px;
+      animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .join-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; }
+    .join-titel   { font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: 9px; }
+    .join-sub     { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+    .veld { margin-bottom: 18px; }
+    .veld label {
+      display: block; font-size: 13px; font-weight: 700;
+      letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); margin-bottom: 9px;
+    }
+    .veld input {
+      width: 100%; font-family: inherit; color: var(--dark);
+      background: #f7f8f9; border: 1.5px solid var(--border); border-radius: 18px;
+      padding: 15px 18px; font-size: 18px; font-weight: 700;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .veld input::placeholder { color: rgba(109,116,122,0.5); font-weight: 400; }
+    .veld input:focus { outline: none; background: white; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(78,142,243,0.16); }
+    #code-input { letter-spacing: 9px; font-variant-numeric: tabular-nums; }
+    .feedback {
+      margin-top: 16px; border-radius: 16px; padding: 13px 18px;
+      font-size: 14px; font-weight: 700; line-height: 1.5; display: none;
+    }
+    .feedback.fout   { display: block; background: #fef2f2; border: 1.5px solid #fecaca; color: #b91c1c; }
+    .feedback.bezig  { display: block; background: var(--primary-soft); border: 1.5px solid rgba(78,142,243,0.25); color: var(--primary-dark); }
+    .feedback.succes { display: block; background: rgba(16,163,127,0.1); border: 1.5px solid rgba(16,163,127,0.3); color: #065f46; }
+    .join-voetnoot { margin-top: 24px; text-align: center; font-size: 13px; color: var(--muted); }
+
+    /* ── WACHTKAMER ── */
+    .wacht-kaart {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 48px 36px; text-align: center;
+    }
+    .wacht-emoji { font-size: 52px; margin-bottom: 18px; animation: wiegelen 2.4s ease-in-out infinite; }
+    @keyframes wiegelen { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+    .wacht-titel { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+    .wacht-sub   { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 360px; margin: 0 auto; }
+    .wacht-naam  { font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+    .dots { display: inline-flex; gap: 6px; margin-top: 24px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--primary); animation: dotBounce 1.2s ease-in-out infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotBounce { 0%,100% { opacity:0.3; transform:scale(0.7); } 50% { opacity:1; transform:scale(1); } }
+
+    /* ── WOORDENWOLK ── */
+    .cloud-kaart {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); overflow: hidden; margin-bottom: 20px;
+    }
+    .cloud-kaart-titel {
+      padding: 22px 24px 0;
+      font-size: 16px; font-weight: 700;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .woord-badge {
+      font-size: 12px; font-weight: 700; color: var(--primary);
+      background: var(--primary-soft); border-radius: var(--r-pill); padding: 4px 12px;
+    }
+    .cloud-container {
+      padding: 28px 24px 32px;
+      min-height: 260px;
+      display: flex; flex-wrap: wrap;
+      justify-content: center; align-items: center;
+      gap: 6px 2px;
+    }
+    .cloud-leeg {
+      color: var(--muted); font-size: 15px; text-align: center; line-height: 1.7;
+    }
+    .cloud-word {
+      display: inline-block;
+      font-weight: 700; line-height: 1.1; cursor: default;
+      transition: font-size 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease;
+      animation: woordKomt 0.55s cubic-bezier(0.22,1,0.36,1) both;
+      padding: 2px 3px;
+    }
+    @keyframes woordKomt {
+      from { opacity: 0; scale: 0.35; filter: blur(3px); }
+      to   { opacity: 1; scale: 1;    filter: blur(0);   }
+    }
+
+    /* ── INZENDFORMULIER ── */
+    .inzend-kaart {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 28px 28px 32px;
+    }
+    .inzend-eyebrow {
+      font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+      color: var(--primary); margin-bottom: 8px;
+    }
+    .inzend-vraag { font-size: 20px; font-weight: 700; margin-bottom: 18px; line-height: 1.3; }
+    .inzend-input-wrap { position: relative; margin-bottom: 12px; }
+    .inzend-input {
+      width: 100%; font-family: inherit; font-size: 20px; font-weight: 700; color: var(--dark);
+      background: #f7f8f9; border: 2px solid var(--border); border-radius: 20px;
+      padding: 16px 56px 16px 20px;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .inzend-input::placeholder { color: rgba(109,116,122,0.45); font-weight: 400; font-size: 17px; }
+    .inzend-input:focus { outline: none; background: white; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(78,142,243,0.16); }
+    .inzend-input:disabled { opacity: 0.55; cursor: not-allowed; }
+    .char-teller {
+      position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+      font-size: 13px; font-weight: 700; color: var(--muted); pointer-events: none;
+    }
+    .char-teller.bijna { color: #f59e0b; }
+    .char-teller.vol   { color: #ef4444; }
+    .btn-verstuur {
+      width: 100%; border: none; border-radius: var(--r-pill); cursor: pointer;
+      font-family: inherit; font-size: 18px; font-weight: 700; color: white;
+      background: var(--green); box-shadow: var(--shadow-btn-green);
+      padding: 16px; margin-top: 2px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, background 0.2s, opacity 0.2s;
+    }
+    .btn-verstuur:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-3px); box-shadow: 0 18px 30px rgba(16,163,127,0.34); }
+    .btn-verstuur:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+    .btn-pijl { transition: transform 0.2s; }
+    .btn-verstuur:hover:not(:disabled) .btn-pijl { transform: translateX(4px); }
+
+    .tip-box {
+      margin-top: 14px; border-radius: 14px; padding: 11px 16px;
+      background: #fef9e9; border: 1.5px solid #f8d760;
+      font-size: 13px; color: #453b1a; line-height: 1.55;
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .tip-icoon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+    /* ── MIJN WOORDEN (ingediende woorden van deze leerling) ── */
+    .mijn-woorden { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .mijn-woord-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(16,163,127,0.1); border: 1px solid rgba(16,163,127,0.3);
+      color: #065f46; font-size: 14px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 6px 14px;
+      animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    /* ── VERGRENDELD / EINDE ── */
+    .vergrendeld-banner {
+      background: #fef9e9; border: 1.5px solid #f8d760;
+      border-radius: 20px; padding: 16px 20px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 12px;
+      font-size: 15px; font-weight: 700; color: #92400e;
+    }
+    .einde-banner {
+      background: linear-gradient(135deg, #134e4a 0%, #0f766e 55%, #14b8a6 100%);
+      border-radius: var(--r-card); padding: 36px 32px; color: white; margin-bottom: 20px;
+      text-align: center;
+    }
+    .einde-emoji { font-size: 44px; margin-bottom: 12px; }
+    .einde-titel { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .einde-sub   { font-size: 15px; color: rgba(255,255,255,0.88); }
+
+    @media (max-width: 480px) {
+      .join-kaart, .inzend-kaart { padding: 32px 24px; }
+      .inzend-input { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="logo-mark">KvM</div>
+    <div class="topbar-naam">
+      Klaar voor Middelbaar
+      <span>Live woordenwolk</span>
+    </div>
+    <div class="naam-badge" id="naam-badge" style="display:none"></div>
+  </div>
+
+  <main class="main" id="app">
+    <!-- Join-formulier als beginscherm -->
+    <div class="view" id="view-join">
+      <div class="join-kaart">
+        <div class="join-eyebrow">Doe mee</div>
+        <div class="join-titel">Vul de code van je docent in! ☁️</div>
+        <div class="join-sub">Je docent heeft een 6-cijferige code op het bord staan. Vul die in samen met je voornaam.</div>
+
+        <form id="join-form" autocomplete="off">
+          <div class="veld">
+            <label for="code-input">Sessiecode</label>
+            <input id="code-input" name="code" type="text" inputmode="numeric" maxlength="6"
+                   placeholder="123456" autocomplete="off">
+          </div>
+          <div class="veld">
+            <label for="naam-input">Jouw voornaam</label>
+            <input id="naam-input" name="naam" type="text" maxlength="24"
+                   placeholder="Bijv. Emma" autocomplete="off">
+          </div>
+          <button class="btn-pill btn-green" id="btn-meedoen" type="submit">
+            Meedoen <span class="btn-pijl">→</span>
+          </button>
+          <div class="feedback" id="join-feedback"></div>
+        </form>
+
+        <div class="join-voetnoot">Vraag je docent om de code als je die nog niet hebt.</div>
+      </div>
+    </div>
+
+    <!-- Overige views worden hier gerenderd -->
+    <div id="view-app" style="display:none"></div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="wordcloud-config.js"></script>
+  <script>
+    // ── State ─────────────────────────────────────────────────────────────────
+    let sessie          = null;
+    let leerlingNaam    = '';
+    let alleInzendingen = [];
+    let woordFreqs      = new Map();
+    let mijnWoorden     = [];        // woorden die deze leerling instuurde (client-side)
+    const MAX_INZENDINGEN = 3;
+    let huidigeView     = 'join';
+    let renderer        = null;
+
+    const viewJoin = document.getElementById('view-join');
+    const viewApp  = document.getElementById('view-app');
+    const naamBadge = document.getElementById('naam-badge');
+
+    // ── Hulpfuncties ──────────────────────────────────────────────────────────
+    function escapeHtml(t) {
+      const d = document.createElement('div');
+      d.textContent = String(t);
+      return d.innerHTML;
+    }
+
+    function schakelNaarApp(html) {
+      viewJoin.style.display = 'none';
+      viewApp.style.display  = 'block';
+      viewApp.innerHTML = `<div class="view">${html}</div>`;
+    }
+
+    function toonFeedback(id, soort, bericht) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.className = `feedback ${soort}`;
+      el.textContent = bericht;
+    }
+
+    // ── WoordenwolkRenderer (identiek aan docentpagina) ───────────────────────
+    const WOLK_KLEUREN = ['#72a8f9','#10a37f','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899'];
+
+    function strHash(s) {
+      let h = 0;
+      for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0;
+      return h;
+    }
+
+    class WoordenwolkRenderer {
+      constructor(container) {
+        this.container = container;
+        this.els = new Map();
+      }
+      _grootte(freq, maxFreq) {
+        if (maxFreq <= 1) return 36;
+        const t = Math.log(1 + freq) / Math.log(1 + maxFreq);
+        return Math.round(16 + t * 52);
+      }
+      _kleur(w)  { return WOLK_KLEUREN[Math.abs(strHash(w)) % WOLK_KLEUREN.length]; }
+      _rot(w)    { return ((Math.abs(strHash(w)) % 30) - 15); }
+      _marge(w) {
+        const h = strHash(w);
+        return `${(Math.abs(h * 17) % 24) - 12}px ${(Math.abs(h * 7) % 18) + 4}px`;
+      }
+      update(freqs) {
+        if (freqs.size === 0) { this._leeg(); return; }
+        const leegEl = this.container.querySelector('.cloud-leeg');
+        if (leegEl) leegEl.remove();
+
+        const maxF = Math.max(...freqs.values());
+
+        for (const [w, el] of this.els) {
+          if (!freqs.has(w)) {
+            el.style.opacity = '0'; el.style.scale = '0.3';
+            setTimeout(() => el.parentNode && el.remove(), 400);
+            this.els.delete(w);
+          }
+        }
+        for (const [w, f] of freqs) {
+          const px = this._grootte(f, maxF);
+          if (this.els.has(w)) {
+            const el = this.els.get(w);
+            el.style.fontSize = px + 'px';
+            el.title = `${f}× ingediend`;
+          } else {
+            const el = document.createElement('span');
+            el.className = 'cloud-word';
+            el.textContent = w;
+            el.style.fontSize = px + 'px';
+            el.style.color  = this._kleur(w);
+            el.style.rotate = this._rot(w) + 'deg';
+            el.style.margin = this._marge(w);
+            el.title = `${f}× ingediend`;
+            this.container.appendChild(el);
+            this.els.set(w, el);
+          }
+        }
+        [...this.els.entries()]
+          .sort((a, b) => (freqs.get(b[0]) || 0) - (freqs.get(a[0]) || 0))
+          .forEach(([, el]) => this.container.appendChild(el));
+      }
+      _leeg() {
+        if (!this.container.querySelector('.cloud-leeg')) {
+          this.container.innerHTML = '<div class="cloud-leeg">Nog geen woorden ingediend 🎈<br>Jij kunt als eerste!</div>';
+          this.els.clear();
+        }
+      }
+    }
+
+    // ── Inzendingen verwerken ─────────────────────────────────────────────────
+    function verwerkInzendingen(inzendingen) {
+      alleInzendingen = inzendingen;
+      woordFreqs = new Map();
+      for (const s of inzendingen) {
+        const w = s.woord.toLowerCase().trim();
+        woordFreqs.set(w, (woordFreqs.get(w) || 0) + 1);
+      }
+      if (renderer) renderer.update(woordFreqs);
+      ververWoordBadge();
+    }
+
+    function ververWoordBadge() {
+      const badge = document.getElementById('woord-badge');
+      if (badge) badge.textContent = `${woordFreqs.size} woord${woordFreqs.size !== 1 ? 'en' : ''}`;
+    }
+
+    // ── JOIN ──────────────────────────────────────────────────────────────────
+    const joinForm   = document.getElementById('join-form');
+    const codeInput  = document.getElementById('code-input');
+    const naamInput  = document.getElementById('naam-input');
+    const btnMeedoen = document.getElementById('btn-meedoen');
+
+    codeInput.addEventListener('input', () => {
+      codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
+      verbergFeedback();
+    });
+    naamInput.addEventListener('input', verbergFeedback);
+
+    function verbergFeedback() {
+      const fb = document.getElementById('join-feedback');
+      if (fb) { fb.className = 'feedback'; fb.textContent = ''; }
+    }
+
+    joinForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const code = codeInput.value.trim();
+      const naam = naamInput.value.trim();
+
+      if (code.length !== 6) {
+        toonFeedback('join-feedback', 'fout', 'Een sessiecode bestaat uit 6 cijfers. Controleer de code op het bord.');
+        return;
+      }
+      if (!naam) {
+        toonFeedback('join-feedback', 'fout', 'Vul je voornaam in zodat je docent weet wie er meedoet.');
+        return;
+      }
+
+      btnMeedoen.disabled = true;
+      toonFeedback('join-feedback', 'bezig', 'Even kijken of deze sessie bestaat…');
+
+      try {
+        const { data: gevondenSessie, error: zoekFout } = await db
+          .from('wordcloud_sessions')
+          .select('*')
+          .eq('code', code)
+          .neq('status', 'ended')
+          .maybeSingle();
+
+        if (zoekFout) throw new Error(zoekFout.message);
+        if (!gevondenSessie) {
+          toonFeedback('join-feedback', 'fout', 'Deze code klopt niet, of de activiteit is al afgelopen. Vraag je docent om de juiste code.');
+          btnMeedoen.disabled = false;
+          return;
+        }
+
+        sessie = gevondenSessie;
+        leerlingNaam = naam;
+        naamBadge.textContent = naam;
+        naamBadge.style.display = 'inline-flex';
+
+        // Bestaande inzendingen ophalen
+        const { data: bestaand } = await db
+          .from('wordcloud_submissions')
+          .select('*')
+          .eq('session_id', sessie.id)
+          .order('ingediend_op', { ascending: true });
+        verwerkInzendingen(bestaand || []);
+
+        abonneerOpSessie();
+        abonneerOpInzendingen();
+
+        if (sessie.status === 'lobby') {
+          toonWachtkamer();
+        } else if (sessie.status === 'active') {
+          toonActief();
+        } else if (sessie.status === 'locked') {
+          toonVergrendeld();
+        }
+
+      } catch (fout) {
+        toonFeedback('join-feedback', 'fout', 'Er ging iets mis: ' + fout.message);
+        btnMeedoen.disabled = false;
+      }
+    });
+
+    // ── Realtime ──────────────────────────────────────────────────────────────
+    function abonneerOpSessie() {
+      db.channel(`leerling-sessie-${sessie.id}`)
+        .on('postgres_changes', {
+          event: 'UPDATE', schema: 'public', table: 'wordcloud_sessions',
+          filter: `id=eq.${sessie.id}`
+        }, (payload) => {
+          const vorigeStatus = sessie.status;
+          sessie = { ...sessie, ...payload.new };
+          if (sessie.status !== vorigeStatus) reageerOpStatuswijziging();
+        })
+        .subscribe();
+    }
+
+    function abonneerOpInzendingen() {
+      db.channel(`leerling-inzendingen-${sessie.id}`)
+        .on('postgres_changes', {
+          event: 'INSERT', schema: 'public', table: 'wordcloud_submissions',
+          filter: `session_id=eq.${sessie.id}`
+        }, (payload) => {
+          alleInzendingen.push(payload.new);
+          verwerkInzendingen(alleInzendingen);
+        })
+        .on('postgres_changes', {
+          event: 'DELETE', schema: 'public', table: 'wordcloud_submissions',
+          filter: `session_id=eq.${sessie.id}`
+        }, () => herlaadInzendingen())
+        .subscribe();
+    }
+
+    async function herlaadInzendingen() {
+      const { data } = await db
+        .from('wordcloud_submissions')
+        .select('*')
+        .eq('session_id', sessie.id)
+        .order('ingediend_op', { ascending: true });
+      verwerkInzendingen(data || []);
+    }
+
+    function reageerOpStatuswijziging() {
+      switch (sessie.status) {
+        case 'active':  toonActief();      break;
+        case 'locked':  toonVergrendeld(); break;
+        case 'ended':   toonEinde();       break;
+      }
+    }
+
+    // ── VIEWS ─────────────────────────────────────────────────────────────────
+
+    function toonWachtkamer() {
+      huidigeView = 'wachtkamer';
+      schakelNaarApp(`
+        <div class="wacht-kaart">
+          <div class="wacht-emoji">☁️</div>
+          <div class="wacht-naam">${escapeHtml(leerlingNaam)}</div>
+          <div class="wacht-titel">Je doet mee!</div>
+          <div class="wacht-sub">
+            Wacht even — de docent start de activiteit zo. Dan kun je je woord insturen!
+          </div>
+          <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>`);
+    }
+
+    function wolkHtml() {
+      return `
+        <div class="cloud-kaart">
+          <div class="cloud-kaart-titel">
+            Live woordenwolk ☁️
+            <span class="woord-badge" id="woord-badge">0 woorden</span>
+          </div>
+          <div class="cloud-container" id="cloud-container">
+            <div class="cloud-leeg">Nog geen woorden ingediend 🎈<br>Jij kunt als eerste!</div>
+          </div>
+        </div>`;
+    }
+
+    function toonActief() {
+      if (huidigeView === 'actief') return;
+      huidigeView = 'actief';
+
+      const aantalResterend = MAX_INZENDINGEN - mijnWoorden.length;
+      const kanNogInsturen  = aantalResterend > 0;
+
+      schakelNaarApp(`
+        ${wolkHtml()}
+        <div class="inzend-kaart" id="inzend-kaart">
+          <div class="inzend-eyebrow">Jouw bijdrage</div>
+          <div class="inzend-vraag">Welk woord past bij dit onderwerp?</div>
+
+          ${kanNogInsturen ? `
+            <form id="inzend-form" autocomplete="off">
+              <div class="inzend-input-wrap">
+                <input class="inzend-input" id="woord-input" type="text"
+                  maxlength="32" placeholder="Bijv. vrienden, huiswerk, nieuw…"
+                  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <span class="char-teller" id="char-teller">32</span>
+              </div>
+              <button class="btn-verstuur" id="btn-verstuur" type="submit" disabled>
+                Stuur in <span class="btn-pijl">→</span>
+              </button>
+            </form>
+            <div class="tip-box">
+              <span class="tip-icoon">💡</span>
+              <span>Gebruik één woord of een korte zin (max. 32 tekens). Je kunt nog
+                <strong>${aantalResterend} woord${aantalResterend !== 1 ? 'en' : ''}</strong> insturen.</span>
+            </div>` : `
+            <div style="text-align:center;padding:16px 0;font-size:22px;font-weight:700;color:var(--green);">
+              ✅ Je hebt al je woorden ingestuurd!
+            </div>`}
+
+          ${mijnWoorden.length > 0 ? `
+            <div style="margin-top:16px;font-size:13px;font-weight:700;color:var(--muted);letter-spacing:0.8px;text-transform:uppercase;margin-bottom:8px;">
+              Jouw woorden
+            </div>
+            <div class="mijn-woorden">
+              ${mijnWoorden.map(w => `<span class="mijn-woord-pill">✓ ${escapeHtml(w)}</span>`).join('')}
+            </div>` : ''}
+        </div>`);
+
+      renderer = new WoordenwolkRenderer(document.getElementById('cloud-container'));
+      renderer.update(woordFreqs);
+      ververWoordBadge();
+      koppelInzendFormulier();
+    }
+
+    function koppelInzendFormulier() {
+      const form    = document.getElementById('inzend-form');
+      const input   = document.getElementById('woord-input');
+      const knop    = document.getElementById('btn-verstuur');
+      const teller  = document.getElementById('char-teller');
+      if (!form || !input) return;
+
+      input.addEventListener('input', () => {
+        const len = input.value.trim().length;
+        const resterend = 32 - input.value.length;
+        teller.textContent = resterend;
+        teller.className = `char-teller${resterend <= 5 ? ' vol' : resterend <= 10 ? ' bijna' : ''}`;
+        knop.disabled = len === 0;
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const woord = input.value.trim().toLowerCase();
+        if (!woord) return;
+        if (mijnWoorden.length >= MAX_INZENDINGEN) return;
+
+        knop.disabled = true;
+        input.disabled = true;
+        knop.textContent = 'Bezig…';
+
+        const { error } = await db
+          .from('wordcloud_submissions')
+          .insert({ session_id: sessie.id, leerling_naam: leerlingNaam, woord });
+
+        if (error) {
+          knop.disabled = false;
+          input.disabled = false;
+          knop.innerHTML = 'Stuur in <span class="btn-pijl">→</span>';
+          alert('Kon het woord niet insturen: ' + error.message);
+          return;
+        }
+
+        mijnWoorden.push(woord);
+        huidigeView = ''; // Verwijder guard zodat toonActief() opnieuw rendert
+        toonActief();
+      });
+    }
+
+    function toonVergrendeld() {
+      huidigeView = 'vergrendeld';
+      schakelNaarApp(`
+        <div class="vergrendeld-banner">
+          🔒 Inzendingen zijn gesloten — de docent heeft de activiteit vergrendeld.
+        </div>
+        ${wolkHtml()}
+        ${mijnWoorden.length > 0 ? `
+          <div class="inzend-kaart" style="text-align:center;">
+            <div style="font-size:15px;color:var(--muted);margin-bottom:12px;">Jouw woorden</div>
+            <div class="mijn-woorden" style="justify-content:center;">
+              ${mijnWoorden.map(w => `<span class="mijn-woord-pill">✓ ${escapeHtml(w)}</span>`).join('')}
+            </div>
+          </div>` : ''}`);
+
+      renderer = new WoordenwolkRenderer(document.getElementById('cloud-container'));
+      renderer.update(woordFreqs);
+      ververWoordBadge();
+    }
+
+    function toonEinde() {
+      if (huidigeView === 'einde') return;
+      huidigeView = 'einde';
+      schakelNaarApp(`
+        <div class="einde-banner">
+          <div class="einde-emoji">🎉</div>
+          <div class="einde-titel">Bedankt voor je deelname!</div>
+          <div class="einde-sub">De activiteit is afgelopen. Bekijk de woordenwolk hieronder.</div>
+        </div>
+        ${wolkHtml()}`);
+
+      renderer = new WoordenwolkRenderer(document.getElementById('cloud-container'));
+      renderer.update(woordFreqs);
+      ververWoordBadge();
+    }
+
+    // Karakter-teller bij het join-formulier is al afgehandeld via CSS maxlength.
+    // Geen extra logica nodig.
+  </script>
+</body>
+</html>

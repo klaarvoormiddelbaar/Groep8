@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Docentendashboard — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg: #f7f9fb;
+      --card-bg: #ffffff;
+      --footer-bg: #f2f4f4;
+      --primary: #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green: #10a37f;
+      --dark: #191c1d;
+      --muted: #6d747a;
+      --border: #eceeee;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+      --shadow-card-hover: 0 32px 48px -8px rgba(0,0,0,0.18), 0 12px 20px -8px rgba(0,0,0,0.10);
+      --shadow-btn-blue: 0 10px 20px rgba(78,142,243,0.30);
+      --max-w: 1184px;
+      --pad: 48px;
+      --r-card: 40px;
+      --r-pill: 9999px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      /*
+        Multi-layer background:
+        1. Subtle dot grid (scrolls with page — notebook feel)
+        2–6. Fixed atmospheric gradient blooms (stay put while scrolling)
+           — blue top-right (primary brand colour)
+           — cool blue top-left
+           — green mid-right (very subtle)
+           — warm amber bottom-left (adds warmth)
+           — white radial center (keeps the reading area bright and readable)
+        Base colour: slightly blue-tinted off-white, warmer than #f8fafa
+      */
+      background-color: #f2f6fd;
+      background-image:
+        radial-gradient(rgba(78,142,243,0.06) 1.5px, transparent 1.5px),
+        radial-gradient(ellipse at 108% -8%,  rgba(114,168,249,0.24) 0%, transparent 52%),
+        radial-gradient(ellipse at -8%   8%,  rgba(156,196,238,0.20) 0%, transparent 48%),
+        radial-gradient(ellipse at 108% 60%,  rgba(16,163,127,0.08)  0%, transparent 42%),
+        radial-gradient(ellipse at -5%  100%, rgba(251,191,36,0.09)  0%, transparent 44%),
+        radial-gradient(ellipse at 50%  40%,  rgba(255,255,255,0.68) 0%, transparent 58%);
+      background-size:
+        28px 28px,
+        100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+      background-attachment:
+        scroll, fixed, fixed, fixed, fixed, fixed;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(247,249,251,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 var(--pad); height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; cursor: pointer; flex-shrink: 0;
+    }
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700; letter-spacing: -0.3px;
+      box-shadow: var(--shadow-btn-blue);
+    }
+    .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
+    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .bc-link { color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; cursor: pointer; }
+    .bc-link:hover { color: var(--primary); }
+    .bc-sep { color: rgba(109,116,122,0.4); }
+    .bc-current { color: var(--primary); font-weight: 700; }
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+    .nav-pill {
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
+      border-radius: var(--r-pill); padding: 6px 14px;
+      font-size: 13px; font-weight: 700; color: var(--primary);
+    }
+    .avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      border: 2.5px solid var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .avatar:hover { transform: scale(1.06); box-shadow: 0 0 0 4px rgba(78,142,243,0.20); }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 48px var(--pad) 96px;
+      position: relative; z-index: 1;
+    }
+
+    /* ── WELCOME HERO ── */
+    .welcome-hero {
+      background: linear-gradient(135deg, rgba(26,66,128,0.92) 0%, rgba(58,123,213,0.90) 48%, rgba(106,170,248,0.87) 78%, rgba(154,196,251,0.85) 100%), url('Dashboard.image.png') center/cover no-repeat;
+      border-radius: var(--r-card);
+      padding: 52px 56px;
+      margin-bottom: 40px;
+      position: relative; overflow: hidden;
+      display: flex; align-items: center;
+      min-height: 290px;
+      color: white;
+      box-shadow: 0 28px 60px -12px rgba(58,123,213,0.45);
+      animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    /* Dot grid overlay on hero */
+    .welcome-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px);
+      background-size: 26px 26px;
+      border-radius: inherit;
+      pointer-events: none; z-index: 0;
+    }
+    /* Large glow circle top-right */
+    .welcome-hero::after {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 380px; height: 380px;
+      background: rgba(255,255,255,0.09);
+      border-radius: 50%;
+      pointer-events: none; z-index: 0;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 560px; }
+
+    .hero-label {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 1.8px; text-transform: uppercase;
+      opacity: 0.72; margin-bottom: 10px;
+    }
+    .hero-title {
+      font-size: 52px; font-weight: 700; line-height: 1.04;
+      margin-bottom: 28px;
+      /* Subtle text shadow for lift */
+      text-shadow: 0 2px 16px rgba(0,0,0,0.12);
+    }
+    .hero-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .hero-chip {
+      background: rgba(255,255,255,0.18);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.30);
+      border-radius: var(--r-pill);
+      padding: 8px 18px;
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; gap: 7px;
+    }
+
+    /* Decorative circles (classic from v1, enlarged) */
+    .deco-c1 {
+      position: absolute; top: -60px; right: 260px;
+      width: 200px; height: 200px;
+      background: rgba(255,255,255,0.06); border-radius: 50%;
+      pointer-events: none; z-index: 0;
+    }
+    .deco-c2 {
+      position: absolute; bottom: -70px; right: 100px;
+      width: 260px; height: 260px;
+      background: rgba(255,255,255,0.05); border-radius: 50%;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* SVG illustration — right side of hero */
+    .hero-illustration {
+      position: absolute;
+      right: 48px; top: 50%;
+      transform: translateY(-50%);
+      width: 300px; height: 220px;
+      pointer-events: none; z-index: 0;
+      opacity: 1;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-head {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 28px;
+      animation: fadeUp 0.5s 0.18s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .section-title {
+      font-size: 28px; font-weight: 700; color: var(--dark);
+      position: relative; display: inline-block;
+    }
+    /* Coloured underline accent on section title */
+    .section-title::after {
+      content: '';
+      position: absolute; left: 0; bottom: -5px;
+      width: 48px; height: 3px;
+      background: linear-gradient(90deg, var(--primary), rgba(114,168,249,0));
+      border-radius: 2px;
+    }
+    .section-sub    { font-size: 14px; color: var(--muted); margin-top: 12px; }
+    .section-count  {
+      font-size: 13px; font-weight: 700; color: var(--primary);
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,0.20);
+      border-radius: var(--r-pill); padding: 8px 18px;
+    }
+
+    /* ── LESSON GRID ── */
+    .lessons-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 20px;
+    }
+
+    /* ── LESSON CARD ── */
+    .lesson-card {
+      border-radius: var(--r-card);
+      overflow: hidden;
+      cursor: pointer;
+      background: white;
+      border: 1px solid rgba(0,0,0,0.06);
+      display: flex; flex-direction: column;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      transition: transform 0.30s cubic-bezier(0.34,1.56,0.64,1),
+                  box-shadow 0.30s ease;
+      animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .lesson-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: var(--shadow-card-hover);
+    }
+    /* Stagger */
+    .lesson-card:nth-child(1) { animation-delay: 0.16s; }
+    .lesson-card:nth-child(2) { animation-delay: 0.22s; }
+    .lesson-card:nth-child(3) { animation-delay: 0.28s; }
+    .lesson-card:nth-child(4) { animation-delay: 0.34s; }
+    .lesson-card:nth-child(5) { animation-delay: 0.40s; }
+    .lesson-card:nth-child(6) { animation-delay: 0.46s; }
+    .lesson-card:nth-child(7) { animation-delay: 0.52s; }
+    .lesson-card:nth-child(8) { animation-delay: 0.58s; }
+
+    /* Colour header */
+    .card-head {
+      padding: 28px 26px 22px;
+      position: relative; overflow: hidden;
+      background: linear-gradient(140deg, var(--ch-g1), var(--ch-g2));
+      min-height: 148px;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .card-head::before {
+      content: '';
+      position: absolute; top: -28px; right: -28px;
+      width: 120px; height: 120px;
+      background: rgba(255,255,255,0.13);
+      border-radius: 50%; pointer-events: none;
+    }
+    .card-head::after {
+      content: '';
+      position: absolute; bottom: -40px; left: 12px;
+      width: 90px; height: 90px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%; pointer-events: none;
+    }
+    .card-head-top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      position: relative; z-index: 1;
+    }
+    .card-num-badge {
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.45);
+      border-radius: var(--r-pill);
+      padding: 4px 12px;
+      font-size: 11px; font-weight: 700; color: white;
+      letter-spacing: 1px; text-transform: uppercase;
+    }
+    .card-head-emoji {
+      font-size: 36px; line-height: 1;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.20));
+      transition: transform 0.30s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .lesson-card:hover .card-head-emoji { transform: scale(1.22) rotate(-5deg); }
+
+    .card-body {
+      padding: 22px 24px 20px;
+      display: flex; flex-direction: column; flex: 1; gap: 8px;
+    }
+    .card-title { font-size: 16px; font-weight: 700; color: var(--dark); line-height: 1.3; }
+    .card-desc  { font-size: 13px; color: var(--muted); line-height: 1.65; flex: 1; }
+    .card-foot  {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 14px; border-top: 1px solid var(--border); margin-top: 6px;
+    }
+    .card-dur { font-size: 12px; color: var(--muted); }
+    .card-cta {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 13px; font-weight: 700; color: var(--ch-g1);
+      transition: gap 0.2s;
+    }
+    .lesson-card:hover .card-cta { gap: 9px; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--footer-bg);
+      border-radius: 64px 64px 0 0;
+      padding: 40px var(--pad);
+      position: relative; z-index: 1;
+    }
+    .footer-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { font-size: 16px; font-weight: 700; color: var(--dark); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--primary); }
+    .footer-copy { font-size: 16px; color: var(--muted); }
+
+    /* ── DETAIL VIEW ── */
+    #detail-view { display: none; }
+    #detail-view.active { display: block; }
+    #dashboard-view.hidden { display: none; }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--r-pill); padding: 10px 22px;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700; color: var(--dark);
+      cursor: pointer; margin-bottom: 32px; transition: all 0.2s;
+    }
+    .back-btn:hover { background: var(--primary-soft); border-color: var(--primary); color: var(--primary); }
+
+    .detail-hero {
+      border-radius: var(--r-card);
+      padding: 52px 56px;
+      color: white; position: relative; overflow: hidden;
+      margin-bottom: 28px;
+      box-shadow: 0 24px 48px -12px rgba(0,0,0,0.28);
+      animation: fadeUp 0.45s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .detail-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.13) 1.5px, transparent 1.5px);
+      background-size: 26px 26px;
+      border-radius: inherit; pointer-events: none;
+    }
+    .detail-hero .ghost-n {
+      position: absolute; right: -10px; bottom: -30px;
+      font-size: 240px; font-weight: 700; line-height: 1;
+      color: rgba(255,255,255,0.08);
+      pointer-events: none; user-select: none;
+    }
+    .detail-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.22); border: 1px solid rgba(255,255,255,0.32);
+      border-radius: var(--r-pill); padding: 6px 16px;
+      font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+      margin-bottom: 16px; position: relative; z-index: 1;
+    }
+    .detail-title { font-size: 44px; font-weight: 700; line-height: 1.08; margin-bottom: 24px; position: relative; z-index: 1; }
+    .detail-hero-bottom {
+      display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+      position: relative; z-index: 1;
+    }
+    .detail-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .detail-hero-ctas { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .detail-chip {
+      background: rgba(255,255,255,0.18); border-radius: var(--r-pill); padding: 7px 16px;
+      font-size: 13px; font-weight: 700;
+    }
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.20); backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255,255,255,0.50); border-radius: var(--r-pill);
+      padding: 13px 30px;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 15px; font-weight: 700; color: white;
+      text-decoration: none; cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+    }
+    .hero-cta:hover { background: rgba(255,255,255,0.32); border-color: rgba(255,255,255,0.75); transform: translateY(-2px); }
+    .hero-cta-arrow { transition: transform 0.2s; }
+    .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+    .hero-cta-live {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: white; border: none; border-radius: var(--r-pill);
+      padding: 14px 30px;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 15px; font-weight: 700; color: var(--primary-dark);
+      text-decoration: none; cursor: pointer; white-space: nowrap;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.18);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+    }
+    .hero-cta-live:hover { transform: translateY(-3px); box-shadow: 0 18px 34px rgba(0,0,0,0.22); }
+    .hero-cta-live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; animation: liveDotPulse 1.6s infinite; flex-shrink: 0; }
+    @keyframes liveDotPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.78); } }
+
+    .tip-box {
+      background: #fef9e9; border: 1.5px solid #f8d760; border-radius: 16px;
+      padding: 20px 24px; display: flex; align-items: flex-start; gap: 16px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.4s 0.10s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .tip-icon-wrap {
+      width: 36px; height: 36px; background: #f8d760; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; flex-shrink: 0;
+    }
+    .tip-label { font-size: 12px; font-weight: 700; color: #c29111; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+    .tip-body  { font-size: 14px; color: #453b1a; line-height: 1.65; }
+
+    .content-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 24px; margin-bottom: 24px;
+      animation: fadeUp 0.4s 0.16s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .content-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 28px; padding: 32px; }
+    .content-card.full { grid-column: 1/-1; }
+    .cc-title { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 20px; }
+    .obj-row { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .obj-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--primary); margin-top: 8px; flex-shrink: 0; }
+    .obj-text { font-size: 15px; color: var(--dark); line-height: 1.55; }
+    .tl-row { display: flex; gap: 16px; margin-bottom: 18px; }
+    .tl-time { font-size: 12px; font-weight: 700; color: var(--primary); width: 56px; flex-shrink: 0; padding-top: 2px; }
+    .tl-name { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+    .tl-desc { font-size: 13px; color: var(--muted); line-height: 1.55; }
+    .mat-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .mat-chip {
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
+      border-radius: var(--r-pill); padding: 8px 18px;
+      font-size: 13px; font-weight: 700; color: var(--primary);
+    }
+    .cta-bar {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 28px;
+      padding: 28px 36px;
+      display: flex; align-items: center; justify-content: space-between; gap: 32px;
+      animation: fadeUp 0.4s 0.24s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .cta-bar-label { font-size: 11px; font-weight: 700; color: var(--primary); letter-spacing: 1.4px; text-transform: uppercase; margin-bottom: 6px; }
+    .cta-bar-title { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .cta-bar-sub   { font-size: 14px; color: var(--muted); }
+    .btn-ga-naar {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--primary); border-radius: 48px; padding: 18px 52px;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 20px; font-weight: 700; color: white;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: var(--shadow-btn-blue);
+      white-space: nowrap; flex-shrink: 0;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+    }
+    .btn-ga-naar:hover { transform: translateY(-3px); box-shadow: 0 18px 36px rgba(78,142,243,0.42); background: var(--primary-dark); }
+    .btn-ga-naar-arrow { transition: transform 0.2s; }
+    .btn-ga-naar:hover .btn-ga-naar-arrow { transform: translateX(5px); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .section-head { animation: fadeUp 0.5s 0.18s cubic-bezier(0.22,1,0.36,1) both; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo" onclick="showDashboard()">
+        <div class="logo-mark">KvM</div>
+        <div>
+          <div class="logo-name">Klaar voor Middelbaar</div>
+          <div class="logo-role">Docentenportaal</div>
+        </div>
+      </div>
+      <nav class="breadcrumb">
+        <span class="bc-link" onclick="showDashboard()">Docentenportaal</span>
+        <span class="bc-sep">/</span>
+        <span class="bc-current" id="bc-current">Groep 8A</span>
+      </nav>
+      <div class="nav-right">
+        <span class="nav-pill">Groep 8</span>
+        <div class="avatar" title="Linda">LI</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div id="dashboard-view">
+
+      <!-- Welcome hero -->
+      <div class="welcome-hero">
+        <div class="deco-c1"></div>
+        <div class="deco-c2"></div>
+
+        <!-- SVG illustration: open book + sparkles -->
+        <svg class="hero-illustration" viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- Outer orbit ring (dashed) -->
+          <circle cx="210" cy="110" r="95" stroke="rgba(255,255,255,0.10)" stroke-width="1.5" stroke-dasharray="6 5"/>
+          <!-- Middle ring -->
+          <circle cx="210" cy="110" r="66" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3 5"/>
+
+          <!-- Open book — left page -->
+          <path d="M104 68 L104 152 Q136 141 148 146 L148 62 Q136 57 104 68Z"
+                fill="rgba(255,255,255,0.11)" stroke="rgba(255,255,255,0.26)" stroke-width="1.5" stroke-linejoin="round"/>
+          <!-- Open book — right page -->
+          <path d="M192 68 L192 152 Q160 141 148 146 L148 62 Q160 57 192 68Z"
+                fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.20)" stroke-width="1.5" stroke-linejoin="round"/>
+          <!-- Spine -->
+          <line x1="148" y1="62" x2="148" y2="146" stroke="rgba(255,255,255,0.38)" stroke-width="2" stroke-linecap="round"/>
+
+          <!-- Lines left page -->
+          <line x1="116" y1="90"  x2="139" y2="87"  stroke="rgba(255,255,255,0.22)" stroke-width="1" stroke-linecap="round"/>
+          <line x1="116" y1="101" x2="139" y2="98"  stroke="rgba(255,255,255,0.17)" stroke-width="1" stroke-linecap="round"/>
+          <line x1="116" y1="112" x2="139" y2="109" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linecap="round"/>
+          <line x1="116" y1="123" x2="130" y2="121" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round"/>
+
+          <!-- Lines right page -->
+          <line x1="157" y1="87"  x2="180" y2="90"  stroke="rgba(255,255,255,0.22)" stroke-width="1" stroke-linecap="round"/>
+          <line x1="157" y1="98"  x2="180" y2="101" stroke="rgba(255,255,255,0.17)" stroke-width="1" stroke-linecap="round"/>
+          <line x1="157" y1="109" x2="180" y2="112" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linecap="round"/>
+          <line x1="157" y1="121" x2="170" y2="123" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round"/>
+
+          <!-- 4-point star sparkle — large -->
+          <path d="M246 36 L248.2 29 L250.4 36 L257.4 38.2 L250.4 40.4 L248.2 47.4 L246 40.4 L239 38.2Z" fill="rgba(255,255,255,0.62)"/>
+          <!-- 4-point star sparkle — small -->
+          <path d="M60 28 L61.4 24 L62.8 28 L66.8 29.4 L62.8 30.8 L61.4 34.8 L60 30.8 L56 29.4Z" fill="rgba(255,255,255,0.44)"/>
+
+          <!-- Scatter dots -->
+          <circle cx="262" cy="72"  r="3"   fill="rgba(255,255,255,0.42)"/>
+          <circle cx="274" cy="108" r="2"   fill="rgba(255,255,255,0.28)"/>
+          <circle cx="40"  cy="72"  r="2.5" fill="rgba(255,255,255,0.30)"/>
+          <circle cx="232" cy="162" r="3.5" fill="rgba(255,255,255,0.36)"/>
+          <circle cx="70"  cy="165" r="2"   fill="rgba(255,255,255,0.22)"/>
+          <circle cx="22"  cy="130" r="1.5" fill="rgba(255,255,255,0.18)"/>
+          <circle cx="284" cy="142" r="2"   fill="rgba(255,255,255,0.24)"/>
+          <circle cx="90"  cy="42"  r="1.5" fill="rgba(255,255,255,0.20)"/>
+
+          <!-- Plus/cross sparkles -->
+          <line x1="35" y1="50"  x2="35" y2="58"  stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="31" y1="54"  x2="39" y2="54"  stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="262" y1="150" x2="262" y2="157" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="258.5" y1="153.5" x2="265.5" y2="153.5" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>
+
+          <!-- Pencil (simple, bottom-right area) -->
+          <rect x="220" y="168" width="6" height="28" rx="1.5"
+                fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.30)" stroke-width="1"
+                transform="rotate(-28 223 182)"/>
+          <path d="M218.5 191 L223 196.5 L227.5 191Z"
+                fill="rgba(255,255,255,0.30)" transform="rotate(-28 223 182)"/>
+        </svg>
+
+        <div class="hero-content">
+          <div class="hero-label">Docentendashboard</div>
+          <div class="hero-title">Goedemorgen Linda!</div>
+          <div class="hero-chips">
+            <div class="hero-chip">🏫 De Zonnewijzer</div>
+            <div class="hero-chip">👥 Groep 8A</div>
+            <div class="hero-chip">📚 8 lessen beschikbaar</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section header -->
+      <div class="section-head">
+        <div>
+          <div class="section-title">Alle lessen</div>
+          <div class="section-sub">Klik op een les om de docentenhandleiding te openen</div>
+        </div>
+        <div class="section-count">8 lessen</div>
+      </div>
+
+      <!-- Lesson cards (built by JS) -->
+      <div class="lessons-grid" id="lessons-grid"></div>
+
+    </div><!-- /dashboard-view -->
+
+    <!-- DETAIL VIEW -->
+    <div id="detail-view"></div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="logo" onclick="showDashboard()" style="cursor:pointer">
+        <div class="logo-mark">KvM</div>
+        <div><div class="logo-name">Klaar voor Middelbaar</div></div>
+      </div>
+      <div class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Contact</a>
+        <a href="#">Hulp</a>
+      </div>
+      <div class="footer-copy">© 2026 Klaar voor Middelbaar</div>
+    </div>
+  </footer>
+
+  <script>
+    const LESSONS = [
+      {
+        n: 1, g1: '#1e4a8a', g2: '#72a8f9',
+        emoji: '🎒', title: 'Welkom bij KvM',
+        sub: 'Kennismaking + Slim Leren',
+        url: 'les-1.html',
+        tip: 'Hang de ingevulde kaartjes op in de klas als visuele herinnering. Verwijs er gedurende het hele programma regelmatig naar terug.',
+        doelen: [
+          'Leerlingen kennen het programma Klaar voor Middelbaar en weten wat ze gaan leren.',
+          'Leerlingen kunnen hun verwachtingen en vragen over de middelbare benoemen.',
+          'Leerlingen stellen zich open voor nieuwe ervaringen.'
+        ],
+        tl: [
+          { t: '0–5 min',   n: 'Introductie',         d: 'Verwelkom de klas en introduceer het KvM-programma aan de hand van de poster.' },
+          { t: '5–20 min',  n: 'Klassengesprek',      d: 'Bespreek wat leerlingen al weten over de middelbare school en wat ze spannend vinden.' },
+          { t: '20–40 min', n: 'Kaartjesopdracht',    d: 'Leerlingen vullen "Ik kijk uit naar…" en "Ik ben benieuwd naar…" kaartjes in.' },
+          { t: '40–55 min', n: 'Plenaire afsluiting', d: 'Bespreek de kaartjes plenair en maak samen een klassencloud op het bord.' }
+        ],
+        mat: ['Kaartjes voor elke leerling', 'KvM-poster (bijlage 1)', 'Stiften of potloden']
+      },
+      {
+        n: 2, g1: '#065f46', g2: '#10a37f',
+        emoji: '🏫', title: 'De nieuwe school',
+        sub: 'Hoe werkt de middelbare school?',
+        url: 'les-2.html',
+        tip: 'Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.',
+        doelen: [
+          'Leerlingen begrijpen de structuur van de middelbare school.',
+          'Leerlingen weten wat er anders is dan op de basisschool.',
+          'Leerlingen kennen begrippen als rooster, kluisje en mentor.'
+        ],
+        tl: [
+          { t: '0–5 min',   n: 'Terugblik',          d: 'Korte herhaling van les 1: wat onthielden leerlingen?' },
+          { t: '5–20 min',  n: 'Uitleg & video',     d: 'Toon en bespreek hoe een dag op de middelbare eruitziet.' },
+          { t: '20–40 min', n: 'Quiz in tweetallen', d: 'Leerlingen beantwoorden vragen over de middelbare in koppels.' },
+          { t: '40–55 min', n: 'Vragenronde',        d: 'Plenair: wat willen leerlingen nog meer weten?' }
+        ],
+        mat: ['Quiz-kaarten (bijlage 2)', 'Smartboard of beamer', 'Optioneel: video over een dag op de middelbare']
+      },
+      {
+        n: 3, g1: '#92400e', g2: '#f59e0b',
+        emoji: '📅', title: 'Slim plannen',
+        sub: 'Agenda, huiswerk en roosters',
+        url: 'les-3.html',
+        tip: 'Gebruik de checklist "Wat gaat er mee naar school?" als tastbaar hulpmiddel dat leerlingen ook thuis kunnen ophangen.',
+        doelen: [
+          'Leerlingen kunnen een agenda correct invullen.',
+          'Leerlingen weten hoe ze huiswerk verspreiden over de week.',
+          'Leerlingen leren hun schooltas planmatig inpakken.'
+        ],
+        tl: [
+          { t: '0–5 min',   n: 'Instapvraag',         d: 'Hoe plan jij nu jouw werk? Leerlingen delen ervaringen.' },
+          { t: '5–20 min',  n: 'Uitleg weekplanning', d: 'Toon een voorbeeld weekplanning voor de middelbare school.' },
+          { t: '20–40 min', n: 'Oefening',            d: 'Leerlingen maken een weekplanning op basis van een fictief rooster.' },
+          { t: '40–55 min', n: 'Bespreking',          d: 'Deel planningen in de klas en bespreek handige strategieën.' }
+        ],
+        mat: ['Werkblad weekplanning (bijlage 3)', 'Checklist schooltas (bijlage 4)', 'Voorbeeld rooster']
+      },
+      {
+        n: 4, g1: '#4c1d95', g2: '#7c3aed',
+        emoji: '👫', title: 'Nieuwe vrienden',
+        sub: 'Sociale vaardigheden en vriendschappen',
+        url: 'les-4.html',
+        tip: 'Houd de sfeer licht en veilig. Dit onderwerp raakt leerlingen soms persoonlijk. Geef aan dat ze altijd bij jou terecht kunnen.',
+        doelen: [
+          'Leerlingen kunnen zichzelf op een positieve manier voorstellen.',
+          'Leerlingen kennen gespreksstarters voor nieuwe situaties.',
+          'Leerlingen herkennen signalen van vriendschap en uitsluiting.'
+        ],
+        tl: [
+          { t: '0–10 min',  n: 'Kennismakingsspel', d: 'Warming-up: leerlingen ontdekken 3 nieuwe feiten over een klasgenoot.' },
+          { t: '10–25 min', n: 'Rollenspel',        d: 'In tweetallen: oefenen met jezelf voorstellen in een nieuwe klas.' },
+          { t: '25–42 min', n: 'Scenario-kaarten',  d: "Bespreek scenario's over vriendschap, pesten en erbij horen." },
+          { t: '42–55 min', n: 'Reflectie',         d: 'Elke leerling noemt één tip die hij of zij meeneemt naar de middelbare.' }
+        ],
+        mat: ["Scenario-kaarten set 1 (bijlage 5)", 'Reflectiekaartjes', 'Optioneel: video over sociale situaties']
+      },
+      {
+        n: 5, g1: '#7f1d1d', g2: '#e05545',
+        emoji: '✉️', title: 'Formeel & Informeel',
+        sub: 'Communicatiestijlen oefenen',
+        url: 'les-5.html',
+        tip: 'De digitale les bevat een interactieve drag-and-drop opdracht. Plan vooraf toegang tot tablets of computers voor de hele klas.',
+        doelen: [
+          'Leerlingen begrijpen het verschil tussen formeel en informeel taalgebruik.',
+          'Leerlingen kunnen een formele e-mail of brief schrijven.',
+          'Leerlingen weten wanneer welke communicatiestijl gepast is.'
+        ],
+        tl: [
+          { t: '0–10 min',  n: 'Voorbeelden vergelijken', d: 'Vergelijk een informeel appbericht met een formele e-mail aan een docent.' },
+          { t: '10–28 min', n: 'Uitleg',                  d: 'Bespreek kenmerken van formeel taalgebruik via de digitale les.' },
+          { t: '28–45 min', n: 'Schrijfopdracht',         d: 'Leerlingen herschrijven een informele boodschap als formele e-mail.' },
+          { t: '45–55 min', n: 'Peerfeedback',            d: 'Wissel e-mails uit en geef kort feedback op elkaars werk.' }
+        ],
+        mat: ['Devices voor de digitale les', 'Werkblad e-mailschrijven (bijlage 6)', 'Voorbeeldmails (bijlage 7)']
+      },
+      {
+        n: 6, g1: '#0c4a6e', g2: '#0284c7',
+        emoji: '🧠', title: 'Gevoel & Zelfvertrouwen',
+        sub: 'Emotionele voorbereiding op de overstap',
+        url: 'les-6.html',
+        tip: 'Wees alert op leerlingen die significant angstig lijken. Spreek ze na de les apart aan en overleg zo nodig met de intern begeleider.',
+        doelen: [
+          'Leerlingen kunnen hun gevoelens over de overstap benoemen.',
+          'Leerlingen kennen technieken om met spanning om te gaan.',
+          'Leerlingen versterken hun zelfvertrouwen via positieve zelfreflectie.'
+        ],
+        tl: [
+          { t: '0–10 min',  n: 'Check-in',           d: 'Thermometer-check: hoe voel jij je over de middelbare? Schaal 1–10.' },
+          { t: '10–28 min', n: 'Gesprek',             d: 'Bespreek gevoelens van spanning en opwinding. Wat is het verschil?' },
+          { t: '28–45 min', n: 'Kracht-kaarten',      d: 'Leerlingen schrijven 3 eigen kwaliteiten op en delen ze met de klas.' },
+          { t: '45–55 min', n: 'Ademhalingsoefening', d: 'Oefen samen een korte ademhalingstechniek voor stressvolle momenten.' }
+        ],
+        mat: ['Kracht-kaarten (bijlage 8)', 'Thermometer-poster', 'QR-code naar ademhalingsvideo']
+      },
+      {
+        n: 7, g1: '#831843', g2: '#db2777',
+        emoji: '🎭', title: 'Sociale situaties',
+        sub: "Oefenen met realistische scenario's",
+        url: 'les-7.html',
+        tip: "Laat groepjes ook eigen scenario's bedenken. Dit verhoogt de betrokkenheid en zorgt voor herkenning.",
+        doelen: [
+          'Leerlingen oefenen met sociale situaties die ze tegenkomen op de middelbare.',
+          'Leerlingen leren om hulp te vragen aan een docent of mentor.',
+          'Leerlingen vergroten hun probleemoplossend vermogen.'
+        ],
+        tl: [
+          { t: '0–5 min',   n: 'Introductie',   d: "Introduceer het concept van sociale scenario's en het belang ervan." },
+          { t: '5–28 min',  n: 'Scenario-spel', d: 'Kleine groepen spelen scenario-kaarten na en bedenken oplossingen.' },
+          { t: '28–45 min', n: 'Nabespreking',  d: 'Bespreek per scenario wat werkte en wat moeilijk was.' },
+          { t: '45–55 min', n: 'Afsluiting',    d: 'Elke leerling kiest het scenario dat hij of zij het meest leerzaam vond.' }
+        ],
+        mat: ["Scenario-kaarten set 2 (bijlage 9)", 'Antwoordbladen', 'Toegang tot digitale les']
+      },
+      {
+        n: 8, g1: '#134e4a', g2: '#0f766e',
+        emoji: '🏆', title: 'Klaar voor de start!',
+        sub: 'Afsluiting, reflectie en certificaat',
+        url: 'les-8.html',
+        tip: 'Maak van de certificaatuitreiking een echt feestmoment. Nodig eventueel ouders uit of maak een korte video voor de ouderavond.',
+        doelen: [
+          'Leerlingen reflecteren op het volledige programma.',
+          'Leerlingen formuleren hun persoonlijke startwoorden.',
+          'Leerlingen ontvangen hun KvM-certificaat en vieren de afronding.'
+        ],
+        tl: [
+          { t: '0–10 min',  n: 'Terugblik',            d: 'Blader samen terug door alle lessen. Wat zijn de highlights?' },
+          { t: '10–28 min', n: 'Eindkaart invullen',    d: 'Leerlingen schrijven: "Ik ben klaar voor de middelbare omdat…"' },
+          { t: '28–45 min', n: 'Certificaatuitreiking', d: 'Reik individueel de KvM-certificaten uit. Vier dit moment!' },
+          { t: '45–55 min', n: 'Feestelijk slot',       d: 'Gezamenlijke afsluiting: succeswensen en een klassenfoto.' }
+        ],
+        mat: ['KvM-certificaten (bijlage 10)', 'Eindkaarten voor leerlingen', 'Optioneel: diploma-muziek en slingers']
+      }
+    ];
+
+    /* Build lesson cards */
+    const grid = document.getElementById('lessons-grid');
+    LESSONS.forEach((L, i) => {
+      grid.innerHTML += `
+        <div class="lesson-card"
+             style="--ch-g1:${L.g1};--ch-g2:${L.g2}"
+             onclick="openLesson(${i})">
+          <div class="card-head">
+            <div class="card-head-top">
+              <div class="card-num-badge">Les ${L.n}</div>
+              <div class="card-head-emoji">${L.emoji}</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="card-title">${L.title}</div>
+            <div class="card-desc">${L.sub}</div>
+            <div class="card-foot">
+              <div class="card-dur">⏱ 50–60 min</div>
+              <div class="card-cta">Bekijk les →</div>
+            </div>
+          </div>
+        </div>`;
+    });
+
+    function openLesson(i) {
+      const L = LESSONS[i];
+      document.getElementById('dashboard-view').classList.add('hidden');
+      document.getElementById('bc-current').textContent = `Les ${L.n}: ${L.title}`;
+
+      const liveSessieUrl = `../Kahoot/docent-sessie.html?les=les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent('Linda')}`;
+      const livePollUrl   = `../Live poll/docent-poll.html?les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent('Linda')}`;
+
+      const dv = document.getElementById('detail-view');
+      dv.innerHTML = `
+        <button class="back-btn" onclick="showDashboard()">← Terug naar overzicht</button>
+
+        <div class="detail-hero" style="background:linear-gradient(135deg,${L.g1} 0%,${L.g2} 100%)">
+          <div class="ghost-n">${L.n}</div>
+          <div class="detail-badge">Les ${L.n} van 8</div>
+          <div class="detail-title">${L.emoji} ${L.title}</div>
+          <div class="detail-hero-bottom">
+            <div class="detail-chips">
+              <div class="detail-chip">⏱ 50–60 min</div>
+              <div class="detail-chip">👥 Groep 8A</div>
+              <div class="detail-chip">🏫 De Zonnewijzer</div>
+            </div>
+            <div class="detail-hero-ctas">
+              <a class="hero-cta" href="${L.url}" target="_blank" rel="noopener">
+                Ga naar de les <span class="hero-cta-arrow">→</span>
+              </a>
+              <a class="hero-cta-live" href="${liveSessieUrl}" target="_blank" rel="noopener">
+                <span class="hero-cta-live-dot"></span> Start live quiz
+              </a>
+              <a class="hero-cta-live" href="${livePollUrl}" target="_blank" rel="noopener"
+                 style="background:rgba(16,163,127,0.12);border:1.5px solid rgba(16,163,127,0.30);color:#0c8268">
+                🗳️ Start live poll
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-box">
+          <div class="tip-icon-wrap">💡</div>
+          <div>
+            <div class="tip-label">Tip voor de docent</div>
+            <div class="tip-body">${L.tip}</div>
+          </div>
+        </div>
+
+        <div class="content-grid">
+          <div class="content-card">
+            <div class="cc-title">Leerdoelen</div>
+            ${L.doelen.map(d => `
+              <div class="obj-row">
+                <div class="obj-dot"></div>
+                <div class="obj-text">${d}</div>
+              </div>`).join('')}
+          </div>
+          <div class="content-card">
+            <div class="cc-title">Lesverloop</div>
+            ${L.tl.map(t => `
+              <div class="tl-row">
+                <div class="tl-time">${t.t}</div>
+                <div>
+                  <div class="tl-name">${t.n}</div>
+                  <div class="tl-desc">${t.d}</div>
+                </div>
+              </div>`).join('')}
+          </div>
+          <div class="content-card full">
+            <div class="cc-title">Benodigde materialen</div>
+            <div class="mat-chips">
+              ${L.mat.map(m => `<div class="mat-chip">📎 ${m}</div>`).join('')}
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-bar">
+          <div>
+            <div class="cta-bar-label">Digitale les</div>
+            <div class="cta-bar-title">Klaar om te beginnen?</div>
+            <div class="cta-bar-sub">Open de interactieve les voor de leerlingen in een nieuw tabblad.</div>
+          </div>
+          <a class="btn-ga-naar" href="${L.url}" target="_blank" rel="noopener">
+            Ga naar de les <span class="btn-ga-naar-arrow">→</span>
+          </a>
+        </div>
+      `;
+      dv.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function showDashboard() {
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      const dv = document.getElementById('detail-view');
+      dv.classList.remove('active');
+      dv.innerHTML = '';
+      document.getElementById('bc-current').textContent = 'Groep 8A';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
