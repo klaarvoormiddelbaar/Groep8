@@ -720,6 +720,7 @@
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let profiel = { naam: '', groep: '8A', school: '' };
+    window.profiel = profiel;
     let userId  = null;
 
     /* ── Auth check + profiel laden ── */
@@ -739,6 +740,7 @@
 
       if (data && data.naam) {
         profiel = data;
+        window.profiel = profiel;
         updateUI();
       } else {
         openProfielModal(true);
@@ -828,6 +830,7 @@
 
       if (!error) {
         profiel = nieuwProfiel;
+        window.profiel = profiel;
         updateUI();
         document.getElementById('profielModal').classList.remove('open');
       }
