@@ -77,6 +77,7 @@
       max-width: var(--max-w); margin: 0 auto;
       padding: 0 var(--pad); height: 72px;
       display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      position: relative;
     }
     .logo {
       display: flex; align-items: center; gap: 12px;
@@ -92,7 +93,12 @@
     }
     .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
     .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
-    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px; font-size: 14px;
+      position: absolute; left: 50%; transform: translateX(-50%);
+      pointer-events: none;
+    }
+    .breadcrumb * { pointer-events: all; }
     .bc-link { color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; cursor: pointer; }
     .bc-link:hover { color: var(--primary); }
     .bc-sep { color: rgba(109,116,122,0.4); }
@@ -190,14 +196,17 @@
       pointer-events: none; z-index: 0;
     }
 
-    /* SVG illustration — right side of hero */
+    /* Dashboard image — right side of hero */
     .hero-illustration {
       position: absolute;
-      right: 48px; top: 50%;
+      right: -20px; top: 50%;
       transform: translateY(-50%);
-      width: 300px; height: 220px;
-      pointer-events: none; z-index: 0;
-      opacity: 1;
+      width: 340px; height: 240px;
+      pointer-events: none; z-index: 1;
+      object-fit: contain;
+      object-position: center bottom;
+      filter: drop-shadow(0 16px 32px rgba(0,0,0,0.28));
+      border-radius: 16px;
     }
 
     /* ── SECTION HEADER ── */
@@ -549,19 +558,13 @@
   <header class="header">
     <div class="header-inner">
       <div class="logo" onclick="showDashboard()">
-        <div class="logo-mark">KvM</div>
-        <div>
-          <div class="logo-name">Klaar voor Middelbaar</div>
-          <div class="logo-role">Docentenportaal</div>
-        </div>
+        <img src="KvM logo no background.png" alt="KvM logo" style="width:125px;height:125px;object-fit:contain;">
       </div>
       <nav class="breadcrumb">
         <span class="bc-link" onclick="showDashboard()">Docentenportaal</span>
-        <span class="bc-sep">/</span>
-        <span class="bc-current" id="bc-current">Groep 8A</span>
+        <span class="bc-current" id="bc-current" style="display:none"></span>
       </nav>
       <div class="nav-right">
-        <span class="nav-pill" id="nav-groep">Groep 8</span>
         <div class="avatar" id="avatar" title="Profiel bewerken" onclick="openProfielModal()">??</div>
         <button class="logout-btn" id="uitloggenBtn" title="Uitloggen">
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -584,62 +587,8 @@
         <div class="deco-c1"></div>
         <div class="deco-c2"></div>
 
-        <!-- SVG illustration: open book + sparkles -->
-        <svg class="hero-illustration" viewBox="0 0 300 220" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <!-- Outer orbit ring (dashed) -->
-          <circle cx="210" cy="110" r="95" stroke="rgba(255,255,255,0.10)" stroke-width="1.5" stroke-dasharray="6 5"/>
-          <!-- Middle ring -->
-          <circle cx="210" cy="110" r="66" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="3 5"/>
-
-          <!-- Open book — left page -->
-          <path d="M104 68 L104 152 Q136 141 148 146 L148 62 Q136 57 104 68Z"
-                fill="rgba(255,255,255,0.11)" stroke="rgba(255,255,255,0.26)" stroke-width="1.5" stroke-linejoin="round"/>
-          <!-- Open book — right page -->
-          <path d="M192 68 L192 152 Q160 141 148 146 L148 62 Q160 57 192 68Z"
-                fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.20)" stroke-width="1.5" stroke-linejoin="round"/>
-          <!-- Spine -->
-          <line x1="148" y1="62" x2="148" y2="146" stroke="rgba(255,255,255,0.38)" stroke-width="2" stroke-linecap="round"/>
-
-          <!-- Lines left page -->
-          <line x1="116" y1="90"  x2="139" y2="87"  stroke="rgba(255,255,255,0.22)" stroke-width="1" stroke-linecap="round"/>
-          <line x1="116" y1="101" x2="139" y2="98"  stroke="rgba(255,255,255,0.17)" stroke-width="1" stroke-linecap="round"/>
-          <line x1="116" y1="112" x2="139" y2="109" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linecap="round"/>
-          <line x1="116" y1="123" x2="130" y2="121" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round"/>
-
-          <!-- Lines right page -->
-          <line x1="157" y1="87"  x2="180" y2="90"  stroke="rgba(255,255,255,0.22)" stroke-width="1" stroke-linecap="round"/>
-          <line x1="157" y1="98"  x2="180" y2="101" stroke="rgba(255,255,255,0.17)" stroke-width="1" stroke-linecap="round"/>
-          <line x1="157" y1="109" x2="180" y2="112" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-linecap="round"/>
-          <line x1="157" y1="121" x2="170" y2="123" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-linecap="round"/>
-
-          <!-- 4-point star sparkle — large -->
-          <path d="M246 36 L248.2 29 L250.4 36 L257.4 38.2 L250.4 40.4 L248.2 47.4 L246 40.4 L239 38.2Z" fill="rgba(255,255,255,0.62)"/>
-          <!-- 4-point star sparkle — small -->
-          <path d="M60 28 L61.4 24 L62.8 28 L66.8 29.4 L62.8 30.8 L61.4 34.8 L60 30.8 L56 29.4Z" fill="rgba(255,255,255,0.44)"/>
-
-          <!-- Scatter dots -->
-          <circle cx="262" cy="72"  r="3"   fill="rgba(255,255,255,0.42)"/>
-          <circle cx="274" cy="108" r="2"   fill="rgba(255,255,255,0.28)"/>
-          <circle cx="40"  cy="72"  r="2.5" fill="rgba(255,255,255,0.30)"/>
-          <circle cx="232" cy="162" r="3.5" fill="rgba(255,255,255,0.36)"/>
-          <circle cx="70"  cy="165" r="2"   fill="rgba(255,255,255,0.22)"/>
-          <circle cx="22"  cy="130" r="1.5" fill="rgba(255,255,255,0.18)"/>
-          <circle cx="284" cy="142" r="2"   fill="rgba(255,255,255,0.24)"/>
-          <circle cx="90"  cy="42"  r="1.5" fill="rgba(255,255,255,0.20)"/>
-
-          <!-- Plus/cross sparkles -->
-          <line x1="35" y1="50"  x2="35" y2="58"  stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="31" y1="54"  x2="39" y2="54"  stroke="rgba(255,255,255,0.28)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="262" y1="150" x2="262" y2="157" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>
-          <line x1="258.5" y1="153.5" x2="265.5" y2="153.5" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" stroke-linecap="round"/>
-
-          <!-- Pencil (simple, bottom-right area) -->
-          <rect x="220" y="168" width="6" height="28" rx="1.5"
-                fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.30)" stroke-width="1"
-                transform="rotate(-28 223 182)"/>
-          <path d="M218.5 191 L223 196.5 L227.5 191Z"
-                fill="rgba(255,255,255,0.30)" transform="rotate(-28 223 182)"/>
-        </svg>
+        <!-- Dashboard image right side of hero -->
+        <img class="hero-illustration" src="Jay waving.png" alt="" aria-hidden="true">
 
         <div class="hero-content">
           <div class="hero-label">Docentendashboard</div>
@@ -754,7 +703,6 @@
       document.getElementById('hero-title').textContent  = `${begroeting} ${profiel.naam}!`;
       document.getElementById('chip-school').textContent = `🏫 ${profiel.school || 'Jouw school'}`;
       document.getElementById('chip-groep').textContent  = `👥 Groep ${profiel.groep}`;
-      document.getElementById('nav-groep').textContent   = `Groep ${profiel.groep.replace(/[AB]/i, '') || profiel.groep}`;
 
       const initialen = profiel.naam
         ? profiel.naam.trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase()
@@ -850,7 +798,7 @@
         n: 1, g1: '#1e4a8a', g2: '#72a8f9',
         emoji: '🎒', title: 'Welkom bij KvM',
         sub: 'Kennismaking + Slim Leren',
-        url: '/les1',
+        url: '../Lessen/les.html?n=1',
         tip: 'Hang de ingevulde kaartjes op in de klas als visuele herinnering. Verwijs er gedurende het hele programma regelmatig naar terug.',
         doelen: [
           'Leerlingen kennen het programma Klaar voor Middelbaar en weten wat ze gaan leren.',
@@ -869,7 +817,7 @@
         n: 2, g1: '#065f46', g2: '#10a37f',
         emoji: '🏫', title: 'De nieuwe school',
         sub: 'Hoe werkt de middelbare school?',
-        url: '/les2',
+        url: '../Lessen/les.html?n=2',
         tip: 'Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.',
         doelen: [
           'Leerlingen begrijpen de structuur van de middelbare school.',
@@ -888,7 +836,7 @@
         n: 3, g1: '#92400e', g2: '#f59e0b',
         emoji: '📅', title: 'Slim plannen',
         sub: 'Agenda, huiswerk en roosters',
-        url: '/les3',
+        url: '../Lessen/les.html?n=3',
         tip: 'Gebruik de checklist "Wat gaat er mee naar school?" als tastbaar hulpmiddel dat leerlingen ook thuis kunnen ophangen.',
         doelen: [
           'Leerlingen kunnen een agenda correct invullen.',
@@ -907,7 +855,7 @@
         n: 4, g1: '#4c1d95', g2: '#7c3aed',
         emoji: '👫', title: 'Nieuwe vrienden',
         sub: 'Sociale vaardigheden en vriendschappen',
-        url: '/les4',
+        url: '../Lessen/les.html?n=4',
         tip: 'Houd de sfeer licht en veilig. Dit onderwerp raakt leerlingen soms persoonlijk. Geef aan dat ze altijd bij jou terecht kunnen.',
         doelen: [
           'Leerlingen kunnen zichzelf op een positieve manier voorstellen.',
@@ -926,7 +874,7 @@
         n: 5, g1: '#7f1d1d', g2: '#e05545',
         emoji: '✉️', title: 'Formeel & Informeel',
         sub: 'Communicatiestijlen oefenen',
-        url: '/les5',
+        url: '../Lessen/les.html?n=5',
         tip: 'De digitale les bevat een interactieve drag-and-drop opdracht. Plan vooraf toegang tot tablets of computers voor de hele klas.',
         doelen: [
           'Leerlingen begrijpen het verschil tussen formeel en informeel taalgebruik.',
@@ -945,7 +893,7 @@
         n: 6, g1: '#0c4a6e', g2: '#0284c7',
         emoji: '🧠', title: 'Gevoel & Zelfvertrouwen',
         sub: 'Emotionele voorbereiding op de overstap',
-        url: '/les6',
+        url: '../Lessen/les.html?n=6',
         tip: 'Wees alert op leerlingen die significant angstig lijken. Spreek ze na de les apart aan en overleg zo nodig met de intern begeleider.',
         doelen: [
           'Leerlingen kunnen hun gevoelens over de overstap benoemen.',
@@ -964,7 +912,7 @@
         n: 7, g1: '#831843', g2: '#db2777',
         emoji: '🎭', title: 'Sociale situaties',
         sub: "Oefenen met realistische scenario's",
-        url: '/les7',
+        url: '../Lessen/les.html?n=7',
         tip: "Laat groepjes ook eigen scenario's bedenken. Dit verhoogt de betrokkenheid en zorgt voor herkenning.",
         doelen: [
           'Leerlingen oefenen met sociale situaties die ze tegenkomen op de middelbare.',
@@ -983,7 +931,7 @@
         n: 8, g1: '#134e4a', g2: '#0f766e',
         emoji: '🏆', title: 'Klaar voor de start!',
         sub: 'Afsluiting, reflectie en certificaat',
-        url: '/les8',
+        url: '../Lessen/les.html?n=8',
         tip: 'Maak van de certificaatuitreiking een echt feestmoment. Nodig eventueel ouders uit of maak een korte video voor de ouderavond.',
         doelen: [
           'Leerlingen reflecteren op het volledige programma.',
