@@ -479,6 +479,68 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .section-head { animation: fadeUp 0.5s 0.18s cubic-bezier(0.22,1,0.36,1) both; }
+
+    /* ── PROFIEL MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.40);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.25s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal-card {
+      background: white; border-radius: 32px;
+      padding: 48px; width: 100%; max-width: 480px;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.18);
+      position: relative;
+      animation: fadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .modal-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .modal-sub   { font-size: 15px; color: var(--muted); margin-bottom: 32px; line-height: 1.5; }
+    .modal-label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .modal-input, .modal-select {
+      width: 100%; height: 52px; padding: 0 18px;
+      border: 1.5px solid var(--border); border-radius: 14px;
+      font-family: 'Inria Sans', Georgia, serif; font-size: 16px;
+      color: var(--dark); background: #fff; margin-bottom: 20px;
+      outline: none; transition: border-color .18s, box-shadow .18s;
+    }
+    .modal-input:focus, .modal-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(78,142,243,0.12);
+    }
+    .modal-select {
+      appearance: none; cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%236d747a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 16px center;
+    }
+    .modal-btn-save {
+      width: 100%; height: 52px;
+      background: var(--primary); border: none; border-radius: 99px;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 17px; font-weight: 700; color: white;
+      cursor: pointer; transition: background 0.2s, transform 0.2s;
+      margin-top: 4px;
+    }
+    .modal-btn-save:hover { background: var(--primary-dark); transform: translateY(-2px); }
+    .modal-close {
+      position: absolute; top: 20px; right: 20px;
+      background: var(--border); border: none; border-radius: 50%;
+      width: 36px; height: 36px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 16px; transition: background 0.2s;
+    }
+    .modal-close:hover { background: #ddd; }
+    .logout-btn {
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); padding: 6px; border-radius: 8px;
+      display: flex; align-items: center;
+      transition: color 0.2s, background 0.2s;
+    }
+    .logout-btn:hover { color: #ef4444; background: rgba(239,68,68,0.08); }
   </style>
 </head>
 <body>
@@ -499,8 +561,14 @@
         <span class="bc-current" id="bc-current">Groep 8A</span>
       </nav>
       <div class="nav-right">
-        <span class="nav-pill">Groep 8</span>
-        <div class="avatar" title="Linda">LI</div>
+        <span class="nav-pill" id="nav-groep">Groep 8</span>
+        <div class="avatar" id="avatar" title="Profiel bewerken" onclick="openProfielModal()">??</div>
+        <button class="logout-btn" id="uitloggenBtn" title="Uitloggen">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M13 3h4a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-4M9 14l4-4-4-4M13 10H3"
+              stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
   </header>
@@ -575,10 +643,10 @@
 
         <div class="hero-content">
           <div class="hero-label">Docentendashboard</div>
-          <div class="hero-title">Goedemorgen Linda!</div>
+          <div class="hero-title" id="hero-title">Welkom!</div>
           <div class="hero-chips">
-            <div class="hero-chip">🏫 De Zonnewijzer</div>
-            <div class="hero-chip">👥 Groep 8A</div>
+            <div class="hero-chip" id="chip-school">🏫 –</div>
+            <div class="hero-chip" id="chip-groep">👥 –</div>
             <div class="hero-chip">📚 8 lessen beschikbaar</div>
           </div>
         </div>
@@ -618,6 +686,133 @@
       <div class="footer-copy">© 2026 Klaar voor Middelbaar</div>
     </div>
   </footer>
+
+  <!-- PROFIEL MODAL -->
+  <div class="modal-overlay" id="profielModal">
+    <div class="modal-card">
+      <button class="modal-close" id="modalSluit" aria-label="Sluiten">✕</button>
+      <div class="modal-title">Jouw profiel</div>
+      <p class="modal-sub">Vul je gegevens in zodat het dashboard gepersonaliseerd wordt.</p>
+      <form id="profielForm">
+        <label class="modal-label" for="p-naam">Naam</label>
+        <input class="modal-input" id="p-naam" type="text" placeholder="Bijv. Linda de Vries" required>
+        <label class="modal-label" for="p-groep">Groep</label>
+        <select class="modal-select" id="p-groep">
+          <option value="8A">Groep 8A</option>
+          <option value="8B">Groep 8B</option>
+          <option value="8">Groep 8</option>
+        </select>
+        <label class="modal-label" for="p-school">School</label>
+        <input class="modal-input" id="p-school" type="text" placeholder="Bijv. De Zonnewijzer">
+        <button type="submit" class="modal-btn-save" id="profielSlaOp">Opslaan</button>
+      </form>
+    </div>
+  </div>
+
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let profiel = { naam: '', groep: '8A', school: '' };
+    let userId  = null;
+
+    /* ── Auth check + profiel laden ── */
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        window.location.href = '../Inlogpagina/index.html';
+        return;
+      }
+      userId = session.user.id;
+
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (data && data.naam) {
+        profiel = data;
+        updateUI();
+      } else {
+        openProfielModal(true);
+      }
+    })();
+
+    /* ── UI bijwerken met profielgegevens ── */
+    function updateUI() {
+      const uur = new Date().getHours();
+      const begroeting = uur < 12 ? 'Goedemorgen' : uur < 18 ? 'Goedemiddag' : 'Goedenavond';
+      document.getElementById('hero-title').textContent  = `${begroeting} ${profiel.naam}!`;
+      document.getElementById('chip-school').textContent = `🏫 ${profiel.school || 'Jouw school'}`;
+      document.getElementById('chip-groep').textContent  = `👥 Groep ${profiel.groep}`;
+      document.getElementById('nav-groep').textContent   = `Groep ${profiel.groep.replace(/[AB]/i, '') || profiel.groep}`;
+
+      const initialen = profiel.naam
+        ? profiel.naam.trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase()
+        : '??';
+      const avatar = document.getElementById('avatar');
+      avatar.textContent = initialen;
+      avatar.title       = profiel.naam;
+
+      document.getElementById('bc-current').textContent = `Groep ${profiel.groep}`;
+    }
+
+    /* ── Profiel modal ── */
+    window.openProfielModal = function(verplicht = false) {
+      document.getElementById('p-naam').value   = profiel.naam   || '';
+      document.getElementById('p-groep').value  = profiel.groep  || '8A';
+      document.getElementById('p-school').value = profiel.school || '';
+      const modal = document.getElementById('profielModal');
+      modal.classList.add('open');
+      if (verplicht) {
+        document.getElementById('modalSluit').style.display = 'none';
+      }
+    };
+
+    document.getElementById('modalSluit').addEventListener('click', () => {
+      document.getElementById('profielModal').classList.remove('open');
+    });
+
+    document.getElementById('profielModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('profielModal')) {
+        document.getElementById('profielModal').classList.remove('open');
+      }
+    });
+
+    document.getElementById('profielForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('profielSlaOp');
+      btn.textContent = 'Opslaan…'; btn.disabled = true;
+
+      const nieuwProfiel = {
+        id:     userId,
+        naam:   document.getElementById('p-naam').value.trim(),
+        groep:  document.getElementById('p-groep').value,
+        school: document.getElementById('p-school').value.trim(),
+      };
+
+      const { error } = await supabase.from('profiles').upsert(nieuwProfiel);
+
+      btn.textContent = 'Opslaan'; btn.disabled = false;
+
+      if (!error) {
+        profiel = nieuwProfiel;
+        updateUI();
+        document.getElementById('profielModal').classList.remove('open');
+      }
+    });
+
+    /* ── Uitloggen ── */
+    document.getElementById('uitloggenBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = '../Inlogpagina/index.html';
+    });
+
+  </script>
 
   <script>
     const LESSONS = [
@@ -804,8 +999,8 @@
       document.getElementById('dashboard-view').classList.add('hidden');
       document.getElementById('bc-current').textContent = `Les ${L.n}: ${L.title}`;
 
-      const liveSessieUrl = `../Kahoot/docent-sessie.html?les=les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent('Linda')}`;
-      const livePollUrl   = `../Live poll/docent-poll.html?les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent('Linda')}`;
+      const liveSessieUrl = `../Kahoot/docent-sessie.html?les=les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
+      const livePollUrl   = `../Live poll/docent-poll.html?les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
 
       const dv = document.getElementById('detail-view');
       dv.innerHTML = `
@@ -818,8 +1013,8 @@
           <div class="detail-hero-bottom">
             <div class="detail-chips">
               <div class="detail-chip">⏱ 50–60 min</div>
-              <div class="detail-chip">👥 Groep 8A</div>
-              <div class="detail-chip">🏫 De Zonnewijzer</div>
+              <div class="detail-chip">👥 Groep ${profiel.groep || '8'}</div>
+              <div class="detail-chip">🏫 ${profiel.school || 'Jouw school'}</div>
             </div>
             <div class="detail-hero-ctas">
               <a class="hero-cta" href="${L.url}" target="_blank" rel="noopener">
@@ -892,7 +1087,7 @@
       const dv = document.getElementById('detail-view');
       dv.classList.remove('active');
       dv.innerHTML = '';
-      document.getElementById('bc-current').textContent = 'Groep 8A';
+      document.getElementById('bc-current').textContent = `Groep ${profiel.groep || '8'}`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   </script>
