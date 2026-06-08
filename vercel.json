@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    { "source": "/les1", "destination": "/Lessen/les.html?n=1" },
+    { "source": "/les2", "destination": "/Lessen/les.html?n=2" },
+    { "source": "/les3", "destination": "/Lessen/les.html?n=3" },
+    { "source": "/les4", "destination": "/Lessen/les.html?n=4" },
+    { "source": "/les5", "destination": "/Lessen/les.html?n=5" },
+    { "source": "/les6", "destination": "/Lessen/les.html?n=6" },
+    { "source": "/les7", "destination": "/Lessen/les.html?n=7" },
+    { "source": "/les8", "destination": "/Lessen/les.html?n=8" }
+  ]
+}
