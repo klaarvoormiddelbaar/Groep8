@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/Dashboard", "destination": "/Dashboard/dashboard.html" },
     { "source": "/les1", "destination": "/Lessen/les.html?n=1" },
     { "source": "/les2", "destination": "/Lessen/les.html?n=2" },
     { "source": "/les3", "destination": "/Lessen/les.html?n=3" },
