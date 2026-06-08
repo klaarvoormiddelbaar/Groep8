@@ -456,8 +456,10 @@
       }
     ];
 
+    // Lees lesnummer uit pad (/les1) of query string (?n=1, voor lokaal)
+    const pathMatch = window.location.pathname.match(/les(\d+)/);
     const params = new URLSearchParams(window.location.search);
-    const n = parseInt(params.get('n'), 10);
+    const n = pathMatch ? parseInt(pathMatch[1], 10) : parseInt(params.get('n'), 10);
     const L = LESSONS.find(l => l.n === n);
     const main = document.getElementById('main');
 
