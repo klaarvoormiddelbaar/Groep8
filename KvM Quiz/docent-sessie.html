@@ -277,7 +277,12 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const lesId = params.get('les') || 'les-1';
-    const lesTitel = params.get('titel') || 'Onbekende les';
+    const LES_TITELS = {
+      'les-1': 'Welkom bij KvM', 'les-2': 'De nieuwe school', 'les-3': 'Slim plannen',
+      'les-4': 'Nieuwe vrienden', 'les-5': 'Formeel & Informeel', 'les-6': 'Gevoel & Zelfvertrouwen',
+      'les-7': 'Sociale situaties', 'les-8': 'Klaar voor de start!'
+    };
+    const lesTitel = LES_TITELS[lesId] || 'Onbekende les';
     const docentNaam = params.get('naam') || 'Docent';
 
     const app = document.getElementById('app');

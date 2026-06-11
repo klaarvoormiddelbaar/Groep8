@@ -511,8 +511,13 @@
 
     // ── State ────────────────────────────────────────────────────────────────
     const params     = new URLSearchParams(window.location.search);
-    const lesId      = params.get('les')   || 'poll-les-6';
-    const lesTitel   = params.get('titel') || 'Live poll';
+    const lesId      = params.get('les')   || 'poll-les-1';
+    const LES_TITELS = {
+      'poll-les-1': 'Welkom bij KvM', 'poll-les-2': 'De nieuwe school', 'poll-les-3': 'Slim plannen',
+      'poll-les-4': 'Nieuwe vrienden', 'poll-les-5': 'Formeel & Informeel', 'poll-les-6': 'Gevoel & Zelfvertrouwen',
+      'poll-les-7': 'Sociale situaties', 'poll-les-8': 'Klaar voor de start!'
+    };
+    const lesTitel   = LES_TITELS[lesId] || 'Onbekende les';
     const docentNaam = params.get('naam')  || 'Docent';
 
     const app = document.getElementById('app');
