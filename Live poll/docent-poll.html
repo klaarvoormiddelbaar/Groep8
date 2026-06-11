@@ -498,16 +498,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/Live%20poll/supabase-config.js"></script>
+  <script src="/Live%20poll/poll-data.js"></script>
   <script>
-    // ── Poll-stellingen (aanpasbaar per les) ─────────────────────────────────
-    const STELLINGEN_TEKST = [
-      'Ik vind het makkelijk om hulp te vragen.',
-      'Ik kijk uit naar de middelbare school.',
-      'Ik kan goed zelfstandig werken.',
-      'Ik durf fouten te maken.',
-      'Ik ben goed in plannen.'
-    ];
-
     const SCHAAL = [
       { score: 1, label: 'Helemaal mee oneens', emoji: '😞', kleur: '#ef4444', soft: 'rgba(239,68,68,0.09)',   border: 'rgba(239,68,68,0.22)'   },
       { score: 2, label: 'Mee oneens',          emoji: '😕', kleur: '#f97316', soft: 'rgba(249,115,22,0.09)', border: 'rgba(249,115,22,0.22)'  },
@@ -569,6 +561,12 @@
 
     // ── Sessie aanmaken ──────────────────────────────────────────────────────
     async function init() {
+      const stellingenTekst = POLLS[lesId];
+      if (!stellingenTekst || stellingenTekst.length === 0) {
+        toonFout(`Voor "${lesTitel}" zijn nog geen poll-stellingen klaargezet. Voeg een sleutel "${lesId}" toe aan POLLS in poll-data.js om hier een live poll te starten.`);
+        return;
+      }
+
       let code;
       try { code = await genereerUniekeSessieCode(); }
       catch (e) { toonFout(e.message); return; }
@@ -580,7 +578,7 @@
       if (se) { toonFout('Kon sessie niet aanmaken: ' + se.message); return; }
       sessie = nieuweSessie;
 
-      const rijen = STELLINGEN_TEKST.map((tekst, i) => ({
+      const rijen = stellingenTekst.map((tekst, i) => ({
         session_id: sessie.id, tekst, volgorde: i, status: 'waiting'
       }));
       const { data: opgeslagen, error: sfe } = await db

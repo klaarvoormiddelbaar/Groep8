@@ -74,5 +74,63 @@ const QUIZZES = {
       goed_index: 1,
       tijdslimiet_seconden: 20
     }
+  ],
+
+  'les-2': [
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat doet een mentor op de middelbare school?',
+      opties: [
+        'Zorgt dat je op tijd naar school komt',
+        'Is jouw vaste begeleider die je helpt bij vragen en problemen',
+        'Geeft alleen gymles',
+        'Deelt de kluisjes uit'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'true_false',
+      vraag: 'Op de middelbare school krijg je voor elk vak een andere docent.',
+      opties: ['Waar', 'Niet waar'],
+      goed_index: 0,
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Waarvoor gebruik je een kluisje op de middelbare school?',
+      opties: [
+        'Om je fiets in te bewaren',
+        'Om boeken, spullen en je jas op te bergen',
+        'Om je mobiel op te laden',
+        'Om cadeaus van vrienden in op te slaan'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'poll',
+      vraag: 'Wat lijkt jou het spannendste aan de middelbare school?',
+      opties: [
+        'Nieuwe docenten leren kennen',
+        'De weg vinden op het schoolgebouw',
+        'Nieuwe vrienden maken',
+        'Jezelf voorstellen in een nieuwe klas'
+      ],
+      goed_index: null,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Waarvoor gebruik je een rooster op de middelbare school?',
+      opties: [
+        'Om te weten welk vak je wanneer hebt',
+        'Om je pauze mee in te plannen',
+        'Om huiswerk op te schrijven',
+        'Om je klasgenoten te leren kennen'
+      ],
+      goed_index: 0,
+      tijdslimiet_seconden: 20
+    }
   ]
 };
