@@ -65,7 +65,11 @@
       "Bash(pkill -9 -f \"user-data-dir=/tmp/c-\")",
       "Bash(pkill -9 -f \"user-data-dir=/tmp/chrome-\")",
       "Bash(pkill -9 -f \"user-data-dir=/tmp/cdt\")",
-      "Bash(rm -rf /tmp/ll_*.html /tmp/m2_*.png /tmp/diag*.png /tmp/diag*.html /tmp/dump*.html /tmp/dump_sz_*.html /tmp/supabase-config.js /tmp/chrome-*.log /tmp/chrome-fixed-test* /tmp/chrome-fd* /tmp/chrome-sz-* /tmp/c-orig* /tmp/c-fixed* /tmp/cdt* /tmp/cmp_*.png /tmp/fd_*.png /tmp/fixed_*.png /tmp/v2_*.png /tmp/zztrivial.html /tmp/cdt2_dump.html /tmp/cdt_err.log /tmp/*.log)"
+      "Bash(rm -rf /tmp/ll_*.html /tmp/m2_*.png /tmp/diag*.png /tmp/diag*.html /tmp/dump*.html /tmp/dump_sz_*.html /tmp/supabase-config.js /tmp/chrome-*.log /tmp/chrome-fixed-test* /tmp/chrome-fd* /tmp/chrome-sz-* /tmp/c-orig* /tmp/c-fixed* /tmp/cdt* /tmp/cmp_*.png /tmp/fd_*.png /tmp/fixed_*.png /tmp/v2_*.png /tmp/zztrivial.html /tmp/cdt2_dump.html /tmp/cdt_err.log /tmp/*.log)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git mv *)"
     ]
   }
 }

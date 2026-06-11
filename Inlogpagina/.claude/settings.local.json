@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(open *)"
+      "Bash(open *)",
+      "Bash(git -C \"/Users/niekheselmans/Library/Mobile Documents/com~apple~CloudDocs/Niek Vibe code/Groep 8 portaal/Inlogpagina\" add index.html)",
+      "Bash(git -C '/Users/niekheselmans/Library/Mobile Documents/com~apple~CloudDocs/Niek Vibe code/Groep 8 portaal/Inlogpagina' commit -m ' *)",
+      "Bash(git -C \"/Users/niekheselmans/Library/Mobile Documents/com~apple~CloudDocs/Niek Vibe code/Groep 8 portaal/Inlogpagina\" add ../Lessen/les.html ../Dashboard/dashboard.html)",
+      "Bash(git -C \"/Users/niekheselmans/Library/Mobile Documents/com~apple~CloudDocs/Niek Vibe code/Groep 8 portaal/Inlogpagina\" push)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }

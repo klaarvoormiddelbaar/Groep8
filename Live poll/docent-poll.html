@@ -980,7 +980,14 @@
       }, 200));
     }
 
-    init();
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (!session) {
+        window.location.href = '/Inlogpagina/';
+        return;
+      }
+      init();
+    })();
   </script>
 </body>
 </html>
