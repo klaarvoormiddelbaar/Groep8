@@ -486,6 +486,13 @@
         </div>`;
     }
 
+    window.addEventListener('beforeunload', (e) => {
+      if (['wachtkamer', 'vraag', 'tussenstand'].includes(huidigeView)) {
+        e.preventDefault();
+        e.returnValue = 'Weet je zeker dat je wilt stoppen? Je voortgang wordt niet opgeslagen.';
+      }
+    });
+
     init();
   </script>
 </body>
