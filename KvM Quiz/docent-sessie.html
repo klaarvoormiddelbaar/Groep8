@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live sessie — Klaar voor Middelbaar</title>
+  <title>Live quiz — Klaar voor Middelbaar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -196,14 +196,25 @@
     .question-image { display: flex; justify-content: center; margin-bottom: 28px; }
     .question-image svg { width: 180px; height: auto; }
 
-    .option-row { margin-bottom: 18px; }
+    .option-row { margin-bottom: 18px; border-radius: 18px; padding: 14px 16px; border: 1.5px solid transparent; transition: opacity 0.3s; }
     .option-row:last-child { margin-bottom: 0; }
+    .option-row.correct {
+      background: rgba(16,163,127,0.08); border-color: rgba(16,163,127,0.45);
+      box-shadow: 0 0 0 4px rgba(16,163,127,0.10);
+    }
+    .option-row.incorrect { opacity: 0.45; }
     .option-row-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 9px; }
     .option-label { display: flex; align-items: center; gap: 12px; font-size: 16px; font-weight: 700; color: var(--dark); }
     .option-letter {
       width: 30px; height: 30px; border-radius: 9px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
       color: white; font-size: 14px; font-weight: 700;
+    }
+    .correct-badge {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.5px;
+      color: var(--green); background: rgba(16,163,127,0.12);
+      border: 1.5px solid rgba(16,163,127,0.35);
+      border-radius: var(--r-pill); padding: 4px 12px; white-space: nowrap; flex-shrink: 0;
     }
     .option-percent { font-size: 14px; font-weight: 700; color: var(--muted); white-space: nowrap; }
     .option-bar-track { height: 14px; background: var(--border); border-radius: var(--r-pill); overflow: hidden; }
@@ -257,7 +268,7 @@
           <div class="logo-role">Live klasquiz · Docentweergave</div>
         </div>
       </div>
-      <div class="live-pill"><span class="live-dot"></span> Live sessie</div>
+      <div class="live-pill"><span class="live-dot"></span> Live quiz</div>
       <div class="avatar" id="docent-avatar" title="">··</div>
     </div>
   </header>
@@ -266,7 +277,7 @@
     <div class="view">
       <div class="loading-card">
         <div class="loading-spinner"></div>
-        <div>Sessie wordt aangemaakt…</div>
+        <div>Quiz wordt aangemaakt…</div>
       </div>
     </div>
   </main>
@@ -317,7 +328,7 @@
     async function init() {
       const quizVragen = QUIZZES[lesId];
       if (!quizVragen || quizVragen.length === 0) {
-        toonFout(`Voor "${lesTitel}" zijn nog geen quizvragen klaargezet. Voeg een sleutel "${lesId}" toe aan QUIZZES in quiz-data.js om hier een live sessie te starten.`);
+        toonFout(`Voor "${lesTitel}" zijn nog geen quizvragen klaargezet. Voeg een sleutel "${lesId}" toe aan QUIZZES in quiz-data.js om hier een live quiz te starten.`);
         return;
       }
 
@@ -335,7 +346,7 @@
         .select()
         .single();
 
-      if (sessieFout) { toonFout('Kon geen sessie aanmaken in Supabase: ' + sessieFout.message); return; }
+      if (sessieFout) { toonFout('Kon geen quiz aanmaken in Supabase:' + sessieFout.message); return; }
       sessie = nieuweSessie;
 
       const teInserten = quizVragen.map((v, i) => ({
@@ -370,6 +381,7 @@
         }, (payload) => {
           sessie = { ...sessie, ...payload.new };
           if (sessie.status === 'active') toonPresentatie();
+          else if (sessie.status === 'tussenstand') toonTussenstand();
           else if (sessie.status === 'ended') toonEinde();
         })
         .subscribe();
@@ -396,6 +408,9 @@
           antwoordTellingen[payload.new.optie_index] = (antwoordTellingen[payload.new.optie_index] || 0) + 1;
           aantalAntwoorden++;
           ververAntwoordStatistieken();
+          if (!antwoordenOnthuld && deelnemers.size > 0 && aantalAntwoorden >= deelnemers.size) {
+            onthulAntwoorden();
+          }
         })
         .subscribe();
     }
@@ -408,11 +423,11 @@
       app.innerHTML = `
         <div class="view">
           <div class="lobby-card">
-            <div class="lobby-eyebrow">Live sessie · ${escapeHtml(lesTitel)}</div>
+            <div class="lobby-eyebrow">KvM quiz les ${lesNum}</div>
             <div class="lobby-title">Klaar om te starten?</div>
             <div class="lobby-sub">
-              Laat de klas naar <strong>${escapeHtml(joinUrl.replace(/^https?:\/\//, ''))}</strong> gaan,
-              en deze code invoeren samen met hun voornaam:
+              Ga naar <strong>groep8.klaarvoormiddelbaar.nl/les${lesNum}/quiz</strong><br>
+              Voer de code en je voornaam in:
             </div>
             <div class="code-display">
               ${sessie.code.split('').map(cijfer => `<div class="code-digit">${cijfer}</div>`).join('')}
@@ -425,13 +440,13 @@
               <div class="panel-count" id="deelnemers-count">0 leerlingen</div>
             </div>
             <div class="participants-grid" id="deelnemers-grid">
-              <div class="empty-hint">Nog niemand binnen — zodra leerlingen de code invullen, verschijnen ze hier live.</div>
+              <div class="empty-hint">Als leerlingen de code invullen, verschijnen ze hier live!</div>
             </div>
           </div>
 
           <div class="lobby-actions">
-            <button class="btn-pill btn-ghost" onclick="bevestigBeeindigen()">Sessie afbreken</button>
-            <button class="btn-pill btn-start" onclick="startSessie()">Start sessie →</button>
+            <button class="btn-pill btn-ghost" onclick="bevestigBeeindigen()">Quiz afbreken</button>
+            <button class="btn-pill btn-start" onclick="startSessie()">Start quiz →</button>
           </div>
         </div>`;
       ververDeelnemerslijst();
@@ -442,7 +457,7 @@
       const grid = document.getElementById('deelnemers-grid');
       if (!grid) return;
       if (deelnemers.size === 0) {
-        grid.innerHTML = `<div class="empty-hint">Nog niemand binnen — zodra leerlingen de code invullen, verschijnen ze hier live.</div>`;
+        grid.innerHTML = `<div class="empty-hint">Als leerlingen de code invullen, verschijnen ze hier live!</div>`;
         return;
       }
       grid.innerHTML = [...deelnemers.values()].map(naam => `
@@ -459,24 +474,31 @@
 
     async function startSessie() {
       const { error } = await db.from('sessions').update({ status: 'active', huidige_vraag_index: 0 }).eq('id', sessie.id);
-      if (error) alert('Kon de sessie niet starten: ' + error.message);
+      if (error) alert('Kon de quiz niet starten:' + error.message);
       // De overgang naar de presentatie gebeurt via de realtime-subscriptie hierboven.
     }
 
     // ── Presentatiescherm ────────────────────────────────────────────────────
+    let antwoordenOnthuld = false;
+    let vraagTimerId = null;
+
     function toonPresentatie() {
       if (huidigeView === 'presenter' && huidigeVraagIndex === sessie.huidige_vraag_index) return;
       huidigeView = 'presenter';
       huidigeVraagIndex = sessie.huidige_vraag_index;
+      antwoordenOnthuld = false;
+      if (vraagTimerId) { clearTimeout(vraagTimerId); vraagTimerId = null; }
 
       const vraag = vragen[huidigeVraagIndex];
       antwoordTellingen = vraag.opties.map(() => 0);
       aantalAntwoorden = 0;
 
-      const isLaatsteVraag = huidigeVraagIndex === vragen.length - 1;
       const kleuren = ['#72a8f9', '#10a37f', '#f59e0b', '#ef4444'];
       const letters = ['A', 'B', 'C', 'D'];
+      const helft = Math.ceil(vragen.length / 2);
+      const isHalfwege = (huidigeVraagIndex + 1 === helft) && (helft < vragen.length);
 
+      // Fase 1: leerlingen antwoorden — geen bars, geen ✓, geen percentages
       app.innerHTML = `
         <div class="view">
           <div class="presenter-head">
@@ -498,27 +520,83 @@
                     <div class="option-label">
                       <span class="option-letter" style="background:${kleuren[i]}">${letters[i]}</span>
                       ${escapeHtml(optie)}
-                      ${vraag.goed_index === i ? ' ✓' : ''}
                     </div>
-                    <div class="option-percent" id="percent-${i}">0 · 0%</div>
-                  </div>
-                  <div class="option-bar-track">
-                    <div class="option-bar-fill" id="bar-${i}" style="background:${kleuren[i]}"></div>
                   </div>
                 </div>`).join('')}
             </div>
           </div>
 
           <div class="presenter-actions">
-            <button class="btn-pill btn-ghost" onclick="bevestigBeeindigen()">Sessie beëindigen</button>
+            <button class="btn-pill btn-ghost" onclick="bevestigBeeindigen()">Quiz beëindigen</button>
+            <button class="btn-pill btn-start" onclick="onthulAntwoorden()">Naar antwoorden →</button>
+          </div>
+        </div>`;
+
+      vraagTimerId = setTimeout(() => {
+        if (!antwoordenOnthuld) onthulAntwoorden();
+      }, vraag.tijdslimiet_seconden * 1000);
+
+      abonneerOpAntwoorden(vraag.id);
+    }
+
+    function onthulAntwoorden() {
+      if (vraagTimerId) { clearTimeout(vraagTimerId); vraagTimerId = null; }
+      antwoordenOnthuld = true;
+      const vraag = vragen[huidigeVraagIndex];
+      const isLaatsteVraag = huidigeVraagIndex === vragen.length - 1;
+      const helft = Math.ceil(vragen.length / 2);
+      const isHalfwege = (huidigeVraagIndex + 1 === helft) && (helft < vragen.length);
+      const kleuren = ['#72a8f9', '#10a37f', '#f59e0b', '#ef4444'];
+      const letters = ['A', 'B', 'C', 'D'];
+
+      // Fase 2: toon bars, percentages en het juiste antwoord
+      app.innerHTML = `
+        <div class="view">
+          <div class="presenter-head">
+            <div class="stepper-label">Vraag ${huidigeVraagIndex + 1} van ${vragen.length} · ${typeLabel(vraag.type)}</div>
+            <div class="presenter-meta">
+              <div class="meta-chip">👥 ${deelnemers.size} deelnemers</div>
+              <div class="meta-chip" id="antwoord-teller">📩 ${aantalAntwoorden} van ${deelnemers.size} hebben geantwoord</div>
+            </div>
+          </div>
+
+          <div class="question-card">
+            <div class="question-type-badge">${typeLabel(vraag.type)}</div>
+            <div class="question-text">${escapeHtml(vraag.vraag)}</div>
+            ${vraag.afbeelding ? `<div class="question-image">${vraag.afbeelding}</div>` : ''}
+            <div class="options-grid">
+              ${vraag.opties.map((optie, i) => {
+                const isGoed = vraag.goed_index === i;
+                const isFout = vraag.goed_index !== null && vraag.goed_index !== undefined && !isGoed;
+                return `
+                <div class="option-row${isGoed ? ' correct' : isFout ? ' incorrect' : ''}">
+                  <div class="option-row-top">
+                    <div class="option-label">
+                      <span class="option-letter" style="background:${kleuren[i]}">${letters[i]}</span>
+                      ${escapeHtml(optie)}
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px">
+                      ${isGoed ? '<span class="correct-badge">✓ Juiste antwoord</span>' : ''}
+                      <div class="option-percent" id="percent-${i}">0 · 0%</div>
+                    </div>
+                  </div>
+                  <div class="option-bar-track">
+                    <div class="option-bar-fill" id="bar-${i}" style="background:${kleuren[i]}"></div>
+                  </div>
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+
+          <div class="presenter-actions">
+            <button class="btn-pill btn-ghost" onclick="bevestigBeeindigen()">Quiz beëindigen</button>
             <button class="btn-pill btn-start" onclick="${isLaatsteVraag ? 'beeindigSessie()' : 'volgendeVraag()'}">
-              ${isLaatsteVraag ? 'Bekijk eindklassement →' : 'Volgende vraag →'}
+              ${isLaatsteVraag ? 'Bekijk eindklassement →' : isHalfwege ? 'Naar tussenstand →' : 'Volgende vraag →'}
             </button>
           </div>
         </div>`;
 
       ververAntwoordStatistieken();
-      abonneerOpAntwoorden(vraag.id);
     }
 
     function ververAntwoordStatistieken() {
@@ -535,22 +613,91 @@
     }
 
     async function volgendeVraag() {
+      const helft = Math.ceil(vragen.length / 2);
+      const isHalfwege = (huidigeVraagIndex + 1 === helft) && (helft < vragen.length);
+      if (isHalfwege) {
+        const { error } = await db.from('sessions').update({ status: 'tussenstand' }).eq('id', sessie.id);
+        if (error) alert('Kon de tussenstand niet tonen: ' + error.message);
+      } else {
+        const { error } = await db
+          .from('sessions')
+          .update({ huidige_vraag_index: huidigeVraagIndex + 1 })
+          .eq('id', sessie.id);
+        if (error) alert('Kon niet doorgaan naar de volgende vraag: ' + error.message);
+      }
+    }
+
+    async function verderNaTussenstand() {
+      const helft = Math.ceil(vragen.length / 2);
       const { error } = await db
         .from('sessions')
-        .update({ huidige_vraag_index: sessie.huidige_vraag_index + 1 })
+        .update({ status: 'active', huidige_vraag_index: helft })
         .eq('id', sessie.id);
-      if (error) alert('Kon niet doorgaan naar de volgende vraag: ' + error.message);
+      if (error) alert('Kon niet verder gaan: ' + error.message);
     }
 
     async function beeindigSessie() {
       const { error } = await db.from('sessions').update({ status: 'ended' }).eq('id', sessie.id);
-      if (error) alert('Kon de sessie niet beëindigen: ' + error.message);
+      if (error) alert('Kon de quiz niet beëindigen:' + error.message);
     }
 
     function bevestigBeeindigen() {
-      if (confirm('Weet je zeker dat je deze sessie wilt beëindigen voor de hele klas?')) {
+      if (confirm('Weet je zeker dat je deze quiz wilt beëindigen voor de hele klas?')) {
         beeindigSessie();
       }
+    }
+
+    // ── Tussenstand ──────────────────────────────────────────────────────────
+    async function toonTussenstand() {
+      if (huidigeView === 'tussenstand') return;
+      huidigeView = 'tussenstand';
+      if (vraagTimerId) { clearTimeout(vraagTimerId); vraagTimerId = null; }
+      if (antwoordKanaal) { db.removeChannel(antwoordKanaal); antwoordKanaal = null; }
+
+      const { data } = await db
+        .from('participants').select('naam, score')
+        .eq('session_id', sessie.id).order('score', { ascending: false });
+
+      const stand = data || [];
+      const medailles = ['🥇', '🥈', '🥉'];
+      const top3 = stand.slice(0, 3);
+      const rest = stand.slice(3);
+
+      app.innerHTML = `
+        <div class="view">
+          <div class="end-hero" style="position:relative; overflow:hidden;">
+            <div class="end-eyebrow">Halverwege</div>
+            <div class="end-title">Tussenstand 🏁</div>
+            <div class="end-sub">Alles is nog mogelijk!</div>
+            <img src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay"
+              style="position:absolute; right:28px; top:50%; transform:translateY(-50%) scaleX(-1); height:155px; width:auto; opacity:0.92;">
+          </div>
+
+          ${top3.length ? `
+            <div class="podium">
+              ${top3.map((d, i) => `
+                <div class="podium-spot podium-${i + 1}">
+                  <div class="podium-medal">${medailles[i]}</div>
+                  <div class="podium-naam">${escapeHtml(d.naam)}</div>
+                  <div class="podium-score">${d.score} punten</div>
+                </div>`).join('')}
+            </div>` : `<div class="empty-hint">Nog geen scores beschikbaar.</div>`}
+
+          ${rest.length ? `
+            <div class="rest-list">
+              ${rest.map((d, i) => `
+                <div class="rest-row">
+                  <div class="rest-rank">${i + 4}</div>
+                  <div class="rest-naam">${escapeHtml(d.naam)}</div>
+                  <div class="rest-score">${d.score} punten</div>
+                </div>`).join('')}
+            </div>` : ''}
+
+          <div class="end-actions">
+            <button class="btn-pill btn-ghost" onclick="bevestigBeeindigen()">Quiz beëindigen</button>
+            <button class="btn-pill btn-start" onclick="verderNaTussenstand()">Verder met de quiz →</button>
+          </div>
+        </div>`;
     }
 
     // ── Eindscherm ───────────────────────────────────────────────────────────
@@ -572,10 +719,12 @@
 
       app.innerHTML = `
         <div class="view">
-          <div class="end-hero">
-            <div class="end-eyebrow">Sessie beëindigd</div>
-            <div class="end-title">Goed gedaan, klas! 🎉</div>
+          <div class="end-hero" style="position:relative; overflow:hidden;">
+            <div class="end-eyebrow">Quiz beëindigd</div>
+            <div class="end-title">Goed gedaan klas! 🎉</div>
             <div class="end-sub">${eindstand.length} ${eindstand.length === 1 ? 'leerling deed' : 'leerlingen deden'} mee aan "${escapeHtml(lesTitel)}"</div>
+            <img src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay"
+              style="position:absolute; right:28px; top:50%; transform:translateY(-50%) scaleX(-1); height:155px; width:auto; opacity:0.92;">
           </div>
 
           ${top3.length ? `
@@ -586,7 +735,7 @@
                   <div class="podium-naam">${escapeHtml(deelnemer.naam)}</div>
                   <div class="podium-score">${deelnemer.score} punten</div>
                 </div>`).join('')}
-            </div>` : `<div class="empty-hint">Er deden geen leerlingen mee aan deze sessie.</div>`}
+            </div>` : `<div class="empty-hint">Er deden geen leerlingen mee aan deze quiz.</div>`}
 
           ${rest.length ? `
             <div class="rest-list">

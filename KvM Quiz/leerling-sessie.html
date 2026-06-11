@@ -39,16 +39,8 @@
       background-attachment: fixed;
     }
 
-    .topbar { display:flex; align-items:center; gap:12px; max-width: var(--max-w); margin: 0 auto; padding: 28px 24px 0; }
-    .logo-mark {
-      width: 36px; height: 36px; border-radius: 11px;
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      display:flex; align-items:center; justify-content:center;
-      color:white; font-size:12px; font-weight:700;
-      box-shadow: var(--shadow-btn-blue);
-    }
-    .topbar-text { font-size: 14px; font-weight:700; line-height:1.2; }
-    .topbar-text span { display:block; font-size:11px; font-weight:400; color: var(--muted); }
+    .topbar { max-width: var(--max-w); margin: 0 auto; padding: 28px 24px 0; text-align: center; }
+    .topbar img { height: 52px; width: auto; opacity: 0.92; }
 
     .main { max-width: var(--max-w); margin: 0 auto; padding: 28px 24px 80px; }
     .view { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
@@ -165,15 +157,14 @@
 </head>
 <body>
   <div class="topbar">
-    <div class="logo-mark">KvM</div>
-    <div class="topbar-text">Klaar voor Middelbaar<span>Live klasquiz</span></div>
+    <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
   </div>
 
   <main class="main" id="app">
     <div class="view">
       <div class="loading-card">
         <div class="loading-spinner"></div>
-        <div>Je wordt verbonden met de sessie…</div>
+        <div>Je wordt verbonden met de quiz…</div>
       </div>
     </div>
   </main>
@@ -221,7 +212,7 @@
         .from('sessions').select('*').eq('code', code).maybeSingle();
 
       if (sessieFout || !sessieData) {
-        toonFout('Deze sessie bestaat niet (meer). Vraag je docent om een nieuwe code en doe opnieuw mee.');
+        toonFout('Deze quiz bestaat niet (meer). Vraag je juf of meester om een nieuwe code en doe opnieuw mee.');
         return;
       }
       sessie = sessieData;
@@ -230,7 +221,7 @@
         .from('participants').select('*').eq('id', deelnemerId).maybeSingle();
 
       if (deelnemerFout || !deelnemerData) {
-        toonFout('We konden je niet meer terugvinden in deze sessie. Ga terug en doe opnieuw mee.');
+        toonFout('We konden je niet meer terugvinden in deze quiz. Ga terug en doe opnieuw mee.');
         return;
       }
       eigenDeelnemer = deelnemerData;
@@ -273,6 +264,7 @@
     function reageerOpSessieStatus() {
       if (sessie.status === 'lobby') toonWachtkamer();
       else if (sessie.status === 'active') toonVraag(sessie.huidige_vraag_index);
+      else if (sessie.status === 'tussenstand') toonTussenstand();
       else if (sessie.status === 'ended') toonEinde();
     }
 
@@ -284,8 +276,8 @@
         <div class="view">
           <div class="wachtkamer-view">
             <div class="wk-avatar">${escapeHtml(eigenDeelnemer.naam.slice(0, 1).toUpperCase())}</div>
-            <div class="wk-titel">Welkom, ${escapeHtml(eigenDeelnemer.naam)}! 👋</div>
-            <div class="wk-sub">Je staat klaar om mee te doen. Zodra je docent de sessie start, verschijnt de eerste vraag hier vanzelf — je hoeft verder niets te doen.</div>
+            <div class="wk-titel">Welkom ${escapeHtml(eigenDeelnemer.naam)}!</div>
+            <div class="wk-sub">Je bent klaar om mee te doen. Wanneer je juf of meester de quiz start, verschijnt de eerste vraag.</div>
             <div class="wk-pulse"><span></span><span></span><span></span></div>
             <div class="wk-count" id="wk-deelnemers"></div>
           </div>
@@ -359,7 +351,7 @@
     function tijdVerstreken() {
       alAntwoordIngediend = true;
       document.querySelectorAll('.optie-knop').forEach(b => b.disabled = true);
-      toonVraagStatus('te-laat', '⏰ De tijd is voorbij — je kon geen antwoord meer geven. Wacht tot de docent doorgaat naar de volgende vraag.');
+      toonVraagStatus('te-laat', '⏰ Net te laat! Je kan helaas geen antwoord meer geven. Succes met de volgende vraag!');
     }
 
     function toonVraagStatus(soort, bericht) {
@@ -416,15 +408,41 @@
           if (isPoll) {
             toonVraagStatus('verzonden', '🙌 Bedankt voor je stem! Wacht tot de docent doorgaat naar de volgende vraag.');
           } else if (isCorrect) {
-            toonVraagStatus('goed', `✅ Goed zo! Je verdiende ${punten} punten. Wacht tot de docent doorgaat…`);
+            toonVraagStatus('goed', `✅ Goed! Je verdiende ${punten} punten. Succes met de volgende vraag!`);
           } else {
-            const goedeOptie = vraag.opties[vraag.goed_index];
-            toonVraagStatus('fout', `❌ Helaas, dat klopte niet. Het juiste antwoord was: "${escapeHtml(goedeOptie)}". Wacht tot de docent doorgaat…`);
+            const goedeLetters = ['A', 'B', 'C', 'D'];
+            toonVraagStatus('fout', `❌ Helaas, dat klopte niet. Het juiste antwoord was: ${goedeLetters[vraag.goed_index]}. Succes met de volgende vraag!`);
           }
         }, 450);
       } catch (fout) {
         toonVraagStatus('fout', 'Er ging iets mis bij het versturen van je antwoord: ' + fout.message);
       }
+    }
+
+    // ── Tussenstand ──────────────────────────────────────────────────────────
+    async function toonTussenstand() {
+      if (huidigeView === 'tussenstand') return;
+      huidigeView = 'tussenstand';
+      if (vraagTimerId) { clearInterval(vraagTimerId); vraagTimerId = null; }
+
+      const { data } = await db
+        .from('participants').select('id, naam, score')
+        .eq('session_id', sessie.id).order('score', { ascending: false });
+
+      const stand = data || [];
+      const positie = stand.findIndex(d => d.id === eigenDeelnemer.id) + 1;
+      const eigenScore = stand.find(d => d.id === eigenDeelnemer.id)?.score || 0;
+      const medaille = positie === 1 ? '🥇' : positie === 2 ? '🥈' : positie === 3 ? '🥉' : '🏅';
+
+      app.innerHTML = `
+        <div class="view">
+          <div class="wachtkamer-view">
+            <div class="wk-avatar" style="font-size:38px; background:none; box-shadow:none; width:64px; height:64px;">${medaille}</div>
+            <div class="wk-titel">Halverwege!</div>
+            <div class="wk-sub">Je staat op plek <strong>${positie}</strong> van ${stand.length} met <strong>${eigenScore} punten</strong>. Wacht tot je juf of meester verdergaat.</div>
+            <div class="wk-pulse"><span></span><span></span><span></span></div>
+          </div>
+        </div>`;
     }
 
     // ── Eindscherm ───────────────────────────────────────────────────────────
@@ -447,7 +465,7 @@
           <div class="eind-view">
             <div class="eind-medaille">${medaille}</div>
             <div class="eind-titel">Bedankt voor het meedoen, ${escapeHtml(eigenDeelnemer.naam)}!</div>
-            <div class="eind-sub">De sessie is afgelopen. Hier is hoe je het hebt gedaan:</div>
+            <div class="eind-sub">De quiz is afgelopen. Hier is hoe je het hebt gedaan:</div>
             <div class="score-chip-groot">Score: <span>${eigenScore}</span></div>
             ${positie > 0 ? `<div class="eind-positie">Je eindigde op plek ${positie} van ${lijst.length}.</div>` : ''}
             <div class="eind-afsluiting">Goed gedaan! Tot de volgende les. 👋</div>
