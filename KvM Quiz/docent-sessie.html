@@ -399,7 +399,7 @@
     function toonWachtkamer() {
       huidigeView = 'lobby';
       const lesNum = lesId.replace('les-', '');
-      const joinUrl = `${window.location.origin}/quiz-les${lesNum}`;
+      const joinUrl = `${window.location.origin}/les${lesNum}/quiz`;
       app.innerHTML = `
         <div class="view">
           <div class="lobby-card">

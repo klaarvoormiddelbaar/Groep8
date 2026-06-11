@@ -228,7 +228,7 @@
 
         if (meldFout) throw new Error(meldFout.message);
 
-        const url = new URL('leerling-poll.html', window.location.href);
+        const url = new URL('/Live%20poll/leerling-poll.html', window.location.origin);
         url.searchParams.set('code', code);
         url.searchParams.set('deelnemer', deelnemer.id);
         window.location.href = url.href;

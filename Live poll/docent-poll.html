@@ -652,7 +652,8 @@
     // ── Wachtkamer ────────────────────────────────────────────────────────────
     function toonWachtkamer() {
       huidigView = 'lobby';
-      const joinUrl = new URL('join.html', window.location.href).href;
+      const lesNum = lesId.replace('poll-les-', '');
+      const joinUrl = `${window.location.origin}/les${lesNum}/wolk`;
       app.innerHTML = `
         <div class="view">
           <div class="lobby-hero">
