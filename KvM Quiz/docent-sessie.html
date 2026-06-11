@@ -287,7 +287,9 @@
   <script src="/KvM%20Quiz/quiz-data.js"></script>
   <script>
     const params = new URLSearchParams(window.location.search);
-    const lesId = params.get('les') || 'les-1';
+    // Vercel rewrites houden de browser-URL intact, dus lees het lesnummer uit het pad.
+    const pathMatch = window.location.pathname.match(/\/les(\d+)\//);
+    const lesId = pathMatch ? `les-${pathMatch[1]}` : (params.get('les') || 'les-1');
     const LES_TITELS = {
       'les-1': 'Welkom bij KvM', 'les-2': 'De nieuwe school', 'les-3': 'Slim plannen',
       'les-4': 'Nieuwe vrienden', 'les-5': 'Formeel & Informeel', 'les-6': 'Gevoel & Zelfvertrouwen',
@@ -328,7 +330,7 @@
     async function init() {
       const quizVragen = QUIZZES[lesId];
       if (!quizVragen || quizVragen.length === 0) {
-        toonFout(`Voor "${lesTitel}" zijn nog geen quizvragen klaargezet. Voeg een sleutel "${lesId}" toe aan QUIZZES in quiz-data.js om hier een live quiz te starten.`);
+        toonKomtBinnenkort(lesTitel);
         return;
       }
 
@@ -761,6 +763,18 @@
             <div class="error-icon">⚠️</div>
             <div class="error-title">Er ging iets mis</div>
             <div class="error-body">${escapeHtml(bericht)}</div>
+            <a class="btn-pill btn-start" href="/Dashboard/">← Terug naar het dashboard</a>
+          </div>
+        </div>`;
+    }
+
+    function toonKomtBinnenkort(titel) {
+      app.innerHTML = `
+        <div class="view">
+          <div class="error-card">
+            <div class="error-icon">🚧</div>
+            <div class="error-title">Quiz wordt nog gemaakt</div>
+            <div class="error-body">De quiz voor "${escapeHtml(titel)}" is nog niet beschikbaar. Kom later terug!</div>
             <a class="btn-pill btn-start" href="/Dashboard/">← Terug naar het dashboard</a>
           </div>
         </div>`;

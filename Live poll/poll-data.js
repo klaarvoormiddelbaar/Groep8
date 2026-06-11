@@ -12,11 +12,4 @@ const POLLS = {
     'Ik ben goed in plannen.'
   ],
 
-  'poll-les-2': [
-    'Ik weet al naar welke middelbare school ik ga.',
-    'Ik denk dat ik snel mijn weg zal vinden op de nieuwe school.',
-    'Ik vind het spannend om les te krijgen van veel verschillende docenten.',
-    'Ik vertrouw erop dat ik snel nieuwe vrienden zal maken.',
-    'Ik voel me goed voorbereid op de overstap naar de middelbare school.'
-  ]
 };

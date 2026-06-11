@@ -510,7 +510,9 @@
 
     // ── State ────────────────────────────────────────────────────────────────
     const params     = new URLSearchParams(window.location.search);
-    const lesId      = params.get('les')   || 'poll-les-1';
+    // Vercel rewrites houden de browser-URL intact, dus lees het lesnummer uit het pad.
+    const pathMatch  = window.location.pathname.match(/\/les(\d+)\//);
+    const lesId      = pathMatch ? `poll-les-${pathMatch[1]}` : (params.get('les') || 'poll-les-1');
     const LES_TITELS = {
       'poll-les-1': 'Welkom bij KvM', 'poll-les-2': 'De nieuwe school', 'poll-les-3': 'Slim plannen',
       'poll-les-4': 'Nieuwe vrienden', 'poll-les-5': 'Formeel & Informeel', 'poll-les-6': 'Gevoel & Zelfvertrouwen',
@@ -550,6 +552,18 @@
         </div>`;
     }
 
+    function toonKomtBinnenkort(titel) {
+      app.innerHTML = `
+        <div class="view">
+          <div class="error-card">
+            <div class="error-icon">🚧</div>
+            <div class="error-title">Poll wordt nog gemaakt</div>
+            <div class="error-body">De poll voor "${esc(titel)}" is nog niet beschikbaar. Kom later terug!</div>
+            <a class="btn btn-blue" href="/Dashboard/">← Terug naar het dashboard</a>
+          </div>
+        </div>`;
+    }
+
     function gemiddeldeKleur(gem) {
       if (!gem || gem === 0) return 'var(--muted)';
       if (gem < 2)   return '#ef4444';
@@ -563,7 +577,7 @@
     async function init() {
       const stellingenTekst = POLLS[lesId];
       if (!stellingenTekst || stellingenTekst.length === 0) {
-        toonFout(`Voor "${lesTitel}" zijn nog geen poll-stellingen klaargezet. Voeg een sleutel "${lesId}" toe aan POLLS in poll-data.js om hier een live poll te starten.`);
+        toonKomtBinnenkort(lesTitel);
         return;
       }
 
