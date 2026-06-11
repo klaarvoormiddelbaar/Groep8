@@ -40,6 +40,10 @@ DROP POLICY IF EXISTS "anon_update_statements"         ON poll_statements;
 DROP POLICY IF EXISTS "poll_statements open"           ON poll_statements;
 DROP POLICY IF EXISTS "leerling_stellingen_lezen"      ON poll_statements;
 DROP POLICY IF EXISTS "docent_stellingen_beheren"      ON poll_statements;
+DROP POLICY IF EXISTS "stelling_lezen"                 ON poll_statements;
+DROP POLICY IF EXISTS "stelling_aanmaken"              ON poll_statements;
+DROP POLICY IF EXISTS "stelling_bijwerken"             ON poll_statements;
+DROP POLICY IF EXISTS "docent_stelling_alles"          ON poll_statements;
 
 DROP POLICY IF EXISTS "anon_read_responses"            ON poll_responses;
 DROP POLICY IF EXISTS "anon_insert_responses"          ON poll_responses;
@@ -47,11 +51,20 @@ DROP POLICY IF EXISTS "poll_responses open"            ON poll_responses;
 DROP POLICY IF EXISTS "leerling_stem_insturen"         ON poll_responses;
 DROP POLICY IF EXISTS "leerling_stemverdeling_zien"    ON poll_responses;
 DROP POLICY IF EXISTS "docent_poll_resultaten_beheren" ON poll_responses;
+DROP POLICY IF EXISTS "stem_insturen"                  ON poll_responses;
+DROP POLICY IF EXISTS "stem_lezen"                     ON poll_responses;
+DROP POLICY IF EXISTS "docent_stem_alles"              ON poll_responses;
 
--- Nieuwe policies
-CREATE POLICY "stelling_lezen"     ON poll_statements FOR SELECT TO anon USING (true);
-CREATE POLICY "stelling_aanmaken"  ON poll_statements FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "stelling_bijwerken" ON poll_statements FOR UPDATE TO anon USING (true);
+-- Nieuwe policies — poll_statements
+-- Leerling (anon): lezen + stemmen
+CREATE POLICY "stelling_lezen"        ON poll_statements FOR SELECT TO anon      USING (true);
+CREATE POLICY "stelling_bijwerken"    ON poll_statements FOR UPDATE TO anon      USING (true);
+-- Docent (authenticated): alles (aanmaken, activeren, sluiten)
+CREATE POLICY "docent_stelling_alles" ON poll_statements FOR ALL    TO authenticated USING (true) WITH CHECK (true);
 
-CREATE POLICY "stem_insturen" ON poll_responses FOR INSERT TO anon WITH CHECK (true);
-CREATE POLICY "stem_lezen"    ON poll_responses FOR SELECT TO anon USING (true);
+-- Nieuwe policies — poll_responses
+-- Leerling (anon): stem insturen + teller zien
+CREATE POLICY "stem_insturen"         ON poll_responses FOR INSERT TO anon      WITH CHECK (true);
+CREATE POLICY "stem_lezen"            ON poll_responses FOR SELECT TO anon      USING (true);
+-- Docent (authenticated): resultaten inzien + beheren
+CREATE POLICY "docent_stem_alles"     ON poll_responses FOR ALL    TO authenticated USING (true) WITH CHECK (true);
