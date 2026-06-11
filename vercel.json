@@ -3,6 +3,7 @@
     { "source": "/Dashboard", "destination": "/Dashboard/", "permanent": false }
   ],
   "rewrites": [
+    { "source": "/Dashboard/", "destination": "/Dashboard/dashboard.html" },
     { "source": "/les1", "destination": "/Les1/index.html" },
     { "source": "/les2", "destination": "/Les2/index.html" },
     { "source": "/les3", "destination": "/Les3/index.html" },
