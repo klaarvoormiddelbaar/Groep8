@@ -766,6 +766,16 @@
         </div>`;
     }
 
+    let heeftGeinterageerd = false;
+    document.addEventListener('click', () => { heeftGeinterageerd = true; }, { once: true });
+
+    window.onbeforeunload = (e) => {
+      if (heeftGeinterageerd && ['lobby', 'presenter', 'tussenstand'].includes(huidigeView)) {
+        e.preventDefault();
+        return e.returnValue = '';
+      }
+    };
+
     (async () => {
       const { data: { session } } = await db.auth.getSession();
       if (!session) {

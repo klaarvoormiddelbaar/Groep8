@@ -486,12 +486,15 @@
         </div>`;
     }
 
-    window.addEventListener('beforeunload', (e) => {
-      if (['wachtkamer', 'vraag', 'tussenstand'].includes(huidigeView)) {
+    let heeftGeinterageerd = false;
+    document.addEventListener('click', () => { heeftGeinterageerd = true; }, { once: true });
+
+    window.onbeforeunload = (e) => {
+      if (heeftGeinterageerd && ['wachtkamer', 'vraag', 'tussenstand'].includes(huidigeView)) {
         e.preventDefault();
-        e.returnValue = 'Weet je zeker dat je wilt stoppen? Je voortgang wordt niet opgeslagen.';
+        return e.returnValue = '';
       }
-    });
+    };
 
     init();
   </script>
