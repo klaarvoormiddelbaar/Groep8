@@ -11,6 +11,14 @@
     { "source": "/les5", "destination": "/Les5/index.html" },
     { "source": "/les6", "destination": "/Les6/index.html" },
     { "source": "/les7", "destination": "/Les7/index.html" },
-    { "source": "/les8", "destination": "/Les8/index.html" }
+    { "source": "/les8", "destination": "/Les8/index.html" },
+    { "source": "/KvM-Quiz-les1", "destination": "/KvM Quiz/join.html" },
+    { "source": "/KvM-Quiz-les2", "destination": "/KvM Quiz/join.html" },
+    { "source": "/KvM-Quiz-les3", "destination": "/KvM Quiz/join.html" },
+    { "source": "/KvM-Quiz-les4", "destination": "/KvM Quiz/join.html" },
+    { "source": "/KvM-Quiz-les5", "destination": "/KvM Quiz/join.html" },
+    { "source": "/KvM-Quiz-les6", "destination": "/KvM Quiz/join.html" },
+    { "source": "/KvM-Quiz-les7", "destination": "/KvM Quiz/join.html" },
+    { "source": "/KvM-Quiz-les8", "destination": "/KvM Quiz/join.html" }
   ]
 }

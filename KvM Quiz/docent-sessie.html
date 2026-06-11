@@ -398,7 +398,8 @@
     // ── Wachtkamer ───────────────────────────────────────────────────────────
     function toonWachtkamer() {
       huidigeView = 'lobby';
-      const joinUrl = new URL('join.html', window.location.href).href;
+      const lesNum = lesId.replace('les-', '');
+      const joinUrl = `${window.location.origin}/KvM-Quiz-les${lesNum}`;
       app.innerHTML = `
         <div class="view">
           <div class="lobby-card">
