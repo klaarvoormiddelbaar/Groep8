@@ -31,13 +31,13 @@
     { "source": "/les6/quiz", "destination": "/KvM Quiz/join.html" },
     { "source": "/les7/quiz", "destination": "/KvM Quiz/join.html" },
     { "source": "/les8/quiz", "destination": "/KvM Quiz/join.html" },
-    { "source": "/les1/wolk", "destination": "/Live poll/join.html" },
-    { "source": "/les2/wolk", "destination": "/Live poll/join.html" },
-    { "source": "/les3/wolk", "destination": "/Live poll/join.html" },
-    { "source": "/les4/wolk", "destination": "/Live poll/join.html" },
-    { "source": "/les5/wolk", "destination": "/Live poll/join.html" },
-    { "source": "/les6/wolk", "destination": "/Live poll/join.html" },
-    { "source": "/les7/wolk", "destination": "/Live poll/join.html" },
-    { "source": "/les8/wolk", "destination": "/Live poll/join.html" }
+    { "source": "/les1/poll", "destination": "/Live poll/join.html" },
+    { "source": "/les2/poll", "destination": "/Live poll/join.html" },
+    { "source": "/les3/poll", "destination": "/Live poll/join.html" },
+    { "source": "/les4/poll", "destination": "/Live poll/join.html" },
+    { "source": "/les5/poll", "destination": "/Live poll/join.html" },
+    { "source": "/les6/poll", "destination": "/Live poll/join.html" },
+    { "source": "/les7/poll", "destination": "/Live poll/join.html" },
+    { "source": "/les8/poll", "destination": "/Live poll/join.html" }
   ]
 }

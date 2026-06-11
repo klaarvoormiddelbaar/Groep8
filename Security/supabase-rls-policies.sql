@@ -128,19 +128,29 @@ CREATE POLICY "docent_poll_resultaten_beheren"
 
 
 -- ── 7. WORDCLOUD_SESSIONS ────────────────────────────────────────────────────
--- Leerlingen mogen sessies opzoeken.
--- Alleen ingelogde docenten mogen sessies aanmaken/bewerken.
+-- Iedereen mag sessies lezen en aanmaken (docent gebruikt anonieme sleutel).
+-- Verwijderen/bewerken alleen voor ingelogde docenten.
 
-DROP POLICY IF EXISTS "Woordenwolk sessies open"  ON wordcloud_sessions;
-DROP POLICY IF EXISTS "wordcloud_sessions open"   ON wordcloud_sessions;
+DROP POLICY IF EXISTS "Woordenwolk sessies open"         ON wordcloud_sessions;
+DROP POLICY IF EXISTS "wordcloud_sessions open"          ON wordcloud_sessions;
+DROP POLICY IF EXISTS "leerling_woordenwolk_sessie_zoeken" ON wordcloud_sessions;
+DROP POLICY IF EXISTS "docent_woordenwolk_sessie_beheren"  ON wordcloud_sessions;
 
-CREATE POLICY "leerling_woordenwolk_sessie_zoeken"
+CREATE POLICY "woordenwolk_sessie_lezen"
   ON wordcloud_sessions FOR SELECT TO anon
   USING (true);
 
-CREATE POLICY "docent_woordenwolk_sessie_beheren"
-  ON wordcloud_sessions FOR ALL TO authenticated
-  USING (true) WITH CHECK (true);
+CREATE POLICY "woordenwolk_sessie_aanmaken"
+  ON wordcloud_sessions FOR INSERT TO anon
+  WITH CHECK (true);
+
+CREATE POLICY "woordenwolk_sessie_bijwerken"
+  ON wordcloud_sessions FOR UPDATE TO anon
+  USING (true);
+
+CREATE POLICY "docent_woordenwolk_sessie_verwijderen"
+  ON wordcloud_sessions FOR DELETE TO authenticated
+  USING (true);
 
 
 -- ── 8. WORDCLOUD_SUBMISSIONS ─────────────────────────────────────────────────
