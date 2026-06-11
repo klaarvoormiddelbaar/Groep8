@@ -50,16 +50,8 @@
     }
     @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
 
-    .join-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
-    .logo-mark {
-      width: 40px; height: 40px; border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 14px; font-weight: 700;
-      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
-    }
-    .join-logo-text { font-size: 15px; font-weight: 700; line-height: 1.2; }
-    .join-logo-text span { display: block; font-size: 12px; font-weight: 400; color: var(--muted); }
+    .join-logo { margin-bottom: 28px; text-align: center; }
+    .join-logo img { height: 52px; width: auto; opacity: 0.92; }
 
     .poll-badge {
       display: inline-flex; align-items: center; gap: 7px;
@@ -126,13 +118,11 @@
 <body>
   <div class="join-card">
     <div class="join-logo">
-      <div class="logo-mark">KvM</div>
-      <div class="join-logo-text">Klaar voor Middelbaar <span>Klassenpoll · Live</span></div>
+      <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
     </div>
 
-    <div class="poll-badge">🗳️ Live poll</div>
-    <div class="join-title">Vul de code van je docent in en doe mee!</div>
-    <div class="join-sub">Geef aan hoe jij over elke stelling denkt — geen goed of fout, gewoon jouw eerlijke mening.</div>
+    <div class="join-title">Vul de code van je juf of meester in en doe mee! 💡</div>
+    <div class="join-sub">Geef aan hoe jij over elke stelling denkt:</div>
 
     <div class="scale-preview">
       <div class="scale-item"><div class="scale-emoji">😞</div><div class="scale-nr">1</div></div>
@@ -144,7 +134,7 @@
 
     <form id="join-form" autocomplete="off">
       <div class="field">
-        <label for="code-input">Sessiecode</label>
+        <label for="code-input">Code</label>
         <input id="code-input" name="code" type="text" inputmode="numeric" maxlength="6"
                placeholder="123456" autocomplete="off">
       </div>
@@ -159,12 +149,22 @@
       <div class="feedback" id="feedback"></div>
     </form>
 
-    <div class="join-footnote">Vraag je docent om de 6-cijferige code als je die nog niet hebt.</div>
+    <div class="join-footnote">Vraag je juf of meester om de 6-cijferige code als je die nog niet hebt.</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/Live%20poll/supabase-config.js"></script>
   <script>
+    // Als de docent ingelogd is, stuur meteen door naar de docentenweergave
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (session) {
+        const match  = window.location.pathname.match(/\/les(\d+)\//i);
+        const lesNum = match ? match[1] : '1';
+        window.location.replace(`/les${lesNum}/docent/poll`);
+      }
+    })();
+
     const form      = document.getElementById('join-form');
     const codeInput = document.getElementById('code-input');
     const naamInput = document.getElementById('naam-input');
@@ -201,7 +201,7 @@
       }
 
       knop.disabled = true;
-      toonFeedback('bezig', 'Even kijken of deze sessie bestaat…');
+      toonFeedback('bezig', 'Even kijken of deze poll actief is…');
 
       try {
         const { data: sessie, error: zoekFout } = await db
@@ -213,7 +213,7 @@
 
         if (zoekFout) throw new Error(zoekFout.message);
         if (!sessie) {
-          toonFeedback('fout', 'Deze code klopt niet (meer), of de poll is al afgelopen. Vraag je docent om de juiste code.');
+          toonFeedback('fout', 'Deze code klopt niet (meer), of de poll is al afgelopen. Vraag je juf of meester om de juiste code.');
           knop.disabled = false;
           return;
         }

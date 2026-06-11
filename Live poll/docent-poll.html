@@ -287,11 +287,18 @@
     }
     .schaal-hint { display: flex; gap: 10px; flex-wrap: wrap; }
     .schaal-hint-item {
-      display: flex; align-items: center; gap: 8px;
-      background: #f7f8f9; border: 1px solid var(--border); border-radius: 14px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 9px;
+      background: #f7f8f9; border: 1px solid var(--border);
+      border-radius: 14px; padding: 9px 14px 9px 10px;
     }
-    .sh-emoji { font-size: 20px; }
-    .sh-txt { font-size: 13px; font-weight: 700; color: var(--muted); }
+    .sh-cirkel {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      background: var(--sh-kleur); color: white;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sh-emoji { font-size: 18px; line-height: 1; }
+    .sh-txt { font-size: 13px; font-weight: 700; color: var(--dark); }
 
     /* Vote counter ring */
     .teller-wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
@@ -468,7 +475,7 @@
     <div class="view">
       <div class="loading-card">
         <div class="spinner"></div>
-        <p>Sessie wordt aangemaakt…</p>
+        <p>Poll wordt aangemaakt…</p>
       </div>
     </div>
   </main>
@@ -502,11 +509,11 @@
     ];
 
     const SCHAAL = [
-      { score: 1, label: 'Helemaal mee oneens', emoji: '😞', kleur: '#ef4444' },
-      { score: 2, label: 'Mee oneens',          emoji: '😕', kleur: '#f97316' },
-      { score: 3, label: 'Neutraal',             emoji: '😐', kleur: '#eab308' },
-      { score: 4, label: 'Mee eens',             emoji: '🙂', kleur: '#22c55e' },
-      { score: 5, label: 'Helemaal mee eens',    emoji: '😊', kleur: '#10a37f' },
+      { score: 1, label: 'Helemaal mee oneens', emoji: '😞', kleur: '#ef4444', soft: 'rgba(239,68,68,0.09)',   border: 'rgba(239,68,68,0.22)'   },
+      { score: 2, label: 'Mee oneens',          emoji: '😕', kleur: '#f97316', soft: 'rgba(249,115,22,0.09)', border: 'rgba(249,115,22,0.22)'  },
+      { score: 3, label: 'Neutraal',             emoji: '😐', kleur: '#eab308', soft: 'rgba(234,179,8,0.09)',  border: 'rgba(234,179,8,0.22)'   },
+      { score: 4, label: 'Mee eens',             emoji: '🙂', kleur: '#22c55e', soft: 'rgba(34,197,94,0.09)',  border: 'rgba(34,197,94,0.22)'   },
+      { score: 5, label: 'Helemaal mee eens',    emoji: '😊', kleur: '#10a37f', soft: 'rgba(16,163,127,0.09)', border: 'rgba(16,163,127,0.22)'  },
     ];
 
     // ── State ────────────────────────────────────────────────────────────────
@@ -663,45 +670,29 @@
         <div class="view">
           <div class="lobby-hero">
             <div class="lobby-eyebrow">Live poll · ${esc(lesTitel)}</div>
-            <div class="lobby-title">Klaar om te starten? 🗳️</div>
+            <div class="lobby-title">Klaar om te starten?</div>
             <div class="lobby-sub">
-              Laat leerlingen <strong>${esc(joinUrl.replace(/^https?:\/\//, ''))}</strong> openen
-              en deze code invoeren samen met hun voornaam:
+              Ga naar <strong>${esc(joinUrl.replace(/^https?:\/\//, ''))}</strong><br>
+              Voer de code en je voornaam in:
             </div>
             <div class="code-display">
               ${sessie.code.split('').map(c => `<div class="code-digit">${c}</div>`).join('')}
             </div>
           </div>
 
-          <div class="cols-2">
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">Deelnemers</div>
-                <div class="panel-badge" id="teller-badge">0 leerlingen</div>
-              </div>
-              <div class="deelnemers-grid" id="d-grid">
-                <div class="leeg">Nog niemand binnen — leerlingen verschijnen hier zodra ze meedoen.</div>
-              </div>
+          <div class="panel" style="margin-bottom:28px">
+            <div class="panel-head">
+              <div class="panel-title">Deelnemers</div>
+              <div class="panel-badge" id="teller-badge">0 leerlingen</div>
             </div>
-
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">Stellingen in deze poll</div>
-                <div class="panel-badge">${stellingen.length} stellingen</div>
-              </div>
-              <div class="stelling-lijst">
-                ${stellingen.map((st, i) => `
-                  <div class="stelling-rij">
-                    <div class="st-nr">${i + 1}</div>
-                    <div class="st-txt">${esc(st.tekst)}</div>
-                  </div>`).join('')}
-              </div>
+            <div class="deelnemers-grid" id="d-grid">
+              <div class="leeg">Als leerlingen de code invullen, verschijnen ze hier live!</div>
             </div>
           </div>
 
           <div class="acties">
-            <button class="btn btn-ghost" onclick="bevestigBeeindigen()">Sessie afbreken</button>
-            <button class="btn btn-blue"  onclick="startPoll()">Start poll 🗳️</button>
+            <button class="btn btn-ghost" onclick="bevestigBeeindigen()">Poll stoppen</button>
+            <button class="btn btn-blue"  onclick="startPoll()">Start poll</button>
           </div>
         </div>`;
       ververDeelnemers();
@@ -712,7 +703,7 @@
       const g = document.getElementById('d-grid');
       if (!g) return;
       if (deelnemers.size === 0) {
-        g.innerHTML = `<div class="leeg">Nog niemand binnen — leerlingen verschijnen hier zodra ze meedoen.</div>`;
+        g.innerHTML = `<div class="leeg">Als leerlingen de code invullen, verschijnen ze hier live!</div>`;
         return;
       }
       g.innerHTML = [...deelnemers.values()].map(naam => `
@@ -757,15 +748,16 @@
             </div>
           </div>
 
-          <div class="cols-2" style="margin-bottom:28px">
+          <div class="cols-2" style="margin-bottom:28px;grid-template-columns:3fr 2fr">
             <div class="stelling-kaart" style="margin-bottom:0">
               <div class="stelling-badge">Stelling ${huidigeIndex + 1}</div>
               <div class="stelling-tekst">${esc(st.tekst)}</div>
               <div class="schaal-hint">
                 ${SCHAAL.map(s => `
-                  <div class="schaal-hint-item">
+                  <div class="schaal-hint-item" style="--sh-kleur:${s.kleur};--sh-soft:${s.soft};--sh-border:${s.border}">
+                    <div class="sh-cirkel">${s.score}</div>
                     <span class="sh-emoji">${s.emoji}</span>
-                    <span class="sh-txt">${s.score} = ${s.label}</span>
+                    <span class="sh-txt">${s.label}</span>
                   </div>`).join('')}
               </div>
             </div>
@@ -784,7 +776,7 @@
           </div>
 
           <div class="acties">
-            <button class="btn btn-ghost" onclick="bevestigBeeindigen()">Sessie beëindigen</button>
+            <button class="btn btn-ghost" onclick="bevestigBeeindigen()">Poll beëindigen</button>
             <button class="btn btn-green" onclick="laadResultaten()">Toon resultaten →</button>
           </div>
         </div>`;
@@ -799,6 +791,9 @@
       if (ring) {
         const pct = deelnemers.size > 0 ? Math.round((aantalStemmen / deelnemers.size) * 100) : 0;
         ring.style.background = `conic-gradient(var(--primary) ${pct}%, #e1e3e3 ${pct}%)`;
+      }
+      if (deelnemers.size > 0 && aantalStemmen >= deelnemers.size && huidigView === 'stelling') {
+        laadResultaten();
       }
     }
 
@@ -874,7 +869,7 @@
           </div>
 
           <div class="acties">
-            <button class="btn btn-ghost" onclick="bevestigBeeindigen()">Sessie beëindigen</button>
+            <button class="btn btn-ghost" onclick="bevestigBeeindigen()">Poll beëindigen</button>
             ${isLaatste
               ? `<button class="btn btn-green" onclick="beeindigPoll()">Klaar! Sluit poll →</button>`
               : `<button class="btn btn-blue"  onclick="volgendeStelling()">Volgende stelling →</button>`}
@@ -913,7 +908,7 @@
     }
 
     function bevestigBeeindigen() {
-      if (confirm('Weet je zeker dat je deze poll wilt beëindigen voor de hele klas?')) beeindigPoll();
+      if (confirm('Weet je zeker dat je deze poll wilt stoppen?')) beeindigPoll();
     }
 
     // ── Eindscherm ────────────────────────────────────────────────────────────
@@ -933,12 +928,14 @@
       app.innerHTML = `
         <div class="view">
           <div class="eind-hero">
-            <div class="eind-eyebrow">Poll beëindigd · ${esc(lesTitel)}</div>
-            <div class="eind-title">Goed gedaan, klas! 🎉</div>
+            <div class="eind-eyebrow">Poll beëindigd</div>
+            <div class="eind-title">Goed gedaan klas! 🎉</div>
             <div class="eind-sub">
               ${deelnemers.size} ${deelnemers.size === 1 ? 'leerling' : 'leerlingen'} namen deel ·
               ${stellingen.length} stellingen besproken
             </div>
+            <img src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay"
+              style="position:absolute;right:40px;top:50%;transform:translateY(-50%) scaleX(-1);height:200px;width:auto;opacity:0.92;">
           </div>
 
           <div class="samenvatting-kaart">
@@ -985,6 +982,16 @@
         });
       }, 200));
     }
+
+    let heeftGeinterageerd = false;
+    document.addEventListener('click', () => { heeftGeinterageerd = true; }, { once: true });
+
+    window.onbeforeunload = (e) => {
+      if (heeftGeinterageerd && ['lobby', 'stelling', 'resultaten'].includes(huidigView)) {
+        e.preventDefault();
+        return e.returnValue = '';
+      }
+    };
 
     (async () => {
       const { data: { session } } = await db.auth.getSession();

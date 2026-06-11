@@ -95,32 +95,29 @@
     .fout-titel  { font-size: 22px; font-weight: 700; }
 
     /* ── WACHTKAMER ──────────────────────────────────────────────── */
-    .wk-kaart {
+    .wachtkamer-view {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 56px 36px;
       display: flex; flex-direction: column; align-items: center; text-align: center;
     }
     .wk-avatar {
-      width: 88px; height: 88px; border-radius: 50%;
+      width: 84px; height: 84px; border-radius: 50%;
       background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: white; font-size: 32px; font-weight: 700;
       display: flex; align-items: center; justify-content: center;
-      font-size: 38px; box-shadow: 0 14px 28px rgba(78,142,243,0.28);
+      box-shadow: 0 14px 28px rgba(78,142,243,0.28);
       margin-bottom: 24px;
     }
-    .wk-titel { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
-    .wk-sub   { font-size: 15px; color: var(--muted); line-height: 1.65; max-width: 360px; margin-bottom: 28px; }
-    .wk-naam-badge {
-      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
-      border-radius: var(--r-pill); padding: 10px 22px;
-      font-size: 16px; font-weight: 700; color: var(--primary); margin-bottom: 28px;
+    .wk-titel { font-size: 25px; font-weight: 700; margin-bottom: 10px; }
+    .wk-sub   { font-size: 15px; color: var(--muted); line-height: 1.6; max-width: 400px; }
+    .wk-pulse { display: flex; gap: 10px; margin: 30px 0 8px; }
+    .wk-pulse span {
+      width: 13px; height: 13px; border-radius: 50%; background: var(--primary);
+      animation: wk-bounce 1.2s ease-in-out infinite;
     }
-    .wk-pulse { display: flex; gap: 10px; margin-bottom: 8px; }
-    .wk-dot {
-      width: 13px; height: 13px; border-radius: 50%;
-      animation: bounce 1.2s ease-in-out infinite;
-    }
-    .wk-dot:nth-child(1) { background: var(--primary);  animation-delay: 0s; }
-    .wk-dot:nth-child(2) { background: var(--green);    animation-delay: 0.15s; }
-    .wk-dot:nth-child(3) { background: #f59e0b;         animation-delay: 0.30s; }
-    @keyframes bounce { 0%,80%,100%{transform:scale(0.65);opacity:0.45;} 40%{transform:scale(1);opacity:1;} }
+    .wk-pulse span:nth-child(2) { animation-delay: 0.15s; background: var(--green); }
+    .wk-pulse span:nth-child(3) { animation-delay: 0.30s; background: #f59e0b; }
+    @keyframes wk-bounce { 0%,80%,100%{transform:scale(0.6);opacity:0.45;} 40%{transform:scale(1);opacity:1;} }
     .wk-hint { font-size: 13px; color: var(--muted); }
 
     /* ── STELLING-BADGE (boven de kaart) ─────────────────────────── */
@@ -353,7 +350,7 @@
     <div class="view">
       <div class="kaart laad-kaart">
         <div class="spinner"></div>
-        <p>Sessie laden…</p>
+        <p>Poll laden…</p>
       </div>
     </div>
   </main>
@@ -407,7 +404,7 @@
 
       const { data: s, error: se } = await db
         .from('sessions').select().eq('code', code).maybeSingle();
-      if (se || !s) { toonFout('Kon de sessie niet laden. Vraag je docent om de code opnieuw.'); return; }
+      if (se || !s) { toonFout('Kon de poll niet laden. Vraag je juf of meester om de code opnieuw.'); return; }
       sessie = s;
 
       const { data: d, error: de } = await db
@@ -482,17 +479,12 @@
       huidigView = 'wachtkamer';
       app.innerHTML = `
         <div class="view">
-          <div class="kaart wk-kaart">
-            <div class="wk-avatar">🗳️</div>
-            <div class="wk-titel">Je doet mee! 🙌</div>
-            <div class="wk-naam-badge">👋 ${esc(deelnemer.naam)}</div>
-            <div class="wk-sub">Je docent start zo de poll. Elke stelling beantwoord je met een schaal van 1 tot 5. Er is geen goed of fout — gewoon jouw eerlijke mening!</div>
-            <div class="wk-pulse">
-              <div class="wk-dot"></div>
-              <div class="wk-dot"></div>
-              <div class="wk-dot"></div>
-            </div>
-            <div class="wk-hint">Wachten op de docent…</div>
+          <div class="wachtkamer-view">
+            <div class="wk-avatar">${esc(deelnemer.naam.slice(0, 1).toUpperCase())}</div>
+            <div class="wk-titel">Welkom ${esc(deelnemer.naam)}!</div>
+            <div class="wk-sub">Je bent klaar om mee te doen. Wanneer je juf of meester de poll start, verschijnt de eerste stelling.</div>
+            <div class="wk-pulse"><span></span><span></span><span></span></div>
+            <div class="wk-hint">Wachten op je juf of meester…</div>
           </div>
         </div>`;
     }
@@ -501,16 +493,12 @@
       huidigView = 'wachten';
       app.innerHTML = `
         <div class="view">
-          <div class="kaart wk-kaart">
+          <div class="wachtkamer-view">
             <div class="wk-avatar">⏳</div>
             <div class="wk-titel">Volgende stelling…</div>
-            <div class="wk-sub">Je docent gaat de resultaten bespreken. Daarna krijg je de volgende stelling te zien.</div>
-            <div class="wk-pulse">
-              <div class="wk-dot"></div>
-              <div class="wk-dot"></div>
-              <div class="wk-dot"></div>
-            </div>
-            <div class="wk-hint">Wachten op de docent…</div>
+            <div class="wk-sub">Je juf of meester bespreekt de resultaten. Daarna krijg je de volgende stelling te zien.</div>
+            <div class="wk-pulse"><span></span><span></span><span></span></div>
+            <div class="wk-hint">Wachten op je juf of meester…</div>
           </div>
         </div>`;
     }
@@ -563,7 +551,7 @@
       });
       const bericht = document.getElementById('status-bericht');
       if (bericht) {
-        bericht.textContent = `Jouw stem (${score}) is ontvangen! Wacht op de docent voor de resultaten.`;
+        bericht.textContent = `Jouw stem (${score}) is ontvangen! Wacht op je juf of meester voor de resultaten.`;
         setTimeout(() => bericht.classList.add('zichtbaar'), 80);
       }
 
@@ -606,7 +594,7 @@
                 </div>
               </div>` : ''}
 
-            <div class="gestemd-sub">Super! Je docent gaat de resultaten van de klas laten zien. Even wachten…</div>
+            <div class="gestemd-sub">Super! Je juf of meester gaat de resultaten van de klas laten zien. Even wachten…</div>
             <div class="wacht-pulse">
               <span></span><span></span><span></span>
             </div>
@@ -682,7 +670,7 @@
                 <span style="background:var(--green)"></span>
                 <span style="background:#f59e0b"></span>
               </div>
-              Docent bespreekt de uitkomst…
+              Juf of meester bespreekt de uitkomst…
             </div>
           </div>
         </div>`;
@@ -706,18 +694,28 @@
         <div class="view">
           <div class="kaart eind-kaart">
             <div class="eind-emoji">🎉</div>
-            <div class="eind-titel">Super gedaan, ${esc(deelnemer ? deelnemer.naam : 'je')}!</div>
+            <div class="eind-titel">Super gedaan ${esc(deelnemer ? deelnemer.naam : 'je')}!</div>
             <div class="eind-divider"></div>
             <div class="eind-sub">
               Je hebt alle stellingen beantwoord. Jouw mening telt mee voor de klasbespreking.
               Goed bezig!
             </div>
             <div class="eind-bedankt">
-              Bedankt voor je deelname aan de poll! 🗳️
+              Bedankt voor je deelname aan de poll!
             </div>
           </div>
         </div>`;
     }
+
+    let heeftGeinterageerd = false;
+    document.addEventListener('click', () => { heeftGeinterageerd = true; }, { once: true });
+
+    window.onbeforeunload = (e) => {
+      if (heeftGeinterageerd && ['wachtkamer', 'stemmen', 'gestemd', 'resultaten'].includes(huidigView)) {
+        e.preventDefault();
+        return e.returnValue = '';
+      }
+    };
 
     init();
   </script>
