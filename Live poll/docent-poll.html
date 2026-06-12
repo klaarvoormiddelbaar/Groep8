@@ -864,7 +864,6 @@
                   <div class="chart-rij">
                     <div class="chart-links">
                       <div class="chart-circ" style="background:${s.kleur}">${s.score}</div>
-                      <div class="chart-emoji">${s.emoji}</div>
                       <div class="chart-lbl" style="${isGem ? 'color:'+s.kleur : ''}">${s.label}${isGem ? ' ←' : ''}</div>
                     </div>
                     <div class="balk-track">
@@ -974,7 +973,7 @@
                     <div class="sam-emojis">
                       ${SCHAAL.map(sc => {
                         const isActief = s.gem && Math.abs(Math.round(s.gem) - sc.score) === 0;
-                        return `<span style="font-size:${isActief ? '20px' : '14px'};opacity:${isActief ? '1' : '0.4'}">${sc.emoji}</span>`;
+                        return `<span style="width:${isActief ? '20px' : '14px'};height:${isActief ? '20px' : '14px'};border-radius:50%;background:${sc.kleur};display:inline-block;opacity:${isActief ? '1' : '0.3'}"></span>`;
                       }).join('')}
                     </div>
                   </div>
