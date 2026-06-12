@@ -567,6 +567,7 @@
           <div class="question-card">
             <div class="question-type-badge">${typeLabel(vraag.type)}</div>
             <div class="question-text">${escapeHtml(vraag.vraag)}</div>
+            ${vraag.toelichting ? `<div style="margin:0 0 20px;padding:12px 18px;background:#fef9e9;border:1.5px solid #f8d760;border-radius:14px;font-size:14px;font-weight:700;color:#92400e">💡 ${escapeHtml(vraag.toelichting)}</div>` : ''}
             ${vraag.afbeelding ? `<div class="question-image">${vraag.afbeelding}</div>` : ''}
             <div class="options-grid">
               ${vraag.opties.map((optie, i) => {
