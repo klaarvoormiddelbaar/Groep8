@@ -648,15 +648,11 @@
   <!-- WELKOMST MODAL -->
   <div class="modal-overlay" id="welkomModal">
     <div class="modal-card" style="max-width:520px;text-align:center">
-      <span class="welkom-hero-icon">🎒</span>
-      <div class="welkom-title">Welkom bij de proeflicentie, <span class="welkom-naam" id="welkom-naam"></span>!</div>
+      <div class="welkom-title">Welkom bij de proeflicentie <span class="welkom-naam" id="welkom-naam"></span>!</div>
       <p class="welkom-body">
-        Fijn dat je erbij bent. Je proeflicentie staat klaar en les 1 is volledig toegankelijk.<br>
-        Bekijk de lesopbouw, start de live quiz en ontdek hoe KvM werkt in de klas.
+        Les 1 staat voor je open. Bekijk de lesopbouw, gebruik de materialen en probeer de live quiz uit met je klas. Zo krijg je een goed beeld van wat KvM te bieden heeft.
       </p>
       <div class="welkom-chips">
-        <div class="welkom-chip">📚 Les 1 direct beschikbaar</div>
-        <div class="welkom-chip">🎮 Live quiz inbegrepen</div>
         <div class="welkom-chip amber">🔒 Lessen 2 t/m 8 via volledige licentie</div>
       </div>
       <button class="btn-welkom-start" onclick="sluitWelkomModal()">Aan de slag →</button>
@@ -668,10 +664,9 @@
     <div class="modal-card">
       <button class="modal-close" id="modalSluit" aria-label="Sluiten">✕</button>
       <div class="modal-title">Jouw profiel</div>
-      <p class="modal-sub">Vul je gegevens in zodat het dashboard gepersonaliseerd wordt.</p>
       <form id="profielForm">
-        <label class="modal-label" for="p-naam">Naam</label>
-        <input class="modal-input" id="p-naam" type="text" placeholder="Bijv. Linda de Vries" required>
+        <label class="modal-label" for="p-naam">Voornaam</label>
+        <input class="modal-input" id="p-naam" type="text" placeholder="Bijv. Linda" required>
         <label class="modal-label" for="p-groep">Groep</label>
         <select class="modal-select" id="p-groep">
           <option value="8A">Groep 8A</option>
