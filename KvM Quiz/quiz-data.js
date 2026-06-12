@@ -20,57 +20,72 @@ const QUIZZES = {
   'les-1': [
     {
       type: 'multiple_choice',
-      vraag: 'Wat is het belangrijkste doel van het Klaar voor Middelbaar-programma?',
+      vraag: 'Wat is het doel van het Klaar voor Middelbaar-programma?',
       opties: [
-        'Zo snel mogelijk hoge cijfers halen',
-        'Je rustig voorbereiden op de overstap naar de middelbare school',
-        'Een nieuwe hobby kiezen',
-        'Extra huiswerk oefenen voor de zomer'
-      ],
-      goed_index: 1,
-      tijdslimiet_seconden: 20
-    },
-    {
-      type: 'true_false',
-      vraag: 'Op de middelbare school krijg je meestal les van meerdere docenten in plaats van één meester of juf.',
-      opties: ['Waar', 'Niet waar'],
-      goed_index: 0,
-      tijdslimiet_seconden: 15
-    },
-    {
-      type: 'image',
-      vraag: 'Wat neem je het beste mee op je eerste schooldag, zodat je goed voorbereid bent?',
-      afbeelding: SCHOOLTAS_ILLUSTRATIE,
-      opties: [
-        'Een schooltas met agenda en spullen',
-        'Alleen je telefoon',
-        'Een knuffel van thuis',
-        'Niets, dat regelt de docent wel'
+        'Leerlingen voorbereiden op de overstap naar de middelbare school',
+        'Leerlingen helpen bij het kiezen van een middelbare school',
+        'Leerlingen extra oefenen met rekenen en taal',
+        'Leerlingen kennis laten maken met verschillende beroepen'
       ],
       goed_index: 0,
-      tijdslimiet_seconden: 20
-    },
-    {
-      type: 'poll',
-      vraag: 'Waar heb jij nu het meeste zin in als je denkt aan de middelbare school?',
-      opties: [
-        'Nieuwe vakken ontdekken',
-        'Nieuwe vrienden maken',
-        'Een eigen rooster en kluisje',
-        'Zelfstandiger worden'
-      ],
-      goed_index: null,
       tijdslimiet_seconden: 20
     },
     {
       type: 'multiple_choice',
-      vraag: 'Je snapt iets niet tijdens de les op je nieuwe school. Wat doe je het beste?',
+      vraag: 'Wie neemt je elke les mee tijdens de lessen van Klaar voor Middelbaar?',
+      opties: ['Finn', 'Jesse', 'Jay', 'Milan'],
+      goed_index: 2,
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Welke van deze onderwerpen behandelen we bij Klaar voor Middelbaar?',
       opties: [
-        'Het maar gewoon laten zitten',
-        'Het opschrijven en het aan de docent vragen',
-        'Een beetje boos worden',
-        'Doen alsof je het wél snapt'
+        'Plannen',
+        'Slim Leren',
+        'Omgaan met toetsen en stress',
+        'Alle antwoorden zijn juist'
       ],
+      goed_index: 3,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Hoe heet de leerkracht die verantwoordelijk is voor jouw klas?',
+      opties: ['Decaan', 'Tutor', 'Mentor', 'Rector'],
+      goed_index: 2,
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: "Hoeveel 'Slim Leren' tips heb je van Jay gekregen?",
+      opties: ['3', '4', '5', '6 of 7'],
+      goed_index: 2,
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat is GEEN tip om slimmer te leren?',
+      opties: [
+        'Vakken afwisselen',
+        'Op verschillende momenten oefenen',
+        'Alles vlak voor de toets leren',
+        'Jezelf vragen stellen'
+      ],
+      goed_index: 2,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'true_false',
+      vraag: 'Af en toe LANGE pauzes nemen is één van de tips die Jay heeft gegeven.',
+      opties: ['Waar', 'Niet waar'],
+      goed_index: 1,
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Hoeveel middelbare scholieren zijn er op dit moment in Nederland?',
+      opties: ['500.000', '1 miljoen', '3 miljoen', '5 miljoen'],
       goed_index: 1,
       tijdslimiet_seconden: 20
     }
