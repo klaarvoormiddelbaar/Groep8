@@ -106,7 +106,7 @@
     .join-footnote { margin-top: 28px; text-align: center; font-size: 13px; color: var(--muted); }
 
     .scale-preview {
-      display: flex; justify-content: space-between; gap: 8px;
+      display: grid; grid-template-columns: repeat(5, 1fr);
       background: #f7f8f9; border: 1px solid var(--border);
       border-radius: 20px; padding: 14px 18px; margin-bottom: 28px;
     }
@@ -130,9 +130,9 @@
 
     <div class="scale-preview">
       <div class="scale-item"><div class="scale-circ" style="background:#ef4444">1</div><div class="scale-nr">Helemaal mee oneens</div></div>
-      <div class="scale-item"><div class="scale-circ" style="background:#f97316">2</div></div>
+      <div class="scale-item"><div class="scale-circ" style="background:#f97316">2</div><div class="scale-nr">Mee oneens</div></div>
       <div class="scale-item"><div class="scale-circ" style="background:#eab308">3</div><div class="scale-nr">Neutraal</div></div>
-      <div class="scale-item"><div class="scale-circ" style="background:#22c55e">4</div></div>
+      <div class="scale-item"><div class="scale-circ" style="background:#22c55e">4</div><div class="scale-nr">Mee eens</div></div>
       <div class="scale-item"><div class="scale-circ" style="background:#10a37f">5</div><div class="scale-nr">Helemaal mee eens</div></div>
     </div>
 
