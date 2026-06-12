@@ -110,9 +110,13 @@
       background: #f7f8f9; border: 1px solid var(--border);
       border-radius: 20px; padding: 14px 18px; margin-bottom: 28px;
     }
-    .scale-item { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-    .scale-emoji { font-size: 22px; }
-    .scale-nr { font-size: 11px; font-weight: 700; color: var(--muted); }
+    .scale-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .scale-circ {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 15px; font-weight: 700;
+    }
+    .scale-nr { font-size: 10px; font-weight: 700; color: var(--muted); }
   </style>
 </head>
 <body>
@@ -121,15 +125,15 @@
       <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
     </div>
 
-    <div class="join-title">Vul de code van je juf of meester in en doe mee! 💡</div>
+    <div class="join-title">Vul de code van je juf of meester in en doe mee!</div>
     <div class="join-sub">Geef aan hoe jij over elke stelling denkt:</div>
 
     <div class="scale-preview">
-      <div class="scale-item"><div class="scale-emoji">😞</div><div class="scale-nr">1</div></div>
-      <div class="scale-item"><div class="scale-emoji">😕</div><div class="scale-nr">2</div></div>
-      <div class="scale-item"><div class="scale-emoji">😐</div><div class="scale-nr">3</div></div>
-      <div class="scale-item"><div class="scale-emoji">🙂</div><div class="scale-nr">4</div></div>
-      <div class="scale-item"><div class="scale-emoji">😊</div><div class="scale-nr">5</div></div>
+      <div class="scale-item"><div class="scale-circ" style="background:#ef4444">1</div><div class="scale-nr">Helemaal mee oneens</div></div>
+      <div class="scale-item"><div class="scale-circ" style="background:#f97316">2</div><div class="scale-nr">Mee oneens</div></div>
+      <div class="scale-item"><div class="scale-circ" style="background:#eab308">3</div><div class="scale-nr">Neutraal</div></div>
+      <div class="scale-item"><div class="scale-circ" style="background:#22c55e">4</div><div class="scale-nr">Mee eens</div></div>
+      <div class="scale-item"><div class="scale-circ" style="background:#10a37f">5</div><div class="scale-nr">Helemaal mee eens</div></div>
     </div>
 
     <form id="join-form" autocomplete="off">
