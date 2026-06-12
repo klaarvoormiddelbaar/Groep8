@@ -1,0 +1,22 @@
+{
+  "n": 7,
+  "g1": "#831843",
+  "g2": "#db2777",
+  "emoji": "🎭",
+  "title": "Sociale situaties",
+  "sub": "Oefenen met realistische scenario's",
+  "tip": "Zorg voor een veilige sfeer voordat je begint. Vraag leerlingen vooraf of ze scenario's mogen delen die ze zelf hebben meegemaakt.",
+  "canva": null,
+  "doelen": [
+    "Leerlingen kunnen sociale scenario's herkennen en analyseren.",
+    "Leerlingen oefenen met assertief en respectvol reageren.",
+    "Leerlingen ontwikkelen empathie voor verschillende perspectieven."
+  ],
+  "tl": [
+    { "t": "0–8 min",   "n": "Warming-up",       "d": "Snel rondje: hoe reageer jij als iemand je ergens mee vraagt wat je niet wilt?" },
+    { "t": "8–25 min",  "n": "Rollenspel",        "d": "Leerlingen spelen scenario's na in groepjes van 3." },
+    { "t": "25–42 min", "n": "Nabespreking",      "d": "Bespreek per scenario: wat werkte goed, wat kon beter?" },
+    { "t": "42–55 min", "n": "Persoonlijk plan",  "d": "Elke leerling schrijft op: één situatie die ik anders ga aanpakken." }
+  ],
+  "mat": ["Scenario-kaarten set 2 (bijlage 9)", "Schrijfpapier", "Optioneel: filmfragmenten"]
+}

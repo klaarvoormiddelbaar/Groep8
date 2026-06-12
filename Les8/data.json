@@ -1,0 +1,22 @@
+{
+  "n": 8,
+  "g1": "#134e4a",
+  "g2": "#0f766e",
+  "emoji": "🏆",
+  "title": "Klaar voor de start!",
+  "sub": "Afsluiting, reflectie en certificaat",
+  "tip": "Maak van de certificaatuitreiking een echt feestmoment. Nodig eventueel ouders uit of maak een korte video voor de ouderavond.",
+  "canva": null,
+  "doelen": [
+    "Leerlingen reflecteren op het volledige programma.",
+    "Leerlingen formuleren hun persoonlijke startwoorden.",
+    "Leerlingen ontvangen hun KvM-certificaat en vieren de afronding."
+  ],
+  "tl": [
+    { "t": "0–10 min",  "n": "Terugblik",             "d": "Blader samen terug door alle lessen. Wat zijn de highlights?" },
+    { "t": "10–28 min", "n": "Eindkaart invullen",     "d": "Leerlingen schrijven: \"Ik ben klaar voor de middelbare omdat…\"" },
+    { "t": "28–45 min", "n": "Certificaatuitreiking",  "d": "Reik individueel de KvM-certificaten uit. Vier dit moment!" },
+    { "t": "45–55 min", "n": "Feestelijk slot",        "d": "Gezamenlijke afsluiting: succeswensen en een klassenfoto." }
+  ],
+  "mat": ["KvM-certificaten (bijlage 10)", "Eindkaarten voor leerlingen", "Optioneel: diploma-muziek en slingers"]
+}

@@ -69,7 +69,10 @@
       "Bash(git add *)",
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
-      "Bash(git mv *)"
+      "Bash(git mv *)",
+      "Bash(git -C \"/Users/niekheselmans/Library/Mobile Documents/com~apple~CloudDocs/Niek Vibe code/Groep 8 portaal\" status)",
+      "Bash(git -C \"/Users/niekheselmans/Library/Mobile Documents/com~apple~CloudDocs/Niek Vibe code/Groep 8 portaal\" log --oneline -3)",
+      "Bash(git *)"
     ]
   }
 }

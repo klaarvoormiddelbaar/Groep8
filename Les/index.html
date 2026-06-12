@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Les — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --page-bg:    #f2f6fd;
+      --card-bg:    #ffffff;
+      --border:     #eceeee;
+      --primary:    #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:      #10a37f;
+      --dark:       #191c1d;
+      --muted:      #6d747a;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --max-w:      1184px;
+      --pad:        48px;
+      --r-card:     28px;
+      --r-pill:     9999px;
+    }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(rgba(78,142,243,0.06) 1.5px, transparent 1.5px),
+        radial-gradient(ellipse at 108% -8%,  rgba(114,168,249,0.24) 0%, transparent 52%),
+        radial-gradient(ellipse at -8%   8%,  rgba(156,196,238,0.20) 0%, transparent 48%),
+        radial-gradient(ellipse at 50%  40%,  rgba(255,255,255,0.68) 0%, transparent 58%);
+      background-size: 28px 28px, 100% 100%, 100% 100%, 100% 100%;
+      background-attachment: scroll, fixed, fixed, fixed;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(242,246,253,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 var(--pad); height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+    }
+    .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
+    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .bc-link {
+      color: var(--muted); text-decoration: none; font-weight: 400;
+      transition: color 0.2s; cursor: pointer;
+    }
+    .bc-link:hover { color: var(--primary); }
+    .bc-sep { color: rgba(109,116,122,0.4); }
+    .bc-current { color: var(--primary); font-weight: 700; }
+    .back-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,0.20);
+      border-radius: var(--r-pill);
+      padding: 8px 18px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      color: var(--primary); cursor: pointer; text-decoration: none;
+      transition: background 0.18s, box-shadow 0.18s;
+    }
+    .back-btn:hover {
+      background: rgba(78,142,243,0.16);
+      box-shadow: 0 4px 12px rgba(78,142,243,0.15);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 48px var(--pad) 96px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      border-radius: var(--r-card);
+      padding: 52px 56px;
+      margin-bottom: 36px;
+      position: relative; overflow: hidden;
+      color: white;
+      box-shadow: 0 12px 32px -8px rgba(0,0,0,0.18);
+      animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.14) 1.5px, transparent 1.5px);
+      background-size: 26px 26px;
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute; top: -80px; right: -80px;
+      width: 360px; height: 360px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 640px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,0.18);
+      border: 1px solid rgba(255,255,255,0.30);
+      border-radius: var(--r-pill);
+      padding: 6px 14px;
+      font-size: 12px; font-weight: 700; letter-spacing: 0.8px;
+      text-transform: uppercase; margin-bottom: 16px;
+    }
+    .hero-title {
+      font-size: 48px; font-weight: 700; line-height: 1.06;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 16px rgba(0,0,0,0.12);
+    }
+    .hero-sub {
+      font-size: 18px; font-weight: 400; opacity: 0.85;
+      margin-bottom: 28px; line-height: 1.5;
+    }
+    .hero-chips { display: flex; gap: 10px; flex-wrap: wrap; }
+    .hero-chip {
+      background: rgba(255,255,255,0.16);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: var(--r-pill);
+      padding: 7px 16px;
+      font-size: 13px; font-weight: 700;
+    }
+    .hero-jay {
+      position: absolute; right: 48px; top: 50%;
+      height: 280px; width: auto;
+      object-fit: contain;
+      pointer-events: none; z-index: 0;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.20));
+      transform: translateY(-50%) scaleX(-1);
+    }
+    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+    .hero-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.18); backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255,255,255,0.45); border-radius: var(--r-pill);
+      padding: 11px 24px;
+      font-family: inherit; font-size: 14px; font-weight: 700; color: white;
+      text-decoration: none; cursor: pointer; white-space: nowrap;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .hero-btn:hover { background: rgba(255,255,255,0.30); transform: translateY(-2px); }
+    .hero-btn-live {
+      background: white; border: none;
+      color: #1e4a8a;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .hero-btn-live:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.20); }
+    .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #ef4444; animation: liveDotPulse 1.6s infinite; flex-shrink: 0; }
+    @keyframes liveDotPulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.4; transform:scale(0.78); } }
+
+    /* ── CANVA EMBED ── */
+    .canva-stage {
+      position: relative;
+      scroll-margin-top: 88px;
+      border-radius: var(--r-card);
+      overflow: hidden;
+      box-shadow: 0 32px 72px -12px rgba(0,0,0,0.22), 0 0 0 1px rgba(0,0,0,0.06);
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s 0.18s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .canva-screen {
+      background: #0e1117;
+    }
+    .canva-frame {
+      display: block; width: 100%; border: none;
+      aspect-ratio: 16 / 9;
+    }
+    /* Eigen balk die alle Canva-controls bedekt */
+    .canva-bottom-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 52px;
+      background: rgba(0,0,0,0.40);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 10;
+    }
+    .canva-fs-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--r-pill);
+      padding: 8px 20px;
+      font-family: inherit; font-size: 13px; font-weight: 700;
+      color: rgba(255,255,255,0.60);
+      cursor: pointer; letter-spacing: 0.2px;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+    }
+    .canva-fs-btn:hover {
+      background: rgba(255,255,255,0.13);
+      color: white;
+      border-color: rgba(255,255,255,0.22);
+    }
+    /* Volledig scherm: iframe vult alles, balk overlapt onderaan */
+    .canva-stage:fullscreen,
+    .canva-stage:-webkit-full-screen {
+      border-radius: 0;
+      background: #0d1117;
+    }
+    .canva-stage:fullscreen .canva-screen,
+    .canva-stage:-webkit-full-screen .canva-screen {
+      position: absolute; inset: 0; padding: 0;
+      display: flex;
+    }
+    .canva-stage:fullscreen .canva-frame,
+    .canva-stage:-webkit-full-screen .canva-frame {
+      width: 100%; height: 100%; aspect-ratio: unset;
+    }
+
+    /* ── CONTENT GRID ── */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s 0.1s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      padding: 32px;
+      box-shadow: var(--shadow-card);
+    }
+    .content-card.full { grid-column: 1 / -1; }
+    .cc-title {
+      font-size: 12px; font-weight: 700;
+      letter-spacing: 1.4px; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 20px;
+    }
+
+    /* Doelen */
+    .obj-row { display: flex; gap: 14px; margin-bottom: 14px; }
+    .obj-row:last-child { margin-bottom: 0; }
+    .obj-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--primary);
+      flex-shrink: 0; margin-top: 7px;
+    }
+    .obj-text { font-size: 15px; line-height: 1.55; color: var(--dark); }
+
+    /* Tijdlijn */
+    .tl-row { display: flex; gap: 16px; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+    .tl-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .tl-time {
+      font-size: 12px; font-weight: 700; color: var(--primary);
+      background: var(--primary-soft);
+      border-radius: 8px; padding: 4px 10px;
+      white-space: nowrap; flex-shrink: 0;
+      height: fit-content; margin-top: 2px;
+      min-width: 72px; text-align: right;
+    }
+    .tl-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .tl-desc { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+    /* Materialen — tekst chips */
+    .mat-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .mat-chip {
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,0.18);
+      border-radius: var(--r-pill);
+      padding: 8px 16px;
+      font-size: 14px; font-weight: 700; color: var(--primary);
+    }
+
+    /* Materialen — carousel */
+    .mat-carousel {
+      position: relative;
+      margin-top: 4px;
+      min-width: 0;
+    }
+    .mat-carousel-track {
+      overflow: hidden;
+      min-width: 0;
+    }
+    .mat-carousel-fade-right,
+    .mat-carousel-fade-left {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 48px;
+      pointer-events: none;
+      z-index: 1;
+      transition: opacity 0.25s;
+    }
+    .mat-carousel-fade-right {
+      right: 0;
+      background: linear-gradient(to right, transparent, white);
+    }
+    .mat-carousel-fade-left {
+      left: 0;
+      background: linear-gradient(to left, transparent, white);
+      opacity: 0;
+    }
+    .mat-carousel-inner {
+      display: flex;
+      gap: 16px;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .mat-carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: white;
+      border: 1.5px solid rgba(78,142,243,0.22);
+      box-shadow: 0 2px 8px rgba(78,142,243,0.10), 0 1px 3px rgba(0,0,0,0.08);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 3;
+      transition: background 0.18s, border-color 0.18s, box-shadow 0.18s, opacity 0.18s;
+      padding: 0;
+    }
+    .mat-carousel-btn:hover {
+      background: var(--primary-soft);
+      border-color: rgba(78,142,243,0.45);
+      box-shadow: 0 4px 16px rgba(78,142,243,0.20);
+    }
+    .mat-carousel-btn.prev { left: -16px; }
+    .mat-carousel-btn.next { right: -16px; }
+    .mat-carousel-btn:disabled { opacity: 0.18; cursor: default; pointer-events: none; }
+
+    /* Materialen — productkaarten met afbeelding */
+    .mat-product-card {
+      width: 140px;
+      flex-shrink: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.07);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      display: flex; flex-direction: column;
+      transition: transform 0.24s cubic-bezier(0.22,1,0.36,1),
+                  box-shadow 0.24s cubic-bezier(0.22,1,0.36,1);
+    }
+    .mat-product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 32px rgba(0,0,0,0.12);
+    }
+    .mat-product-img-area {
+      width: 140px; height: 140px;
+      flex-shrink: 0; overflow: hidden;
+    }
+    .mat-product-img-area img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.24s cubic-bezier(0.22,1,0.36,1);
+    }
+    .mat-product-card:hover .mat-product-img-area img {
+      transform: scale(1.05);
+    }
+    .mat-product-footer {
+      background: white;
+      border-top: 1px solid rgba(0,0,0,0.05);
+      padding: 10px 12px;
+    }
+    .mat-product-name {
+      font-size: 13px; font-weight: 700; color: var(--dark);
+      text-align: center;
+    }
+    .mat-product-card { cursor: zoom-in; }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.22s ease;
+    }
+    .lightbox.open {
+      opacity: 1; pointer-events: auto;
+    }
+    .lightbox-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      width: 420px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.30);
+      transform: scale(0.88);
+      transition: transform 0.26s cubic-bezier(0.22,1,0.36,1);
+    }
+    .lightbox.open .lightbox-card {
+      transform: scale(1);
+    }
+    .lightbox-card img {
+      width: 100%; height: 420px;
+      object-fit: cover; display: block;
+    }
+    .lightbox-card-footer {
+      padding: 14px 18px;
+      font-size: 15px; font-weight: 700; color: var(--dark);
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Tip */
+    .tip-card {
+      background: linear-gradient(135deg, rgba(16,163,127,0.08) 0%, rgba(16,163,127,0.02) 100%);
+      border: 1px solid rgba(16,163,127,0.28);
+      border-radius: var(--r-card);
+      padding: 28px 32px;
+      display: flex; gap: 18px; align-items: flex-start;
+      margin-bottom: 24px;
+      animation: fadeUp 0.5s 0.15s cubic-bezier(0.22,1,0.36,1) both;
+      box-shadow: var(--shadow-card);
+      position: relative; overflow: hidden;
+    }
+    .tip-card::after {
+      content: '';
+      position: absolute; top: 0; left: -80%;
+      width: 50%; height: 100%;
+      background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(255,255,255,0.32) 50%,
+        transparent 70%
+      );
+      animation: tipShine 3.5s ease-in-out 1s infinite;
+      pointer-events: none;
+    }
+    @keyframes tipShine {
+      0%   { left: -80%; }
+      60%, 100% { left: 160%; }
+    }
+    .tip-icon { font-size: 28px; flex-shrink: 0; margin-top: 2px; }
+    .tip-label {
+      font-size: 12px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: var(--green); margin-bottom: 6px;
+    }
+    .tip-body { font-size: 15px; line-height: 1.6; color: var(--dark); }
+
+    /* ── NOT FOUND ── */
+    .not-found {
+      text-align: center; padding: 120px 48px;
+      animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .not-found-emoji { font-size: 64px; margin-bottom: 24px; }
+    .not-found h1 { font-size: 32px; margin-bottom: 12px; }
+    .not-found p { font-size: 16px; color: var(--muted); margin-bottom: 32px; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #f2f4f4;
+      border-radius: 64px 64px 0 0;
+      padding: 40px var(--pad);
+    }
+    .footer-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo { height: 40px; width: auto; }
+    .footer-copy { font-size: 15px; color: var(--muted); }
+
+    @media (max-width: 768px) {
+      :root { --pad: 20px; }
+      .content-grid { grid-template-columns: 1fr; }
+      .hero { padding: 36px 28px; }
+      .hero-title { font-size: 34px; }
+      .hero-jay { display: none; }
+      .header-inner { padding: 0 20px; }
+      .breadcrumb { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ══════════════════════════════════════════════════════ -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="/Dashboard">
+        <div class="logo-mark">KvM</div>
+        <div>
+          <div class="logo-name">Klaar voor Middelbaar</div>
+          <div class="logo-role">Docentenportaal</div>
+        </div>
+      </a>
+
+      <nav class="breadcrumb" id="breadcrumb">
+        <a class="bc-link" href="/Dashboard">Dashboard</a>
+        <span class="bc-sep">/</span>
+        <span class="bc-current" id="bc-title">Les laden…</span>
+      </nav>
+
+      <a class="back-btn" href="/Dashboard">
+        ← Terug naar dashboard
+      </a>
+    </div>
+  </header>
+
+  <!-- ══ MAIN ═══════════════════════════════════════════════════════ -->
+  <main class="main" id="main">
+    <div style="text-align:center;padding:80px 0;color:var(--muted)">Les laden…</div>
+  </main>
+
+  <!-- ══ LIGHTBOX ══════════════════════════════════════════════════ -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-card" onclick="event.stopPropagation()">
+      <img id="lightbox-img" src="" alt="">
+      <div class="lightbox-card-footer" id="lightbox-name"></div>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ═════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar" class="footer-logo">
+      <p class="footer-copy">© 2026 Klaar voor Middelbaar</p>
+    </div>
+  </footer>
+
+  <script>
+    const pathMatch = window.location.pathname.match(/les(\d+)/i);
+    const params = new URLSearchParams(window.location.search);
+    const n = pathMatch ? parseInt(pathMatch[1], 10) : parseInt(params.get('n'), 10);
+    const main = document.getElementById('main');
+
+    if (!n || n < 1 || n > 8) {
+      showNotFound();
+    } else {
+      fetch(`/Les${n}/data.json`)
+        .then(r => { if (!r.ok) throw new Error(); return r.json(); })
+        .then(renderLesson)
+        .catch(showNotFound);
+    }
+
+    function showNotFound() {
+      document.title = 'Les niet gevonden — KvM';
+      main.innerHTML = `
+        <div class="not-found">
+          <div class="not-found-emoji">🔍</div>
+          <h1>Les niet gevonden</h1>
+          <p>Er is geen les met dit nummer. Ga terug naar het dashboard.</p>
+          <a class="back-btn" href="/Dashboard">← Terug naar dashboard</a>
+        </div>`;
+    }
+
+    function renderLesson(L) {
+      document.title = `Les ${L.n}: ${L.title} — Klaar voor Middelbaar`;
+      document.getElementById('bc-title').textContent = `Les ${L.n}: ${L.title}`;
+
+      const canvaHtml = L.canva ? `
+        <div class="canva-stage" id="canva-stage">
+          <div class="canva-screen">
+            <iframe class="canva-frame" src="${L.canva}" loading="lazy"></iframe>
+          </div>
+          <div class="canva-bottom-bar">
+            <button class="canva-fs-btn" onclick="toggleCanvaFullscreen()" aria-label="Volledig scherm">
+              <svg id="canva-fs-icon" width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 5.5V1H5.5M9.5 1H14V5.5M14 9.5V14H9.5M5.5 14H1V9.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span id="canva-fs-label">Volledig scherm</span>
+            </button>
+          </div>
+        </div>` : '';
+
+      main.innerHTML = `
+        <div class="hero" style="background:linear-gradient(135deg,${L.g1} 0%,${L.g2} 100%)">
+          <div class="hero-content">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+              <div class="hero-badge" style="margin-bottom:0">Les ${L.n} van 8</div>
+              <div class="hero-badge" style="margin-bottom:0">⏱ 60 minuten</div>
+            </div>
+            <div class="hero-title">${L.emoji} ${L.title}</div>
+            <div class="hero-sub">${L.sub}</div>
+            <div class="hero-btns">
+              ${L.canva ? `<button class="hero-btn" onclick="scrollToPresentation()" type="button">▶ Start presentatie</button>` : ''}
+              <a class="hero-btn hero-btn-live" href="/les${L.n}/docent/poll" target="_blank" rel="noopener">
+                <span class="live-dot"></span> Start live poll
+              </a>
+              <a class="hero-btn" href="/les${L.n}/docent/quiz" target="_blank" rel="noopener">
+                🧠 Start live quiz
+              </a>
+            </div>
+          </div>
+          <img class="hero-jay" src="/Afbeeldingen/Jay los/Jay waving.png" alt="" aria-hidden="true">
+        </div>
+
+        <div class="content-grid">
+          <div style="display:flex;flex-direction:column;gap:24px;min-width:0;">
+            <div class="tip-card" style="margin-bottom:0;animation:none;padding:36px;flex:1 1 auto;">
+              <div class="tip-icon">💡</div>
+              <div>
+                <div class="tip-label">Tip voor de leerkracht</div>
+                <div class="tip-body">${L.tip}</div>
+              </div>
+            </div>
+            <div class="content-card" style="padding:36px;flex:1 1 auto;">
+              <div class="cc-title">Leerdoelen</div>
+              ${L.doelen.map(d => `
+                <div class="obj-row">
+                  <div class="obj-dot"></div>
+                  <div class="obj-text">${d}</div>
+                </div>`).join('')}
+            </div>
+            <div class="content-card">
+              <div class="cc-title">Benodigde materialen</div>
+              ${L.benodigdheden && L.benodigdheden.length ? `
+                <div class="mat-carousel">
+                  <button class="mat-carousel-btn prev" id="mat-prev" aria-label="Vorige">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8L10 4" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                  <div class="mat-carousel-fade-left" id="mat-fade-left"></div>
+                  <div class="mat-carousel-track">
+                    <div class="mat-carousel-inner" id="mat-inner">
+                      ${L.benodigdheden.map(b => `
+                        <div class="mat-product-card" onclick="openLightbox('${b.afbeelding}','${b.naam}')">
+                          <div class="mat-product-img-area">
+                            <img src="${b.afbeelding}" alt="${b.naam}" loading="lazy">
+                          </div>
+                          <div class="mat-product-footer">
+                            <div class="mat-product-name">${b.naam}</div>
+                          </div>
+                        </div>`).join('')}
+                    </div>
+                  </div>
+                  <div class="mat-carousel-fade-right" id="mat-fade-right"></div>
+                  <button class="mat-carousel-btn next" id="mat-next" aria-label="Volgende">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </button>
+                </div>` : `
+                <div class="mat-chips">
+                  ${L.mat.map(m => `<div class="mat-chip">📎 ${m}</div>`).join('')}
+                </div>`}
+            </div>
+          </div>
+
+          <div class="content-card" style="align-self:stretch;min-width:0;">
+            <div class="cc-title">Lesverloop</div>
+            ${L.tl.map(t => `
+              <div class="tl-row">
+                <div class="tl-time">${t.t}</div>
+                <div>
+                  <div class="tl-name">${t.n}</div>
+                  <div class="tl-desc">${t.d}</div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>
+
+        ${canvaHtml}
+      `;
+      initCarousel();
+    }
+    function initCarousel() {
+      const inner     = document.getElementById('mat-inner');
+      const track     = inner && inner.parentElement;
+      const prev      = document.getElementById('mat-prev');
+      const next      = document.getElementById('mat-next');
+      const fadeLeft  = document.getElementById('mat-fade-left');
+      const fadeRight = document.getElementById('mat-fade-right');
+      if (!inner || !prev || !next) return;
+
+      const cards = inner.children;
+      let idx = 0;
+
+      function allFit() {
+        return inner.scrollWidth <= track.offsetWidth + 1;
+      }
+
+      function update() {
+        const cardW = cards[0].offsetWidth + 16;
+        inner.style.transform = `translateX(${-idx * cardW}px)`;
+        const fits = allFit();
+        prev.style.visibility = (fits || idx === 0) ? 'hidden' : 'visible';
+        next.style.visibility = (fits || idx >= cards.length - 1) ? 'hidden' : 'visible';
+        if (fadeLeft)  fadeLeft.style.opacity  = (!fits && idx > 0) ? '1' : '0';
+        if (fadeRight) fadeRight.style.opacity = (!fits && idx < cards.length - 1) ? '1' : '0';
+        prev.disabled = idx === 0;
+        next.disabled = idx >= cards.length - 1;
+      }
+
+      prev.addEventListener('click', () => { if (idx > 0) { idx--; update(); } });
+      next.addEventListener('click', () => { if (idx < cards.length - 1) { idx++; update(); } });
+
+      update();
+      window.addEventListener('resize', () => {
+        if (allFit() && idx > 0) { idx = 0; inner.style.transform = 'translateX(0)'; }
+        update();
+      });
+    }
+
+    function scrollToPresentation() {
+      const el = document.getElementById('canva-stage');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function openLightbox(src, naam) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox-name').textContent = naam;
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    const ICON_EXPAND   = `<path d="M1 5.5V1H5.5M9.5 1H14V5.5M14 9.5V14H9.5M5.5 14H1V9.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+    const ICON_COLLAPSE = `<path d="M5.5 1V5.5H1M14 5.5H9.5V1M1 9.5H5.5V14M9.5 14V9.5H14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+    function toggleCanvaFullscreen() {
+      const stage = document.getElementById('canva-stage');
+      if (!stage) return;
+      if (!document.fullscreenElement) {
+        stage.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      const isFS = !!document.fullscreenElement;
+      const icon  = document.getElementById('canva-fs-icon');
+      const label = document.getElementById('canva-fs-label');
+      if (icon)  icon.innerHTML  = isFS ? ICON_COLLAPSE : ICON_EXPAND;
+      if (label) label.textContent = isFS ? 'Sluiten' : 'Volledig scherm';
+      if (isFS) {
+        const frame = document.querySelector('.canva-frame');
+        if (frame) frame.focus();
+      }
+    });
+  </script>
+</body>
+</html>
