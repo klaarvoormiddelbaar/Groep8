@@ -708,10 +708,17 @@
         .eq('id', userId)
         .maybeSingle();
 
+      const welkomKey = `kvm_welkom_proef_${userId}`;
+
       if (data && data.naam) {
         profiel = data;
         window.profiel = profiel;
         updateUI();
+        if (!localStorage.getItem(welkomKey)) {
+          localStorage.setItem(welkomKey, '1');
+          document.getElementById('welkom-naam').textContent = profiel.naam.split(' ')[0];
+          document.getElementById('welkomModal').classList.add('open');
+        }
       } else {
         openProfielModal(true);
       }
@@ -794,7 +801,8 @@
       btn.textContent = 'Opslaan'; btn.disabled = false;
 
       if (!error) {
-        const eersteKeer = !profiel.naam;
+        const eersteKeer = !localStorage.getItem(welkomKey);
+        localStorage.setItem(welkomKey, '1');
         profiel = nieuwProfiel;
         window.profiel = profiel;
         updateUI();
