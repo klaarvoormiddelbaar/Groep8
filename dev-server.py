@@ -12,6 +12,8 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 # ── 302-redirects: browser-URL verandert (nodig wanneer JS window.location.search leest) ──
 REDIRECTS = {
     "/Dashboard":          "/Dashboard/",
+    "/proef":              "/proef/",
+    "/proeflicentie":      "/proef/",
     "/les1/docent/quiz":   "/KvM%20Quiz/docent-sessie.html?les=les-1",
     "/les2/docent/quiz":   "/KvM%20Quiz/docent-sessie.html?les=les-2",
     "/les3/docent/quiz":   "/KvM%20Quiz/docent-sessie.html?les=les-3",
@@ -66,8 +68,10 @@ REWRITES = {
     "/les6/poll":         "/Live poll/join.html",
     "/les7/poll":         "/Live poll/join.html",
     "/les8/poll":         "/Live poll/join.html",
-    "/Inlogpagina":       "/Inlogpagina/index.html",
-    "/Inlogpagina/":      "/Inlogpagina/index.html",
+    "/Inlogpagina":        "/Inlogpagina/index.html",
+    "/Inlogpagina/":       "/Inlogpagina/index.html",
+    "/proef/":             "/Proeflicentie/dashboard.html",
+    "/proef/inloggen":     "/Proeflicentie/inlogpagina.html",
 }
 
 MIME = {
@@ -155,6 +159,8 @@ if __name__ == "__main__":
     print(f"  Les 1 quiz docent: http://localhost:{port}/les1/docent/quiz")
     print(f"  Les 1 poll docent: http://localhost:{port}/les1/docent/poll")
     print(f"  Les 1 quiz leerling: http://localhost:{port}/les1/quiz")
+    print(f"  Proeflicentie inlog: http://localhost:{port}/proef/inloggen")
+    print(f"  Proeflicentie dash:  http://localhost:{port}/proef/")
     print(f"\nStop met Ctrl+C\n")
     try:
         server.serve_forever()

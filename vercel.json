@@ -11,10 +11,14 @@
     }
   ],
   "redirects": [
-    { "source": "/Dashboard", "destination": "/Dashboard/", "permanent": false }
+    { "source": "/Dashboard",    "destination": "/Dashboard/",    "permanent": false },
+    { "source": "/proef",        "destination": "/proef/",        "permanent": false },
+    { "source": "/proeflicentie","destination": "/proef/",        "permanent": false }
   ],
   "rewrites": [
-    { "source": "/Dashboard/", "destination": "/Dashboard/dashboard.html" },
+    { "source": "/Dashboard/",      "destination": "/Dashboard/dashboard.html" },
+    { "source": "/proef/",          "destination": "/Proeflicentie/dashboard.html" },
+    { "source": "/proef/inloggen",  "destination": "/Proeflicentie/inlogpagina.html" },
     { "source": "/les1", "destination": "/Les/index.html" },
     { "source": "/les2", "destination": "/Les/index.html" },
     { "source": "/les3", "destination": "/Les/index.html" },
