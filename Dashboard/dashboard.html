@@ -596,9 +596,9 @@
           <div class="hero-label">Docentendashboard</div>
           <div class="hero-title" id="hero-title">Welkom!</div>
           <div class="hero-chips">
-            <div class="hero-chip" id="chip-school"><img class="chip-emoji" src="/Afbeeldingen/emoji/school.png" alt=""> –</div>
-            <div class="hero-chip" id="chip-groep"><img class="chip-emoji" src="/Afbeeldingen/emoji/kinderen.png" alt=""> –</div>
-            <div class="hero-chip"><img class="chip-emoji" src="/Afbeeldingen/emoji/boeken.png" alt=""> 8 lessen beschikbaar</div>
+            <div class="hero-chip" id="chip-school"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/school.png" alt=""> –</div>
+            <div class="hero-chip" id="chip-groep"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> –</div>
+            <div class="hero-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/boeken.png" alt=""> 8 lessen beschikbaar</div>
           </div>
         </div>
       </div>
@@ -710,8 +710,8 @@
       const uur = new Date().getHours();
       const begroeting = uur < 12 ? 'Goedemorgen' : uur < 18 ? 'Goedemiddag' : 'Goedenavond';
       document.getElementById('hero-title').textContent  = `${begroeting} ${profiel.naam}!`;
-      document.getElementById('chip-school').innerHTML = `<img class="chip-emoji" src="/Afbeeldingen/emoji/school.png" alt=""> ${profiel.school || 'Jouw school'}`;
-      document.getElementById('chip-groep').innerHTML  = `<img class="chip-emoji" src="/Afbeeldingen/emoji/kinderen.png" alt=""> Groep ${profiel.groep}`;
+      document.getElementById('chip-school').innerHTML = `<img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/school.png" alt=""> ${profiel.school || 'Jouw school'}`;
+      document.getElementById('chip-groep').innerHTML  = `<img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> Groep ${profiel.groep}`;
 
       const initialen = profiel.naam
         ? profiel.naam.trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase()
@@ -818,14 +818,14 @@
           <div class="card-head">
             <div class="card-head-top">
               <div class="card-num-badge">Les ${L.n}</div>
-              <img class="card-head-emoji" src="/Afbeeldingen/emoji/${L.emoji}" alt="">
+              <img class="card-head-emoji" src="/Afbeeldingen/emojis nieuw/${L.emoji}" alt="">
             </div>
           </div>
           <div class="card-body">
             <div class="card-title">${L.title}</div>
             <div class="card-desc">${L.sub}</div>
             <div class="card-foot">
-              <div class="card-dur"><img class="chip-emoji" src="/Afbeeldingen/emoji/ster.png" alt=""> 50–60 min</div>
+              <div class="card-dur"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> 50–60 min</div>
               <div class="card-cta">Bekijk les →</div>
             </div>
           </div>
@@ -847,12 +847,12 @@
         <div class="detail-hero" style="background:linear-gradient(135deg,${L.g1} 0%,${L.g2} 100%)">
           <div class="ghost-n">${L.n}</div>
           <div class="detail-badge">Les ${L.n} van 8</div>
-          <div class="detail-title"><img src="/Afbeeldingen/emoji/${L.emoji}" style="width:52px;height:52px;object-fit:contain;vertical-align:middle;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.2))"> ${L.title}</div>
+          <div class="detail-title"><img src="/Afbeeldingen/emojis nieuw/${L.emoji}" style="width:52px;height:52px;object-fit:contain;vertical-align:middle;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.2))"> ${L.title}</div>
           <div class="detail-hero-bottom">
             <div class="detail-chips">
-              <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emoji/ster.png" alt=""> 50–60 min</div>
-              <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emoji/kinderen.png" alt=""> Groep ${profiel.groep || '8'}</div>
-              <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emoji/school.png" alt=""> ${profiel.school || 'Jouw school'}</div>
+              <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> 50–60 min</div>
+              <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> Groep ${profiel.groep || '8'}</div>
+              <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/school.png" alt=""> ${profiel.school || 'Jouw school'}</div>
             </div>
             <div class="detail-hero-ctas">
               <a class="hero-cta" href="${L.url}" target="_blank" rel="noopener">
@@ -863,14 +863,14 @@
               </a>
               <a class="hero-cta-live" href="${livePollUrl}" target="_blank" rel="noopener"
                  style="background:rgba(16,163,127,0.12);border:1.5px solid rgba(16,163,127,0.30);color:#0c8268">
-                <img class="chip-emoji" src="/Afbeeldingen/emoji/lijst.png" alt=""> Start live poll
+                <img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/lijst.png" alt=""> Start live poll
               </a>
             </div>
           </div>
         </div>
 
         <div class="tip-box">
-          <div class="tip-icon-wrap"><img src="/Afbeeldingen/emoji/lamp.png" style="width:22px;height:22px;object-fit:contain" alt=""></div>
+          <div class="tip-icon-wrap"><img src="/Afbeeldingen/emojis nieuw/lamp.png" style="width:22px;height:22px;object-fit:contain" alt=""></div>
           <div>
             <div class="tip-label">Tip voor de docent</div>
             <div class="tip-body">${L.tip}</div>
@@ -900,7 +900,7 @@
           <div class="content-card full">
             <div class="cc-title">Benodigde materialen</div>
             <div class="mat-chips">
-              ${L.mat.map(m => `<div class="mat-chip"><img class="chip-emoji" src="/Afbeeldingen/emoji/pen.png" alt=""> ${m}</div>`).join('')}
+              ${L.mat.map(m => `<div class="mat-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/pen.png" alt=""> ${m}</div>`).join('')}
             </div>
           </div>
         </div>

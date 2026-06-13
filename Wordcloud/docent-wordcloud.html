@@ -434,12 +434,12 @@
       }
       _leeg() {
         if (!this.container.querySelector('.cloud-leeg')) {
-          this.container.innerHTML = '<div class="cloud-leeg">Nog geen woorden ingediend <img class="ei" src="/Afbeeldingen/emoji/raket.png" alt=""><br>Laat de klas meedoen!</div>';
+          this.container.innerHTML = '<div class="cloud-leeg">Nog geen woorden ingediend <img class="ei" src="/Afbeeldingen/emojis nieuw/raket.png" alt=""><br>Laat de klas meedoen!</div>';
           this.els.clear();
         }
       }
       wis() {
-        this.container.innerHTML = '<div class="cloud-leeg">Wolk gewist <img class="ei" src="/Afbeeldingen/emoji/planeet.png" alt=""><br>Laat de klas nieuwe woorden insturen!</div>';
+        this.container.innerHTML = '<div class="cloud-leeg">Wolk gewist <img class="ei" src="/Afbeeldingen/emojis nieuw/planeet.png" alt=""><br>Laat de klas nieuwe woorden insturen!</div>';
         this.els.clear();
       }
     }
@@ -525,7 +525,7 @@
         <div class="view">
           <div class="lobby-banner">
             <div class="lobby-eyebrow">Woordenwolk · ${escapeHtml(lesTitel)}</div>
-            <div class="lobby-title">Klaar om te starten? <img class="ei" src="/Afbeeldingen/emoji/planeet.png" alt=""></div>
+            <div class="lobby-title">Klaar om te starten? <img class="ei" src="/Afbeeldingen/emojis nieuw/planeet.png" alt=""></div>
             <div class="lobby-sub">
               Laat leerlingen naar <strong>${escapeHtml(urlKort)}</strong> gaan
               en deze code invoeren samen met hun voornaam:
@@ -572,8 +572,8 @@
               <div class="statusbalk-sub" id="statusbalk-sub">0 inzendingen</div>
             </div>
             <div class="statusbalk-acties">
-              <button class="btn-pill btn-amber" id="btn-vergrendel" onclick="wisselVergrendeling()"><img class="ei" src="/Afbeeldingen/emoji/slot.png" alt=""> Vergrendel</button>
-              <button class="btn-pill btn-red"   onclick="bevestigAllesWissen()"><img class="ei" src="/Afbeeldingen/emoji/vraagteken.png" alt=""> Wis alles</button>
+              <button class="btn-pill btn-amber" id="btn-vergrendel" onclick="wisselVergrendeling()"><img class="ei" src="/Afbeeldingen/emojis nieuw/slot.png" alt=""> Vergrendel</button>
+              <button class="btn-pill btn-red"   onclick="bevestigAllesWissen()"><img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""> Wis alles</button>
               <button class="btn-pill btn-ghost" onclick="bevestigBeeindigen()">Beëindig activiteit</button>
             </div>
           </div>
@@ -581,17 +581,17 @@
           <div class="actief-layout">
             <div class="cloud-kaart">
               <div class="cloud-kaart-header">
-                <div class="cloud-kaart-titel">Live woordenwolk <img class="ei" src="/Afbeeldingen/emoji/planeet.png" alt=""></div>
+                <div class="cloud-kaart-titel">Live woordenwolk <img class="ei" src="/Afbeeldingen/emojis nieuw/planeet.png" alt=""></div>
                 <div class="inzending-badge" id="inzending-badge">0 woorden</div>
               </div>
               <div class="cloud-container" id="cloud-container">
-                <div class="cloud-leeg">Nog geen woorden ingediend <img class="ei" src="/Afbeeldingen/emoji/raket.png" alt=""><br>Laat de klas meedoen!</div>
+                <div class="cloud-leeg">Nog geen woorden ingediend <img class="ei" src="/Afbeeldingen/emojis nieuw/raket.png" alt=""><br>Laat de klas meedoen!</div>
               </div>
             </div>
 
             <aside class="moderatie-paneel">
               <div class="moderatie-header">
-                <div class="moderatie-titel"><img class="ei" src="/Afbeeldingen/emoji/lijst.png" alt=""> Moderatie</div>
+                <div class="moderatie-titel"><img class="ei" src="/Afbeeldingen/emojis nieuw/lijst.png" alt=""> Moderatie</div>
                 <div class="moderatie-count" id="mod-count">0 inzendingen</div>
               </div>
               <div class="moderatie-lijst" id="moderatie-lijst">
@@ -599,7 +599,7 @@
               </div>
               <div class="moderatie-footer">
                 <div style="font-size:12px;color:var(--muted);line-height:1.5;">
-                  <img class="ei" src="/Afbeeldingen/emoji/vraagteken.png" alt=""> Verwijdert het woord voor de hele klas
+                  <img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""> Verwijdert het woord voor de hele klas
                 </div>
               </div>
             </aside>
@@ -627,7 +627,7 @@
         <div class="view">
           <div class="einde-hero">
             <div class="einde-eyebrow">Activiteit beëindigd</div>
-            <div class="einde-titel">Goed gedaan! <img class="ei" src="/Afbeeldingen/emoji/planeet.png" alt=""></div>
+            <div class="einde-titel">Goed gedaan! <img class="ei" src="/Afbeeldingen/emojis nieuw/planeet.png" alt=""></div>
             <div class="einde-sub">
               ${alleInzendingen.length} inzending${alleInzendingen.length !== 1 ? 'en' : ''} ·
               ${aantalUniek} uniek${aantalUniek !== 1 ? 'e' : ''} woord${aantalUniek !== 1 ? 'en' : ''}
@@ -659,7 +659,7 @@
       if (sub) sub.textContent = `${aantalInzendingen} inzending${aantalInzendingen !== 1 ? 'en' : ''} · ${aantalUniek} unieke woorden`;
       if (badge) badge.textContent = `${aantalUniek} woord${aantalUniek !== 1 ? 'en' : ''}`;
       if (btn) {
-        btn.textContent = vergrendeld ? '<img class="ei" src="/Afbeeldingen/emoji/slot.png" alt=""> Ontgrendel' : '<img class="ei" src="/Afbeeldingen/emoji/slot.png" alt=""> Vergrendel';
+        btn.textContent = vergrendeld ? '<img class="ei" src="/Afbeeldingen/emojis nieuw/slot.png" alt=""> Ontgrendel' : '<img class="ei" src="/Afbeeldingen/emojis nieuw/slot.png" alt=""> Vergrendel';
         btn.className = vergrendeld ? 'btn-pill btn-green' : 'btn-pill btn-amber';
       }
     }
@@ -690,7 +690,7 @@
           </div>
           <div class="inzending-woord" title="${escapeHtml(inz.woord)}">${escapeHtml(inz.woord)}</div>
           <button class="btn-verwijder" data-woord="${escapeHtml(inz.woord)}"
-            title="Verwijder '${escapeHtml(inz.woord)}' voor iedereen"><img class="ei" src="/Afbeeldingen/emoji/vraagteken.png" alt=""></button>
+            title="Verwijder '${escapeHtml(inz.woord)}' voor iedereen"><img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""></button>
         </div>`).join('');
     }
 
@@ -753,7 +753,7 @@
       app.innerHTML = `
         <div class="view">
           <div class="error-card">
-            <div class="error-icon"><img class="ei" src="/Afbeeldingen/emoji/vraagteken.png" alt=""></div>
+            <div class="error-icon"><img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""></div>
             <div class="error-title">Er ging iets mis</div>
             <div class="error-body">${escapeHtml(bericht)}</div>
             <a class="btn-pill btn-blue" href="../Dashboard/dashboard.html">← Terug naar het dashboard</a>
