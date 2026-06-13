@@ -2,7 +2,7 @@
   "n": 4,
   "g1": "#4c1d95",
   "g2": "#7c3aed",
-  "emoji": "👫",
+  "emoji": "kinderen.png",
   "title": "Nieuwe vrienden",
   "sub": "Sociale vaardigheden en vriendschappen",
   "tip": "Houd de sfeer licht en veilig. Dit onderwerp raakt leerlingen soms persoonlijk. Geef aan dat ze altijd bij jou terecht kunnen.",
@@ -13,10 +13,30 @@
     "Leerlingen herkennen signalen van vriendschap en uitsluiting."
   ],
   "tl": [
-    { "t": "0–10 min",  "n": "Kennismakingsspel",  "d": "Warming-up: leerlingen ontdekken 3 nieuwe feiten over een klasgenoot." },
-    { "t": "10–25 min", "n": "Rollenspel",         "d": "In tweetallen: oefenen met jezelf voorstellen in een nieuwe klas." },
-    { "t": "25–42 min", "n": "Scenario-kaarten",   "d": "Bespreek scenario's over vriendschap, pesten en erbij horen." },
-    { "t": "42–55 min", "n": "Reflectie",          "d": "Elke leerling noemt één tip die hij of zij meeneemt naar de middelbare." }
+    {
+      "t": "0–10 min",
+      "n": "Kennismakingsspel",
+      "d": "Warming-up: leerlingen ontdekken 3 nieuwe feiten over een klasgenoot."
+    },
+    {
+      "t": "10–25 min",
+      "n": "Rollenspel",
+      "d": "In tweetallen: oefenen met jezelf voorstellen in een nieuwe klas."
+    },
+    {
+      "t": "25–42 min",
+      "n": "Scenario-kaarten",
+      "d": "Bespreek scenario's over vriendschap, pesten en erbij horen."
+    },
+    {
+      "t": "42–55 min",
+      "n": "Reflectie",
+      "d": "Elke leerling noemt één tip die hij of zij meeneemt naar de middelbare."
+    }
   ],
-  "mat": ["Scenario-kaarten set 1 (bijlage 5)", "Reflectiekaartjes", "Optioneel: video over sociale situaties"]
+  "mat": [
+    "Scenario-kaarten set 1 (bijlage 5)",
+    "Reflectiekaartjes",
+    "Optioneel: video over sociale situaties"
+  ]
 }

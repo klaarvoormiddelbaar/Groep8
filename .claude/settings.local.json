@@ -72,7 +72,15 @@
       "Bash(git mv *)",
       "Bash(git -C \"/Users/niekheselmans/Library/Mobile Documents/com~apple~CloudDocs/Niek Vibe code/Groep 8 portaal\" status)",
       "Bash(git -C \"/Users/niekheselmans/Library/Mobile Documents/com~apple~CloudDocs/Niek Vibe code/Groep 8 portaal\" log --oneline -3)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(xargs ls -la)",
+      "Bash(lsof -ti:3000)",
+      "Bash(xargs kill -9)",
+      "Bash(python3 dev-server.py)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/proef/inloggen)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/proef/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/Dashboard/)",
+      "Bash(python3 *)"
     ]
   }
 }

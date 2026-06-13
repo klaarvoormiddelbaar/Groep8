@@ -260,6 +260,8 @@
       .join-kaart, .inzend-kaart { padding: 32px 24px; }
       .inzend-input { font-size: 18px; }
     }
+  
+    .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
   </style>
 </head>
 <body>
@@ -277,7 +279,7 @@
     <div class="view" id="view-join">
       <div class="join-kaart">
         <div class="join-eyebrow">Doe mee</div>
-        <div class="join-titel">Vul de code van je docent in! ☁️</div>
+        <div class="join-titel">Vul de code van je docent in! <img class="ei" src="/Afbeeldingen/emoji/planeet.png" alt=""></div>
         <div class="join-sub">Je docent heeft een 6-cijferige code op het bord staan. Vul die in samen met je voornaam.</div>
 
         <form id="join-form" autocomplete="off">
@@ -406,7 +408,7 @@
       }
       _leeg() {
         if (!this.container.querySelector('.cloud-leeg')) {
-          this.container.innerHTML = '<div class="cloud-leeg">Nog geen woorden ingediend 🎈<br>Jij kunt als eerste!</div>';
+          this.container.innerHTML = '<div class="cloud-leeg">Nog geen woorden ingediend <img class="ei" src="/Afbeeldingen/emoji/raket.png" alt=""><br>Jij kunt als eerste!</div>';
           this.els.clear();
         }
       }
@@ -561,7 +563,7 @@
       huidigeView = 'wachtkamer';
       schakelNaarApp(`
         <div class="wacht-kaart">
-          <div class="wacht-emoji">☁️</div>
+          <div class="wacht-emoji"><img class="ei" src="/Afbeeldingen/emoji/planeet.png" alt=""></div>
           <div class="wacht-naam">${escapeHtml(leerlingNaam)}</div>
           <div class="wacht-titel">Je doet mee!</div>
           <div class="wacht-sub">
@@ -579,11 +581,11 @@
       return `
         <div class="cloud-kaart">
           <div class="cloud-kaart-titel">
-            Live woordenwolk ☁️
+            Live woordenwolk <img class="ei" src="/Afbeeldingen/emoji/planeet.png" alt="">
             <span class="woord-badge" id="woord-badge">0 woorden</span>
           </div>
           <div class="cloud-container" id="cloud-container">
-            <div class="cloud-leeg">Nog geen woorden ingediend 🎈<br>Jij kunt als eerste!</div>
+            <div class="cloud-leeg">Nog geen woorden ingediend <img class="ei" src="/Afbeeldingen/emoji/raket.png" alt=""><br>Jij kunt als eerste!</div>
           </div>
         </div>`;
     }
@@ -614,12 +616,12 @@
               </button>
             </form>
             <div class="tip-box">
-              <span class="tip-icoon">💡</span>
+              <span class="tip-icoon"><img class="ei" src="/Afbeeldingen/emoji/lamp.png" alt=""></span>
               <span>Gebruik één woord of een korte zin (max. 32 tekens). Je kunt nog
                 <strong>${aantalResterend} woord${aantalResterend !== 1 ? 'en' : ''}</strong> insturen.</span>
             </div>` : `
             <div style="text-align:center;padding:16px 0;font-size:22px;font-weight:700;color:var(--green);">
-              ✅ Je hebt al je woorden ingestuurd!
+              <img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""> Je hebt al je woorden ingestuurd!
             </div>`}
 
           ${mijnWoorden.length > 0 ? `
@@ -627,7 +629,7 @@
               Jouw woorden
             </div>
             <div class="mijn-woorden">
-              ${mijnWoorden.map(w => `<span class="mijn-woord-pill">✓ ${escapeHtml(w)}</span>`).join('')}
+              ${mijnWoorden.map(w => `<span class="mijn-woord-pill"><img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""> ${escapeHtml(w)}</span>`).join('')}
             </div>` : ''}
         </div>`);
 
@@ -684,14 +686,14 @@
       huidigeView = 'vergrendeld';
       schakelNaarApp(`
         <div class="vergrendeld-banner">
-          🔒 Inzendingen zijn gesloten — de docent heeft de activiteit vergrendeld.
+          <img class="ei" src="/Afbeeldingen/emoji/slot.png" alt=""> Inzendingen zijn gesloten — de docent heeft de activiteit vergrendeld.
         </div>
         ${wolkHtml()}
         ${mijnWoorden.length > 0 ? `
           <div class="inzend-kaart" style="text-align:center;">
             <div style="font-size:15px;color:var(--muted);margin-bottom:12px;">Jouw woorden</div>
             <div class="mijn-woorden" style="justify-content:center;">
-              ${mijnWoorden.map(w => `<span class="mijn-woord-pill">✓ ${escapeHtml(w)}</span>`).join('')}
+              ${mijnWoorden.map(w => `<span class="mijn-woord-pill"><img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""> ${escapeHtml(w)}</span>`).join('')}
             </div>
           </div>` : ''}`);
 
@@ -705,7 +707,7 @@
       huidigeView = 'einde';
       schakelNaarApp(`
         <div class="einde-banner">
-          <div class="einde-emoji">🎉</div>
+          <div class="einde-emoji"><img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt=""></div>
           <div class="einde-titel">Bedankt voor je deelname!</div>
           <div class="einde-sub">De activiteit is afgelopen. Bekijk de woordenwolk hieronder.</div>
         </div>

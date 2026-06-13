@@ -2,7 +2,7 @@
   "n": 2,
   "g1": "#065f46",
   "g2": "#10a37f",
-  "emoji": "🏫",
+  "emoji": "school.png",
   "title": "De nieuwe school",
   "sub": "Hoe werkt de middelbare school?",
   "tip": "Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.",
@@ -13,10 +13,30 @@
     "Leerlingen kennen begrippen als rooster, kluisje en mentor."
   ],
   "tl": [
-    { "t": "0–5 min",   "n": "Terugblik",          "d": "Korte herhaling van les 1: wat onthielden leerlingen?" },
-    { "t": "5–20 min",  "n": "Uitleg & video",      "d": "Toon en bespreek hoe een dag op de middelbare eruitziet." },
-    { "t": "20–40 min", "n": "Quiz in tweetallen",  "d": "Leerlingen beantwoorden vragen over de middelbare in koppels." },
-    { "t": "40–55 min", "n": "Vragenronde",         "d": "Plenair: wat willen leerlingen nog meer weten?" }
+    {
+      "t": "0–5 min",
+      "n": "Terugblik",
+      "d": "Korte herhaling van les 1: wat onthielden leerlingen?"
+    },
+    {
+      "t": "5–20 min",
+      "n": "Uitleg & video",
+      "d": "Toon en bespreek hoe een dag op de middelbare eruitziet."
+    },
+    {
+      "t": "20–40 min",
+      "n": "Quiz in tweetallen",
+      "d": "Leerlingen beantwoorden vragen over de middelbare in koppels."
+    },
+    {
+      "t": "40–55 min",
+      "n": "Vragenronde",
+      "d": "Plenair: wat willen leerlingen nog meer weten?"
+    }
   ],
-  "mat": ["Quiz-kaarten (bijlage 2)", "Smartboard of beamer", "Optioneel: video over een dag op de middelbare"]
+  "mat": [
+    "Quiz-kaarten (bijlage 2)",
+    "Smartboard of beamer",
+    "Optioneel: video over een dag op de middelbare"
+  ]
 }

@@ -2,7 +2,7 @@
   "n": 6,
   "g1": "#0c4a6e",
   "g2": "#0284c7",
-  "emoji": "🧠",
+  "emoji": "brein.png",
   "title": "Gevoel & Zelfvertrouwen",
   "sub": "Emotionele voorbereiding op de overstap",
   "tip": "Wees alert op leerlingen die significant angstig lijken. Spreek ze na de les apart aan en overleg zo nodig met de intern begeleider.",
@@ -13,10 +13,30 @@
     "Leerlingen versterken hun zelfvertrouwen via positieve zelfreflectie."
   ],
   "tl": [
-    { "t": "0–10 min",  "n": "Check-in",            "d": "Thermometer-check: hoe voel jij je over de middelbare? Schaal 1–10." },
-    { "t": "10–28 min", "n": "Gesprek",              "d": "Bespreek gevoelens van spanning en opwinding. Wat is het verschil?" },
-    { "t": "28–45 min", "n": "Kracht-kaarten",       "d": "Leerlingen schrijven 3 eigen kwaliteiten op en delen ze met de klas." },
-    { "t": "45–55 min", "n": "Ademhalingsoefening",  "d": "Oefen samen een korte ademhalingstechniek voor stressvolle momenten." }
+    {
+      "t": "0–10 min",
+      "n": "Check-in",
+      "d": "Thermometer-check: hoe voel jij je over de middelbare? Schaal 1–10."
+    },
+    {
+      "t": "10–28 min",
+      "n": "Gesprek",
+      "d": "Bespreek gevoelens van spanning en opwinding. Wat is het verschil?"
+    },
+    {
+      "t": "28–45 min",
+      "n": "Kracht-kaarten",
+      "d": "Leerlingen schrijven 3 eigen kwaliteiten op en delen ze met de klas."
+    },
+    {
+      "t": "45–55 min",
+      "n": "Ademhalingsoefening",
+      "d": "Oefen samen een korte ademhalingstechniek voor stressvolle momenten."
+    }
   ],
-  "mat": ["Kracht-kaarten (bijlage 8)", "Thermometer-poster", "QR-code naar ademhalingsvideo"]
+  "mat": [
+    "Kracht-kaarten (bijlage 8)",
+    "Thermometer-poster",
+    "QR-code naar ademhalingsvideo"
+  ]
 }

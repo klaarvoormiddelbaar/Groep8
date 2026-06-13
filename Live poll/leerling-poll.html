@@ -529,7 +529,7 @@
                 >
                   <div class="schaal-cirkel">${s.score}</div>
                   <div class="schaal-lbl">${s.label.replace('\n', '<br>')}</div>
-                  <div class="schaal-check">✓</div>
+                  <div class="schaal-check"><img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""></div>
                 </button>`).join('')}
             </div>
 
@@ -581,7 +581,7 @@
       app.innerHTML = `
         <div class="view">
           <div class="kaart gestemd-kaart">
-            <div class="gestemd-bol">✓</div>
+            <div class="gestemd-bol"><img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""></div>
             <div class="gestemd-titel">Stem ontvangen!</div>
 
             ${optie ? `
@@ -621,7 +621,7 @@
 
             <div class="res-kop">
               <div>
-                <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:8px">✓ Resultaten</div>
+                <div style="font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--green);margin-bottom:8px"><img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""> Resultaten</div>
                 <div class="res-tekst">${esc(huidigeStelling.tekst)}</div>
               </div>
             </div>
@@ -688,7 +688,7 @@
       app.innerHTML = `
         <div class="view">
           <div class="kaart eind-kaart">
-            <div class="eind-emoji">★</div>
+            <div class="eind-emoji"><img class="ei" src="/Afbeeldingen/emoji/ster.png" alt=""></div>
             <div class="eind-titel">Super gedaan ${esc(deelnemer ? deelnemer.naam : 'je')}!</div>
             <div class="eind-divider"></div>
             <div class="eind-sub">

@@ -440,6 +440,8 @@
       .chart-lbl { font-size: 12px; }
       .gem-nr { font-size: 40px; }
     }
+  
+    .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
   </style>
 </head>
 <body>
@@ -545,7 +547,7 @@
       app.innerHTML = `
         <div class="view">
           <div class="error-card">
-            <div class="error-icon">⚠️</div>
+            <div class="error-icon"><img class="ei" src="/Afbeeldingen/emoji/vraagteken.png" alt=""></div>
             <div class="error-title">Er ging iets mis</div>
             <div class="error-body">${esc(msg)}</div>
           </div>
@@ -556,7 +558,7 @@
       app.innerHTML = `
         <div class="view">
           <div class="error-card">
-            <div class="error-icon">🚧</div>
+            <div class="error-icon"><img class="ei" src="/Afbeeldingen/emoji/vraagteken.png" alt=""></div>
             <div class="error-title">Poll wordt nog gemaakt</div>
             <div class="error-body">De poll voor "${esc(titel)}" is nog niet beschikbaar. Kom later terug!</div>
             <a class="btn btn-blue" href="/Dashboard/">← Terug naar het dashboard</a>
@@ -668,7 +670,7 @@
         const con = document.getElementById(`conn-${i}`);
         if (!el) return;
         el.className = 'step-item' + (i === actief ? ' actief' : i < actief ? ' klaar' : '');
-        el.querySelector('.step-circle').innerHTML = i < actief ? '✓' : String(i + 1);
+        el.querySelector('.step-circle').innerHTML = i < actief ? '<img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt="">' : String(i + 1);
         if (con) con.className = 'step-connector' + (i < actief ? ' klaar' : '');
       });
     }
@@ -755,9 +757,9 @@
           <div class="poll-kop">
             <div class="poll-stap">Stelling ${huidigeIndex + 1} van ${stellingen.length} · Stemmen loopt</div>
             <div class="poll-meta">
-              <div class="meta-chip">🔑 Code: ${sessie.code}</div>
-              <div class="meta-chip">👥 ${deelnemers.size} deelnemers</div>
-              <div class="meta-chip" id="stem-chip">📩 0 van ${deelnemers.size} gestemd</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/sleutel.png" alt=""> Code: ${sessie.code}</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/kinderen.png" alt=""> ${deelnemers.size} deelnemers</div>
+              <div class="meta-chip" id="stem-chip"><img class="ei" src="/Afbeeldingen/emoji/envelop.png" alt=""> 0 van ${deelnemers.size} gestemd</div>
             </div>
           </div>
 
@@ -799,7 +801,7 @@
       const chip = document.getElementById('stem-chip');
       const ring = document.getElementById('ring');
       if (n) n.textContent = aantalStemmen;
-      if (chip) chip.textContent = `📩 ${aantalStemmen} van ${deelnemers.size} gestemd`;
+      if (chip) chip.textContent = `<img class="ei" src="/Afbeeldingen/emoji/envelop.png" alt=""> ${aantalStemmen} van ${deelnemers.size} gestemd`;
       if (ring) {
         const pct = deelnemers.size > 0 ? Math.round((aantalStemmen / deelnemers.size) * 100) : 0;
         ring.style.background = `conic-gradient(var(--primary) ${pct}%, #e1e3e3 ${pct}%)`;
@@ -836,16 +838,16 @@
           <div class="poll-kop">
             <div class="poll-stap">Stelling ${huidigeIndex + 1} van ${stellingen.length} · Resultaten</div>
             <div class="poll-meta">
-              <div class="meta-chip">🔑 Code: ${sessie.code}</div>
-              <div class="meta-chip">👥 ${deelnemers.size} deelnemers</div>
-              <div class="meta-chip">✅ ${totaal} stemmen ontvangen</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/sleutel.png" alt=""> Code: ${sessie.code}</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/kinderen.png" alt=""> ${deelnemers.size} deelnemers</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""> ${totaal} stemmen ontvangen</div>
             </div>
           </div>
 
           <div class="resultaten-kaart">
             <div class="res-top">
               <div class="res-info">
-                <div class="res-badge">✓ Stemmen gesloten · Stelling ${huidigeIndex + 1}</div>
+                <div class="res-badge"><img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""> Stemmen gesloten · Stelling ${huidigeIndex + 1}</div>
                 <div class="res-stelling-tekst">${esc(st.tekst)}</div>
               </div>
               <div class="gem-blok">
@@ -941,7 +943,7 @@
         <div class="view">
           <div class="eind-hero">
             <div class="eind-eyebrow">Poll beëindigd</div>
-            <div class="eind-title">Goed gedaan klas! 🎉</div>
+            <div class="eind-title">Goed gedaan klas! <img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt=""></div>
             <div class="eind-sub">
               ${deelnemers.size} ${deelnemers.size === 1 ? 'leerling' : 'leerlingen'} namen deel ·
               ${stellingen.length} stellingen besproken

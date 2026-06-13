@@ -256,6 +256,8 @@
       .podium { grid-template-columns: 1fr; }
       .podium-1 { transform: none; }
     }
+  
+    .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
   </style>
 </head>
 <body>
@@ -500,15 +502,15 @@
       const helft = Math.ceil(vragen.length / 2);
       const isHalfwege = (huidigeVraagIndex + 1 === helft) && (helft < vragen.length);
 
-      // Fase 1: leerlingen antwoorden — geen bars, geen ✓, geen percentages
+      // Fase 1: leerlingen antwoorden — geen bars, geen <img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt="">, geen percentages
       app.innerHTML = `
         <div class="view">
           <div class="presenter-head">
             <div class="stepper-label">Vraag ${huidigeVraagIndex + 1} van ${vragen.length} · ${typeLabel(vraag.type)}</div>
             <div class="presenter-meta">
-              <div class="meta-chip">🔑 Code: ${sessie.code}</div>
-              <div class="meta-chip">👥 ${deelnemers.size} deelnemers</div>
-              <div class="meta-chip" id="antwoord-teller">📩 0 van ${deelnemers.size} hebben geantwoord</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/sleutel.png" alt=""> Code: ${sessie.code}</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/kinderen.png" alt=""> ${deelnemers.size} deelnemers</div>
+              <div class="meta-chip" id="antwoord-teller"><img class="ei" src="/Afbeeldingen/emoji/envelop.png" alt=""> 0 van ${deelnemers.size} hebben geantwoord</div>
             </div>
           </div>
 
@@ -558,16 +560,16 @@
           <div class="presenter-head">
             <div class="stepper-label">Vraag ${huidigeVraagIndex + 1} van ${vragen.length} · ${typeLabel(vraag.type)}</div>
             <div class="presenter-meta">
-              <div class="meta-chip">🔑 Code: ${sessie.code}</div>
-              <div class="meta-chip">👥 ${deelnemers.size} deelnemers</div>
-              <div class="meta-chip" id="antwoord-teller">📩 ${aantalAntwoorden} van ${deelnemers.size} hebben geantwoord</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/sleutel.png" alt=""> Code: ${sessie.code}</div>
+              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emoji/kinderen.png" alt=""> ${deelnemers.size} deelnemers</div>
+              <div class="meta-chip" id="antwoord-teller"><img class="ei" src="/Afbeeldingen/emoji/envelop.png" alt=""> ${aantalAntwoorden} van ${deelnemers.size} hebben geantwoord</div>
             </div>
           </div>
 
           <div class="question-card">
             <div class="question-type-badge">${typeLabel(vraag.type)}</div>
             <div class="question-text">${escapeHtml(vraag.vraag)}</div>
-            ${vraag.toelichting ? `<div style="margin:0 0 20px;padding:12px 18px;background:#fef9e9;border:1.5px solid #f8d760;border-radius:14px;font-size:14px;font-weight:700;color:#92400e">💡 ${escapeHtml(vraag.toelichting)}</div>` : ''}
+            ${vraag.toelichting ? `<div style="margin:0 0 20px;padding:12px 18px;background:#fef9e9;border:1.5px solid #f8d760;border-radius:14px;font-size:14px;font-weight:700;color:#92400e"><img class="ei" src="/Afbeeldingen/emoji/lamp.png" alt=""> ${escapeHtml(vraag.toelichting)}</div>` : ''}
             ${vraag.afbeelding ? `<div class="question-image">${vraag.afbeelding}</div>` : ''}
             <div class="options-grid">
               ${vraag.opties.map((optie, i) => {
@@ -581,7 +583,7 @@
                       ${escapeHtml(optie)}
                     </div>
                     <div style="display:flex;align-items:center;gap:10px">
-                      ${isGoed ? '<span class="correct-badge">✓ Juiste antwoord</span>' : ''}
+                      ${isGoed ? '<span class="correct-badge"><img class="ei" src="/Afbeeldingen/emoji/vinkje.png" alt=""> Juiste antwoord</span>' : ''}
                       <div class="option-percent" id="percent-${i}">0 · 0%</div>
                     </div>
                   </div>
@@ -614,7 +616,7 @@
         if (pct) pct.textContent = `${aantal} · ${aantalAntwoorden === 0 ? 0 : percentage}%`;
       });
       const teller = document.getElementById('antwoord-teller');
-      if (teller) teller.textContent = `📩 ${aantalAntwoorden} van ${deelnemers.size} hebben geantwoord`;
+      if (teller) teller.textContent = `<img class="ei" src="/Afbeeldingen/emoji/envelop.png" alt=""> ${aantalAntwoorden} van ${deelnemers.size} hebben geantwoord`;
     }
 
     async function volgendeVraag() {
@@ -664,7 +666,7 @@
         .eq('session_id', sessie.id).order('score', { ascending: false });
 
       const stand = data || [];
-      const medailles = ['🥇', '🥈', '🥉'];
+      const medailles = ['<img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt="">', '<img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt="">', '<img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt="">'];
       const top3 = stand.slice(0, 3);
       const rest = stand.slice(3);
 
@@ -672,7 +674,7 @@
         <div class="view">
           <div class="end-hero" style="position:relative;">
             <div class="end-eyebrow">Halverwege</div>
-            <div class="end-title">Tussenstand 🏁</div>
+            <div class="end-title">Tussenstand <img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt=""></div>
             <div class="end-sub">Alles is nog mogelijk!</div>
             <img src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay"
               style="position:absolute; right:40px; top:50%; transform:translateY(-50%) scaleX(-1); height:200px; width:auto; opacity:0.92;">
@@ -718,7 +720,7 @@
         .order('score', { ascending: false });
 
       const eindstand = error ? [] : data;
-      const medailles = ['🥇', '🥈', '🥉'];
+      const medailles = ['<img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt="">', '<img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt="">', '<img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt="">'];
       const top3 = eindstand.slice(0, 3);
       const rest = eindstand.slice(3);
 
@@ -726,7 +728,7 @@
         <div class="view">
           <div class="end-hero" style="position:relative;">
             <div class="end-eyebrow">Quiz beëindigd</div>
-            <div class="end-title">Goed gedaan klas! 🎉</div>
+            <div class="end-title">Goed gedaan klas! <img class="ei" src="/Afbeeldingen/emoji/trofee.png" alt=""></div>
             <div class="end-sub">${eindstand.length} ${eindstand.length === 1 ? 'leerling deed' : 'leerlingen deden'} mee aan "${escapeHtml(lesTitel)}"</div>
             <img src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay"
               style="position:absolute; right:40px; top:50%; transform:translateY(-50%) scaleX(-1); height:200px; width:auto; opacity:0.92;">
@@ -763,7 +765,7 @@
       app.innerHTML = `
         <div class="view">
           <div class="error-card">
-            <div class="error-icon">⚠️</div>
+            <div class="error-icon"><img class="ei" src="/Afbeeldingen/emoji/vraagteken.png" alt=""></div>
             <div class="error-title">Er ging iets mis</div>
             <div class="error-body">${escapeHtml(bericht)}</div>
             <a class="btn-pill btn-start" href="/Dashboard/">← Terug naar het dashboard</a>
@@ -775,7 +777,7 @@
       app.innerHTML = `
         <div class="view">
           <div class="error-card">
-            <div class="error-icon">🚧</div>
+            <div class="error-icon"><img class="ei" src="/Afbeeldingen/emoji/vraagteken.png" alt=""></div>
             <div class="error-title">Quiz wordt nog gemaakt</div>
             <div class="error-body">De quiz voor "${escapeHtml(titel)}" is nog niet beschikbaar. Kom later terug!</div>
             <a class="btn-pill btn-start" href="/Dashboard/">← Terug naar het dashboard</a>

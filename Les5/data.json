@@ -2,7 +2,7 @@
   "n": 5,
   "g1": "#7f1d1d",
   "g2": "#e05545",
-  "emoji": "✉️",
+  "emoji": "envelop.png",
   "title": "Formeel & Informeel",
   "sub": "Communicatiestijlen oefenen",
   "tip": "De digitale les bevat een interactieve drag-and-drop opdracht. Plan vooraf toegang tot tablets of computers voor de hele klas.",
@@ -13,10 +13,30 @@
     "Leerlingen weten wanneer welke communicatiestijl gepast is."
   ],
   "tl": [
-    { "t": "0–10 min",  "n": "Voorbeelden vergelijken",  "d": "Vergelijk een informeel appbericht met een formele e-mail aan een docent." },
-    { "t": "10–28 min", "n": "Uitleg",                   "d": "Bespreek kenmerken van formeel taalgebruik via de digitale les." },
-    { "t": "28–45 min", "n": "Schrijfopdracht",          "d": "Leerlingen herschrijven een informele boodschap als formele e-mail." },
-    { "t": "45–55 min", "n": "Peerfeedback",             "d": "Wissel e-mails uit en geef kort feedback op elkaars werk." }
+    {
+      "t": "0–10 min",
+      "n": "Voorbeelden vergelijken",
+      "d": "Vergelijk een informeel appbericht met een formele e-mail aan een docent."
+    },
+    {
+      "t": "10–28 min",
+      "n": "Uitleg",
+      "d": "Bespreek kenmerken van formeel taalgebruik via de digitale les."
+    },
+    {
+      "t": "28–45 min",
+      "n": "Schrijfopdracht",
+      "d": "Leerlingen herschrijven een informele boodschap als formele e-mail."
+    },
+    {
+      "t": "45–55 min",
+      "n": "Peerfeedback",
+      "d": "Wissel e-mails uit en geef kort feedback op elkaars werk."
+    }
   ],
-  "mat": ["Devices voor de digitale les", "Werkblad e-mailschrijven (bijlage 6)", "Voorbeeldmails (bijlage 7)"]
+  "mat": [
+    "Devices voor de digitale les",
+    "Werkblad e-mailschrijven (bijlage 6)",
+    "Voorbeeldmails (bijlage 7)"
+  ]
 }

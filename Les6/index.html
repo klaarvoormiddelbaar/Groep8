@@ -153,10 +153,10 @@
     .hero-emoji {
       position: absolute; right: 56px; top: 50%;
       transform: translateY(-50%);
-      font-size: 120px; opacity: 0.18;
+      width: 160px; height: 160px; object-fit: contain;
+      opacity: 0.18;
       pointer-events: none; z-index: 0;
-      line-height: 1;
-    }
+      }
     .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
     .hero-btn {
       display: inline-flex; align-items: center; gap: 8px;
@@ -243,7 +243,7 @@
       animation: fadeUp 0.5s 0.15s cubic-bezier(0.22,1,0.36,1) both;
     }
     .tip-icon {
-      font-size: 28px; flex-shrink: 0; margin-top: 2px;
+      flex-shrink: 0; margin-top: 2px;
     }
     .tip-label {
       font-size: 12px; font-weight: 700; letter-spacing: 1.2px;
@@ -256,7 +256,7 @@
       text-align: center; padding: 120px 48px;
       animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
     }
-    .not-found-emoji { font-size: 64px; margin-bottom: 24px; }
+    .not-found-emoji { margin-bottom: 24px; }
     .not-found h1 { font-size: 32px; margin-bottom: 12px; }
     .not-found p { font-size: 16px; color: var(--muted); margin-bottom: 32px; }
 
@@ -287,6 +287,8 @@
       .header-inner { padding: 0 20px; }
       .breadcrumb { display: none; }
     }
+  
+    .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
   </style>
 </head>
 <body>
@@ -331,7 +333,7 @@
     const LESSONS = [
       {
         n: 1, g1: '#1e4a8a', g2: '#72a8f9',
-        emoji: '🎒', title: 'Welkom bij KvM',
+        emoji: 'rugzak.png', title: 'Welkom bij KvM',
         sub: 'Kennismaking + Slim Leren',
         tip: 'Hang de ingevulde kaartjes op in de klas als visuele herinnering. Verwijs er gedurende het hele programma regelmatig naar terug.',
         doelen: [
@@ -349,7 +351,7 @@
       },
       {
         n: 2, g1: '#065f46', g2: '#10a37f',
-        emoji: '🏫', title: 'De nieuwe school',
+        emoji: 'school.png', title: 'De nieuwe school',
         sub: 'Hoe werkt de middelbare school?',
         tip: 'Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.',
         doelen: [
@@ -367,7 +369,7 @@
       },
       {
         n: 3, g1: '#92400e', g2: '#f59e0b',
-        emoji: '📅', title: 'Slim plannen',
+        emoji: 'notitieboek.png', title: 'Slim plannen',
         sub: 'Agenda, huiswerk en roosters',
         tip: 'Gebruik de checklist "Wat gaat er mee naar school?" als tastbaar hulpmiddel dat leerlingen ook thuis kunnen ophangen.',
         doelen: [
@@ -385,7 +387,7 @@
       },
       {
         n: 4, g1: '#4c1d95', g2: '#7c3aed',
-        emoji: '👫', title: 'Nieuwe vrienden',
+        emoji: 'kinderen.png', title: 'Nieuwe vrienden',
         sub: 'Sociale vaardigheden en vriendschappen',
         tip: 'Houd de sfeer licht en veilig. Dit onderwerp raakt leerlingen soms persoonlijk. Geef aan dat ze altijd bij jou terecht kunnen.',
         doelen: [
@@ -403,7 +405,7 @@
       },
       {
         n: 5, g1: '#7f1d1d', g2: '#e05545',
-        emoji: '✉️', title: 'Formeel & Informeel',
+        emoji: 'envelop.png', title: 'Formeel & Informeel',
         sub: 'Communicatiestijlen oefenen',
         tip: 'De digitale les bevat een interactieve drag-and-drop opdracht. Plan vooraf toegang tot tablets of computers voor de hele klas.',
         doelen: [
@@ -421,7 +423,7 @@
       },
       {
         n: 6, g1: '#0c4a6e', g2: '#0284c7',
-        emoji: '🧠', title: 'Gevoel & Zelfvertrouwen',
+        emoji: 'brein.png', title: 'Gevoel & Zelfvertrouwen',
         sub: 'Emotionele voorbereiding op de overstap',
         tip: 'Wees alert op leerlingen die significant angstig lijken. Spreek ze na de les apart aan en overleg zo nodig met de intern begeleider.',
         doelen: [
@@ -439,7 +441,7 @@
       },
       {
         n: 7, g1: '#831843', g2: '#db2777',
-        emoji: '🎭', title: 'Sociale situaties',
+        emoji: 'vraagteken.png', title: 'Sociale situaties',
         sub: "Oefenen met realistische scenario's",
         tip: "Zorg voor een veilige sfeer voordat je begint. Vraag leerlingen vooraf of ze scenario's mogen delen die ze zelf hebben meegemaakt.",
         doelen: [
@@ -457,7 +459,7 @@
       },
       {
         n: 8, g1: '#134e4a', g2: '#0f766e',
-        emoji: '🏆', title: 'Klaar voor de start!',
+        emoji: 'trofee.png', title: 'Klaar voor de start!',
         sub: 'Afsluiting, reflectie en certificaat',
         tip: 'Maak van de certificaatuitreiking een echt feestmoment. Nodig eventueel ouders uit of maak een korte video voor de ouderavond.',
         doelen: [
@@ -486,7 +488,7 @@
       document.title = 'Les niet gevonden — KvM';
       main.innerHTML = `
         <div class="not-found">
-          <div class="not-found-emoji">🔍</div>
+          <div class="not-found-emoji"><img src="/Afbeeldingen/emoji/sleutel.png" alt="" style="width:64px;height:64px;object-fit:contain"></div>
           <h1>Les niet gevonden</h1>
           <p>Er is geen les met dit nummer. Ga terug naar het dashboard.</p>
           <a class="back-btn" href="/Dashboard">← Terug naar dashboard</a>
@@ -499,26 +501,26 @@
         <div class="hero" style="background:linear-gradient(135deg,${L.g1} 0%,${L.g2} 100%)">
           <div class="hero-content">
             <div class="hero-badge">Les ${L.n} van 8</div>
-            <div class="hero-title">${L.emoji} ${L.title}</div>
+            <div class="hero-title"><img class="ei" src="/Afbeeldingen/emoji/${L.emoji}" alt="" style="height:1em;vertical-align:-0.1em"> ${L.title}</div>
             <div class="hero-sub">${L.sub}</div>
             <div class="hero-chips">
-              <div class="hero-chip">⏱ 50–60 min</div>
-              <div class="hero-chip">📋 Docentenhandleiding</div>
+              <div class="hero-chip"><img class="ei" src="/Afbeeldingen/emoji/ster.png" alt=""> 50–60 min</div>
+              <div class="hero-chip"><img class="ei" src="/Afbeeldingen/emoji/lijst.png" alt=""> Docentenhandleiding</div>
             </div>
             <div class="hero-btns">
               <a class="hero-btn hero-btn-live" href="/les${L.n}/docent/quiz" target="_blank" rel="noopener">
                 <span class="live-dot"></span> Start live quiz
               </a>
               <a class="hero-btn" href="/les${L.n}/docent/poll" target="_blank" rel="noopener">
-                🗳️ Start live poll
+                <img class="ei" src="/Afbeeldingen/emoji/lijst.png" alt=""> Start live poll
               </a>
             </div>
           </div>
-          <div class="hero-emoji" aria-hidden="true">${L.emoji}</div>
+          <img class="hero-emoji" src="/Afbeeldingen/emoji/${L.emoji}" alt="" aria-hidden="true">
         </div>
 
         <div class="tip-card">
-          <div class="tip-icon">💡</div>
+          <div class="tip-icon"><img src="/Afbeeldingen/emoji/lamp.png" alt="" style="width:32px;height:32px;object-fit:contain"></div>
           <div>
             <div class="tip-label">Tip voor de docent</div>
             <div class="tip-body">${L.tip}</div>
@@ -550,7 +552,7 @@
           <div class="content-card full">
             <div class="cc-title">Benodigde materialen</div>
             <div class="mat-chips">
-              ${L.mat.map(m => `<div class="mat-chip">📎 ${m}</div>`).join('')}
+              ${L.mat.map(m => `<div class="mat-chip"><img class="ei" src="/Afbeeldingen/emoji/pen.png" alt=""> ${m}</div>`).join('')}
             </div>
           </div>
         </div>
