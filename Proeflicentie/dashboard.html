@@ -693,7 +693,8 @@
 
     let profiel = { naam: '', groep: '8A', school: '' };
     window.profiel = profiel;
-    let userId  = null;
+    let userId       = null;
+    let welkomGezien = false;
 
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -702,6 +703,7 @@
         return;
       }
       userId = session.user.id;
+      welkomGezien = !!(session.user.user_metadata && session.user.user_metadata.kvm_welkom_proef);
 
       const { data } = await supabase
         .from('profiles')
@@ -709,14 +711,13 @@
         .eq('id', userId)
         .maybeSingle();
 
-      const welkomKey = `kvm_welkom_proef_${userId}`;
-
       if (data && data.naam) {
         profiel = data;
         window.profiel = profiel;
         updateUI();
-        if (!localStorage.getItem(welkomKey)) {
-          localStorage.setItem(welkomKey, '1');
+        if (!welkomGezien) {
+          welkomGezien = true;
+          supabase.auth.updateUser({ data: { kvm_welkom_proef: true } });
           document.getElementById('welkom-naam').textContent = profiel.naam.split(' ')[0];
           document.getElementById('welkomModal').classList.add('open');
         }
@@ -802,8 +803,9 @@
       btn.textContent = 'Opslaan'; btn.disabled = false;
 
       if (!error) {
-        const eersteKeer = !localStorage.getItem(welkomKey);
-        localStorage.setItem(welkomKey, '1');
+        const eersteKeer = !welkomGezien;
+        welkomGezien = true;
+        supabase.auth.updateUser({ data: { kvm_welkom_proef: true } });
         profiel = nieuwProfiel;
         window.profiel = profiel;
         updateUI();

@@ -799,7 +799,9 @@
         ${canvaHtml}
       `;
       initCarousel();
-      setTimeout(function () { if (typeof tutMaybeStart === 'function') tutMaybeStart(); }, 500);
+      (window._tutReadyPromise || Promise.resolve()).then(function () {
+        if (typeof tutMaybeStart === 'function') tutMaybeStart();
+      });
       (function () {
         var stage = document.getElementById('canva-stage');
         if (!stage) return;
@@ -907,6 +909,38 @@
         if (frame) frame.focus();
       }
     });
+  </script>
+
+  <!-- ══ TUTORIAL STATE (Supabase) ══════════════════════════════════ -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient(
+      'https://cqcncausbclwvoomqdpy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo'
+    );
+
+    window._tutDone = new Set();
+
+    window._tutReadyPromise = (async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user && user.user_metadata) {
+          const m = user.user_metadata;
+          if (m.kvm_les_tut_v1)   window._tutDone.add('kvm_les_tut_v1');
+          if (m.kvm_canva_tut_v1) window._tutDone.add('kvm_canva_tut_v1');
+        }
+      } catch (e) {}
+    })();
+
+    window._markTutDone = async function (key) {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const patch = {};
+        patch[key] = true;
+        await supabase.auth.updateUser({ data: patch });
+      } catch (e) {}
+    };
   </script>
 
   <!-- ══ TUTORIAL OVERLAY ═══════════════════════════════════════════ -->
@@ -1055,11 +1089,13 @@
     function tutClose() {
       overlay.classList.remove('active');
       try { localStorage.setItem(currentKey, '1'); } catch (e) {}
+      if (window._tutDone) window._tutDone.add(currentKey);
+      if (window._markTutDone) window._markTutDone(currentKey);
     }
 
     /* ── Knoppenrondleiding ── */
     window.tutMaybeStart = function () {
-      try { if (localStorage.getItem(BTN_KEY)) return; } catch (e) {}
+      try { if (localStorage.getItem(BTN_KEY) || (window._tutDone && window._tutDone.has(BTN_KEY))) return; } catch (e) {}
       if (overlay.classList.contains('active')) return;
       var steps = ALL_STEPS.filter(function (s) { return !!document.getElementById(s.id); });
       tutOpenWith(steps, BTN_KEY);
@@ -1074,7 +1110,7 @@
 
     /* ── Canva-rondleiding ── */
     window.canvaTutMaybeStart = function () {
-      try { if (localStorage.getItem(CANVA_KEY)) return; } catch (e) {}
+      try { if (localStorage.getItem(CANVA_KEY) || (window._tutDone && window._tutDone.has(CANVA_KEY))) return; } catch (e) {}
       if (overlay.classList.contains('active')) return;
       var steps = CANVA_STEPS.filter(function (s) { return !!document.getElementById(s.id); });
       tutOpenWith(steps, CANVA_KEY);
