@@ -234,7 +234,7 @@
       background: var(--card-bg); border: 1px solid var(--border); border-radius: 28px;
       box-shadow: var(--shadow-card); padding: 28px 20px; text-align: center;
     }
-    .podium-1 { transform: translateY(-14px); border: 1px solid #f8d760; box-shadow: 0 24px 36px -8px rgba(248,215,96,0.35); }
+    .podium-1 { border: 1px solid #f8d760; box-shadow: 0 24px 36px -8px rgba(248,215,96,0.35); }
     .podium-medal { font-size: 38px; margin-bottom: 10px; }
     .podium-naam { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
     .podium-score { font-size: 14px; font-weight: 700; color: var(--primary); }
@@ -686,7 +686,7 @@
 
       app.innerHTML = `
         <div class="view">
-          <div class="end-hero" style="position:relative;min-height:180px;padding-right:260px;">
+          <div class="end-hero" style="position:relative;padding:80px 320px 80px 52px;">
             <div class="end-eyebrow">Halverwege</div>
             <div class="end-title">Tussenstand <img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
             <div class="end-sub">Alles is nog mogelijk!</div>
@@ -744,7 +744,7 @@
 
       app.innerHTML = `
         <div class="view">
-          <div class="end-hero" style="position:relative;min-height:180px;padding-right:260px;">
+          <div class="end-hero" style="position:relative;padding:80px 320px 80px 52px;">
             <div class="end-eyebrow">Quiz beëindigd</div>
             <div class="end-title">Goed gedaan klas! <img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
             <div class="end-sub">${eindstand.length} ${eindstand.length === 1 ? 'leerling deed' : 'leerlingen deden'} mee aan "${escapeHtml(lesTitel)}"</div>
