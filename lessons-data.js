@@ -24,7 +24,7 @@ const LESSONS = [
     n: 2, g1: '#065f46', g2: '#10a37f',
     emoji: 'school.png', title: 'Rustige schoolweek inplannen',
     sub: 'Structuur en overzicht in een rustige week',
-    duur: '55 min',
+    duur: '50–60 min',
     url: '/les2',
     tip: 'Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.',
     doelen: [
@@ -44,7 +44,7 @@ const LESSONS = [
     n: 3, g1: '#92400e', g2: '#f59e0b',
     emoji: 'notitieboek.png', title: 'Online hulpmiddelen tijdens het leren',
     sub: 'Handige digitale tools voor school',
-    duur: '55 min',
+    duur: '60 min',
     url: '/les3',
     tip: 'Gebruik de checklist "Wat gaat er mee naar school?" als tastbaar hulpmiddel dat leerlingen ook thuis kunnen ophangen.',
     doelen: [
@@ -64,7 +64,7 @@ const LESSONS = [
     n: 4, g1: '#4c1d95', g2: '#7c3aed',
     emoji: 'kinderen.png', title: 'Executieve functies',
     sub: 'Focus, planning en zelfregulatie',
-    duur: '55 min',
+    duur: '60 min',
     url: '/les4',
     tip: 'Houd de sfeer licht en veilig. Dit onderwerp raakt leerlingen soms persoonlijk. Geef aan dat ze altijd bij jou terecht kunnen.',
     doelen: [
@@ -84,7 +84,7 @@ const LESSONS = [
     n: 5, g1: '#7f1d1d', g2: '#e05545',
     emoji: 'envelop.png', title: 'Omgaan met toetsen en stress',
     sub: 'Rust bewaren en goed presteren',
-    duur: '55 min',
+    duur: '50–60 min',
     url: '/les5',
     tip: 'De digitale les bevat een interactieve drag-and-drop opdracht. Plan vooraf toegang tot tablets of computers voor de hele klas.',
     doelen: [
@@ -104,7 +104,7 @@ const LESSONS = [
     n: 6, g1: '#0c4a6e', g2: '#0284c7',
     emoji: 'brein.png', title: 'Drukke schoolweek inplannen',
     sub: 'Prioriteiten stellen in een volle week',
-    duur: '55 min',
+    duur: '50–60 min',
     url: '/les6',
     tip: 'Wees alert op leerlingen die significant angstig lijken. Spreek ze na de les apart aan en overleg zo nodig met de intern begeleider.',
     doelen: [
@@ -124,7 +124,7 @@ const LESSONS = [
     n: 7, g1: '#831843', g2: '#db2777',
     emoji: 'vraagteken.png', title: 'Schriftelijke vaardigheden',
     sub: 'Schrijven, samenvatten en noteren',
-    duur: '55 min',
+    duur: '50–60 min',
     url: '/les7',
     tip: "Laat groepjes ook eigen scenario's bedenken. Dit verhoogt de betrokkenheid en zorgt voor herkenning.",
     doelen: [
@@ -144,7 +144,7 @@ const LESSONS = [
     n: 8, g1: '#134e4a', g2: '#0f766e',
     emoji: 'trofee.png', title: 'Klaar voor de start!',
     sub: 'Afsluiting, reflectie en certificaat',
-    duur: '55 min',
+    duur: '50–60 min',
     url: '/les8',
     tip: 'Maak van de certificaatuitreiking een echt feestmoment. Nodig eventueel ouders uit of maak een korte video voor de ouderavond.',
     doelen: [
