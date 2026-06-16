@@ -845,7 +845,7 @@
               <div class="card-title">${L.title}</div>
               <div class="card-desc">${L.sub}</div>
               <div class="card-foot">
-                <div class="card-dur"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
+                <div class="card-dur" id="dur-les-${L.n}"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
               </div>
             </div>
           </div>`;
@@ -864,12 +864,24 @@
               <div class="card-title">${L.title}</div>
               <div class="card-desc">${L.sub}</div>
               <div class="card-foot">
-                <div class="card-dur"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
+                <div class="card-dur" id="dur-les-${L.n}"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
                 <div class="card-cta">Bekijk les →</div>
               </div>
             </div>
           </div>`;
       }
+    });
+
+    /* Sync durations from data.json (single source of truth) */
+    LESSONS.forEach(L => {
+      fetch(`/Les${L.n}/data.json`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (!data || !data.duur) return;
+          const el = document.getElementById(`dur-les-${L.n}`);
+          if (el) el.innerHTML = `<img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${data.duur}`;
+        })
+        .catch(() => {});
     });
 
     window.sluitWelkomModal = function() {

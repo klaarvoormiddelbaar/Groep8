@@ -825,11 +825,23 @@
             <div class="card-title">${L.title}</div>
             <div class="card-desc">${L.sub}</div>
             <div class="card-foot">
-              <div class="card-dur"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
+              <div class="card-dur" id="dur-les-${L.n}"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
               <div class="card-cta">Bekijk les →</div>
             </div>
           </div>
         </div>`;
+    });
+
+    /* Sync durations from data.json (single source of truth) */
+    LESSONS.forEach(L => {
+      fetch(`/Les${L.n}/data.json`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (!data || !data.duur) return;
+          const el = document.getElementById(`dur-les-${L.n}`);
+          if (el) el.innerHTML = `<img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${data.duur}`;
+        })
+        .catch(() => {});
     });
 
     function openLesson(i) {
@@ -850,7 +862,7 @@
           <div class="detail-title"><img src="/Afbeeldingen/emojis nieuw/${L.emoji}" style="width:52px;height:52px;object-fit:contain;vertical-align:middle;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.2))"> ${L.title}</div>
           <div class="detail-hero-bottom">
             <div class="detail-chips">
-              <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
+              <div class="detail-chip" id="detail-dur-${L.n}"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
               <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> Groep ${profiel.groep || '8'}</div>
               <div class="detail-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/school.png" alt=""> ${profiel.school || 'Jouw school'}</div>
             </div>
@@ -918,6 +930,15 @@
       `;
       dv.classList.add('active');
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      fetch(`/Les${L.n}/data.json`)
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (!data || !data.duur) return;
+          const el = document.getElementById(`detail-dur-${L.n}`);
+          if (el) el.innerHTML = `<img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${data.duur}`;
+        })
+        .catch(() => {});
     }
 
     function showDashboard() {
