@@ -1085,12 +1085,16 @@
       spotlight.style.transition = 'none';
       card.style.transition      = 'none';
       step = 0;
-      positionStep(0);
 
+      /* Wacht twee frames zodat scroll + overflow:hidden zijn verwerkt
+         voordat we de positie berekenen en de overlay tonen */
       requestAnimationFrame(function () {
-        spotlight.style.transition = '';
-        card.style.transition      = '';
-        overlay.classList.add('active');
+        requestAnimationFrame(function () {
+          positionStep(0);
+          spotlight.style.transition = '';
+          card.style.transition      = '';
+          overlay.classList.add('active');
+        });
       });
     }
 
