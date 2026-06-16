@@ -1078,6 +1078,9 @@
       buildDots(steps.length);
 
       if (key === BTN_KEY) {
+        /* Stop lopende hero-animatie zodat getBoundingClientRect klopt */
+        var hero = document.querySelector('.hero');
+        if (hero) hero.style.animation = 'none';
         window.scrollTo({ top: 0, behavior: 'instant' });
         document.body.style.overflow = 'hidden';
       }
@@ -1086,15 +1089,11 @@
       card.style.transition      = 'none';
       step = 0;
 
-      /* Wacht twee frames zodat scroll + overflow:hidden zijn verwerkt
-         voordat we de positie berekenen en de overlay tonen */
       requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          positionStep(0);
-          spotlight.style.transition = '';
-          card.style.transition      = '';
-          overlay.classList.add('active');
-        });
+        positionStep(0);
+        spotlight.style.transition = '';
+        card.style.transition      = '';
+        overlay.classList.add('active');
       });
     }
 
