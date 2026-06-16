@@ -1083,9 +1083,6 @@
         spotlight.style.transition = '';
         card.style.transition      = '';
         overlay.classList.add('active');
-        /* Re-position after first paint so late-loading images don't push the target */
-        requestAnimationFrame(function () { positionStep(step); });
-        setTimeout(function () { positionStep(step); }, 200);
       });
     }
 
