@@ -485,6 +485,7 @@
     // ── Presentatiescherm ────────────────────────────────────────────────────
     let antwoordenOnthuld = false;
     let vraagTimerId = null;
+    let onthulBroadcastKanaal = null;
 
     function toonPresentatie() {
       if (huidigeView === 'presenter' && huidigeVraagIndex === sessie.huidige_vraag_index) return;
@@ -547,6 +548,20 @@
     function onthulAntwoorden() {
       if (vraagTimerId) { clearTimeout(vraagTimerId); vraagTimerId = null; }
       antwoordenOnthuld = true;
+
+      // Stuur reveal-signaal naar alle leerlingen
+      const vraagVoorBroadcast = vragen[huidigeVraagIndex];
+      if (onthulBroadcastKanaal) { db.removeChannel(onthulBroadcastKanaal); }
+      onthulBroadcastKanaal = db.channel(`onthulling-${sessie.id}`);
+      onthulBroadcastKanaal.subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          onthulBroadcastKanaal.send({
+            type: 'broadcast',
+            event: 'reveal',
+            payload: { vraag_index: huidigeVraagIndex, goed_index: vraagVoorBroadcast.goed_index ?? null }
+          });
+        }
+      });
       const vraag = vragen[huidigeVraagIndex];
       const isLaatsteVraag = huidigeVraagIndex === vragen.length - 1;
       const helft = Math.ceil(vragen.length / 2);
@@ -616,7 +631,7 @@
         if (pct) pct.textContent = `${aantal} · ${aantalAntwoorden === 0 ? 0 : percentage}%`;
       });
       const teller = document.getElementById('antwoord-teller');
-      if (teller) teller.textContent = `<img class="ei" src="/Afbeeldingen/emojis nieuw/envelop.png" alt=""> ${aantalAntwoorden} van ${deelnemers.size} hebben geantwoord`;
+      if (teller) teller.innerHTML = `<img class="ei" src="/Afbeeldingen/emojis nieuw/envelop.png" alt=""> ${aantalAntwoorden} van ${deelnemers.size} hebben geantwoord`;
     }
 
     async function volgendeVraag() {
@@ -666,9 +681,8 @@
         .eq('session_id', sessie.id).order('score', { ascending: false });
 
       const stand = data || [];
-      const medailles = ['<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">', '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">', '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">'];
-      const top3 = stand.slice(0, 3);
-      const rest = stand.slice(3);
+      const top1 = stand.slice(0, 1);
+      const rest = stand.slice(1);
 
       app.innerHTML = `
         <div class="view">
@@ -680,24 +694,28 @@
               style="position:absolute; right:40px; top:50%; transform:translateY(-50%) scaleX(-1); height:200px; width:auto; opacity:0.92;">
           </div>
 
-          ${top3.length ? `
-            <div class="podium">
-              ${top3.map((d, i) => `
-                <div class="podium-spot podium-${i + 1}">
-                  <div class="podium-medal">${medailles[i]}</div>
-                  <div class="podium-naam">${escapeHtml(d.naam)}</div>
-                  <div class="podium-score">${d.score} punten</div>
-                </div>`).join('')}
+          ${top1.length ? `
+            <div class="podium" style="grid-template-columns:1fr;max-width:260px;margin-left:auto;margin-right:auto;">
+              <div class="podium-spot podium-1">
+                <div class="podium-medal"><img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
+                <div class="podium-naam">${escapeHtml(top1[0].naam)}</div>
+                <div class="podium-score">${top1[0].score} punten</div>
+              </div>
             </div>` : `<div class="empty-hint">Nog geen scores beschikbaar.</div>`}
 
           ${rest.length ? `
             <div class="rest-list">
-              ${rest.map((d, i) => `
+              ${rest.map((d, i) => {
+                const rank = i + 2;
+                const kleur = rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : null;
+                const stl = kleur ? `background:${kleur};color:white;` : '';
+                return `
                 <div class="rest-row">
-                  <div class="rest-rank">${i + 4}</div>
+                  <div class="rest-rank" style="${stl}">${rank}</div>
                   <div class="rest-naam">${escapeHtml(d.naam)}</div>
                   <div class="rest-score">${d.score} punten</div>
-                </div>`).join('')}
+                </div>`;
+              }).join('')}
             </div>` : ''}
 
           <div class="end-actions">
@@ -720,9 +738,8 @@
         .order('score', { ascending: false });
 
       const eindstand = error ? [] : data;
-      const medailles = ['<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">', '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">', '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">'];
-      const top3 = eindstand.slice(0, 3);
-      const rest = eindstand.slice(3);
+      const top1 = eindstand.slice(0, 1);
+      const rest = eindstand.slice(1);
 
       app.innerHTML = `
         <div class="view">
@@ -734,24 +751,28 @@
               style="position:absolute; right:40px; top:50%; transform:translateY(-50%) scaleX(-1); height:200px; width:auto; opacity:0.92;">
           </div>
 
-          ${top3.length ? `
-            <div class="podium">
-              ${top3.map((deelnemer, i) => `
-                <div class="podium-spot podium-${i + 1}">
-                  <div class="podium-medal">${medailles[i]}</div>
-                  <div class="podium-naam">${escapeHtml(deelnemer.naam)}</div>
-                  <div class="podium-score">${deelnemer.score} punten</div>
-                </div>`).join('')}
+          ${top1.length ? `
+            <div class="podium" style="grid-template-columns:1fr;max-width:260px;margin-left:auto;margin-right:auto;">
+              <div class="podium-spot podium-1">
+                <div class="podium-medal"><img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
+                <div class="podium-naam">${escapeHtml(top1[0].naam)}</div>
+                <div class="podium-score">${top1[0].score} punten</div>
+              </div>
             </div>` : `<div class="empty-hint">Er deden geen leerlingen mee aan deze quiz.</div>`}
 
           ${rest.length ? `
             <div class="rest-list">
-              ${rest.map((deelnemer, i) => `
+              ${rest.map((deelnemer, i) => {
+                const rank = i + 2;
+                const kleur = rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : null;
+                const stl = kleur ? `background:${kleur};color:white;` : '';
+                return `
                 <div class="rest-row">
-                  <div class="rest-rank">${i + 4}</div>
+                  <div class="rest-rank" style="${stl}">${rank}</div>
                   <div class="rest-naam">${escapeHtml(deelnemer.naam)}</div>
                   <div class="rest-score">${deelnemer.score} punten</div>
-                </div>`).join('')}
+                </div>`;
+              }).join('')}
             </div>` : ''}
 
           <div class="end-actions">

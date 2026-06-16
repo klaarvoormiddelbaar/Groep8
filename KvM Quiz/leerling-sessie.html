@@ -193,6 +193,10 @@
     let vraagTimerId = null;
     let alAntwoordIngediend = false;
     let aantalDeelnemers = 1;
+    let gekozenOptieIndex = null;
+    let gekozenIsPoll = false;
+    let gekozenPunten = 0;
+    let onthulKanaal = null;
 
     function escapeHtml(tekst) {
       const d = document.createElement('div');
@@ -238,6 +242,7 @@
 
       abonneerOpSessie();
       abonneerOpDeelnemers();
+      abonneerOpOnthulling();
       reageerOpSessieStatus();
     }
 
@@ -270,6 +275,25 @@
       else if (sessie.status === 'ended') toonEinde();
     }
 
+    // ── Onthulling broadcast ─────────────────────────────────────────────────
+    function abonneerOpOnthulling() {
+      if (onthulKanaal) { db.removeChannel(onthulKanaal); onthulKanaal = null; }
+      onthulKanaal = db.channel(`onthulling-${sessie.id}`)
+        .on('broadcast', { event: 'reveal' }, (payload) => {
+          const { vraag_index, goed_index } = payload.payload;
+          if (vraag_index !== huidigeVraagIndex || gekozenOptieIndex === null) return;
+          const letters = ['A', 'B', 'C', 'D'];
+          if (gekozenIsPoll) {
+            toonVraagStatus('verzonden', '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""> Bedankt voor je stem! Wacht op de volgende vraag.');
+          } else if (gekozenOptieIndex === goed_index) {
+            toonVraagStatus('goed', `<img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""> Goed! Je verdiende ${gekozenPunten} punten. Succes met de volgende vraag!`);
+          } else {
+            toonVraagStatus('fout', `<img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""> Helaas, dat klopte niet. Het juiste antwoord was: ${letters[goed_index]}. Succes met de volgende vraag!`);
+          }
+        })
+        .subscribe();
+    }
+
     // ── Wachtkamer ───────────────────────────────────────────────────────────
     function toonWachtkamer() {
       if (huidigeView === 'wachtkamer') { ververDeelnemerAantal(); return; }
@@ -289,7 +313,7 @@
 
     function ververDeelnemerAantal() {
       const el = document.getElementById('wk-deelnemers');
-      if (el) el.textContent = `<img class="ei" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> ${aantalDeelnemers} ${aantalDeelnemers === 1 ? 'klasgenoot doet' : 'klasgenoten doen'} mee`;
+      if (el) el.innerHTML = `<img class="ei" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> ${aantalDeelnemers} ${aantalDeelnemers === 1 ? 'klasgenoot doet' : 'klasgenoten doen'} mee`;
     }
 
     // ── Vraagscherm ──────────────────────────────────────────────────────────
@@ -300,6 +324,9 @@
       huidigeView = 'vraag';
       huidigeVraagIndex = index;
       alAntwoordIngediend = false;
+      gekozenOptieIndex = null;
+      gekozenIsPoll = false;
+      gekozenPunten = 0;
       vraagStartTijd = Date.now();
 
       const vraag = vragen[index];
@@ -360,7 +387,7 @@
       const status = document.getElementById('vraag-status');
       if (!status) return;
       status.className = `vraag-status zichtbaar ${soort}`;
-      status.textContent = bericht;
+      status.innerHTML = bericht;
     }
 
     async function kiesAntwoord(optieIndex) {
@@ -385,6 +412,10 @@
         punten = isCorrect ? Math.round(500 + 500 * tijdsfractie) : 0;
       }
 
+      gekozenOptieIndex = optieIndex;
+      gekozenIsPoll = isPoll;
+      gekozenPunten = punten;
+
       toonVraagStatus('verzonden', '<img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""> Antwoord verzonden — wacht tot de docent doorgaat…');
 
       try {
@@ -402,20 +433,6 @@
           await db.from('participants').update({ score: nieuweScore }).eq('id', eigenDeelnemer.id);
           eigenDeelnemer.score = nieuweScore;
         }
-
-        setTimeout(() => {
-          // Toon de uitslag alleen nog als de docent niet inmiddels is doorgegaan
-          // naar een andere vraag (anders zou de feedback over de nieuwe vraag heen vallen).
-          if (huidigeView !== 'vraag' || huidigeVraagIndex !== vraagIndexBijInzending) return;
-          if (isPoll) {
-            toonVraagStatus('verzonden', '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""> Bedankt voor je stem! Wacht tot de docent doorgaat naar de volgende vraag.');
-          } else if (isCorrect) {
-            toonVraagStatus('goed', `<img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""> Goed! Je verdiende ${punten} punten. Succes met de volgende vraag!`);
-          } else {
-            const goedeLetters = ['A', 'B', 'C', 'D'];
-            toonVraagStatus('fout', `<img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""> Helaas, dat klopte niet. Het juiste antwoord was: ${goedeLetters[vraag.goed_index]}. Succes met de volgende vraag!`);
-          }
-        }, 450);
       } catch (fout) {
         toonVraagStatus('fout', 'Er ging iets mis bij het versturen van je antwoord: ' + fout.message);
       }
@@ -434,7 +451,9 @@
       const stand = data || [];
       const positie = stand.findIndex(d => d.id === eigenDeelnemer.id) + 1;
       const eigenScore = stand.find(d => d.id === eigenDeelnemer.id)?.score || 0;
-      const medaille = positie === 1 ? '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">' : positie === 2 ? '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">' : positie === 3 ? '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">' : '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">';
+      const medaille = positie === 1
+        ? '<img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="" style="height:54px;width:auto;">'
+        : `<div style="width:54px;height:54px;border-radius:50%;background:${positie === 2 ? '#c0c0c0' : positie === 3 ? '#cd7f32' : '#9ca3af'};color:white;font-size:22px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">${positie}</div>`;
 
       app.innerHTML = `
         <div class="view">
@@ -460,7 +479,9 @@
       const positie = lijst.findIndex(d => d.id === eigenDeelnemer.id) + 1;
       const eigenItem = lijst.find(d => d.id === eigenDeelnemer.id);
       const eigenScore = eigenItem ? eigenItem.score : (eigenDeelnemer.score || 0);
-      const medaille = positie === 1 ? '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">' : positie === 2 ? '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">' : positie === 3 ? '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">' : '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">';
+      const medaille = positie === 1
+        ? '<img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="" style="height:54px;width:auto;">'
+        : `<div style="width:54px;height:54px;border-radius:50%;background:${positie === 2 ? '#c0c0c0' : positie === 3 ? '#cd7f32' : '#9ca3af'};color:white;font-size:22px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">${positie}</div>`;
 
       app.innerHTML = `
         <div class="view">
