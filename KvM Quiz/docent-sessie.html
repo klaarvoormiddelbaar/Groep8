@@ -681,41 +681,42 @@
         .eq('session_id', sessie.id).order('score', { ascending: false });
 
       const stand = data || [];
-      const top1 = stand.slice(0, 1);
-      const rest = stand.slice(1);
+      const top3 = stand.slice(0, 3);
+      const rest = stand.slice(3);
 
       app.innerHTML = `
         <div class="view">
-          <div class="end-hero" style="position:relative;">
+          <div class="end-hero" style="position:relative;min-height:180px;padding-right:260px;">
             <div class="end-eyebrow">Halverwege</div>
             <div class="end-title">Tussenstand <img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
             <div class="end-sub">Alles is nog mogelijk!</div>
             <img src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay"
-              style="position:absolute; right:40px; top:50%; transform:translateY(-50%) scaleX(-1); height:200px; width:auto; opacity:0.92;">
+              style="position:absolute; right:40px; top:50%; transform:translateY(-50%) scaleX(-1); height:220px; width:auto; opacity:0.92;">
           </div>
 
-          ${top1.length ? `
-            <div class="podium" style="grid-template-columns:1fr;max-width:260px;margin-left:auto;margin-right:auto;">
-              <div class="podium-spot podium-1">
-                <div class="podium-medal"><img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
-                <div class="podium-naam">${escapeHtml(top1[0].naam)}</div>
-                <div class="podium-score">${top1[0].score} punten</div>
-              </div>
+          ${top3.length ? `
+            <div class="podium">
+              ${top3.map((d, i) => {
+                const medalHtml = i === 0
+                  ? '<img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="" style="height:38px;width:auto;">'
+                  : `<div style="width:44px;height:44px;border-radius:50%;background:${i === 1 ? '#c0c0c0' : '#cd7f32'};color:white;font-size:18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin:0 auto;">${i + 1}</div>`;
+                return `
+                <div class="podium-spot podium-${i + 1}">
+                  <div class="podium-medal">${medalHtml}</div>
+                  <div class="podium-naam">${escapeHtml(d.naam)}</div>
+                  <div class="podium-score">${d.score} punten</div>
+                </div>`;
+              }).join('')}
             </div>` : `<div class="empty-hint">Nog geen scores beschikbaar.</div>`}
 
           ${rest.length ? `
             <div class="rest-list">
-              ${rest.map((d, i) => {
-                const rank = i + 2;
-                const kleur = rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : null;
-                const stl = kleur ? `background:${kleur};color:white;` : '';
-                return `
+              ${rest.map((d, i) => `
                 <div class="rest-row">
-                  <div class="rest-rank" style="${stl}">${rank}</div>
+                  <div class="rest-rank">${i + 4}</div>
                   <div class="rest-naam">${escapeHtml(d.naam)}</div>
                   <div class="rest-score">${d.score} punten</div>
-                </div>`;
-              }).join('')}
+                </div>`).join('')}
             </div>` : ''}
 
           <div class="end-actions">
@@ -738,41 +739,42 @@
         .order('score', { ascending: false });
 
       const eindstand = error ? [] : data;
-      const top1 = eindstand.slice(0, 1);
-      const rest = eindstand.slice(1);
+      const top3 = eindstand.slice(0, 3);
+      const rest = eindstand.slice(3);
 
       app.innerHTML = `
         <div class="view">
-          <div class="end-hero" style="position:relative;">
+          <div class="end-hero" style="position:relative;min-height:180px;padding-right:260px;">
             <div class="end-eyebrow">Quiz beëindigd</div>
             <div class="end-title">Goed gedaan klas! <img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
             <div class="end-sub">${eindstand.length} ${eindstand.length === 1 ? 'leerling deed' : 'leerlingen deden'} mee aan "${escapeHtml(lesTitel)}"</div>
             <img src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay"
-              style="position:absolute; right:40px; top:50%; transform:translateY(-50%) scaleX(-1); height:200px; width:auto; opacity:0.92;">
+              style="position:absolute; right:40px; top:50%; transform:translateY(-50%) scaleX(-1); height:220px; width:auto; opacity:0.92;">
           </div>
 
-          ${top1.length ? `
-            <div class="podium" style="grid-template-columns:1fr;max-width:260px;margin-left:auto;margin-right:auto;">
-              <div class="podium-spot podium-1">
-                <div class="podium-medal"><img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
-                <div class="podium-naam">${escapeHtml(top1[0].naam)}</div>
-                <div class="podium-score">${top1[0].score} punten</div>
-              </div>
+          ${top3.length ? `
+            <div class="podium">
+              ${top3.map((deelnemer, i) => {
+                const medalHtml = i === 0
+                  ? '<img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="" style="height:38px;width:auto;">'
+                  : `<div style="width:44px;height:44px;border-radius:50%;background:${i === 1 ? '#c0c0c0' : '#cd7f32'};color:white;font-size:18px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin:0 auto;">${i + 1}</div>`;
+                return `
+                <div class="podium-spot podium-${i + 1}">
+                  <div class="podium-medal">${medalHtml}</div>
+                  <div class="podium-naam">${escapeHtml(deelnemer.naam)}</div>
+                  <div class="podium-score">${deelnemer.score} punten</div>
+                </div>`;
+              }).join('')}
             </div>` : `<div class="empty-hint">Er deden geen leerlingen mee aan deze quiz.</div>`}
 
           ${rest.length ? `
             <div class="rest-list">
-              ${rest.map((deelnemer, i) => {
-                const rank = i + 2;
-                const kleur = rank === 2 ? '#c0c0c0' : rank === 3 ? '#cd7f32' : null;
-                const stl = kleur ? `background:${kleur};color:white;` : '';
-                return `
+              ${rest.map((deelnemer, i) => `
                 <div class="rest-row">
-                  <div class="rest-rank" style="${stl}">${rank}</div>
+                  <div class="rest-rank">${i + 4}</div>
                   <div class="rest-naam">${escapeHtml(deelnemer.naam)}</div>
                   <div class="rest-score">${deelnemer.score} punten</div>
-                </div>`;
-              }).join('')}
+                </div>`).join('')}
             </div>` : ''}
 
           <div class="end-actions">
