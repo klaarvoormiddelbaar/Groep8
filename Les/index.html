@@ -1077,6 +1077,10 @@
       activeSteps = steps;
       buildDots(steps.length);
 
+      if (key === BTN_KEY) {
+        document.body.style.overflow = 'hidden';
+      }
+
       spotlight.style.transition = 'none';
       card.style.transition      = 'none';
       step = 0;
@@ -1091,6 +1095,7 @@
 
     function tutClose() {
       overlay.classList.remove('active');
+      document.body.style.overflow = '';
       try { localStorage.setItem(currentKey, '1'); } catch (e) {}
       if (window._tutDone) window._tutDone.add(currentKey);
       if (window._markTutDone) window._markTutDone(currentKey);
