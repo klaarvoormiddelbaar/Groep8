@@ -64,26 +64,6 @@
         scroll, fixed, fixed, fixed, fixed, fixed;
     }
 
-    /* ── Floating educational decorations (subtle, behind content) ── */
-    .dash-float-bg {
-      position: fixed; inset: 0;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .dash-float {
-      position: absolute;
-      pointer-events: none;
-      animation: dashDrift 9s ease-in-out infinite;
-    }
-    .dash-float .ei { height: 1em; width: auto; object-fit: contain; display: block; }
-
-    @keyframes dashDrift {
-      0%, 100% { transform: translateY(0)    rotate(0deg);  }
-      33%      { transform: translateY(-8px) rotate(2deg);  }
-      66%      { transform: translateY(-5px) rotate(-2deg); }
-    }
-
     /* ── HEADER ── */
     .header {
       position: sticky; top: 0; z-index: 200;
@@ -576,24 +556,6 @@
 </head>
 <body>
 
-  <!-- Floating educational decorations -->
-  <div class="dash-float-bg" aria-hidden="true">
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/boeken.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/pen.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/lijst.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/ster.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/lamp.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/brein.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/notitieboek.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/raket.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/planeet.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/school.png" alt=""></span>
-    <span class="dash-float"><img class="ei" src="/Afbeeldingen/emojis nieuw/sleutel.png" alt=""></span>
-  </div>
-
   <!-- HEADER -->
   <header class="header">
     <div class="header-inner">
@@ -987,52 +949,6 @@
       document.getElementById('bc-current').textContent = `Groep ${profiel.groep || '8'}`;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-  </script>
-
-  <script>
-    /* ── Floating emoji placement: subtle background grid ── */
-    (function () {
-      const COLS = 6, ROWS = 5;
-      const cellW = 96 / COLS;
-      const cellH = 96 / ROWS;
-
-      const zigzag = [];
-      for (let r = 0; r < ROWS; r++) {
-        const row = Array.from({ length: COLS }, (_, c) => ({ r, c }));
-        if (r % 2 === 1) row.reverse();
-        zigzag.push(...row);
-      }
-      for (let i = zigzag.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [zigzag[i], zigzag[j]] = [zigzag[j], zigzag[i]];
-      }
-
-      const sizes   = [32, 36, 40, 44, 48];
-      const weights = [ 4,  4,  3,  2,  1];
-      const totalW  = weights.reduce((a, b) => a + b, 0);
-      function pickSize() {
-        let r = Math.random() * totalW;
-        for (let k = 0; k < sizes.length; k++) { r -= weights[k]; if (r <= 0) return sizes[k]; }
-        return sizes[0];
-      }
-
-      const floats = Array.from(document.querySelectorAll('.dash-float'));
-      floats.forEach((el, i) => {
-        const cell    = zigzag[i % zigzag.length];
-        const jX      = 0.2 + Math.random() * 0.6;
-        const jY      = 0.2 + Math.random() * 0.6;
-        const left    = 2 + cell.c * cellW + jX * cellW;
-        const top     = 2 + cell.r * cellH + jY * cellH;
-        const size    = pickSize();
-        const opacity = (0.20 + 0.15 * (size - 32) / (48 - 32)).toFixed(2);
-
-        el.style.left           = left.toFixed(1) + '%';
-        el.style.top            = top.toFixed(1) + '%';
-        el.style.fontSize       = size + 'px';
-        el.style.opacity        = opacity;
-        el.style.animationDelay = (Math.random() * 9).toFixed(1) + 's';
-      });
-    })();
   </script>
 </body>
 </html>
