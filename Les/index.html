@@ -722,9 +722,10 @@
             <div class="hero-sub">${L.sub}</div>
             <div class="hero-btns">
               ${L.canva ? `<button id="btn-les" class="hero-btn" onclick="scrollToPresentation()" type="button">▶ Starten met de les</button>` : ''}
+              ${L.n !== 8 ? `
               <a id="btn-poll" class="hero-btn hero-btn-live" href="/les${L.n}/docent/poll" target="_blank" rel="noopener">
                 <span class="live-dot"></span> Start live poll
-              </a>
+              </a>` : ''}
               <a id="btn-quiz" class="hero-btn" href="/les${L.n}/docent/quiz" target="_blank" rel="noopener">
                 <img src="/Afbeeldingen/emojis nieuw/brein.png" alt="" style="height:1.5em;width:auto;object-fit:contain;vertical-align:-0.3em"> Start live quiz
               </a>
