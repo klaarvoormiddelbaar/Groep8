@@ -143,21 +143,23 @@ const LESSONS = [
   {
     n: 8, g1: '#134e4a', g2: '#0f766e',
     emoji: 'trofee.png', title: 'Klaar voor de start!',
-    sub: 'Afsluiten, reflecteren en certificaat in ontvangst nemen',
-    duur: '50–60 min',
+    sub: 'Afsluiten, evalueren en certificaat in ontvangst nemen',
+    duur: '60 min',
     url: '/les8',
-    tip: 'Maak van de certificaatuitreiking een echt feestmoment. Nodig eventueel ouders uit of maak een korte video voor de ouderavond.',
+    tip: 'Zijn er nog ongeveer vijf minuten over tijdens het bordspel? Laat het team op plek 1 naar vakje 46 gaan en het team op plek 2 naar vakje 43, zodat het spel altijd kan worden afgerond.',
     doelen: [
-      'Leerlingen reflecteren op het volledige programma.',
-      'Leerlingen formuleren hun persoonlijke startwoorden.',
-      'Leerlingen ontvangen hun KvM-certificaat en vieren de afronding.'
+      'De leerlingen testen alles wat ze hebben geleerd nog één keer met het KvM Bordspel.',
+      'De leerlingen hebben tips en tops gegeven over het programma.',
+      'De leerlingen ontvangen hun certificaat, zetten hun handtekening en zijn dan helemaal Klaar voor Middelbaar!'
     ],
     tl: [
-      { t: '0–10 min',  n: 'Terugblik',            d: 'Blader samen terug door alle lessen. Wat zijn de highlights?' },
-      { t: '10–28 min', n: 'Eindkaart invullen',    d: 'Leerlingen schrijven: "Ik ben klaar voor de middelbare omdat..."' },
-      { t: '28–45 min', n: 'Certificaatuitreiking', d: 'Reik individueel de KvM-certificaten uit. Vier dit moment!' },
-      { t: '45–55 min', n: 'Feestelijk slot',       d: 'Gezamenlijke afsluiting: succeswensen en een klassenfoto.' }
+      { t: '0–5 min',   n: 'Start, terugblik en leerdoelen',             d: 'Blik terug op les 7 en bespreek de leerdoelen van vandaag.' },
+      { t: '5–10 min',  n: 'Uitleg KvM Bordspel',                        d: 'Leg de spelregels van het KvM Bordspel uit en verdeel de klas in groepjes van 4.' },
+      { t: '10–40 min', n: 'Spelen KvM Bordspel + opruimen',             d: 'Leerlingen spelen het bordspel in hun groepjes en ruimen aan het einde samen op.' },
+      { t: '40–50 min', n: 'Evaluatie',                                  d: 'Leerlingen vullen de Tips en Tops enquête in via de link van de leerkracht. Daarna worden de resultaten samen in de klas besproken.' },
+      { t: '50–60 min', n: 'Uitdelen samenvattingen en certificaten',    d: 'Deel de samenvattingen en KvM-certificaten uit en sluit het programma feestelijk af.' },
+      { t: '60+ min',   n: 'Uitloop',                                   d: 'Als de betrokkenheid na een half uur nog hoog is, kan het spel natuurlijk langer worden gespeeld en loopt de les iets uit.' }
     ],
-    mat: ['KvM-certificaten (bijlage 10)', 'Eindkaarten voor leerlingen', 'Optioneel: diploma-muziek en slingers']
+    mat: ['KvM Bordspel', 'KvM-certificaten (bijlage 10)', 'Samenvattingen voor leerlingen', 'Optioneel: diploma-muziek en slingers']
   }
 ];

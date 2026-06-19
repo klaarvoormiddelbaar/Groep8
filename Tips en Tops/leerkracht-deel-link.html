@@ -228,12 +228,12 @@
 
       if (!aantal) {
         emojiEl.innerHTML = '<img class="ei" style="height:1em" src="/Afbeeldingen/emojis nieuw/raket.png" alt="">';
-        tekstEl.textContent = 'Nog niemand heeft ingeleverd';
+        tekstEl.textContent = 'Nog niemand heeft de enquête ingeleverd';
         subEl.textContent = 'Deel de link hierboven met je klas om te beginnen.';
         namenEl.innerHTML = '';
       } else {
         emojiEl.innerHTML = '<img class="ei" style="height:1em" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">';
-        tekstEl.textContent = `${aantal} ${aantal === 1 ? 'leerling heeft' : 'leerlingen hebben'} al ingeleverd`;
+        tekstEl.textContent = `${aantal} ${aantal === 1 ? 'leerling heeft' : 'leerlingen hebben'} de enquête al ingeleverd`;
         subEl.textContent = 'Bekijk de antwoorden zodra je klaar bent om te bespreken.';
         namenEl.innerHTML = data
           .map(r => r.leerling_naam ? r.leerling_naam.trim() : null)
