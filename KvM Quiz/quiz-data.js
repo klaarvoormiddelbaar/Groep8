@@ -91,3 +91,13 @@ const QUIZZES = {
     }
   ]
 };
+
+// Les 8 heeft voor nu nog geen eigen quizvragen. Begin als kopie van les 1
+// (onafhankelijke kopie, dus aanpassingen hier raken les 1 niet), zonder de
+// vragen die niet bij les 8 passen.
+QUIZZES['les-8'] = JSON.parse(JSON.stringify(QUIZZES['les-1'])).filter(q => ![
+  'Wie neemt je elke les mee tijdens de lessen van Klaar voor Middelbaar?',
+  "Hoeveel 'Slim Leren' tips heb je van Jay gekregen?",
+  'Af en toe lange pauzes nemen is één van de tips die Jay heeft gegeven.',
+  'Hoeveel middelbare scholieren zijn er op dit moment in Nederland?'
+].includes(q.vraag));
