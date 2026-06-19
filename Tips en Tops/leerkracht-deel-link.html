@@ -167,13 +167,6 @@
   <script>
     let leerkrachtId = null;
 
-    const CODE_ALFABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // zonder O/0, I/1/L voor leesbaarheid
-    function genereerCode(lengte = 6) {
-      let code = '';
-      for (let i = 0; i < lengte; i++) code += CODE_ALFABET[Math.floor(Math.random() * CODE_ALFABET.length)];
-      return code;
-    }
-
     async function haalOfMaakLink() {
       const { data: bestaand } = await db
         .from('tips_en_tops_links')
@@ -184,16 +177,17 @@
       let code = bestaand && bestaand.code;
 
       if (!code) {
-        for (let poging = 0; poging < 5 && !code; poging++) {
-          const nieuweCode = genereerCode();
-          const { error } = await db.from('tips_en_tops_links').insert({ leerkracht_id: leerkrachtId, code: nieuweCode });
-          if (!error) code = nieuweCode;
-        }
+        const { data: nieuw, error } = await db
+          .from('tips_en_tops_links')
+          .insert({ leerkracht_id: leerkrachtId })
+          .select('code')
+          .single();
+        if (!error) code = nieuw.code;
       }
 
       if (!code) return;
 
-      const url = `${window.location.origin}/feedback/${code}`;
+      const url = `groep8.klaarvoormiddelbaar.nl/feedback/${code}`;
       document.getElementById('link-url').textContent = url;
       document.getElementById('link-kaart').style.display = 'block';
     }

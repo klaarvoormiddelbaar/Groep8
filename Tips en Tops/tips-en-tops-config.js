@@ -34,10 +34,27 @@
 // CREATE POLICY "Leerkracht leest alleen eigen reacties"
 //   ON tips_en_tops_reacties FOR SELECT TO authenticated USING (auth.uid() = leerkracht_id);
 //
-// -- Korte, makkelijk over te typen code per leerkracht (in plaats van een lange UUID-link).
+// -- Korte, oplopende code per leerkracht (in plaats van een lange UUID-link).
+// -- Begint bij 0178 en telt op; springt bij 9999 naar 10178 (zie hieronder).
+// CREATE SEQUENCE IF NOT EXISTS tips_en_tops_code_seq START WITH 178;
+//
+// CREATE OR REPLACE FUNCTION volgende_tips_en_tops_code()
+// RETURNS TEXT AS $$
+// DECLARE
+//   n BIGINT;
+// BEGIN
+//   n := nextval('tips_en_tops_code_seq');
+//   IF n = 10000 THEN
+//     PERFORM setval('tips_en_tops_code_seq', 10178);
+//     n := 10178;
+//   END IF;
+//   RETURN lpad(n::text, 4, '0');
+// END;
+// $$ LANGUAGE plpgsql;
+//
 // CREATE TABLE IF NOT EXISTS tips_en_tops_links (
 //   leerkracht_id  UUID        PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-//   code           TEXT        UNIQUE NOT NULL,
+//   code           TEXT        UNIQUE NOT NULL DEFAULT volgende_tips_en_tops_code(),
 //   aangemaakt_op  TIMESTAMPTZ NOT NULL DEFAULT now()
 // );
 //
