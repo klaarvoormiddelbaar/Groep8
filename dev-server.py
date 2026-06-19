@@ -72,6 +72,8 @@ REWRITES = {
     "/Inlogpagina/":       "/Inlogpagina/index.html",
     "/proef/":             "/Proeflicentie/dashboard.html",
     "/proef/inloggen":     "/Proeflicentie/inlogpagina.html",
+    "/tips-en-tops/leerkracht":            "/Tips en Tops/leerkracht-deel-link.html",
+    "/tips-en-tops/leerkracht/antwoorden": "/Tips en Tops/leerkracht-tips-en-tops.html",
 }
 
 MIME = {
@@ -109,8 +111,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
             self.end_headers()
             return
 
-        # 2. Rewrite (bestand serveren, URL blijft)
-        serve_path = REWRITES.get(path, path)
+        # 2a. Dynamische rewrite: /feedback/<code> -> Tips en Tops formulier
+        # (de pagina leest de code zelf uit window.location.pathname, net als /les8 e.d.)
+        if path.startswith("/feedback/") and path.count("/") == 2:
+            serve_path = "/Tips en Tops/tips-en-tops.html"
+        else:
+            # 2b. Statische rewrite (bestand serveren, URL blijft)
+            serve_path = REWRITES.get(path, path)
 
         # 3. Bestand zoeken op het filesystem
         fs_path = os.path.join(ROOT, serve_path.lstrip("/"))

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tips en Tops — Deel met je klas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --card-bg: #ffffff;
+      --primary: #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green: #10a37f;
+      --green-dark: #0c8268;
+      --dark: #191c1d;
+      --muted: #6d747a;
+      --border: #eceeee;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+      --shadow-btn-green: 0 10px 15px -3px rgba(0,0,0,0.18), 0 4px 6px -4px rgba(0,0,0,0.10);
+      --max-w: 720px;
+      --r-card: 32px;
+      --r-pill: 9999px;
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      background-color: #eef4fe;
+      background-image:
+        radial-gradient(ellipse at 10% -8%,  rgba(114,168,249,0.28) 0%, transparent 50%),
+        radial-gradient(ellipse at 102% 105%, rgba(16,163,127,0.15)  0%, transparent 48%),
+        radial-gradient(ellipse at 88% 4%,   rgba(251,191,36,0.13)   0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    .topbar { max-width: var(--max-w); margin: 0 auto; padding: 24px 24px 0; text-align: center; }
+    .topbar img { height: 52px; width: auto; opacity: 0.92; }
+
+    .main { max-width: var(--max-w); margin: 0 auto; padding: 24px 24px 80px; }
+
+    .link-kaart {
+      background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
+      border-radius: var(--r-card); padding: 44px 48px; color: white;
+      position: relative; overflow: hidden; margin-bottom: 24px;
+    }
+    .link-kaart::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
+      background-size: 26px 26px; border-radius: inherit; pointer-events: none;
+    }
+    .link-kaart::after {
+      content: ''; position: absolute; top: -140px; right: -100px;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .link-titel {
+      position: relative; font-size: 26px; font-weight: 700;
+      margin-bottom: 22px; max-width: 460px; line-height: 1.3;
+    }
+
+    .browser-venster {
+      position: relative; background: white; border-radius: 16px;
+      box-shadow: 0 24px 44px rgba(10,30,70,0.35);
+      overflow: hidden; width: 100%;
+    }
+    .browser-chrome {
+      display: flex; align-items: center; gap: 7px;
+      padding: 11px 14px; background: #eef0f3; border-bottom: 1px solid #e2e5e9;
+    }
+    .chrome-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    .chrome-dot.rood   { background: #ef4444; }
+    .chrome-dot.amber  { background: #f59e0b; }
+    .chrome-dot.groen  { background: #10b981; }
+    .browser-adres {
+      display: flex; align-items: center; gap: 10px;
+      padding: 18px 20px;
+    }
+    .browser-adres svg { flex-shrink: 0; color: #9aa0a6; }
+    .browser-url {
+      font-family: 'JetBrains Mono', monospace; font-weight: 600;
+      font-size: 19px; color: var(--dark); word-break: break-all; line-height: 1.3;
+    }
+
+    .link-vervolg {
+      position: relative; font-size: 15px; color: rgba(255,255,255,0.86);
+      margin-top: 18px;
+    }
+
+    .status-kaart {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 36px 36px; text-align: center;
+    }
+    .status-emoji { font-size: 44px; margin-bottom: 14px; }
+    .status-tekst { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .status-sub { font-size: 14px; color: var(--muted); margin-bottom: 24px; }
+
+    .namen-rij { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 24px; }
+    .naam-pil {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(16,163,127,0.1); border: 1px solid rgba(16,163,127,0.3);
+      color: #065f46; font-size: 14px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 6px 14px;
+    }
+
+    .btn-antwoorden {
+      display: inline-flex; align-items: center; gap: 10px;
+      border: none; border-radius: var(--r-pill); cursor: pointer; text-decoration: none;
+      font-family: inherit; font-size: 17px; font-weight: 700; color: white;
+      background: var(--green); box-shadow: var(--shadow-btn-green);
+      padding: 16px 32px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, background 0.2s;
+    }
+    .btn-antwoorden:hover { background: var(--green-dark); transform: translateY(-3px); box-shadow: 0 18px 30px rgba(16,163,127,0.34); }
+    .btn-pijl { transition: transform 0.2s; }
+    .btn-antwoorden:hover .btn-pijl { transform: translateX(4px); }
+
+    .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
+
+    @media (max-width: 480px) {
+      .link-kaart, .status-kaart { padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
+  </div>
+
+  <main class="main">
+    <div class="link-kaart" id="link-kaart" style="display:none">
+      <div class="link-titel">Ga op je laptop naar deze link:</div>
+      <div class="browser-venster">
+        <div class="browser-chrome">
+          <span class="chrome-dot rood"></span>
+          <span class="chrome-dot amber"></span>
+          <span class="chrome-dot groen"></span>
+        </div>
+        <div class="browser-adres">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <span class="browser-url" id="link-url">…</span>
+        </div>
+      </div>
+      <div class="link-vervolg">Vul daar de enquête in.</div>
+    </div>
+
+    <div class="status-kaart">
+      <div class="status-emoji" id="status-emoji"><img class="ei" style="height:1em" src="/Afbeeldingen/emojis nieuw/raket.png" alt=""></div>
+      <div class="status-tekst" id="status-tekst">Even kijken…</div>
+      <div class="status-sub" id="status-sub">&nbsp;</div>
+      <div class="namen-rij" id="namen-rij"></div>
+      <a class="btn-antwoorden" href="/tips-en-tops/leerkracht/antwoorden">
+        Naar antwoorden <span class="btn-pijl">→</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Tips%20en%20Tops/tips-en-tops-config.js"></script>
+  <script>
+    let leerkrachtId = null;
+
+    const CODE_ALFABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; // zonder O/0, I/1/L voor leesbaarheid
+    function genereerCode(lengte = 6) {
+      let code = '';
+      for (let i = 0; i < lengte; i++) code += CODE_ALFABET[Math.floor(Math.random() * CODE_ALFABET.length)];
+      return code;
+    }
+
+    async function haalOfMaakLink() {
+      const { data: bestaand } = await db
+        .from('tips_en_tops_links')
+        .select('code')
+        .eq('leerkracht_id', leerkrachtId)
+        .maybeSingle();
+
+      let code = bestaand && bestaand.code;
+
+      if (!code) {
+        for (let poging = 0; poging < 5 && !code; poging++) {
+          const nieuweCode = genereerCode();
+          const { error } = await db.from('tips_en_tops_links').insert({ leerkracht_id: leerkrachtId, code: nieuweCode });
+          if (!error) code = nieuweCode;
+        }
+      }
+
+      if (!code) return;
+
+      const url = `${window.location.origin}/feedback/${code}`;
+      document.getElementById('link-url').textContent = url;
+      document.getElementById('link-kaart').style.display = 'block';
+    }
+
+    function escapeHtml(t) {
+      const d = document.createElement('div');
+      d.textContent = String(t);
+      return d.innerHTML;
+    }
+
+    async function verversStatus() {
+      const { data, error } = await db
+        .from('tips_en_tops_reacties')
+        .select('leerling_naam')
+        .eq('leerkracht_id', leerkrachtId)
+        .order('ingediend_op', { ascending: false });
+
+      const emojiEl = document.getElementById('status-emoji');
+      const tekstEl = document.getElementById('status-tekst');
+      const subEl   = document.getElementById('status-sub');
+      const namenEl = document.getElementById('namen-rij');
+
+      if (error) {
+        emojiEl.innerHTML = '<img class="ei" style="height:1em" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt="">';
+        tekstEl.textContent = 'Kon de status niet ophalen';
+        subEl.textContent = 'Probeer de pagina opnieuw te laden.';
+        namenEl.innerHTML = '';
+        return;
+      }
+
+      const aantal = data.length;
+
+      if (!aantal) {
+        emojiEl.innerHTML = '<img class="ei" style="height:1em" src="/Afbeeldingen/emojis nieuw/raket.png" alt="">';
+        tekstEl.textContent = 'Nog niemand heeft ingeleverd';
+        subEl.textContent = 'Deel de link hierboven met je klas om te beginnen.';
+        namenEl.innerHTML = '';
+      } else {
+        emojiEl.innerHTML = '<img class="ei" style="height:1em" src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">';
+        tekstEl.textContent = `${aantal} ${aantal === 1 ? 'leerling heeft' : 'leerlingen hebben'} al ingeleverd`;
+        subEl.textContent = 'Bekijk de antwoorden zodra je klaar bent om te bespreken.';
+        namenEl.innerHTML = data
+          .map(r => r.leerling_naam ? r.leerling_naam.trim() : null)
+          .filter(Boolean)
+          .map(naam => `<span class="naam-pil"><img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""> ${escapeHtml(naam)}</span>`)
+          .join('');
+      }
+    }
+
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (!session) {
+        window.location.href = '/Inlogpagina/';
+        return;
+      }
+      leerkrachtId = session.user.id;
+
+      await haalOfMaakLink();
+      await verversStatus();
+
+      db.channel('leerkracht-deel-link')
+        .on('postgres_changes', {
+          event: 'INSERT', schema: 'public', table: 'tips_en_tops_reacties',
+          filter: `leerkracht_id=eq.${leerkrachtId}`
+        }, () => verversStatus())
+        .subscribe();
+    })();
+  </script>
+</body>
+</html>

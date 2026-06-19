@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tips en Tops — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --card-bg: #ffffff;
+      --primary: #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green: #10a37f;
+      --green-dark: #0c8268;
+      --dark: #191c1d;
+      --muted: #6d747a;
+      --border: #eceeee;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+      --shadow-btn-green: 0 10px 15px -3px rgba(0,0,0,0.18), 0 4px 6px -4px rgba(0,0,0,0.10);
+      --max-w: 700px;
+      --r-card: 40px;
+      --r-pill: 9999px;
+    }
+
+    html, body { height: 100%; }
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      background-color: #eef4fe;
+      background-image:
+        radial-gradient(ellipse at 10% -8%,  rgba(114,168,249,0.28) 0%, transparent 50%),
+        radial-gradient(ellipse at 102% 105%, rgba(16,163,127,0.15)  0%, transparent 48%),
+        radial-gradient(ellipse at 88% 4%,   rgba(251,191,36,0.13)   0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    .topbar { max-width: var(--max-w); margin: 0 auto; padding: 24px 24px 0; text-align: center; }
+    .topbar img { height: 52px; width: auto; opacity: 0.92; }
+
+    .main { max-width: var(--max-w); margin: 0 auto; padding: 24px 24px 80px; }
+    .view { animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+
+    .form-kaart {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 44px 40px;
+    }
+    .form-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--primary); margin-bottom: 10px; }
+    .form-titel   { font-size: 28px; font-weight: 700; line-height: 1.25; margin-bottom: 9px; }
+    .form-sub     { font-size: 15px; color: var(--muted); line-height: 1.6; margin-bottom: 28px; }
+
+    .veld { margin-bottom: 22px; }
+    .veld > label {
+      display: block; font-size: 16px; font-weight: 700;
+      margin-bottom: 10px; line-height: 1.4;
+    }
+    .veld input, .veld textarea {
+      width: 100%; font-family: inherit; color: var(--dark);
+      background: #f7f8f9; border: 1.5px solid var(--border); border-radius: 18px;
+      padding: 15px 18px; font-size: 16px; font-weight: 400;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+      resize: vertical;
+    }
+    .veld textarea { min-height: 90px; line-height: 1.5; }
+    .veld input::placeholder, .veld textarea::placeholder { color: rgba(109,116,122,0.5); }
+    .veld input:focus, .veld textarea:focus { outline: none; background: white; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(78,142,243,0.16); }
+
+    .veld-hint { font-size: 13px; font-weight: 400; color: var(--muted); margin: -6px 0 12px; }
+
+    .keuze-lijst { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .keuze-optie {
+      position: relative;
+      display: flex; align-items: center; gap: 12px;
+      min-height: 64px;
+      border: 1.5px solid var(--border); background: #f7f8f9; border-radius: 16px;
+      padding: 13px 16px; cursor: pointer;
+      transition: border-color 0.18s, background 0.18s, transform 0.18s;
+    }
+    .keuze-optie:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .keuze-optie:active { transform: scale(0.98); }
+    .keuze-optie input[type="checkbox"] {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      margin: 0; opacity: 0; cursor: pointer;
+    }
+    .keuze-vak {
+      width: 24px; height: 24px; border-radius: 8px; flex-shrink: 0;
+      border: 2px solid #d7dade; background: white;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.18s, border-color 0.18s;
+    }
+    .keuze-vak svg {
+      width: 14px; height: 14px; opacity: 0; transform: scale(0.4);
+      transition: opacity 0.15s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .keuze-tekst { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.4; }
+    .keuze-optie.aangevinkt { border-color: var(--primary); background: var(--primary-soft); }
+    .keuze-optie.aangevinkt .keuze-vak { background: var(--primary); border-color: var(--primary); }
+    .keuze-optie.aangevinkt .keuze-vak svg { opacity: 1; transform: scale(1); }
+    .keuze-optie.uitgeschakeld { opacity: 0.45; cursor: not-allowed; }
+    .keuze-optie.uitgeschakeld input[type="checkbox"] { cursor: not-allowed; }
+
+    @media (max-width: 480px) {
+      .keuze-lijst { grid-template-columns: 1fr; }
+    }
+
+    .cijfer-rij { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cijfer-knop {
+      width: 44px; height: 44px; border-radius: 14px;
+      border: 1.5px solid var(--border); background: #f7f8f9;
+      font-family: inherit; font-size: 16px; font-weight: 700; color: var(--dark);
+      cursor: pointer; transition: all 0.15s;
+    }
+    .cijfer-knop:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .cijfer-knop.actief { background: var(--primary); border-color: var(--primary); color: white; transform: scale(1.05); }
+
+    .btn-verstuur {
+      width: 100%; border: none; border-radius: var(--r-pill); cursor: pointer;
+      font-family: inherit; font-size: 18px; font-weight: 700; color: white;
+      background: var(--green); box-shadow: var(--shadow-btn-green);
+      padding: 16px; margin-top: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s, background 0.2s, opacity 0.2s;
+    }
+    .btn-verstuur:hover:not(:disabled) { background: var(--green-dark); transform: translateY(-3px); box-shadow: 0 18px 30px rgba(16,163,127,0.34); }
+    .btn-verstuur:disabled { opacity: 0.55; cursor: not-allowed; transform: none !important; }
+    .btn-pijl { transition: transform 0.2s; }
+    .btn-verstuur:hover:not(:disabled) .btn-pijl { transform: translateX(4px); }
+
+    .feedback {
+      margin-top: 16px; border-radius: 16px; padding: 13px 18px;
+      font-size: 14px; font-weight: 700; line-height: 1.5; display: none;
+    }
+    .feedback.fout { display: block; background: #fef2f2; border: 1.5px solid #fecaca; color: #b91c1c; }
+
+    .dank-kaart {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 56px 36px; text-align: center;
+    }
+    .dank-emoji { font-size: 48px; margin-bottom: 18px; }
+    .dank-titel { font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+    .dank-sub   { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 380px; margin: 0 auto; }
+
+    .fout-kaart {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 56px 36px; text-align: center;
+    }
+    .fout-emoji { font-size: 48px; margin-bottom: 18px; }
+    .fout-titel { font-size: 24px; font-weight: 700; margin-bottom: 10px; }
+    .fout-sub   { font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 380px; margin: 0 auto; }
+
+    @media (max-width: 480px) {
+      .form-kaart, .dank-kaart { padding: 32px 24px; }
+    }
+
+    .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
+  </div>
+
+  <main class="main">
+    <div class="view" id="view-laden">
+      <div class="form-kaart" style="text-align:center;padding:56px 36px;">
+        <div class="dank-sub">Even kijken bij welke leerkracht deze link hoort…</div>
+      </div>
+    </div>
+
+    <div class="view" id="view-form" style="display:none">
+      <div class="form-kaart">
+        <div class="form-eyebrow">Jouw mening telt</div>
+        <div class="form-titel">Tips en Tops <img class="ei" src="/Afbeeldingen/emojis nieuw/lamp.png" alt=""></div>
+        <div class="form-sub">Help ons het programma te verbeteren! Vul de vragen hieronder in. Je leerkracht bespreekt de antwoorden later in de klas.</div>
+
+        <form id="tips-form" autocomplete="off">
+          <div class="veld">
+            <label for="naam-input">Jouw voornaam</label>
+            <input id="naam-input" type="text" maxlength="24" placeholder="Bijv. Emma" autocomplete="off">
+          </div>
+
+          <div class="veld">
+            <label for="meeste-lijst">Van welke onderwerpen heb jij het meest geleerd?</label>
+            <div class="veld-hint">Kies maximaal 2 antwoorden.</div>
+            <div class="keuze-lijst" id="meeste-lijst" role="group" aria-label="Van welke onderwerpen heb jij het meest geleerd?"></div>
+          </div>
+
+          <div class="veld">
+            <label for="mist-input">Wat mis je nog in het programma?</label>
+            <textarea id="mist-input" maxlength="400" placeholder="Schrijf hier wat je nog zou willen toevoegen…"></textarea>
+          </div>
+
+          <div class="veld">
+            <label for="werkvormen-lijst">Welke werkvormen vond je het leukst?</label>
+            <div class="veld-hint">Kies maximaal 2 antwoorden.</div>
+            <div class="keuze-lijst" id="werkvormen-lijst" role="group" aria-label="Welke werkvormen vond je het leukst?"></div>
+          </div>
+
+          <div class="veld">
+            <label for="saai-input">Welke werkvormen vond je minder leuk, en wat kunnen we doen om ze leuker te maken?</label>
+            <textarea id="saai-input" maxlength="400" placeholder="Schrijf hier je antwoord…"></textarea>
+          </div>
+
+          <div class="veld">
+            <label for="cijfer-rij">Welk cijfer geef je het programma?</label>
+            <div class="cijfer-rij" id="cijfer-rij" role="group" aria-label="Cijfer">
+              <!-- knoppen 1 t/m 10 worden hier ingevoegd -->
+            </div>
+          </div>
+
+          <button class="btn-verstuur" id="btn-verstuur" type="submit">
+            Versturen <span class="btn-pijl">→</span>
+          </button>
+          <div class="feedback" id="form-feedback"></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="view" id="view-dank" style="display:none">
+      <div class="dank-kaart">
+        <div class="dank-emoji"><img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
+        <div class="dank-titel">Bedankt voor je antwoord!</div>
+        <div class="dank-sub">Je leerkracht bespreekt de tips en tops binnenkort in de klas.</div>
+      </div>
+    </div>
+
+    <div class="view" id="view-fout" style="display:none">
+      <div class="fout-kaart">
+        <div class="fout-emoji"><img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""></div>
+        <div class="fout-titel">Deze link werkt niet</div>
+        <div class="fout-sub">Vraag je leerkracht om de juiste link naar Tips en Tops.</div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Tips%20en%20Tops/tips-en-tops-config.js"></script>
+  <script>
+    let gekozenCijfer = null;
+    let docentId = null;
+    let werkvormenBoxes = [];
+
+    const VINK_SVG = '<svg viewBox="0 0 16 16" fill="none"><path d="M3 8.5L6.2 11.7L13 4.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+    function vulKeuzeLijst(container, opties) {
+      container.innerHTML = opties.map(tekst => `
+        <label class="keuze-optie">
+          <input type="checkbox" value="${tekst}">
+          <span class="keuze-vak">${VINK_SVG}</span>
+          <span class="keuze-tekst">${tekst}</span>
+        </label>`).join('');
+    }
+
+    function koppelMaxKeuze(container, max) {
+      const boxes = [...container.querySelectorAll('input[type="checkbox"]')];
+      boxes.forEach(box => {
+        box.addEventListener('change', () => {
+          box.closest('.keuze-optie').classList.toggle('aangevinkt', box.checked);
+          const aantalAangevinkt = boxes.filter(b => b.checked).length;
+          boxes.forEach(b => {
+            const optie = b.closest('.keuze-optie');
+            const moetUit = !b.checked && aantalAangevinkt >= max;
+            b.disabled = moetUit;
+            optie.classList.toggle('uitgeschakeld', moetUit);
+          });
+          verbergFeedback();
+        });
+      });
+      return boxes;
+    }
+
+    function bouwFormulier() {
+      vulKeuzeLijst(document.getElementById('meeste-lijst'), [
+        'Slim leren',
+        'Plannen en organiseren',
+        'Omgaan met toetsen en stress',
+        'Aantekeningen maken',
+        'Omgaan met anderen',
+        'Digitale vaardigheden'
+      ]);
+
+      vulKeuzeLijst(document.getElementById('werkvormen-lijst'), [
+        'De opdrachten in het werkboek',
+        'De opdrachten op de laptop',
+        'De wordcloud',
+        'De gesprekken met klasgenoten',
+        'Het samenwerken in groepjes',
+        'De quiz',
+        'De poll / stellingen',
+        'Het bespreken van voorbeelden uit het echte leven'
+      ]);
+
+      const MAX_KEUZES = 2;
+      koppelMaxKeuze(document.getElementById('meeste-lijst'), MAX_KEUZES);
+      werkvormenBoxes = koppelMaxKeuze(document.getElementById('werkvormen-lijst'), MAX_KEUZES);
+
+      const cijferRij = document.getElementById('cijfer-rij');
+      for (let i = 1; i <= 10; i++) {
+        const knop = document.createElement('button');
+        knop.type = 'button';
+        knop.className = 'cijfer-knop';
+        knop.textContent = i;
+        knop.addEventListener('click', () => {
+          gekozenCijfer = i;
+          document.querySelectorAll('.cijfer-knop').forEach(k => k.classList.remove('actief'));
+          knop.classList.add('actief');
+          verbergFeedback();
+        });
+        cijferRij.appendChild(knop);
+      }
+    }
+
+    function verbergFeedback() {
+      const fb = document.getElementById('form-feedback');
+      fb.className = 'feedback';
+      fb.textContent = '';
+    }
+
+    function toonFeedback(bericht) {
+      const fb = document.getElementById('form-feedback');
+      fb.className = 'feedback fout';
+      fb.textContent = bericht;
+    }
+
+    document.getElementById('tips-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const naam       = document.getElementById('naam-input').value.trim();
+      const meeste     = [...document.querySelectorAll('#meeste-lijst input[type="checkbox"]:checked')].map(b => b.value);
+      const werkvormen = werkvormenBoxes.filter(b => b.checked).map(b => b.value);
+      const mist       = document.getElementById('mist-input').value.trim();
+      const saai       = document.getElementById('saai-input').value.trim();
+
+      if (meeste.length === 0) { toonFeedback('Kies minstens één onderwerp waar je het meest van hebt geleerd.'); return; }
+      if (!mist)   { toonFeedback('Vul in wat je nog mist in het programma.'); return; }
+      if (werkvormen.length === 0) { toonFeedback('Kies minstens één werkvorm die je het leukst vond.'); return; }
+      if (!saai)   { toonFeedback('Vul in welke werkvormen je saai vond en wat we kunnen toevoegen.'); return; }
+      if (!gekozenCijfer) { toonFeedback('Kies een cijfer voor het programma.'); return; }
+
+      const knop = document.getElementById('btn-verstuur');
+      knop.disabled = true;
+      knop.textContent = 'Bezig…';
+
+      const { error } = await db.from('tips_en_tops_reacties').insert({
+        leerkracht_id: docentId,
+        leerling_naam: naam || null,
+        meeste_aan_gehad: meeste,
+        mist_nog: mist,
+        leukste_werkvormen: werkvormen,
+        saaiste_en_suggesties: saai,
+        cijfer: gekozenCijfer
+      });
+
+      if (error) {
+        knop.disabled = false;
+        knop.innerHTML = 'Versturen <span class="btn-pijl">→</span>';
+        toonFeedback('Versturen mislukt: ' + error.message);
+        return;
+      }
+
+      document.getElementById('view-form').style.display = 'none';
+      document.getElementById('view-dank').style.display = 'block';
+    });
+
+    (async () => {
+      const padMatch = window.location.pathname.match(/feedback\/([^/?]+)/i);
+      const code = (padMatch ? padMatch[1] : (new URLSearchParams(window.location.search).get('code') || '')).trim().toUpperCase();
+
+      function toonFout() {
+        document.getElementById('view-laden').style.display = 'none';
+        document.getElementById('view-fout').style.display = 'block';
+      }
+
+      if (!code) { toonFout(); return; }
+
+      const { data, error } = await db
+        .from('tips_en_tops_links')
+        .select('leerkracht_id')
+        .eq('code', code)
+        .maybeSingle();
+
+      if (error || !data) { toonFout(); return; }
+
+      docentId = data.leerkracht_id;
+      bouwFormulier();
+      document.getElementById('view-laden').style.display = 'none';
+      document.getElementById('view-form').style.display = 'block';
+    })();
+  </script>
+</body>
+</html>

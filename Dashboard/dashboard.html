@@ -603,6 +603,18 @@
         </div>
       </div>
 
+      <!-- Tips en Tops -->
+      <div class="cta-bar" style="margin-bottom:40px">
+        <div>
+          <div class="cta-bar-label">Feedback ophalen</div>
+          <div class="cta-bar-title">Tips en Tops <img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/lamp.png" alt=""></div>
+          <div class="cta-bar-sub">Deel de link bij les 8 met je leerlingen en bekijk hier de reacties.</div>
+        </div>
+        <a class="btn-ga-naar" style="padding:14px 28px;font-size:15px" href="/tips-en-tops/leerkracht" target="_blank" rel="noopener">
+          Bekijk resultaten <span class="btn-ga-naar-arrow">→</span>
+        </a>
+      </div>
+
       <!-- Section header -->
       <div class="section-head">
         <div>
@@ -877,6 +889,11 @@
                  style="background:rgba(16,163,127,0.12);border:1.5px solid rgba(16,163,127,0.30);color:#0c8268">
                 <img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/lijst.png" alt=""> Start live poll
               </a>
+              ${L.n === 8 ? `
+              <a class="hero-cta-live" href="/tips-en-tops/leerkracht" target="_blank" rel="noopener"
+                 style="background:rgba(251,191,36,0.16);border:1.5px solid rgba(251,191,36,0.40);color:#92400e">
+                <img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/lamp.png" alt=""> Tips en tops
+              </a>` : ''}
             </div>
           </div>
         </div>
