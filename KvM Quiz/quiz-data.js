@@ -101,3 +101,49 @@ QUIZZES['les-8'] = JSON.parse(JSON.stringify(QUIZZES['les-1'])).filter(q => ![
   'Af en toe lange pauzes nemen is één van de tips die Jay heeft gegeven.',
   'Hoeveel middelbare scholieren zijn er op dit moment in Nederland?'
 ].includes(q.vraag));
+
+// Vraag 4 en 5 worden voor de overgebleven les-1-vragen (positie 4+) ingevoegd,
+// die schuiven daardoor op naar achteren.
+QUIZZES['les-8'].splice(3, 0,
+  {
+    type: 'multiple_choice',
+    vraag: 'Wat kun je het beste doen als je een vraag tijdens een toets niet weet?',
+    opties: [
+      'Gelijk gokken wat het antwoord is en er daarna niet meer naar kijken.',
+      'In paniek raken.',
+      'De toets inleveren zonder die vraag in te vullen.',
+      'Rustig blijven en later terugkomen bij de vraag.'
+    ],
+    goed_index: 3,
+    tijdslimiet_seconden: 20
+  },
+  {
+    type: 'true_false',
+    vraag: 'Op elke middelbare school in Nederland spreek je je docent aan met zijn of haar achternaam.',
+    opties: ['Waar', 'Niet waar'],
+    goed_index: 1,
+    tijdslimiet_seconden: 15
+  }
+);
+
+QUIZZES['les-8'].push(
+  {
+    type: 'multiple_choice',
+    vraag: 'Welke leerling maakt de slimste aantekeningen?',
+    opties: [
+      'Sam schrijft alles woord voor woord over.',
+      'Emma noteert alleen de belangrijkste punten.',
+      'Noah schrijft niets op.',
+      'Sara maakt alleen tekeningen.'
+    ],
+    goed_index: 1,
+    tijdslimiet_seconden: 20
+  },
+  {
+    type: 'multiple_choice',
+    vraag: 'Hoe oud is een gemiddelde docent op de middelbare school?',
+    opties: ['35 jaar', '43 jaar', '52 jaar', '67 jaar'],
+    goed_index: 1,
+    tijdslimiet_seconden: 15
+  }
+);
