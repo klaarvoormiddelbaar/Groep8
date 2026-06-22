@@ -170,6 +170,8 @@
       transition: background 0.2s, transform 0.2s;
     }
     .hero-btn:hover { background: rgba(255,255,255,0.30); transform: translateY(-2px); }
+    .hero-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .hero-btn:disabled:hover { background: rgba(255,255,255,0.18); transform: none; }
     .hero-btn-live {
       background: white; border: none;
       color: #1e4a8a;
@@ -721,7 +723,9 @@
             <div class="hero-title"><img class="ei" src="/Afbeeldingen/emojis nieuw/${L.emoji}" alt="" style="height:1.3em;flex-shrink:0"> ${L.title}</div>
             <div class="hero-sub">${L.sub}</div>
             <div class="hero-btns">
-              ${L.canva ? `<button id="btn-les" class="hero-btn" onclick="scrollToPresentation()" type="button">▶ Starten met de les</button>` : ''}
+              ${L.canva
+                ? `<button id="btn-les" class="hero-btn" onclick="scrollToPresentation()" type="button">▶ Starten met de les</button>`
+                : `<button class="hero-btn" type="button" disabled title="De presentatie voor deze les is nog niet toegevoegd">▶ Starten met de les <span style="opacity:0.7;font-weight:400">(binnenkort)</span></button>`}
               ${L.n !== 8 ? `
               <a id="btn-poll" class="hero-btn hero-btn-live" href="/les${L.n}/docent/poll" target="_blank" rel="noopener">
                 <span class="live-dot"></span> Start live poll
