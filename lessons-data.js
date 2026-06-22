@@ -146,7 +146,7 @@ const LESSONS = [
     sub: 'Afsluiten, evalueren en certificaat in ontvangst nemen',
     duur: '60 min',
     url: '/les8',
-    tip: 'Zijn er nog ongeveer vijf minuten over tijdens het bordspel? Laat het team op plek 1 naar vakje 46 gaan en het team op plek 2 naar vakje 43, zodat het spel altijd kan worden afgerond.',
+    tip: 'Zijn er nog vijf minuten over tijdens het bordspel? Laat het team op plek 1 naar vakje 46 gaan en het team op plek 2 naar vakje 43, zodat het spel altijd kan worden afgerond.',
     doelen: [
       'De leerlingen testen alles wat ze hebben geleerd nog één keer met het KvM Bordspel.',
       'De leerlingen hebben tips en tops gegeven over het programma.',

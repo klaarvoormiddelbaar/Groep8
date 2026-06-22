@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(open *)",
+      "mcp__plugin_figma_figma__get_screenshot",
+      "Bash(curl *)",
+      "Bash(screencapture *)",
+      "Bash(sips -g *)"
+    ]
+  }
+}

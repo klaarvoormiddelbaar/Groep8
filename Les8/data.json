@@ -6,7 +6,7 @@
   "title": "Klaar voor de start!",
   "sub": "Afsluiting, evaluatie en certificaat",
   "duur": "60 min",
-  "tip": "Zijn er nog ongeveer vijf minuten over tijdens het bordspel? Laat het team op plek 1 naar vakje 46 gaan en het team op plek 2 naar vakje 43, zodat het spel altijd kan worden afgerond.",
+  "tip": "Zijn er nog vijf minuten over tijdens het bordspel? Laat het team op plek 1 naar vakje 46 gaan en het team op plek 2 naar vakje 43, zodat het spel altijd kan worden afgerond.",
   "canva": "https://www.canva.com/design/DAHMQG4-AJs/c9O4rs2cr5VJxucSCzFCTw/view?embed",
   "doelen": [
     "De leerlingen testen alles wat ze hebben geleerd nog één keer met het KvM Bordspel.",
@@ -50,5 +50,19 @@
     "KvM-certificaten (bijlage 10)",
     "Samenvattingen voor leerlingen",
     "Optioneel: diploma-muziek en slingers"
+  ],
+  "benodigdheden": [
+    {
+      "naam": "KvM Bordspel",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Bordspel.png"
+    },
+    {
+      "naam": "Certificaat",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Certificaat.png"
+    },
+    {
+      "naam": "Samenvattingen",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Samenvattingenboekje.png"
+    }
   ]
 }
