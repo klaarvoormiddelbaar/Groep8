@@ -7,32 +7,42 @@
   "sub": "Vaardigheden voor school en daarbuiten",
   "duur": "60 min",
   "tip": "Houd de sfeer licht en veilig. Dit onderwerp raakt leerlingen soms persoonlijk. Geef aan dat ze altijd bij jou terecht kunnen.",
-  "canva": null,
+  "canva": "https://www.canva.com/design/DAHMQKxptKs/qjWzCnOogT3LeqyhpXxiSw/view?embed",
   "doelen": [
-    "Leerlingen kunnen zichzelf op een positieve manier voorstellen.",
-    "Leerlingen kennen gespreksstarters voor nieuwe situaties.",
-    "Leerlingen herkennen signalen van vriendschap en uitsluiting."
+    "Leerlingen weten wat executieve functies zijn.",
+    "Leerlingen kennen hun sterkste en minst sterke executieve functies.",
+    "Leerlingen hebben de executieve functies verbeterd met het spel: 'KvM Sterrenstrijd'."
   ],
   "tl": [
     {
       "t": "0–10 min",
-      "n": "Kennismakingsspel",
-      "d": "Warming-up: leerlingen ontdekken 3 nieuwe feiten over een klasgenoot."
+      "n": "Start, terugblik, leerdoelen en kennisclip",
+      "d": "Open de les, blik terug op les 3 en bespreek de leerdoelen. Bekijk samen de kennisclip over executieve functies."
     },
     {
-      "t": "10–25 min",
-      "n": "Rollenspel",
-      "d": "In tweetallen: oefenen met jezelf voorstellen in een nieuwe klas."
+      "t": "10–20 min",
+      "n": "Stellingenlijst",
+      "d": "Leerlingen vullen een stellingenlijst in en ontdekken zo hun sterkste en minst sterke executieve functies."
     },
     {
-      "t": "25–42 min",
-      "n": "Scenario-kaarten",
-      "d": "Bespreek scenario's over vriendschap, pesten en erbij horen."
+      "t": "20–25 min",
+      "n": "Uitleg werkblad van KvM Sterrenstrijd + uitleg spel",
+      "d": "Leg het werkblad van KvM Sterrenstrijd uit en geef uitleg over hoe het spel werkt."
     },
     {
-      "t": "42–55 min",
-      "n": "Reflectie",
-      "d": "Elke leerling noemt één tip die hij of zij meeneemt naar de middelbare."
+      "t": "25–50 min",
+      "n": "'KvM Sterrenstrijd' spelen",
+      "d": "Leerlingen spelen KvM Sterrenstrijd en oefenen daarmee hun executieve functies."
+    },
+    {
+      "t": "50–55 min",
+      "n": "Het spel opruimen",
+      "d": "Ruim samen het spelmateriaal op."
+    },
+    {
+      "t": "55–60 min",
+      "n": "Bespreken KvM Sterrenstrijd werkblad + vooruitblikken",
+      "d": "Bespreek het werkblad en blik samen vooruit naar de volgende les."
     }
   ],
   "mat": [
