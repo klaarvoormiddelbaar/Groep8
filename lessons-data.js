@@ -66,19 +66,21 @@ const LESSONS = [
     sub: 'Vaardigheden voor school en daarbuiten',
     duur: '60 min',
     url: '/les4',
-    tip: 'Houd de sfeer licht en veilig. Dit onderwerp raakt leerlingen soms persoonlijk. Geef aan dat ze altijd bij jou terecht kunnen.',
+    tip: 'Sommige leerlingen hebben wat meer tijd nodig om de stellingenlijst eerlijk in te vullen. Geef hen die ruimte. Leerlingen die eerder klaar zijn, kunnen alvast beginnen aan de puzzel achterin het werkboek.',
     doelen: [
       'Leerlingen weten wat executieve functies zijn.',
       'Leerlingen kennen hun sterkste en minst sterke executieve functies.',
       "Leerlingen hebben de executieve functies verbeterd met het spel: 'KvM Sterrenstrijd'."
     ],
     tl: [
-      { t: '0–10 min',  n: 'Start, terugblik, leerdoelen en kennisclip',          d: 'Open de les, blik terug op les 3 en bespreek de leerdoelen. Bekijk samen de kennisclip over executieve functies.' },
+      { t: '0–5 min',   n: 'Start en terugblik',                                 d: 'Open de les en blik terug op les 3.' },
+      { t: '5–10 min',  n: 'Leerdoelen en kennisclip executieve functies',       d: 'Bespreek de leerdoelen van vandaag en bekijk samen de kennisclip over executieve functies.' },
       { t: '10–20 min', n: 'Stellingenlijst',                                    d: 'Leerlingen vullen een stellingenlijst in en ontdekken zo hun sterkste en minst sterke executieve functies.' },
       { t: '20–25 min', n: 'Uitleg werkblad van KvM Sterrenstrijd + uitleg spel', d: 'Leg het werkblad van KvM Sterrenstrijd uit en geef uitleg over hoe het spel werkt.' },
       { t: '25–50 min', n: "'KvM Sterrenstrijd' spelen",                         d: 'Leerlingen spelen KvM Sterrenstrijd en oefenen daarmee hun executieve functies.' },
       { t: '50–55 min', n: 'Het spel opruimen',                                  d: 'Ruim samen het spelmateriaal op.' },
-      { t: '55–60 min', n: 'Bespreken KvM Sterrenstrijd werkblad + vooruitblikken', d: 'Bespreek het werkblad en blik samen vooruit naar de volgende les.' }
+      { t: '55–60 min', n: 'Bespreken KvM Sterrenstrijd werkblad + vooruitblikken', d: 'Bespreek het werkblad en blik vooruit naar de volgende les.' },
+      { t: '60+ min',   n: 'Uitloop',                                              d: 'Als de leerlingen na een half uur nog vol enthousiasme aan het spelen zijn, kan het spel natuurlijk langer worden gespeeld en loopt de les iets uit.' }
     ],
     mat: ["Scenario-kaarten set 1 (bijlage 5)", 'Reflectiekaartjes', 'Optioneel: video over sociale situaties']
   },
@@ -160,7 +162,7 @@ const LESSONS = [
       { t: '10–40 min', n: 'Spelen KvM Bordspel + opruimen',             d: 'Leerlingen spelen het bordspel in hun groepjes en ruimen aan het einde samen op.' },
       { t: '40–50 min', n: 'Evaluatie',                                  d: 'Leerlingen vullen de Tips en Tops enquête in via de link van de leerkracht. Daarna worden de resultaten samen in de klas besproken.' },
       { t: '50–60 min', n: 'Uitdelen samenvattingen en certificaten',    d: 'Deel de samenvattingen en KvM-certificaten uit en sluit het programma feestelijk af.' },
-      { t: '60+ min',   n: 'Uitloop',                                   d: 'Als de betrokkenheid na een half uur nog hoog is, kan het spel natuurlijk langer worden gespeeld en loopt de les iets uit.' }
+      { t: '60+ min',   n: 'Uitloop',                                   d: 'Als de leerlingen na een half uur nog vol enthousiasme aan het spelen zijn, kan het spel natuurlijk langer worden gespeeld en loopt de les iets uit.' }
     ],
     mat: ['KvM Bordspel', 'KvM-certificaten (bijlage 10)', 'Samenvattingen voor leerlingen', 'Optioneel: diploma-muziek en slingers']
   }
