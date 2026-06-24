@@ -161,14 +161,9 @@
   .inzending-preview {
     background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
   }
-  .inzending-preview-onderwerp {
-    display: block; font-size: 14px; font-weight: 700; color: var(--primary-dark);
-    background: var(--primary-soft); padding: 10px 14px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
   .inzending-preview-bericht {
     font-size: 14px; color: var(--muted); line-height: 1.5; white-space: pre-line;
-    padding: 10px 14px 12px;
+    padding: 12px 14px;
   }
 
   /* ── DETAILWEERGAVE ── */
@@ -434,7 +429,6 @@
           <div class="inzending-score ${i.aantal_goed === 5 ? 'compleet' : ''}">${i.aantal_goed} / 5</div>
         </div>
         <div class="inzending-preview">
-          <div class="inzending-preview-onderwerp">${escapeHtml(i.onderwerp)}</div>
           <div class="inzending-preview-bericht">${escapeHtml(i.bericht)}</div>
         </div>
       </button>
