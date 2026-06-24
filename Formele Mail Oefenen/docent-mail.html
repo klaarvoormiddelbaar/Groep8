@@ -205,14 +205,22 @@
     background: white; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 5px 13px; white-space: nowrap;
   }
   .detail-score.compleet { color: var(--green); background: var(--green-soft); border-color: rgba(16,163,127,0.25); }
-  .detail-mail-meta {
-    background: var(--primary-soft); padding: 20px 28px; display: flex; flex-direction: column; gap: 8px;
+  .detail-mail-body { padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 16px; }
+  .detail-mail-veld { display: flex; flex-direction: column; gap: 6px; }
+  .detail-mail-veld-label { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); }
+  .detail-mail-van {
+    display: flex; align-items: center; gap: 10px; background: #f2f4f4; border-radius: 12px; padding: 12px 16px;
+    font-size: 15px; font-weight: 700; color: var(--muted);
   }
-  .detail-mail-veld { display: flex; align-items: baseline; gap: 10px; }
-  .detail-mail-veld-label { flex-shrink: 0; width: 80px; font-size: 12px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--primary-dark); opacity: 0.7; }
-  .detail-mail-veld-waarde { font-size: 16px; font-weight: 700; color: var(--primary-dark); }
-  .detail-mail-body { padding: 26px 28px 30px; }
-  .detail-mail-bericht { font-size: 18px; font-weight: 500; line-height: 1.7; white-space: pre-line; color: var(--dark); }
+  .detail-mail-van svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .detail-mail-veld-waarde {
+    font-size: 16px; font-weight: 700; color: var(--dark);
+    background: #fbfbfc; border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 16px;
+  }
+  .detail-mail-bericht {
+    font-size: 16px; font-weight: 400; line-height: 1.6; white-space: pre-line; color: var(--dark);
+    background: #fbfbfc; border: 1.5px solid var(--border); border-radius: 12px; padding: 16px 18px;
+  }
 
   @media (max-width: 720px) {
     .header-inner, .main { padding-left: 24px; padding-right: 24px; }
@@ -258,18 +266,22 @@
         <span class="detail-mail-dot" style="background:#10a37f"></span>
         <div class="detail-score" id="detail-score"></div>
       </div>
-      <div class="detail-mail-meta">
+      <div class="detail-mail-body">
         <div class="detail-mail-veld">
           <div class="detail-mail-veld-label">Van</div>
-          <div class="detail-mail-veld-waarde" id="detail-van"></div>
+          <div class="detail-mail-van">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H7l-3 3V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <span id="detail-van"></span>
+          </div>
         </div>
         <div class="detail-mail-veld">
           <div class="detail-mail-veld-label">Onderwerp</div>
           <div class="detail-mail-veld-waarde" id="detail-onderwerp"></div>
         </div>
-      </div>
-      <div class="detail-mail-body">
-        <div class="detail-mail-bericht" id="detail-bericht"></div>
+        <div class="detail-mail-veld">
+          <div class="detail-mail-veld-label">E-mail</div>
+          <div class="detail-mail-bericht" id="detail-bericht"></div>
+        </div>
       </div>
     </div>
   </div>
