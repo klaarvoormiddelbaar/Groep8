@@ -159,15 +159,16 @@
   .inzending-score.compleet { color: var(--green); background: var(--green-soft); }
 
   .inzending-preview {
-    background: white; border: 1px solid var(--border); border-radius: 14px; padding: 10px 12px;
+    background: white; border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
   }
   .inzending-preview-onderwerp {
     display: block; font-size: 12px; font-weight: 700; color: var(--primary-dark);
-    background: var(--primary-soft); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px;
+    background: var(--primary-soft); padding: 10px 14px;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
   .inzending-preview-bericht {
     font-size: 12px; color: var(--muted); line-height: 1.4; white-space: pre-line;
+    padding: 10px 14px 12px;
   }
 
   /* ── DETAILWEERGAVE ── */
@@ -204,11 +205,10 @@
     background: white; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 5px 13px; white-space: nowrap;
   }
   .detail-score.compleet { color: var(--green); background: var(--green-soft); border-color: rgba(16,163,127,0.25); }
-  .detail-mail-meta { padding: 20px 28px; display: flex; flex-direction: column; gap: 10px; border-bottom: 1px solid var(--border); }
-  .detail-mail-veld {
-    display: flex; align-items: baseline; gap: 10px; padding: 10px 16px;
-    background: var(--primary-soft); border-radius: 12px;
+  .detail-mail-meta {
+    background: var(--primary-soft); padding: 20px 28px; display: flex; flex-direction: column; gap: 8px;
   }
+  .detail-mail-veld { display: flex; align-items: baseline; gap: 10px; }
   .detail-mail-veld-label { flex-shrink: 0; width: 80px; font-size: 12px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--primary-dark); opacity: 0.7; }
   .detail-mail-veld-waarde { font-size: 14px; font-weight: 700; color: var(--primary-dark); }
   .detail-mail-body { padding: 26px 28px 30px; }
