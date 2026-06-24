@@ -402,7 +402,6 @@
     <div class="resultaat-trofee"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#10a37f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="resultaat-titel">E-mail gecontroleerd!</div>
     <div class="resultaat-compliment" id="resultaat-compliment"></div>
-    <button class="btn-sluiten" type="button" id="sluiten-btn">Sluiten</button>
   </div>
 </div>
 
@@ -590,10 +589,6 @@ Laterrrr,
         if (error) console.error('Kon inzending niet opslaan:', error.message);
       });
     }
-  });
-
-  document.getElementById('sluiten-btn').addEventListener('click', () => {
-    document.getElementById('resultaat-overlay').classList.remove('open');
   });
 
   const welkomInput = document.getElementById('welkom-naam-input');
