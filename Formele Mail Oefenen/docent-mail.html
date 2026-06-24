@@ -124,14 +124,13 @@
     font-size: 14px; font-weight: 700; color: var(--primary);
     background: var(--primary-soft); border-radius: var(--r-pill); padding: 7px 16px;
   }
-  .inzendingen-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; min-height: 56px; }
+  .inzendingen-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; min-height: 56px; }
   .empty-hint { color: var(--muted); font-size: 15px; padding: 14px 4px; grid-column: 1 / -1; }
 
   .inzending-item {
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-    aspect-ratio: 1; text-align: center;
+    display: flex; flex-direction: column; gap: 14px; text-align: left;
     background: #f7f8f9; border: 1.5px solid var(--border); border-radius: 22px;
-    padding: 18px 12px; font-family: inherit; cursor: pointer;
+    padding: 18px; font-family: inherit; cursor: pointer;
     transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s;
     animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both;
   }
@@ -139,19 +138,30 @@
     border-color: var(--primary); background: white; transform: translateY(-3px);
     box-shadow: 0 14px 22px -10px rgba(78,142,243,0.30);
   }
+  .inzending-top { display: flex; align-items: center; gap: 12px; }
   .inzending-avatar {
-    width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
     background: linear-gradient(135deg, var(--green), #0c8268);
-    color: white; font-size: 17px; font-weight: 700;
+    color: white; font-size: 15px; font-weight: 700;
     display: flex; align-items: center; justify-content: center;
   }
+  .inzending-naam-wrap { flex: 1; min-width: 0; }
   .inzending-naam { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.25; }
   .inzending-tijd { font-size: 12px; color: var(--muted); }
   .inzending-score {
-    font-size: 12px; font-weight: 700; color: var(--muted);
+    font-size: 12px; font-weight: 700; color: var(--muted); flex-shrink: 0;
     background: var(--border); border-radius: var(--r-pill); padding: 5px 13px; white-space: nowrap;
   }
   .inzending-score.compleet { color: var(--green); background: var(--green-soft); }
+
+  .inzending-preview {
+    background: white; border: 1px solid var(--border); border-radius: 14px; padding: 10px 12px;
+  }
+  .inzending-preview-onderwerp { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .inzending-preview-bericht {
+    font-size: 12px; color: var(--muted); line-height: 1.4;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
 
   /* ── DETAILWEERGAVE ── */
   .overlay {
@@ -162,7 +172,7 @@
   .overlay.open { opacity: 1; pointer-events: all; }
   .detail-kaart {
     position: relative; background: transparent;
-    max-width: 560px; width: 100%; max-height: 88vh; overflow-y: auto;
+    max-width: 560px; width: 100%; max-height: 88vh;
     transform: scale(0.92); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
   }
   .overlay.open .detail-kaart { transform: scale(1); }
@@ -174,7 +184,10 @@
   }
   .btn-detail-sluiten:hover { color: var(--dark); transform: scale(1.08); }
 
-  .detail-mailkaart { background: white; border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); overflow: hidden; }
+  .detail-mailkaart {
+    background: white; border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    max-height: 80vh; overflow-x: hidden; overflow-y: auto;
+  }
   .detail-mail-titelbalk { display: flex; align-items: center; gap: 8px; padding: 16px 22px; background: #f2f4f4; border-bottom: 1px solid var(--border); }
   .detail-mail-dot { width: 9px; height: 9px; border-radius: 50%; }
   .detail-score {
@@ -381,10 +394,18 @@
     const lijst = [...inzendingen.values()].sort((a, b) => new Date(b.aangemaakt_op) - new Date(a.aangemaakt_op));
     grid.innerHTML = lijst.map(i => `
       <button class="inzending-item" data-id="${i.id}" type="button">
-        <div class="inzending-avatar">${escapeHtml(i.voornaam.slice(0, 2).toUpperCase())}</div>
-        <div class="inzending-naam">${escapeHtml(i.voornaam)}</div>
-        <div class="inzending-tijd">${formatTijd(i.aangemaakt_op)}</div>
-        <div class="inzending-score ${i.aantal_goed === 5 ? 'compleet' : ''}">${i.aantal_goed} / 5</div>
+        <div class="inzending-top">
+          <div class="inzending-avatar">${escapeHtml(i.voornaam.slice(0, 2).toUpperCase())}</div>
+          <div class="inzending-naam-wrap">
+            <div class="inzending-naam">${escapeHtml(i.voornaam)}</div>
+            <div class="inzending-tijd">${formatTijd(i.aangemaakt_op)}</div>
+          </div>
+          <div class="inzending-score ${i.aantal_goed === 5 ? 'compleet' : ''}">${i.aantal_goed} / 5</div>
+        </div>
+        <div class="inzending-preview">
+          <div class="inzending-preview-onderwerp">${escapeHtml(i.onderwerp)}</div>
+          <div class="inzending-preview-bericht">${escapeHtml(i.bericht)}</div>
+        </div>
       </button>
     `).join('');
 
