@@ -161,7 +161,7 @@
   .inzending-preview {
     background: white; border: 1px solid var(--border); border-radius: 14px; padding: 10px 12px;
   }
-  .inzending-preview-onderwerp { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .inzending-preview-onderwerp { font-size: 12px; font-weight: 700; color: var(--dark); margin-bottom: 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .inzending-preview-bericht {
     font-size: 12px; color: var(--muted); line-height: 1.4; white-space: pre-line;
   }
@@ -192,7 +192,9 @@
     max-height: 80vh; overflow-x: hidden; overflow-y: auto;
   }
   .detail-mail-titelbalk { display: flex; align-items: center; gap: 8px; padding: 16px 22px; background: #f2f4f4; border-bottom: 1px solid var(--border); }
-  .detail-mail-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .detail-mail-dot { width: 9px; height: 9px; border-radius: 50%; border: none; padding: 0; }
+  .detail-mail-dot-sluit { cursor: pointer; transition: transform 0.15s; }
+  .detail-mail-dot-sluit:hover { transform: scale(1.3); }
   .detail-score {
     margin-left: auto; font-size: 12px; font-weight: 700; color: var(--muted);
     background: white; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 5px 13px; white-space: nowrap;
@@ -244,7 +246,7 @@
     <button class="btn-detail-sluiten" type="button" id="detail-sluiten-btn">✕</button>
     <div class="detail-mailkaart">
       <div class="detail-mail-titelbalk">
-        <span class="detail-mail-dot" style="background:#ef4444"></span>
+        <button class="detail-mail-dot detail-mail-dot-sluit" type="button" id="detail-dot-sluiten-btn" style="background:#ef4444" aria-label="Sluiten" title="Sluiten"></button>
         <span class="detail-mail-dot" style="background:#f59e0b"></span>
         <span class="detail-mail-dot" style="background:#10a37f"></span>
         <div class="detail-score" id="detail-score"></div>
@@ -436,9 +438,11 @@
     document.getElementById('detail-overlay').classList.add('open');
   }
 
-  document.getElementById('detail-sluiten-btn').addEventListener('click', () => {
+  function sluitDetail() {
     document.getElementById('detail-overlay').classList.remove('open');
-  });
+  }
+  document.getElementById('detail-sluiten-btn').addEventListener('click', sluitDetail);
+  document.getElementById('detail-dot-sluiten-btn').addEventListener('click', sluitDetail);
 
   (async () => {
     const { data: { session } } = await db.auth.getSession();
