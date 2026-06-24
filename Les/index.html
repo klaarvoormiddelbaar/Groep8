@@ -743,13 +743,17 @@
               ${L.canva
                 ? `<button id="btn-les" class="hero-btn" onclick="scrollToPresentation()" type="button">▶ Starten met de les</button>`
                 : `<button class="hero-btn" type="button" disabled title="De presentatie voor deze les is nog niet toegevoegd">▶ Starten met de les <span style="opacity:0.7;font-weight:400">(binnenkort)</span></button>`}
-              ${L.n !== 8 && L.n !== 4 ? `
+              ${L.n !== 8 && L.n !== 4 && L.n !== 7 ? `
               <a id="btn-poll" class="hero-btn hero-btn-live" href="/les${L.n}/docent/poll" target="_blank" rel="noopener">
                 <span class="live-dot"></span> Start live poll
               </a>` : ''}
               ${L.n === 8 ? `
               <a id="btn-tips-en-tops" class="hero-btn" href="/tips-en-tops/leerkracht" target="_blank" rel="noopener">
                 <img src="/Afbeeldingen/emojis nieuw/lamp.png" alt="" style="height:1.5em;width:auto;object-fit:contain;vertical-align:-0.3em"> Tips en tops
+              </a>` : ''}
+              ${L.n === 7 ? `
+              <a id="btn-formele-mail" class="hero-btn" href="/Formele%20Mail%20Oefenen/docent-mail.html" target="_blank" rel="noopener">
+                <img src="/Afbeeldingen/emojis nieuw/envelop.png" alt="" style="height:1.5em;width:auto;object-fit:contain;vertical-align:-0.3em"> Opdracht formele mail
               </a>` : ''}
               <a id="btn-quiz" class="hero-btn" href="/les${L.n}/docent/quiz" target="_blank" rel="noopener">
                 <img src="/Afbeeldingen/emojis nieuw/brein.png" alt="" style="height:1.5em;width:auto;object-fit:contain;vertical-align:-0.3em"> Start live quiz
@@ -1009,6 +1013,10 @@
       {
         id:   'btn-tips-en-tops',
         text: 'Hier vind je de link waarmee leerlingen de Tips en Tops enquête invullen. Deel de link met je klas en bespreek de resultaten samen.'
+      },
+      {
+        id:   'btn-formele-mail',
+        text: 'Hier krijg je een vaste link voor de opdracht formele mail. Deel die met je klas en bekijk live wie zijn of haar mail heeft ingeleverd.'
       },
       {
         id:   'btn-quiz',
