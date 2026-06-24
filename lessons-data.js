@@ -126,23 +126,23 @@ const LESSONS = [
   },
   {
     n: 7, g1: '#831843', g2: '#db2777',
-    emoji: 'vraagteken.png', title: 'Schriftelijke vaardigheden',
-    sub: 'Aantekeningen maken en mailen naar je docent',
+    emoji: 'vulpen.png', title: 'Schriftelijke vaardigheden',
+    sub: 'Aantekeningen maken en mailen naar je leerkracht',
     duur: '50–60 min',
     url: '/les7',
-    tip: "Laat groepjes ook eigen scenario's bedenken. Dit verhoogt de betrokkenheid en zorgt voor herkenning.",
+    tip: 'Sta tijdens de tussenbespreking van de PlanetenPresentatie uitgebreid stil bij de tips voor aantekeningen maken, zodat leerlingen deze direct kunnen toepassen in het tweede deel van de presentatie.',
     doelen: [
-      'Leerlingen oefenen met sociale situaties die ze tegenkomen op de middelbare.',
-      'Leerlingen leren om hulp te vragen aan een docent of mentor.',
-      'Leerlingen vergroten hun probleemoplossend vermogen.'
+      'Leerlingen kunnen op een overzichtelijke manier aantekeningen maken tijdens de les.',
+      'Leerlingen begrijpen het verschil tussen informeel en formeel taalgebruik.',
+      'Leerlingen kunnen een formele e-mail schrijven aan hun leerkracht.'
     ],
     tl: [
-      { t: '0–5 min',   n: 'Introductie',   d: "Introduceer het concept van sociale scenario's en het belang ervan." },
-      { t: '5–28 min',  n: 'Scenario-spel', d: 'Kleine groepen spelen scenario-kaarten na en bedenken oplossingen.' },
-      { t: '28–45 min', n: 'Nabespreking',  d: 'Bespreek per scenario wat werkte en wat moeilijk was.' },
-      { t: '45–55 min', n: 'Afsluiting',    d: 'Elke leerling kiest het scenario dat hij of zij het meest leerzaam vond.' }
+      { t: '0–10 min',  n: 'Introductie',            d: 'Bespreek waarom slim aantekeningen maken en een nette mail schrijven straks op de middelbare school belangrijk wordt.' },
+      { t: '10–25 min', n: 'Aantekeningen maken',     d: 'Oefen samen met een voorbeeldtekst hoe je kort en overzichtelijk aantekeningen maakt.' },
+      { t: '25–45 min', n: 'Opdracht formele mail',   d: 'Leerlingen herschrijven een informeel appje naar een formele e-mail met de digitale opdracht.' },
+      { t: '45–55 min', n: 'Nabespreking',            d: 'Bespreek een paar ingeleverde mails klassikaal en wat een mail formeel maakt.' }
     ],
-    mat: ["Scenario-kaarten set 2 (bijlage 9)", 'Antwoordbladen', 'Toegang tot digitale les']
+    mat: ['Devices voor de digitale opdracht', 'Werkblad aantekeningen maken (optioneel)', 'Toegang tot digitale les']
   },
   {
     n: 8, g1: '#134e4a', g2: '#0f766e',
