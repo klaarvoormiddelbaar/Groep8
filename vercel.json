@@ -61,6 +61,7 @@
     { "source": "/les8/docent/poll", "destination": "/Live poll/docent-poll.html?les=poll-les-8" },
     { "source": "/tips-en-tops/leerkracht",            "destination": "/Tips en Tops/leerkracht-deel-link.html" },
     { "source": "/tips-en-tops/leerkracht/antwoorden", "destination": "/Tips en Tops/leerkracht-tips-en-tops.html" },
-    { "source": "/feedback/:code", "destination": "/Tips en Tops/tips-en-tops.html" }
+    { "source": "/feedback/:code", "destination": "/Tips en Tops/tips-en-tops.html" },
+    { "source": "/formeel/:nummer", "destination": "/Formele Mail Oefenen/formele-mail-oefenen.html" }
   ]
 }

@@ -406,6 +406,8 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/Formele%20Mail%20Oefenen/supabase-config.js"></script>
 <script>
   /* ── Docentgegevens: makkelijk aanpasbaar, later dynamisch uit docentaccount ── */
   const teacher = {
@@ -558,11 +560,36 @@ Laterrrr,
 
   const COMPLIMENT_TEKST = 'Helemaal goed! Zo schrijf je een net berichtje aan een leerkracht. Jouw juf of meester gaat alle e-mails zo bespreken.';
 
-  document.getElementById('verzenden-btn').addEventListener('click', () => {
-    evalueer();
-    document.getElementById('resultaat-compliment').textContent = COMPLIMENT_TEKST;
+  const padMatch = window.location.pathname.match(/formeel\/([^/?]+)/i);
+  const volgnummer = padMatch ? padMatch[1] : new URLSearchParams(window.location.search).get('l');
+  let leerlingNaam = '';
+  let linkId = null;
 
+  if (volgnummer) {
+    db.rpc('resolve_mail_link', { p_volgnummer: Number(volgnummer) })
+      .then(({ data, error }) => {
+        if (error) { console.error('Kon link niet opzoeken:', error.message); return; }
+        if (data) linkId = data;
+      });
+  }
+
+  document.getElementById('verzenden-btn').addEventListener('click', () => {
+    const checks = evalueer();
+    document.getElementById('resultaat-compliment').textContent = COMPLIMENT_TEKST;
     document.getElementById('resultaat-overlay').classList.add('open');
+
+    if (linkId) {
+      db.from('mail_inzendingen').insert({
+        link_id: linkId,
+        voornaam: leerlingNaam || 'Onbekend',
+        onderwerp: document.getElementById('onderwerp-input').value.trim(),
+        bericht: document.getElementById('bericht-input').value.trim(),
+        checklist: checks,
+        aantal_goed: CHECKLIST.filter(c => checks[c.id]).length
+      }).then(({ error }) => {
+        if (error) console.error('Kon inzending niet opslaan:', error.message);
+      });
+    }
   });
 
   document.getElementById('sluiten-btn').addEventListener('click', () => {
@@ -578,8 +605,8 @@ Laterrrr,
     if (e.key === 'Enter' && !welkomBtn.disabled) welkomBtn.click();
   });
   welkomBtn.addEventListener('click', () => {
-    const naam = welkomInput.value.trim();
-    document.getElementById('informeel-tekst').textContent = INFORMELE_TEKST.replace('[JOUW NAAM]', naam);
+    leerlingNaam = welkomInput.value.trim();
+    document.getElementById('informeel-tekst').textContent = INFORMELE_TEKST.replace('[JOUW NAAM]', leerlingNaam);
     document.getElementById('welkom-overlay').classList.remove('open');
   });
   welkomInput.focus();
