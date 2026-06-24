@@ -2,15 +2,15 @@
 const LESSONS = [
   {
     n: 1, g1: '#1e4a8a', g2: '#72a8f9',
-    emoji: 'rugzak.png', title: 'Welkom bij KvM',
+    emoji: 'raket.png', title: 'Klaar voor lancering!',
     sub: 'Kennismaking + Slim Leren',
     duur: '60 min',
     url: '/les1',
-    tip: 'Hang de ingevulde kaartjes op in de klas als visuele herinnering. Verwijs er gedurende het hele programma regelmatig naar terug.',
+    tip: 'Neem iets mee uit je eigen middelbareschooltijd, zoals een agenda, schoolfoto of rapport. Leerlingen vinden het vaak leuk om hiernaar te kijken en het levert mooie gesprekken op.',
     doelen: [
-      'Leerlingen kennen het programma Klaar voor Middelbaar en weten wat ze gaan leren.',
-      'Leerlingen kunnen hun verwachtingen en vragen over de middelbare benoemen.',
-      'Leerlingen stellen zich open voor nieuwe ervaringen.'
+      'De leerlingen weten wat zij kunnen verwachten van de brugklas.',
+      'De leerlingen maken kennis met het Klaar voor Middelbaar-programma en weten wat zij de komende lessen gaan leren.',
+      "De leerlingen weten dat 'Slim Leren' meer oplevert dan alleen hard werken."
     ],
     tl: [
       { t: '0–5 min',   n: 'Introductie',         d: 'Verwelkom de klas en introduceer het KvM-programma aan de hand van de poster.' },
