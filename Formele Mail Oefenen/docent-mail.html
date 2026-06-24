@@ -88,22 +88,26 @@
 
   .link-kaart {
     background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
-    border-radius: var(--r-card); padding: 44px 48px; color: white;
-    position: relative; overflow: hidden; margin-bottom: 32px;
+    border-radius: var(--r-card); padding: 56px 260px 56px 44px; color: white;
+    position: relative; margin-bottom: 32px;
   }
   .link-kaart::after {
     content: ''; position: absolute; width: 360px; height: 360px; border-radius: 50%;
     background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%);
-    top: -140px; right: -100px;
+    top: -140px; right: -100px; pointer-events: none;
+  }
+  .link-jay {
+    position: absolute; right: 28px; top: 50%; transform: translateY(-50%) scaleX(-1);
+    height: 180px; width: auto; opacity: 0.95; pointer-events: none;
   }
   .link-eyebrow {
     position: relative; font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
     color: rgba(255,255,255,0.78); margin-bottom: 10px;
   }
   .link-title { position: relative; font-size: 26px; font-weight: 700; margin-bottom: 22px; }
-  .link-rij { position: relative; display: flex; gap: 12px; flex-wrap: wrap; }
+  .link-rij { position: relative; display: flex; gap: 12px; flex-wrap: wrap; max-width: 560px; }
   .link-input {
-    flex: 1 1 320px; min-width: 0; background: rgba(255,255,255,0.92); border: none; border-radius: var(--r-pill);
+    flex: 1 1 380px; min-width: 0; background: rgba(255,255,255,0.92); border: none; border-radius: var(--r-pill);
     padding: 14px 22px; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--dark);
   }
   .btn-kopieer {
@@ -202,7 +206,10 @@
 
   @media (max-width: 720px) {
     .header-inner, .main { padding-left: 24px; padding-right: 24px; }
-    .link-kaart, .inzendingen-panel { padding: 32px 24px; }
+    .link-kaart { padding: 32px 24px; }
+    .inzendingen-panel { padding: 32px 24px; }
+    .link-jay { display: none; }
+    .link-rij { max-width: none; }
     .detail-mail-body { padding: 22px 20px 24px; }
   }
 </style>
@@ -314,6 +321,7 @@
             <input class="link-input" id="link-input" readonly value="${studentUrl}">
             <button class="btn-kopieer" id="kopieer-btn" type="button">Kopiëren</button>
           </div>
+          <img class="link-jay" src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay">
         </div>
 
         <div class="inzendingen-panel">
