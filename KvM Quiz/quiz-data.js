@@ -78,8 +78,9 @@ const QUIZZES = {
     {
       type: 'true_false',
       vraag: 'Af en toe lange pauzes nemen is één van de tips die Jay heeft gegeven.',
-      opties: ['Waar', 'Niet waar! Korte pauzes (5 tot 10 min) zijn de tip, niet lange.'],
+      opties: ['Waar', 'Niet waar'],
       goed_index: 1,
+      toelichting: 'Korte pauzes (5 tot 10 min) zijn de tip, geen lange pauzes.',
       tijdslimiet_seconden: 15
     },
     {
