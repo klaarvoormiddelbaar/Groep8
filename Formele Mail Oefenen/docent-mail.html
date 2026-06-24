@@ -198,11 +198,12 @@
     background: white; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 5px 13px; white-space: nowrap;
   }
   .detail-score.compleet { color: var(--green); background: var(--green-soft); border-color: rgba(16,163,127,0.25); }
-  .detail-mail-body { padding: 26px 28px 30px; }
-  .detail-mail-veld { display: flex; align-items: baseline; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .detail-mail-meta { background: #f8f9fa; padding: 18px 28px; border-bottom: 1px solid var(--border); }
+  .detail-mail-veld { display: flex; align-items: baseline; gap: 10px; padding: 7px 0; }
   .detail-mail-veld-label { flex-shrink: 0; width: 88px; font-size: 12px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; color: var(--muted); }
   .detail-mail-veld-waarde { font-size: 14px; font-weight: 600; color: var(--muted); }
-  .detail-mail-bericht { margin-top: 22px; font-size: 16px; font-weight: 500; line-height: 1.7; white-space: pre-line; color: var(--dark); }
+  .detail-mail-body { padding: 26px 28px 30px; }
+  .detail-mail-bericht { font-size: 16px; font-weight: 500; line-height: 1.7; white-space: pre-line; color: var(--dark); }
 
   @media (max-width: 720px) {
     .header-inner, .main { padding-left: 24px; padding-right: 24px; }
@@ -248,7 +249,7 @@
         <span class="detail-mail-dot" style="background:#10a37f"></span>
         <div class="detail-score" id="detail-score"></div>
       </div>
-      <div class="detail-mail-body">
+      <div class="detail-mail-meta">
         <div class="detail-mail-veld">
           <div class="detail-mail-veld-label">Van</div>
           <div class="detail-mail-veld-waarde" id="detail-van"></div>
@@ -257,6 +258,8 @@
           <div class="detail-mail-veld-label">Onderwerp</div>
           <div class="detail-mail-veld-waarde" id="detail-onderwerp"></div>
         </div>
+      </div>
+      <div class="detail-mail-body">
         <div class="detail-mail-bericht" id="detail-bericht"></div>
       </div>
     </div>
