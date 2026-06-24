@@ -80,7 +80,22 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/proef/inloggen)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/proef/)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000/Dashboard/)",
-      "Bash(python3 *)"
+      "Bash(python3 *)",
+      "Bash(cp ~/Desktop/Scherm*18*13.44.58.png /tmp/laatste_screenshot.png)",
+      "Read(//tmp/**)",
+      "Bash(pkill -f \"python3 dev-server.py\")",
+      "Bash(awk '{ print length, $0 }')",
+      "Skill(fewer-permission-prompts)",
+      "Bash(xargs -I{} jq -r 'select\\(.message.content != null\\) | .message.content[]? | select\\(.type==\"tool_use\"\\) | select\\(.name==\"Bash\"\\) | .input.command' {})",
+      "Bash(xargs -I{} jq -r 'select\\(.message.content != null\\) | .message.content[]? | select\\(.type==\"tool_use\"\\) | select\\(.name | startswith\\(\"mcp__\"\\)\\) | .name' {})",
+      "Bash(awk '{print $1, $2}')",
+      "Bash(awk -F'\\\\n' '{print $1}')",
+      "Bash(awk '{print $1}')",
+      "Bash(xargs -I{} jq -r 'select\\(.message.content != null\\) | .message.content[]? | select\\(.type==\"tool_use\"\\) | select\\(.name==\"Bash\"\\) | .input.command | gsub\\(\"\\\\n\"; \" \"\\)' {})",
+      "Bash(awk '{print $1, $NF}')",
+      "Bash(grep -oE 'osascript.{0,80}' /tmp/bash_flat.txt)",
+      "mcp__plugin_figma_figma__download_assets",
+      "Bash(awk *)"
     ]
   }
 }

@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formele e-mail oefenen — Klaar voor Middelbaar</title>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue:    #4e8ef3;
+    --blue-soft: rgba(78,142,243,0.10);
+    --blue-dk: #005c99;
+    --green:   #10a37f;
+    --green-soft: rgba(16,163,127,0.10);
+    --red:     #ef4444;
+    --amber:   #f59e0b;
+    --dark:    #191c1d;
+    --mid:     #6d747a;
+    --border:  #eceeee;
+    --bg:      #f8fafa;
+    --bgalt:   #f2f4f4;
+    --font:    'Inria Sans', Georgia, serif;
+    --r-pill: 9999px;
+  }
+
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--dark);
+    display: flex; flex-direction: column;
+    min-height: 100%;
+  }
+
+  /* ════════════════════ HEADER (1:1 uit intro-levensgebieden) ════════════════════ */
+  .header { flex-shrink: 0; background: var(--bg); box-shadow: 0 4px 10px rgba(0,0,0,0.03); z-index: 10; }
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 12px 32px 13px; border-bottom: 1px solid var(--border); }
+  .nav-left { display: flex; align-items: center; gap: 24px; }
+  .logo { display: flex; align-items: center; text-decoration: none; }
+  .logo-img { height: 48px; width: auto; display: block; }
+  .breadcrumbs { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 700; }
+  .breadcrumbs a { color: var(--dark); text-decoration: none; }
+  .breadcrumbs a:hover { text-decoration: underline; }
+  .breadcrumbs .active { color: var(--blue); }
+  .breadcrumbs .sep { color: rgba(109,116,122,0.35); font-weight: 400; }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .settings-btn { width: 36px; height: 36px; border-radius: 50%; border: none; background: none; cursor: pointer; color: var(--mid); display: flex; align-items: center; justify-content: center; }
+  .settings-btn:hover { background: var(--bgalt); }
+  .settings-btn svg { width: 18px; height: 18px; }
+  .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--blue); border: 2px solid var(--blue); overflow: hidden; flex-shrink: 0; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 15px; }
+
+  .progress-bar { display: flex; align-items: center; padding: 14px 32px; background: rgba(255,255,255,0.5); }
+  .step { display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .step-dot { width: 32px; height: 32px; border-radius: 50%; background: #e1e3e3; display: flex; align-items: center; justify-content: center; opacity: 0.4; flex-shrink: 0; }
+  .step-dot svg { width: 14px; height: 14px; }
+  .step.done .step-dot { opacity: 1; background: var(--green); }
+  .step.active .step-dot { width: 40px; height: 40px; background: var(--blue); opacity: 1; box-shadow: 0 0 0 4px rgba(78,142,243,0.2), 0 8px 12px -2px rgba(0,0,0,0.12); }
+  .step-label { font-size: 14px; color: var(--dark); opacity: 0.4; }
+  .step.done .step-label, .step.active .step-label { font-weight: 700; opacity: 1; }
+  .step-line { flex: 1; height: 2px; background: #e1e3e3; margin: 0 8px; }
+  .step-line.done { background: rgba(16,163,127,0.4); }
+
+  /* ════════════════════ MAIN AREA ════════════════════ */
+  .main-area { flex: 1; width: 100%; max-width: 1184px; margin: 0 auto; padding: 40px 32px 0; display: flex; flex-direction: column; gap: 28px; }
+
+  .situatie-kaart {
+    background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 55%, #6aaaf8 100%);
+    border-radius: 28px; padding: 30px 34px; color: white;
+    display: flex; gap: 18px; align-items: center; justify-content: flex-start; position: relative; overflow: hidden;
+  }
+  .situatie-kaart::before { content:''; position:absolute; inset:0; background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px); background-size: 22px 22px; }
+  .situatie-icoon { position:relative; width: 46px; height: 46px; flex-shrink: 0; background: rgba(255,255,255,0.18); border-radius: 14px; display:flex; align-items:center; justify-content:center; }
+  .situatie-icoon img { width: 24px; height: 24px; }
+  .situatie-tekst { position:relative; text-align: left; }
+  .situatie-body { font-size: 17px; line-height: 1.6; font-weight: 700; max-width: none; }
+
+  .opdracht-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; align-items: start; }
+  @media (max-width: 700px) { .opdracht-grid { grid-template-columns: 1fr; } }
+
+  /* ── INFORMELE BRONMAIL ── */
+  .informeel-kaart {
+    background: #fffbeb; border: 1px solid #fde68a; border-radius: 16px;
+    padding: 24px 26px; transform: rotate(-0.6deg);
+    box-shadow: 0 10px 18px -4px rgba(0,0,0,0.10); position: relative; overflow: hidden;
+  }
+  .informeel-badge {
+    position: absolute; top: 0; right: 0; width: 64px; height: 64px; background: #fef3c7;
+    border-radius: 0 0 0 100%; display: flex; align-items: flex-start; justify-content: flex-end; padding: 8px;
+  }
+  .informeel-badge svg { width: 18px; height: 18px; }
+  .informeel-label { font-size: 16px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: #92400e; margin-bottom: 12px; }
+  .informeel-tekst { font-size: 15px; line-height: 1.65; color: #78350f; font-style: italic; white-space: pre-line; }
+
+  /* ── MAIL EDITOR ── */
+  .mail-kaart { background: white; border: 1px solid var(--border); border-radius: 28px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.06); overflow: hidden; }
+  .mail-titelbalk { display: flex; align-items: center; gap: 10px; padding: 16px 22px; background: var(--bgalt); border-bottom: 1px solid var(--border); }
+  .mail-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mail-titel { font-size: 13px; font-weight: 700; color: var(--mid); margin-left: 4px; }
+  .mail-body { padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 16px; }
+  .mail-veld { display: flex; flex-direction: column; gap: 6px; }
+  .mail-veld-label { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--mid); }
+  .mail-veld-aan {
+    display: flex; align-items: center; gap: 10px; background: var(--bgalt); border-radius: 12px; padding: 12px 16px;
+    font-size: 15px; font-weight: 700; color: var(--mid);
+  }
+  .mail-veld-aan svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .mail-input {
+    width: 100%; font-family: inherit; font-size: 16px; font-weight: 700; color: var(--dark);
+    background: #fbfbfc; border: 1.5px solid var(--border); border-radius: 12px; padding: 13px 16px;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+  }
+  .mail-input::placeholder { color: rgba(109,116,122,0.5); font-weight: 400; }
+  .mail-input:focus { outline: none; border-color: var(--blue); background: white; box-shadow: 0 0 0 4px var(--blue-soft); }
+  .mail-textarea { min-height: 280px; font-weight: 400; line-height: 1.6; resize: vertical; }
+
+  .mail-acties { display: flex; gap: 12px; flex-wrap: wrap; padding-top: 4px; }
+  .btn-secundair {
+    display: inline-flex; align-items: center; gap: 8px; background: white; border: 1.5px solid var(--border);
+    border-radius: var(--r-pill); padding: 11px 20px; font-family: inherit; font-size: 14px; font-weight: 700;
+    color: var(--dark); cursor: pointer; transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .btn-secundair:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
+
+  .verzenden-wrap { position: relative; margin-left: auto; display: inline-flex; }
+  .btn-verzenden {
+    display: inline-flex; align-items: center; gap: 10px;
+    border: none; border-radius: var(--r-pill); padding: 13px 26px;
+    font-family: inherit; font-size: 15px; font-weight: 700; color: white; cursor: pointer;
+    background: #8cc4a5; box-shadow: 0 6px 14px -4px rgba(0,0,0,0.18);
+    transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  }
+  .btn-verzenden svg { width: 17px; height: 17px; }
+  .btn-verzenden:disabled { cursor: not-allowed; }
+  .btn-verzenden.klaar {
+    background: var(--green);
+    animation: popGoed 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .btn-verzenden.klaar:hover { background: #0c8268; transform: translateY(-2px); }
+
+  .verzenden-tooltip {
+    position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%) translateY(4px);
+    background: #212529; color: white; font-size: 13px; font-weight: 600; white-space: nowrap;
+    padding: 9px 16px; border-radius: 10px; box-shadow: 0 10px 20px -6px rgba(0,0,0,0.3);
+    opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 5;
+  }
+  .verzenden-tooltip::after {
+    content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    border: 6px solid transparent; border-top-color: #212529;
+  }
+  .btn-verzenden:disabled:hover ~ .verzenden-tooltip { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .btn-secundair svg { width: 15px; height: 15px; }
+
+  /* ── CHECKLIST ── */
+  .checklist-kaart { background: white; border: 1px solid var(--border); border-radius: 28px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.06); padding: 26px 28px; }
+  .checklist-titel { font-size: 16px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--mid); margin-bottom: 18px; }
+  #checklist-lijst { display: flex; flex-direction: column; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .checklist-item:last-child { border-bottom: none; }
+  .check-icoon { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.25s, transform 0.25s; }
+  .check-icoon svg { width: 14px; height: 14px; transition: opacity 0.15s; }
+  .checklist-item.fout .check-icoon { background: rgba(239,68,68,0.12); }
+  .checklist-item.goed .check-icoon { background: var(--green); animation: popGoed 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes popGoed { 0% { transform: scale(0.6); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
+  .check-tekst { flex: 1 1 auto; min-width: 0; font-size: 14px; font-weight: 700; color: var(--dark); line-height: 1.4; padding-top: 4px; transition: color 0.2s; }
+  .checklist-item.goed .check-tekst { color: var(--green); }
+
+  .check-tip-wrap { position: relative; padding-top: 4px; flex-shrink: 0; }
+  .check-tip-icoon {
+    width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--bgalt);
+    display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;
+    color: var(--mid); cursor: help; transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .check-tip-icoon:hover { border-color: var(--blue); color: var(--blue); background: var(--blue-soft); }
+  .check-tip-tooltip {
+    position: absolute; bottom: calc(100% + 10px); right: 0; transform: translateY(4px);
+    background: #212529; color: white; font-size: 13px; font-weight: 600; line-height: 1.4; width: max-content; max-width: 320px;
+    padding: 10px 14px; border-radius: 10px; box-shadow: 0 10px 20px -6px rgba(0,0,0,0.3);
+    opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 5;
+  }
+  .check-tip-tooltip::after {
+    content: ''; position: absolute; top: 100%; right: 6px;
+    border: 6px solid transparent; border-top-color: #212529;
+  }
+  .check-tip-icoon:hover ~ .check-tip-tooltip { opacity: 1; transform: translateY(0); pointer-events: auto; }
+
+  @keyframes dansKnop {
+    0%, 100% { transform: translateY(0) rotate(0); }
+    20%      { transform: translateY(-4px) rotate(-4deg); }
+    40%      { transform: translateY(0) rotate(3deg); }
+    60%      { transform: translateY(-3px) rotate(-3deg); }
+    80%      { transform: translateY(0) rotate(2deg); }
+  }
+  .btn-secundair.dans { animation: dansKnop 0.6s ease-in-out infinite; }
+
+  .succes-balk {
+    margin-top: 18px; background: var(--green-soft); border: 1.5px solid rgba(16,163,127,0.3); border-radius: 16px;
+    padding: 16px 18px; text-align: center; opacity: 0; max-height: 0; overflow: hidden;
+    transition: opacity 0.3s, max-height 0.3s, margin-top 0.3s, padding 0.3s;
+  }
+  .succes-balk.show { opacity: 1; max-height: 200px; margin-top: 18px; padding: 16px 18px; }
+  .succes-tekst { font-size: 14px; font-weight: 700; color: #0c8268; margin-bottom: 12px; }
+  .btn-primair {
+    display: inline-flex; align-items: center; gap: 10px; width: 100%; justify-content: center;
+    background: var(--green); border: none; border-radius: var(--r-pill); padding: 13px 20px;
+    font-family: inherit; font-size: 15px; font-weight: 700; color: white; cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.15); transition: background 0.15s, transform 0.15s;
+  }
+  .btn-primair:hover { background: #0c8268; transform: translateY(-2px); }
+
+  /* ── VOORBEELD KAART ── */
+  .voorbeeld-wrap { max-height: 0; opacity: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; }
+  .voorbeeld-wrap.open { max-height: 640px; opacity: 1; }
+  .voorbeeld-kaart { background: var(--bgalt); border: 1.5px dashed #c8ccd2; border-radius: 22px; padding: 20px 22px; margin-top: 16px; }
+  .voorbeeld-label { font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--mid); margin-bottom: 14px; }
+  .voorbeeld-kop { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .voorbeeld-kop span { flex: 1; font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: var(--mid); text-align: left; }
+  .voorbeeld-kop .voorbeeld-pijl-spacer { width: 18px; flex-shrink: 0; }
+  .voorbeeld-paar { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .voorbeeld-paar:last-child { margin-bottom: 0; }
+  .voorbeeld-informeel, .voorbeeld-formeel {
+    flex: 1; font-size: 14px; font-weight: 700; border-radius: 12px; padding: 10px 14px; line-height: 1.4;
+    white-space: pre-line; text-align: left;
+  }
+  .voorbeeld-informeel { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+  .voorbeeld-formeel { background: var(--green-soft); color: #0c8268; border: 1px solid rgba(16,163,127,0.25); }
+  .voorbeeld-pijl { flex-shrink: 0; width: 18px; height: 18px; color: var(--mid); }
+
+  /* ════════════════════ RESULTAAT OVERLAY ════════════════════ */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(20,30,50,0.55); backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center; padding: 20px; z-index: 200;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .overlay.open { opacity: 1; pointer-events: all; }
+  .resultaat-kaart { background: white; border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.3); max-width: 460px; width: 100%; padding: 36px 32px; text-align: center; transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+  .overlay.open .resultaat-kaart { transform: scale(1); }
+  .resultaat-trofee { width: 60px; height: 60px; margin: 0 auto 14px; background: var(--green-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .resultaat-trofee svg { width: 30px; height: 30px; }
+  .resultaat-titel { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+  .resultaat-compliment { font-size: 14px; color: var(--mid); margin-bottom: 22px; line-height: 1.5; }
+  .btn-sluiten { background: var(--blue); border: none; border-radius: var(--r-pill); padding: 13px 30px; font-family: inherit; font-size: 15px; font-weight: 700; color: white; cursor: pointer; width: 100%; transition: background 0.15s; }
+  .btn-sluiten:hover { background: var(--blue-dk); }
+  .btn-sluiten:disabled { background: var(--border); color: var(--mid); cursor: not-allowed; }
+  .welkom-veld { text-align: left; margin-bottom: 18px; }
+
+  /* ════════════════════ FOOTER (1:1 uit intro-levensgebieden) ════════════════════ */
+  .footer { flex-shrink: 0; margin-top: 32px; }
+  .footer-inner { background: var(--bgalt); border-radius: 32px 32px 0 0; padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; max-width: 1184px; margin: 0 auto; }
+  .footer-logo { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; }
+  .footer-logo .logo-img { height: 28px; }
+  .footer-links { display: flex; gap: 40px; }
+  .footer-links a { font-size: 16px; font-weight: 700; color: var(--dark); text-decoration: none; }
+  .footer-links a:hover { text-decoration: underline; }
+  .footer-copy { font-size: 16px; color: var(--mid); }
+
+  @media (max-width: 700px) {
+    .footer-inner { flex-direction: column; gap: 14px; text-align: center; padding: 24px 28px; }
+    .nav { padding: 12px 18px 13px; }
+    .main-area { padding: 28px 18px 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<header class="header">
+  <nav class="nav">
+    <div class="nav-left">
+      <a class="logo" href="/Dashboard/">
+        <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar" class="logo-img">
+      </a>
+      <div class="breadcrumbs">
+        <a href="/Dashboard/">Dashboard</a>
+        <span class="sep">/</span>
+        <a href="/les7">Les 7</a>
+        <span class="sep">/</span>
+        <span class="active">Formele e-mail oefenen</span>
+      </div>
+    </div>
+    <div class="nav-right">
+      <button class="settings-btn" title="Instellingen">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l1.8-1.4-2-3.4-2.1.6a7.4 7.4 0 0 0-2.6-1.5L14 2h-4l-.5 2.3a7.4 7.4 0 0 0-2.6 1.5l-2.1-.6-2 3.4L4.6 10.5a7.6 7.6 0 0 0 0 3L2.8 15l2 3.4 2.1-.6c.76.66 1.64 1.17 2.6 1.5L10 22h4l.5-2.3a7.4 7.4 0 0 0 2.6-1.5l2.1.6 2-3.4-1.8-1.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="avatar">JM</div>
+    </div>
+  </nav>
+</header>
+
+<!-- ── MAIN ── -->
+<div class="main-area">
+
+  <div class="situatie-kaart">
+    <div class="situatie-icoon"><img src="/Afbeeldingen/emojis%20nieuw/envelop.png" alt=""></div>
+    <div class="situatie-tekst">
+      <div class="situatie-body">Opdracht: schrijf de informele e-mail om naar een formele e-mail met behulp van de checklist.</div>
+    </div>
+  </div>
+
+  <div class="opdracht-grid">
+
+    <!-- INFORMEEL APPJE + CHECKLIST -->
+    <div style="display:flex; flex-direction:column; gap:24px;">
+      <div class="informeel-kaart">
+        <div class="informeel-badge"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2l1.6 5.2H19l-4.3 3.1 1.6 5.2L12 12.4l-4.3 3.1 1.6-5.2L5 7.2h5.4z" stroke="#92400e" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+        <div class="informeel-label">Informele e-mail</div>
+        <div class="informeel-tekst" id="informeel-tekst"></div>
+      </div>
+
+      <div class="checklist-kaart">
+        <div class="checklist-titel">Checklist</div>
+        <div id="checklist-lijst"></div>
+        <div class="succes-balk" id="succes-balk">
+          <div class="succes-tekst">Top! Je e-mail is klaar om te versturen.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIL EDITOR -->
+    <div>
+      <div class="mail-kaart">
+        <div class="mail-titelbalk">
+          <span class="mail-dot" style="background:#ef4444"></span>
+          <span class="mail-dot" style="background:#f59e0b"></span>
+          <span class="mail-dot" style="background:#10a37f"></span>
+          <span class="mail-titel">Formele e-mail</span>
+        </div>
+        <div class="mail-body">
+          <div class="mail-veld">
+            <div class="mail-veld-label">Aan</div>
+            <div class="mail-veld-aan">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h16v12H7l-3 3V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              <span id="aan-veld"></span>
+            </div>
+          </div>
+          <div class="mail-veld">
+            <div class="mail-veld-label">Onderwerp</div>
+            <input class="mail-input" id="onderwerp-input" type="text" placeholder="Typ hier je onderwerp..." autocomplete="off">
+          </div>
+          <div class="mail-veld">
+            <div class="mail-veld-label">E-mail</div>
+            <textarea class="mail-input mail-textarea" id="bericht-input" placeholder="Typ hier je formele e-mail"></textarea>
+          </div>
+          <div class="mail-acties">
+            <button class="btn-secundair" type="button" id="voorbeeld-btn">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7"/></svg>
+              Voorbeelden bekijken
+            </button>
+            <div class="verzenden-wrap">
+              <button class="btn-verzenden" type="button" id="verzenden-btn" disabled>
+                Verzenden
+                <svg viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M22 2l-7 20-4-9-9-4 20-7z" stroke="white" stroke-width="2" stroke-linejoin="round"/></svg>
+              </button>
+              <div class="verzenden-tooltip">Voldoe eerst aan alle eisen</div>
+            </div>
+          </div>
+          <div class="voorbeeld-wrap" id="voorbeeld-wrap">
+            <div class="voorbeeld-kaart">
+              <div class="voorbeeld-label">Voorbeelden</div>
+              <div class="voorbeeld-kop">
+                <span>Informeel</span>
+                <span class="voorbeeld-pijl-spacer"></span>
+                <span>Formeel</span>
+              </div>
+              <div id="voorbeeld-paren"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar" class="logo-img"></div>
+    <div class="footer-links"><a href="#">Privacy</a><a href="#">Contact</a></div>
+    <div class="footer-copy">© 2026 Klaar voor Middelbaar</div>
+  </div>
+</footer>
+
+<!-- ── WELKOM OVERLAY ── -->
+<div class="overlay open" id="welkom-overlay">
+  <div class="resultaat-kaart">
+    <div class="resultaat-trofee"><img src="/Afbeeldingen/emojis%20nieuw/envelop.png" alt="" style="width:30px; height:30px;"></div>
+    <div class="resultaat-titel">Geachte leerling,</div>
+    <div class="resultaat-compliment">U gaat zo een formele e-mail schrijven naar uw juf of meester. Vul alstublieft eerst uw voornaam in, zodat u kunt beginnen.</div>
+    <div class="welkom-veld">
+      <input class="mail-input" id="welkom-naam-input" type="text" placeholder="Uw voornaam" autocomplete="off">
+    </div>
+    <button class="btn-sluiten" type="button" id="welkom-start-btn" disabled>Beginnen</button>
+  </div>
+</div>
+
+<!-- ── RESULTAAT OVERLAY ── -->
+<div class="overlay" id="resultaat-overlay">
+  <div class="resultaat-kaart">
+    <div class="resultaat-trofee"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#10a37f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="resultaat-titel">E-mail gecontroleerd!</div>
+    <div class="resultaat-compliment" id="resultaat-compliment"></div>
+    <button class="btn-sluiten" type="button" id="sluiten-btn">Sluiten</button>
+  </div>
+</div>
+
+<script>
+  /* ── Docentgegevens: makkelijk aanpasbaar, later dynamisch uit docentaccount ── */
+  const teacher = {
+    firstName: 'Sanne',
+    lastName: 'Jongmans',
+    gender: 'mevrouw', // 'mevrouw' of 'meneer'
+    email: 'docent@middelbare-school.nl'
+  };
+
+  document.getElementById('aan-veld').textContent = teacher.email;
+
+  const INFORMELE_TEKST =
+`Yoo Ingrid Jongmans,
+
+Alles lekker?
+
+Ik snap geen bal van wiskunde hoofdstuk 6 opdracht 4. Help me ff. Ik kan dinsdag, jij toch ook wel?
+
+Laat maar wetuhhhh.
+
+Laterrrr,
+[JOUW NAAM]`;
+  document.getElementById('informeel-tekst').textContent = INFORMELE_TEKST;
+
+  const AANHEF = teacher.gender === 'meneer' ? 'meneer' : 'mevrouw';
+
+  const ONDERWERP_KEYWOORDEN = [
+    'wiskunde', 'rekenen', 'hoofdstuk', 'opdracht', 'vraag', 'som',
+    'huiswerk', 'hulp', 'helpen', 'uitleg', 'begrijp', 'snappen', 'snap', '6', '4'
+  ];
+
+  const VOORBEELD_PAREN = [
+    { informeel: '"Hoi Sem Jongmans,"', formeel: '"Beste meneer Jongmans,"' },
+    { informeel: 'Alles goed maatje?', formeel: 'Hoe gaat het met u?' },
+    { informeel: 'Kun je morgen bro?', formeel: 'Heeft u morgen tijd om mij te helpen?' },
+    { informeel: 'De mazzel,\nJay', formeel: 'Met vriendelijke groet,\nJay van der Melkweg' }
+  ];
+  document.getElementById('voorbeeld-paren').innerHTML = VOORBEELD_PAREN.map(p => `
+    <div class="voorbeeld-paar">
+      <div class="voorbeeld-informeel">${p.informeel}</div>
+      <svg class="voorbeeld-pijl" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="voorbeeld-formeel">${p.formeel}</div>
+    </div>`).join('');
+
+  const ICON_KRUIS = `<svg viewBox="0 0 24 24" fill="none"><path d="M7 7l10 10M17 7L7 17" stroke="#ef4444" stroke-width="2.4" stroke-linecap="round"/></svg>`;
+  const ICON_VINK  = `<svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5l5 5L19 7" stroke="white" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  const VOORBEELD_TIP = 'Twijfel je? Bekijk de voorbeelden.';
+
+  const CHECKLIST = [
+    { id: 'onderwerp',  label: 'Vul een onderwerp in', tip: 'Het onderwerp van je e-mail moet te maken hebben met je wiskunde opdracht.' },
+    { id: 'aanhef',     label: `Begin met "Beste ${AANHEF} + achternaam,"`, tip: VOORBEELD_TIP, toonVoorbeeld: true },
+    { id: 'uvorm',      label: 'Gebruik u en geen jij', tip: VOORBEELD_TIP, toonVoorbeeld: true },
+    { id: 'vraag',      label: 'Stel een duidelijke vraag over hulp bij wiskunde', tip: 'Vraag om hulp (bekijk de voorbeelden) bij wiskunde. Bij een vraag hoort natuurlijk ook altijd een vraagteken.', toonVoorbeeld: true },
+    { id: 'afsluiting', label: 'Sluit je e-mail netjes af met je naam erbij', tip: VOORBEELD_TIP, toonVoorbeeld: true }
+  ];
+
+  const lijstEl = document.getElementById('checklist-lijst');
+  lijstEl.innerHTML = CHECKLIST.map(c => `
+    <div class="checklist-item fout" id="item-${c.id}">
+      <div class="check-icoon">${ICON_KRUIS}</div>
+      <div class="check-tekst">${c.label}</div>
+      <div class="check-tip-wrap${c.toonVoorbeeld ? ' check-tip-voorbeeld' : ''}">
+        <div class="check-tip-icoon">?</div>
+        <div class="check-tip-tooltip">${c.tip}</div>
+      </div>
+    </div>`).join('');
+
+  document.querySelectorAll('.check-tip-voorbeeld').forEach(wrap => {
+    wrap.addEventListener('mouseenter', () => {
+      document.getElementById('voorbeeld-btn').classList.add('dans');
+    });
+    wrap.addEventListener('mouseleave', () => {
+      document.getElementById('voorbeeld-btn').classList.remove('dans');
+    });
+  });
+
+  const AFSLUITINGEN = [
+    'met vriendelijke groet',
+    'vriendelijke groet',
+    'vriendelijke groeten',
+    'vriendelijke groetjes',
+    'groetjes',
+    'groet',
+    'groeten',
+    'hartelijke groet',
+    'hartelijke groeten',
+    'alvast bedankt',
+    'bedankt'
+  ];
+
+  function evalueer() {
+    const onderwerp = document.getElementById('onderwerp-input').value.trim();
+    const bericht = document.getElementById('bericht-input').value;
+    const berichtTrim = bericht.trim();
+    const laag = bericht.toLowerCase();
+
+    const checks = {};
+    checks.onderwerp = onderwerp.length >= 3 && ONDERWERP_KEYWOORDEN.some(k => onderwerp.toLowerCase().includes(k));
+
+    const aanhefRegex = new RegExp(`^beste\\s+${AANHEF}\\s+${teacher.lastName}\\b`, 'i');
+    checks.aanhef = aanhefRegex.test(berichtTrim);
+
+    checks.uvorm = /\b(u|uw)\b/i.test(bericht) && !/\b(jij|je)\b/i.test(bericht);
+    const heeftVraagteken = bericht.includes('?');
+    const hulpWoorden = ['help', 'hulp', 'ondersteun', 'assist', 'bijstaan', 'begeleid', 'uitleg'];
+    const heeftHulpvraag = hulpWoorden.some(woord => laag.includes(woord));
+    const wiskundeWoorden = ['wiskunde', 'rekenen', 'som', 'sommen', 'opdracht', 'opgave', 'hoofdstuk', 'oefening', '6', '4'];
+    const gaatOverWiskunde = wiskundeWoorden.some(woord => laag.includes(woord));
+    checks.vraag = heeftVraagteken && heeftHulpvraag && gaatOverWiskunde;
+
+    const afsluitRegex = new RegExp(`\\b(${AFSLUITINGEN.join('|')})\\b`, 'gi');
+    let afsluitMatch, laatsteAfsluitMatch = null;
+    while ((afsluitMatch = afsluitRegex.exec(laag))) { laatsteAfsluitMatch = afsluitMatch; }
+    const afsluitingGevonden = !!laatsteAfsluitMatch;
+    let naamGevonden = false;
+    if (afsluitingGevonden) {
+      const restStart = laatsteAfsluitMatch.index + laatsteAfsluitMatch[0].length;
+      const rest = bericht.slice(restStart).replace(/[,\s]+/g, ' ').trim();
+      naamGevonden = rest.length >= 2;
+    }
+    checks.afsluiting = afsluitingGevonden && naamGevonden;
+
+    CHECKLIST.forEach(c => {
+      const el = document.getElementById('item-' + c.id);
+      const goed = !!checks[c.id];
+      el.classList.toggle('goed', goed);
+      el.classList.toggle('fout', !goed);
+      el.querySelector('.check-icoon').innerHTML = goed ? ICON_VINK : ICON_KRUIS;
+    });
+
+    const alleGoed = CHECKLIST.every(c => checks[c.id]);
+    document.getElementById('succes-balk').classList.toggle('show', alleGoed);
+    const verzendBtn = document.getElementById('verzenden-btn');
+    verzendBtn.disabled = !alleGoed;
+    verzendBtn.classList.toggle('klaar', alleGoed);
+
+    return checks;
+  }
+
+  document.getElementById('onderwerp-input').addEventListener('input', evalueer);
+  document.getElementById('bericht-input').addEventListener('input', evalueer);
+  evalueer();
+
+  document.getElementById('voorbeeld-btn').addEventListener('click', () => {
+    const wrap = document.getElementById('voorbeeld-wrap');
+    const open = wrap.classList.toggle('open');
+    document.getElementById('voorbeeld-btn').querySelector('svg').style.transform = open ? 'scale(1.1)' : '';
+  });
+
+  const COMPLIMENT_TEKST = 'Helemaal goed! Zo schrijf je een net berichtje aan een leerkracht. Jouw juf of meester gaat alle e-mails zo bespreken.';
+
+  document.getElementById('verzenden-btn').addEventListener('click', () => {
+    evalueer();
+    document.getElementById('resultaat-compliment').textContent = COMPLIMENT_TEKST;
+
+    document.getElementById('resultaat-overlay').classList.add('open');
+  });
+
+  document.getElementById('sluiten-btn').addEventListener('click', () => {
+    document.getElementById('resultaat-overlay').classList.remove('open');
+  });
+
+  const welkomInput = document.getElementById('welkom-naam-input');
+  const welkomBtn = document.getElementById('welkom-start-btn');
+  welkomInput.addEventListener('input', () => {
+    welkomBtn.disabled = welkomInput.value.trim().length < 2;
+  });
+  welkomInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !welkomBtn.disabled) welkomBtn.click();
+  });
+  welkomBtn.addEventListener('click', () => {
+    const naam = welkomInput.value.trim();
+    document.getElementById('informeel-tekst').textContent = INFORMELE_TEKST.replace('[JOUW NAAM]', naam);
+    document.getElementById('welkom-overlay').classList.remove('open');
+  });
+  welkomInput.focus();
+</script>
+</body>
+</html>

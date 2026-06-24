@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Stress Challenge — Klaar voor Middelbaar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --card-bg: #ffffff;
+    --primary: #72a8f9;
+    --primary-dark: #4e8ef3;
+    --primary-soft: rgba(78,142,243,0.10);
+    --green: #10a37f;
+    --green-dark: #0c8268;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --purple: #7c3aed;
+    --dark: #191c1d;
+    --muted: #6d747a;
+    --border: #eceeee;
+    --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+    --shadow-btn-green: 0 10px 15px -3px rgba(0,0,0,0.18), 0 4px 6px -4px rgba(0,0,0,0.10);
+    --shadow-btn-blue: 0 10px 20px rgba(78,142,243,0.30);
+    --r-pill: 9999px;
+  }
+
+  html, body { height: 100%; overflow-x: hidden; }
+  body {
+    font-family: 'Inria Sans', Georgia, serif; color: var(--dark);
+    min-height: 100vh; background:#0f1a30;
+    transition: background 0.6s ease;
+  }
+  body.fase-rustig    { background: #eef4fe; }
+  body.fase-reflectie { background: #eef9f5; }
+  body.fase-ontdekking{ background: #0f1a30; }
+
+  .icon { display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .icon svg { display:block; width:100%; height:100%; }
+
+  .scherm { display:none; min-height:100vh; align-items:center; justify-content:center; padding:24px; }
+  .scherm.actief { display:flex; animation: fadeIn 0.4s ease both; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .kaart {
+    background:var(--card-bg); border-radius:32px; box-shadow:var(--shadow-card);
+    padding:40px 34px; max-width:440px; width:100%; text-align:center; position:relative;
+  }
+
+  /* ── TOPBAR LOGO (start/eind/reflectie) ── */
+  .topbar { position:fixed; top:18px; left:0; right:0; text-align:center; z-index:5; pointer-events:none; }
+  .topbar img { height:40px; opacity:0.9; }
+
+  /* ── STARTSCHERM ── */
+  .start-hero {
+    background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
+    border-radius:40px; padding:46px 38px; color:white; text-align:center;
+    max-width:460px; width:100%; position:relative; overflow:hidden;
+  }
+  .start-hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.14) 1.5px, transparent 1.5px); background-size:24px 24px; }
+  .start-hero::after { content:''; position:absolute; top:-110px; right:-90px; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%); }
+  .start-eyebrow { position:relative; font-size:12px; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; opacity:0.85; margin-bottom:14px; }
+  .start-titel { position:relative; font-size:34px; font-weight:700; margin-bottom:14px; line-height:1.15; }
+  .start-tekst { position:relative; font-size:15px; opacity:0.92; line-height:1.6; margin-bottom:28px; }
+  .start-missie {
+    position:relative; background:rgba(255,255,255,0.14); border:1.5px dashed rgba(255,255,255,0.4);
+    border-radius:18px; padding:16px 18px; font-size:14px; font-weight:700; line-height:1.5; margin-bottom:26px; text-align:left;
+  }
+  .start-missie .icon { width:18px; height:18px; margin-right:6px; vertical-align:-3px; }
+  .btn-start {
+    position:relative; display:inline-flex; align-items:center; gap:10px; width:100%; justify-content:center;
+    background:white; color:var(--primary-dark); border:none; border-radius:99px; cursor:pointer;
+    font-family:inherit; font-size:19px; font-weight:700; padding:17px 30px; box-shadow:var(--shadow-btn-blue);
+    transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .btn-start:hover { transform: translateY(-3px); }
+
+  /* ── HUD (tijdens level) ── */
+  .hud { position:fixed; top:0; left:0; right:0; z-index:10; padding:16px 18px 0; }
+  .hud-rij { display:flex; align-items:center; gap:12px; max-width:600px; margin:0 auto; }
+  .hud-level {
+    background:rgba(255,255,255,0.95); border-radius:99px; padding:8px 16px; font-size:13px; font-weight:700;
+    color:var(--primary-dark); box-shadow:0 4px 12px rgba(0,0,0,0.12); white-space:nowrap;
+  }
+  .hud-score {
+    background:rgba(255,255,255,0.95); border-radius:99px; padding:8px 16px; font-size:13px; font-weight:700;
+    color:var(--green-dark); box-shadow:0 4px 12px rgba(0,0,0,0.12); white-space:nowrap;
+  }
+  .hud-stress-wrap { flex:1; background:rgba(255,255,255,0.95); border-radius:99px; padding:6px 14px; box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+  .hud-stress-label { font-size:9px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--muted); margin-bottom:3px; display:flex; justify-content:space-between; }
+  .hud-stress-track { height:7px; background:#eceeee; border-radius:99px; overflow:hidden; }
+  .hud-stress-fill { height:100%; border-radius:99px; width:0%; background:linear-gradient(90deg, var(--green), var(--amber), var(--red)); transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
+
+  /* ── speelveld achtergrond intensiteit per level ── */
+  .speelveld-bg { position:fixed; inset:0; z-index:0; transition: background 0.6s ease; }
+  .speelveld-bg.lvl1 { background: linear-gradient(160deg,#eef4fe,#dfeaff); }
+  .speelveld-bg.lvl2 { background: linear-gradient(160deg,#eef4fe,#d8e8ff); }
+  .speelveld-bg.lvl3 { background: linear-gradient(160deg,#fff7e6,#ffe9c2); }
+  .speelveld-bg.lvl4 { background: linear-gradient(160deg,#ffeae6,#ffd2c7); }
+  .speelveld-bg.lvl5 { background: linear-gradient(160deg,#2a0f12,#4a1118); }
+  .speelveld-bg.lvl5 ~ * { color: var(--dark); }
+
+  .shake { animation: shake 0.32s ease-in-out infinite; }
+  @keyframes shake { 0%,100%{transform:translate(0,0)} 25%{transform:translate(-2px,1px)} 50%{transform:translate(2px,-1px)} 75%{transform:translate(-1px,-2px)} }
+
+  /* ── GEHEUGEN-GETAL SCHERM ── */
+  .geheugen-kaart { background:var(--card-bg); border-radius:36px; box-shadow:var(--shadow-card); padding:48px 36px; max-width:380px; width:100%; text-align:center; }
+  .geheugen-label { font-size:13px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--primary-dark); margin-bottom:18px; }
+  .geheugen-getal { font-family:'JetBrains Mono', monospace; font-size:64px; font-weight:700; color:var(--dark); letter-spacing:4px; margin-bottom:18px; }
+  .geheugen-balk-track { height:6px; background:#eceeee; border-radius:99px; overflow:hidden; max-width:200px; margin:0 auto; }
+  .geheugen-balk-fill { height:100%; background:var(--primary); border-radius:99px; width:100%; transition: width linear; }
+
+  /* ── TAAKSCHERM (sterren + som) ── */
+  .taak-wrap { position:relative; z-index:1; width:100%; max-width:640px; padding-top:84px; }
+  .taak-kop { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:14px; }
+  .taak-titel { font-size:18px; font-weight:700; }
+  .timer-pil {
+    display:inline-flex; align-items:center; gap:6px; background:white; border-radius:99px; padding:7px 14px;
+    font-size:14px; font-weight:700; box-shadow:0 4px 10px rgba(0,0,0,0.10);
+  }
+  .timer-pil .icon { width:16px; height:16px; }
+  .timer-pil.kritiek { color:var(--red); animation: pulseRed 0.6s ease-in-out infinite; }
+  @keyframes pulseRed { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+  .sterren-veld {
+    position:relative; background:rgba(255,255,255,0.55); border:1.5px solid rgba(255,255,255,0.7);
+    border-radius:28px; height:240px; margin-bottom:16px; overflow:hidden; backdrop-filter: blur(2px);
+  }
+  .ster-knop {
+    position:absolute; width:46px; height:46px; border:none; background:transparent; cursor:pointer;
+    padding:0; transition: transform 0.18s, opacity 0.18s;
+  }
+  .ster-knop:active { transform: scale(0.85); }
+  .ster-knop.weg { opacity:0; transform:scale(0.3) rotate(40deg); pointer-events:none; }
+  .ster-knop .icon { width:100%; height:100%; }
+
+  .som-kaart {
+    background:white; border-radius:20px; padding:16px 20px; box-shadow:0 8px 20px rgba(0,0,0,0.10);
+    display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:8px;
+  }
+  .som-tekst { font-size:22px; font-weight:700; font-family:'JetBrains Mono', monospace; }
+  .som-input {
+    width:70px; font-family:'JetBrains Mono', monospace; font-size:20px; font-weight:700; text-align:center;
+    border:2px solid var(--border); border-radius:14px; padding:8px 6px; color:var(--dark);
+  }
+  .som-input:focus { outline:none; border-color:var(--primary); }
+  .btn-som {
+    border:none; border-radius:99px; background:var(--green); color:white; font-family:inherit; font-weight:700;
+    font-size:14px; padding:10px 18px; cursor:pointer;
+  }
+  .som-status { font-size:13px; font-weight:700; margin-top:2px; height:18px; }
+  .som-status.goed { color:var(--green-dark); }
+  .som-status.fout { color:var(--red); }
+
+  /* ── AFLEIDING TOASTS ── */
+  .afleiding-laag { position:fixed; top:90px; right:16px; z-index:40; display:flex; flex-direction:column; gap:8px; max-width:240px; }
+  .afleiding-toast {
+    background:#1f2530; color:white; border-radius:14px; padding:10px 14px; font-size:12.5px; font-weight:700;
+    box-shadow:0 8px 18px rgba(0,0,0,0.3); transform:translateX(120%); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    display:flex; align-items:center; gap:8px;
+  }
+  .afleiding-toast.show { transform: translateX(0); }
+  .afleiding-toast .icon { width:16px; height:16px; flex-shrink:0; }
+
+  /* ── HERINNER-SCHERM ── */
+  .herinner-kaart { background:white; border-radius:32px; box-shadow:var(--shadow-card); padding:38px 32px; max-width:380px; width:100%; text-align:center; position:relative; z-index:2; }
+  .herinner-eyebrow { font-size:12px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--primary-dark); margin-bottom:10px; }
+  .herinner-vraag { font-size:19px; font-weight:700; margin-bottom:22px; }
+  .opties-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .optie-knop {
+    border:2px solid var(--border); background:#f7f8f9; border-radius:16px; padding:16px;
+    font-family:'JetBrains Mono', monospace; font-size:20px; font-weight:700; color:var(--dark); cursor:pointer;
+    transition: transform 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .optie-knop:hover { border-color:var(--primary); background:var(--primary-soft); }
+  .optie-knop:active { transform:scale(0.96); }
+  .optie-knop.goed { border-color:var(--green); background:rgba(16,163,127,0.14); }
+  .optie-knop.fout { border-color:var(--red); background:rgba(239,68,68,0.12); }
+
+  .feedback-flits {
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:60;
+    pointer-events:none; opacity:0; transition: opacity 0.2s;
+  }
+  .feedback-flits.show { opacity:1; }
+  .feedback-flits .icon { width:120px; height:120px; filter: drop-shadow(0 10px 24px rgba(0,0,0,0.25)); }
+
+  /* ── EINDSCHERM ── */
+  .eind-hero { background:linear-gradient(135deg,#134e4a 0%,#0f766e 55%,#14b8a6 100%); border-radius:40px; padding:44px 36px; color:white; text-align:center; max-width:420px; width:100%; }
+  .eind-trofee { width:64px; height:64px; margin:0 auto 14px; }
+  .eind-titel { font-size:27px; font-weight:700; margin-bottom:22px; }
+  .eind-stats { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:26px; }
+  .eind-stat-kaart { background:rgba(255,255,255,0.14); border-radius:18px; padding:14px 6px; }
+  .eind-stat-getal { font-size:24px; font-weight:700; }
+  .eind-stat-label { font-size:10px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; opacity:0.85; margin-top:2px; }
+  .btn-verder { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; border:none; border-radius:99px; cursor:pointer; background:white; color:#0f766e; font-family:inherit; font-weight:700; font-size:16px; padding:15px; transition: transform 0.2s; }
+  .btn-verder:hover { transform: translateY(-2px); }
+
+  /* ── REFLECTIESCHERM ── */
+  .reflectie-kaart { background:white; border-radius:32px; box-shadow:var(--shadow-card); padding:38px 32px; max-width:480px; width:100%; }
+  .reflectie-eyebrow { font-size:12px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--green-dark); margin-bottom:8px; text-align:center; }
+  .reflectie-titel { font-size:23px; font-weight:700; margin-bottom:8px; text-align:center; }
+  .reflectie-sub { font-size:14px; color:var(--muted); line-height:1.6; margin-bottom:26px; text-align:center; }
+  .reflectie-vraag { margin-bottom:18px; }
+  .reflectie-vraag-tekst { font-size:15px; font-weight:700; margin-bottom:8px; }
+  .reflectie-textarea {
+    width:100%; min-height:54px; font-family:inherit; font-size:14px; color:var(--dark);
+    background:#f7f8f9; border:1.5px solid var(--border); border-radius:14px; padding:12px 14px; resize:vertical;
+  }
+  .reflectie-textarea:focus { outline:none; border-color:var(--green); background:white; }
+  .reflectie-textarea::placeholder { color: rgba(109,116,122,0.5); }
+
+  /* ── ONTDEKKING (leerboodschap) ── */
+  .ontdekking-kaart {
+    background: linear-gradient(150deg, #1a0f2e 0%, #4c1d95 45%, #7c3aed 100%);
+    border-radius:36px; padding:42px 34px; color:white; text-align:center; max-width:460px; width:100%;
+    position:relative; overflow:hidden; box-shadow:0 30px 60px rgba(0,0,0,0.4);
+  }
+  .ontdekking-kaart::before { content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.10) 1.5px, transparent 1.5px); background-size:22px 22px; }
+  .ontdekking-glow { position:absolute; top:-100px; left:50%; transform:translateX(-50%); width:280px; height:280px; border-radius:50%; background:radial-gradient(circle, rgba(253,224,71,0.35) 0%, transparent 70%); }
+  .ontdekking-badge { position:relative; width:72px; height:72px; margin:0 auto 16px; border-radius:50%; background:rgba(255,255,255,0.16); border:2px solid rgba(255,255,255,0.4); display:flex; align-items:center; justify-content:center; }
+  .ontdekking-badge .icon { width:38px; height:38px; }
+  .ontdekking-eyebrow { position:relative; font-size:12px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; opacity:0.85; margin-bottom:14px; }
+  .ontdekking-titel { position:relative; font-size:24px; font-weight:700; margin-bottom:20px; line-height:1.3; }
+  .ontdekking-punt {
+    position:relative; display:flex; align-items:flex-start; gap:12px; text-align:left;
+    background:rgba(255,255,255,0.10); border-radius:16px; padding:14px 16px; margin-bottom:10px;
+    font-size:14px; line-height:1.5; opacity:0; transform:translateY(10px);
+    animation: puntIn 0.5s ease forwards;
+  }
+  .ontdekking-punt .icon { width:20px; height:20px; flex-shrink:0; margin-top:1px; }
+  @keyframes puntIn { to { opacity:1; transform:translateY(0); } }
+  .btn-opnieuw {
+    position:relative; display:inline-flex; align-items:center; gap:10px; width:100%; justify-content:center; margin-top:14px;
+    border:none; border-radius:99px; cursor:pointer; background:white; color:#4c1d95; font-family:inherit;
+    font-weight:700; font-size:16px; padding:15px; transition: transform 0.2s;
+  }
+  .btn-opnieuw:hover { transform: translateY(-2px); }
+
+  @media (max-width: 460px) {
+    .kaart, .start-hero, .geheugen-kaart, .herinner-kaart, .eind-hero, .reflectie-kaart, .ontdekking-kaart { padding-left:24px; padding-right:24px; }
+    .geheugen-getal { font-size:48px; letter-spacing:2px; }
+    .eind-stats { gap:6px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="speelveld-bg lvl1" id="speelveld-bg"></div>
+<div class="topbar" id="topbar"><img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar"></div>
+
+<!-- ══════════ HUD ══════════ -->
+<div class="hud" id="hud" style="display:none">
+  <div class="hud-rij">
+    <div class="hud-level" id="hud-level">Level 1</div>
+    <div class="hud-stress-wrap">
+      <div class="hud-stress-label"><span>Stress</span><span id="hud-stress-getal">0%</span></div>
+      <div class="hud-stress-track"><div class="hud-stress-fill" id="hud-stress-fill"></div></div>
+    </div>
+    <div class="hud-score" id="hud-score">0 pt</div>
+  </div>
+</div>
+
+<!-- ══════════ START ══════════ -->
+<div class="scherm actief" id="scherm-start">
+  <div class="start-hero">
+    <div class="start-eyebrow">Geheime missie · Klaar voor Middelbaar</div>
+    <div class="start-titel">Stress Challenge</div>
+    <div class="start-tekst">Je bent ondergedoken op een geheime missie. Voer opdrachten uit, onthoud belangrijke codes en blijf scherp, ook als het druk wordt.</div>
+    <div class="start-missie"><span class="icon" id="icoon-missie-start"></span>Onthoud steeds de geheime code en voer je opdrachten uit. Klaar voor de eerste ronde?</div>
+    <button class="btn-start" type="button" onclick="startChallenge()">▶ Start de missie</button>
+  </div>
+</div>
+
+<!-- ══════════ GEHEUGEN-GETAL ══════════ -->
+<div class="scherm" id="scherm-geheugen">
+  <div class="geheugen-kaart">
+    <div class="geheugen-label">Onthoud deze code</div>
+    <div class="geheugen-getal" id="geheugen-getal">000</div>
+    <div class="geheugen-balk-track"><div class="geheugen-balk-fill" id="geheugen-balk"></div></div>
+  </div>
+</div>
+
+<!-- ══════════ TAAK (sterren + som) ══════════ -->
+<div class="scherm" id="scherm-taak">
+  <div class="taak-wrap">
+    <div class="taak-kop">
+      <div class="taak-titel" id="taak-titel">Verzamel alle sterren</div>
+      <div class="timer-pil" id="timer-pil" style="display:none"><span class="icon" id="icoon-timer"></span><span id="timer-getal">20</span>s</div>
+    </div>
+    <div class="sterren-veld" id="sterren-veld"></div>
+    <div class="som-kaart" id="som-kaart" style="display:none">
+      <span class="som-tekst" id="som-tekst">7 + 8 =</span>
+      <input class="som-input" id="som-input" type="number" inputmode="numeric">
+      <button class="btn-som" type="button" onclick="checkSom()">Check</button>
+    </div>
+    <div class="som-status" id="som-status"></div>
+  </div>
+</div>
+
+<div class="afleiding-laag" id="afleiding-laag"></div>
+
+<!-- ══════════ HERINNER ══════════ -->
+<div class="scherm" id="scherm-herinner">
+  <div class="herinner-kaart">
+    <div class="herinner-eyebrow">Geheugentest</div>
+    <div class="herinner-vraag">Wat was de geheime code?</div>
+    <div class="opties-grid" id="opties-grid"></div>
+  </div>
+</div>
+
+<div class="feedback-flits" id="feedback-flits"><span class="icon" id="feedback-icoon"></span></div>
+
+<!-- ══════════ EINDSCHERM ══════════ -->
+<div class="scherm" id="scherm-eind">
+  <div class="eind-hero">
+    <div class="eind-trofee"><span class="icon" id="icoon-trofee" style="width:100%;height:100%"></span></div>
+    <div class="eind-titel">Missie volbracht!</div>
+    <div class="eind-stats">
+      <div class="eind-stat-kaart"><div class="eind-stat-getal" id="eind-score">0</div><div class="eind-stat-label">Score</div></div>
+      <div class="eind-stat-kaart"><div class="eind-stat-getal" id="eind-stress">100%</div><div class="eind-stat-label">Stress</div></div>
+      <div class="eind-stat-kaart"><div class="eind-stat-getal" id="eind-fouten">0</div><div class="eind-stat-label">Fouten</div></div>
+    </div>
+    <button class="btn-verder" type="button" onclick="naarReflectie()">Naar de reflectie →</button>
+  </div>
+</div>
+
+<!-- ══════════ REFLECTIE ══════════ -->
+<div class="scherm" id="scherm-reflectie">
+  <div class="reflectie-kaart">
+    <div class="reflectie-eyebrow">Even stilstaan</div>
+    <div class="reflectie-titel">Hoe was dat voor jou?</div>
+    <div class="reflectie-sub">Geen goed of fout antwoord. Denk gewoon eerlijk terug aan hoe het spel voelde.</div>
+
+    <div class="reflectie-vraag">
+      <div class="reflectie-vraag-tekst">Wanneer werd het moeilijk?</div>
+      <textarea class="reflectie-textarea" placeholder="Bijvoorbeeld: vanaf level..."></textarea>
+    </div>
+    <div class="reflectie-vraag">
+      <div class="reflectie-vraag-tekst">Wanneer maakte je meer fouten?</div>
+      <textarea class="reflectie-textarea" placeholder="Schrijf hier je antwoord..."></textarea>
+    </div>
+    <div class="reflectie-vraag">
+      <div class="reflectie-vraag-tekst">Waardoor kwam dat, denk je?</div>
+      <textarea class="reflectie-textarea" placeholder="Schrijf hier je antwoord..."></textarea>
+    </div>
+    <div class="reflectie-vraag">
+      <div class="reflectie-vraag-tekst">Wat gebeurde er met je concentratie?</div>
+      <textarea class="reflectie-textarea" placeholder="Schrijf hier je antwoord..."></textarea>
+    </div>
+
+    <button class="btn-verder" type="button" style="background:var(--green);color:white;margin-top:8px" onclick="naarOntdekking()">Naar de ontdekking →</button>
+  </div>
+</div>
+
+<!-- ══════════ ONTDEKKING ══════════ -->
+<div class="scherm" id="scherm-ontdekking">
+  <div class="ontdekking-kaart">
+    <div class="ontdekking-glow"></div>
+    <div class="ontdekking-badge"><span class="icon" id="icoon-ontdekking-badge" style="width:38px;height:38px"></span></div>
+    <div class="ontdekking-eyebrow">Achievement unlocked</div>
+    <div class="ontdekking-titel">Jouw ontdekking</div>
+    <div id="ontdekking-punten"></div>
+    <button class="btn-opnieuw" type="button" onclick="terugNaarStart()">↻ Nog een keer spelen</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   CUSTOM FLAT ICONS (geen standaard emoji's)
+   ═══════════════════════════════════════════════════════════════════════ */
+const ICONS = {
+  ster: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 4l6.5 13.5L45 19.5 34.5 29.5 37 44 24 36.5 11 44l2.5-14.5L3 19.5l14.5-2L24 4z" fill="#f59e0b"/></svg>`,
+  klok: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="26" r="18" fill="#72a8f9"/><path d="M24 16v10l8 5" stroke="white" stroke-width="3.4" stroke-linecap="round" fill="none"/><rect x="18" y="4" width="12" height="6" rx="3" fill="#4e8ef3"/></svg>`,
+  brein: `<svg viewBox="0 0 48 48" fill="none"><path d="M18 8c-5 0-8 4-8 8-3 1-5 4-5 8 0 5 4 8 8 9 0 4 4 7 8 7s8-3 8-7c4 0 8-4 8-9 0-4-2-7-5-8 0-4-3-8-8-8-2 0-4 1-5 2-1-1-3-2-5-2z" fill="#7c3aed"/><path d="M18 16v16M28 16v16M18 24h10" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round"/></svg>`,
+  bliksem: `<svg viewBox="0 0 48 48" fill="none"><path d="M26 4L12 26h10l-4 18 18-24H26l4-16z" fill="#ef4444"/></svg>`,
+  vinkje: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#10a37f"/><path d="M14 25l7 7 13-15" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>`,
+  kruis: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#ef4444"/><path d="M16 16l16 16M32 16L16 32" stroke="white" stroke-width="4" stroke-linecap="round"/></svg>`,
+  trofee: `<svg viewBox="0 0 48 48" fill="none"><path d="M14 6h20v12c0 6-4 11-10 11s-10-5-10-11V6z" fill="#fbbf24"/><path d="M14 9H7a2 2 0 0 0-2 2c0 5 3 9 8 10M34 9h7a2 2 0 0 1 2 2c0 5-3 9-8 10" stroke="#fbbf24" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="20" y="29" width="8" height="8" fill="#fbbf24"/><rect x="14" y="37" width="20" height="5" rx="2" fill="#f59e0b"/></svg>`,
+  megafoon: `<svg viewBox="0 0 48 48" fill="none"><path d="M6 20v8h6l14 8V12l-14 8H6z" fill="#f59e0b"/><path d="M30 16c3 2 3 14 0 16" stroke="#f59e0b" stroke-width="3" stroke-linecap="round" fill="none"/></svg>`,
+  vraag: `<svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#72a8f9"/><path d="M18 18c0-4 3-6 6-6s6 2 6 6c0 3-2 4-4 6s-2 3-2 5" stroke="white" stroke-width="3.4" stroke-linecap="round" fill="none"/><circle cx="24" cy="35" r="1.8" fill="white"/></svg>`,
+  lamp: `<svg viewBox="0 0 48 48" fill="none"><path d="M24 6c-8 0-13 6-13 13 0 6 3 9 6 12v5h14v-5c3-3 6-6 6-12 0-7-5-13-13-13z" fill="#fde047"/><rect x="18" y="38" width="12" height="5" rx="2" fill="#9ca3af"/></svg>`
+};
+function icon(name, size) { return `<span class="icon" style="width:${size||22}px;height:${size||22}px">${ICONS[name]}</span>`; }
+document.querySelectorAll('[id^="icoon-"]').forEach(el => {});
+document.getElementById('icoon-missie-start').innerHTML = ICONS.vraag;
+document.getElementById('icoon-timer').innerHTML = ICONS.klok;
+document.getElementById('icoon-trofee').innerHTML = ICONS.trofee;
+document.getElementById('icoon-ontdekking-badge').innerHTML = ICONS.lamp;
+
+/* ═══════════════════════════════════════════════════════════════════════
+   AUDIO (Web Audio API, geen externe bestanden)
+   ═══════════════════════════════════════════════════════════════════════ */
+let audioCtx = null;
+function piep(freq, duur, type, volume) {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.value = freq;
+    gain.gain.value = volume || 0.06;
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + (duur || 0.12));
+    osc.stop(audioCtx.currentTime + (duur || 0.12) + 0.02);
+  } catch (e) {}
+}
+const geluid = {
+  pop:    () => piep(680, 0.08, 'triangle', 0.05),
+  goed:   () => { piep(520,0.1,'sine',0.07); setTimeout(()=>piep(780,0.14,'sine',0.07), 90); },
+  fout:   () => piep(160, 0.22, 'sawtooth', 0.06),
+  tik:    () => piep(900, 0.04, 'square', 0.025),
+  whoosh: () => piep(300, 0.3, 'sine', 0.04)
+};
+
+/* ═══════════════════════════════════════════════════════════════════════
+   LEVEL-CONFIGURATIE
+   ═══════════════════════════════════════════════════════════════════════ */
+const LEVELS = [
+  { n:1, naam:'Rustig',        stress:10,  timer:null, som:false, somAantal:0, afleiding:false, afleidingSnel:false, chaos:false, sterren:8  },
+  { n:2, naam:'Tijdsdruk',     stress:25,  timer:20,   som:false, somAantal:0, afleiding:false, afleidingSnel:false, chaos:false, sterren:9  },
+  { n:3, naam:'Dubbele taak',  stress:50,  timer:20,   som:true,  somAantal:1, afleiding:false, afleidingSnel:false, chaos:false, sterren:9  },
+  { n:4, naam:'Afleiding',     stress:75,  timer:15,   som:true,  somAantal:1, afleiding:true,  afleidingSnel:false, chaos:false, sterren:10 },
+  { n:5, naam:'Chaos',         stress:100, timer:10,   som:true,  somAantal:1, afleiding:true,  afleidingSnel:false, chaos:true,  sterren:10 },
+  { n:6, naam:'Overbelast',    stress:100, timer:8,    som:true,  somAantal:2, afleiding:true,  afleidingSnel:true,  chaos:true,  sterren:12 }
+];
+const AFLEIDINGEN = [
+  { tekst:'Nog 10 seconden!', icon:'klok' },
+  { tekst:'Emma heeft level 4 gehaald!', icon:'megafoon' },
+  { tekst:'Schiet op!', icon:'bliksem' },
+  { tekst:'Let op de tijd!', icon:'klok' },
+  { tekst:'Noah is je voor...', icon:'megafoon' },
+  { tekst:'Bijna klaar, vol houden!', icon:'bliksem' }
+];
+
+let huidigLevelIdx = 0;
+let score = 0;
+let fouten = 0;
+let geheimeCode = 0;
+let somAntwoord = null;
+let somOpgelost = false;
+let somResterend = 0;
+let sterrenOver = 0;
+let taakKlaar = false;
+let timerOver = null;
+let timerInterval = null;
+let afleidingInterval = null;
+let taakStartTijd = 0;
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SCHERM-NAVIGATIE
+   ═══════════════════════════════════════════════════════════════════════ */
+function toonScherm(id) {
+  document.querySelectorAll('.scherm').forEach(s => s.classList.remove('actief'));
+  document.getElementById(id).classList.add('actief');
+}
+
+function setBodyFase(klasse) {
+  document.body.className = klasse || '';
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   FLOW
+   ═══════════════════════════════════════════════════════════════════════ */
+function startChallenge() {
+  huidigLevelIdx = 0; score = 0; fouten = 0;
+  document.getElementById('hud').style.display = 'block';
+  document.getElementById('topbar').style.display = 'none';
+  setBodyFase('');
+  verversHud();
+  speelLevel();
+}
+
+function verversHud() {
+  const lvl = LEVELS[huidigLevelIdx];
+  document.getElementById('hud-level').textContent = `Level ${lvl.n} · ${lvl.naam}`;
+  document.getElementById('hud-score').textContent = `${score} pt`;
+  document.getElementById('hud-stress-getal').textContent = lvl.stress + '%';
+  document.getElementById('hud-stress-fill').style.width = lvl.stress + '%';
+  document.getElementById('speelveld-bg').className = 'speelveld-bg lvl' + lvl.n;
+}
+
+function genereerGeheimeCode() {
+  let code;
+  do { code = Math.floor(100 + Math.random() * 900); } while (code % 100 === 0);
+  return code;
+}
+
+function speelLevel() {
+  const lvl = LEVELS[huidigLevelIdx];
+  verversHud();
+  geheimeCode = genereerGeheimeCode();
+  toonGeheugenGetal(lvl);
+}
+
+function toonGeheugenGetal(lvl) {
+  toonScherm('scherm-geheugen');
+  document.getElementById('geheugen-getal').textContent = geheimeCode;
+  const balk = document.getElementById('geheugen-balk');
+  balk.style.transition = 'none';
+  balk.style.width = '100%';
+  requestAnimationFrame(() => {
+    balk.style.transition = 'width 2.4s linear';
+    balk.style.width = '0%';
+  });
+  setTimeout(() => startTaak(lvl), 2500);
+}
+
+/* ── TAAKFASE: sterren + som + timer + afleiding + chaos ── */
+function startTaak(lvl) {
+  toonScherm('scherm-taak');
+  document.body.classList.toggle('shake', !!lvl.chaos);
+  taakKlaar = false;
+  somResterend = lvl.som ? lvl.somAantal : 0;
+  somOpgelost = somResterend <= 0;
+  taakStartTijd = Date.now();
+
+  document.getElementById('taak-titel').textContent = lvl.som
+    ? (lvl.somAantal > 1 ? `Verzamel sterren én reken ${lvl.somAantal}x!` : 'Verzamel sterren én reken!')
+    : 'Verzamel alle sterren';
+
+  // sterren
+  const veld = document.getElementById('sterren-veld');
+  veld.innerHTML = '';
+  sterrenOver = lvl.sterren;
+  const breedte = veld.clientWidth || 560, hoogte = veld.clientHeight || 240;
+  for (let i = 0; i < lvl.sterren; i++) {
+    const btn = document.createElement('button');
+    btn.className = 'ster-knop';
+    btn.innerHTML = ICONS.ster;
+    const x = 14 + Math.random() * (breedte - 60);
+    const y = 14 + Math.random() * (hoogte - 60);
+    btn.style.left = x + 'px'; btn.style.top = y + 'px';
+    btn.onclick = () => {
+      if (btn.classList.contains('weg')) return;
+      btn.classList.add('weg');
+      geluid.pop();
+      sterrenOver--;
+      if (sterrenOver <= 0 && somOpgelost) eindigTaak(lvl);
+    };
+    veld.appendChild(btn);
+  }
+
+  // som
+  const somKaart = document.getElementById('som-kaart');
+  if (lvl.som) {
+    somKaart.style.display = 'flex';
+    nieuweSom();
+  } else {
+    somKaart.style.display = 'none';
+  }
+
+  // timer
+  const timerPil = document.getElementById('timer-pil');
+  clearInterval(timerInterval);
+  if (lvl.timer) {
+    timerPil.style.display = 'inline-flex';
+    timerOver = lvl.timer;
+    document.getElementById('timer-getal').textContent = timerOver;
+    timerPil.classList.remove('kritiek');
+    timerInterval = setInterval(() => {
+      timerOver--;
+      document.getElementById('timer-getal').textContent = Math.max(0, timerOver);
+      if (timerOver <= 5) { timerPil.classList.add('kritiek'); if (lvl.chaos) geluid.tik(); }
+      if (timerOver <= 0) { clearInterval(timerInterval); eindigTaak(lvl); }
+    }, 1000);
+  } else {
+    timerPil.style.display = 'none';
+  }
+
+  // afleidingen
+  clearInterval(afleidingInterval);
+  document.getElementById('afleiding-laag').innerHTML = '';
+  if (lvl.afleiding) {
+    const interval = lvl.afleidingSnel ? () => 900 + Math.random() * 800 : () => 1800 + Math.random() * 1400;
+    afleidingInterval = setInterval(() => toonAfleiding(), interval());
+    setTimeout(() => toonAfleiding(), 500);
+  }
+}
+
+function nieuweSom() {
+  const somStatus = document.getElementById('som-status');
+  somStatus.textContent = ''; somStatus.className = 'som-status';
+  document.getElementById('som-input').value = '';
+  document.getElementById('som-input').focus();
+  const a = 2 + Math.floor(Math.random() * 11), b = 2 + Math.floor(Math.random() * 11);
+  somAntwoord = a + b;
+  document.getElementById('som-tekst').textContent = `${a} + ${b} =`;
+}
+
+function toonAfleiding() {
+  const a = AFLEIDINGEN[Math.floor(Math.random() * AFLEIDINGEN.length)];
+  const laag = document.getElementById('afleiding-laag');
+  const el = document.createElement('div');
+  el.className = 'afleiding-toast';
+  el.innerHTML = `${icon(a.icon, 16)}<span>${a.tekst}</span>`;
+  laag.appendChild(el);
+  requestAnimationFrame(() => el.classList.add('show'));
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 350); }, 2600);
+}
+
+function checkSom() {
+  if (somOpgelost) return;
+  const waarde = parseInt(document.getElementById('som-input').value, 10);
+  const status = document.getElementById('som-status');
+  if (waarde === somAntwoord) {
+    somResterend--;
+    score += 30;
+    geluid.goed();
+    verversHud();
+    if (somResterend <= 0) {
+      somOpgelost = true;
+      status.textContent = 'Goed gerekend! +30 pt';
+      status.className = 'som-status goed';
+      if (sterrenOver <= 0) eindigTaak(LEVELS[huidigLevelIdx]);
+    } else {
+      status.textContent = `Goed! +30 pt · nog ${somResterend} sommetje${somResterend > 1 ? 's' : ''}`;
+      status.className = 'som-status goed';
+      nieuweSom();
+    }
+  } else {
+    fouten++;
+    geluid.fout();
+    status.textContent = 'Niet helemaal, probeer nog eens.';
+    status.className = 'som-status fout';
+  }
+}
+
+function eindigTaak(lvl) {
+  if (taakKlaar) return;
+  taakKlaar = true;
+  clearInterval(timerInterval);
+  clearInterval(afleidingInterval);
+  document.body.classList.remove('shake');
+
+  // snelheidsbonus als alles op tijd af is
+  if (lvl.timer && timerOver > 0) {
+    const bonus = Math.round((timerOver / lvl.timer) * 20);
+    score += bonus;
+  }
+  verversHud();
+  setTimeout(() => toonHerinner(lvl), 350);
+}
+
+/* ── HERINNERFASE ── */
+function toonHerinner(lvl) {
+  toonScherm('scherm-herinner');
+  const opties = new Set([geheimeCode]);
+  while (opties.size < 4) {
+    const afwijking = (Math.floor(Math.random() * 40) + 5) * (Math.random() < 0.5 ? -1 : 1);
+    const kandidaat = geheimeCode + afwijking;
+    if (kandidaat > 99 && kandidaat < 1000 && kandidaat % 100 !== 0) opties.add(kandidaat);
+  }
+  const lijst = [...opties].sort(() => Math.random() - 0.5);
+  const grid = document.getElementById('opties-grid');
+  grid.innerHTML = '';
+  lijst.forEach(getal => {
+    const btn = document.createElement('button');
+    btn.className = 'optie-knop';
+    btn.textContent = getal;
+    btn.onclick = () => kiesHerinnerOptie(btn, getal, lvl);
+    grid.appendChild(btn);
+  });
+}
+
+function kiesHerinnerOptie(btn, getal, lvl) {
+  document.querySelectorAll('.optie-knop').forEach(b => b.onclick = null);
+  const juist = getal === geheimeCode;
+  btn.classList.add(juist ? 'goed' : 'fout');
+  if (juist) { score += 50; geluid.goed(); flitsFeedback('vinkje'); }
+  else { fouten++; geluid.fout(); flitsFeedback('kruis');
+    document.querySelectorAll('.optie-knop').forEach(b => { if (parseInt(b.textContent) === geheimeCode) b.classList.add('goed'); });
+  }
+  verversHud();
+  setTimeout(() => volgendeLevel(), 1100);
+}
+
+function flitsFeedback(naam) {
+  const el = document.getElementById('feedback-flits');
+  document.getElementById('feedback-icoon').innerHTML = ICONS[naam];
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 700);
+}
+
+function volgendeLevel() {
+  huidigLevelIdx++;
+  if (huidigLevelIdx >= LEVELS.length) { toonEindscherm(); return; }
+  speelLevel();
+}
+
+/* ── EINDSCHERM / REFLECTIE / ONTDEKKING ── */
+function toonEindscherm() {
+  document.getElementById('hud').style.display = 'none';
+  document.getElementById('topbar').style.display = 'block';
+  setBodyFase('');
+  document.getElementById('speelveld-bg').className = 'speelveld-bg lvl1';
+  document.getElementById('eind-score').textContent = score;
+  document.getElementById('eind-stress').textContent = '100%';
+  document.getElementById('eind-fouten').textContent = fouten;
+  toonScherm('scherm-eind');
+}
+
+function naarReflectie() {
+  setBodyFase('fase-reflectie');
+  toonScherm('scherm-reflectie');
+}
+
+const ONTDEKKING_PUNTEN = [
+  { icon:'lamp', tekst:'De opdrachten werden bijna niet moeilijker, sterren klikken en simpele sommetjes blijven makkelijk.' },
+  { icon:'bliksem', tekst:'Wat wél veranderde: de omstandigheden. Tijdsdruk, afleiding en chaos kwamen erbij.' },
+  { icon:'brein', tekst:'Dat lijkt op een echte toetsweek: de stof zelf wordt niet per se moeilijker, maar de druk eromheen wel.' },
+  { icon:'vraag', tekst:'Stress, tijdsdruk en afleiding kunnen ervoor zorgen dat je minder goed nadenkt, ook als je het antwoord eigenlijk wist.' }
+];
+
+function naarOntdekking() {
+  setBodyFase('fase-ontdekking');
+  const wrap = document.getElementById('ontdekking-punten');
+  wrap.innerHTML = '';
+  toonScherm('scherm-ontdekking');
+  ONTDEKKING_PUNTEN.forEach((p, i) => {
+    setTimeout(() => {
+      const el = document.createElement('div');
+      el.className = 'ontdekking-punt';
+      el.style.animationDelay = '0s';
+      el.innerHTML = `${icon(p.icon, 20)}<span>${p.tekst}</span>`;
+      wrap.appendChild(el);
+      geluid.whoosh();
+    }, i * 650);
+  });
+}
+
+function terugNaarStart() {
+  setBodyFase('');
+  document.getElementById('speelveld-bg').className = 'speelveld-bg lvl1';
+  document.getElementById('topbar').style.display = 'block';
+  toonScherm('scherm-start');
+}
+</script>
+</body>
+</html>
