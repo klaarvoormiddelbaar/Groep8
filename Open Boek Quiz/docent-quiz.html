@@ -226,7 +226,6 @@
   }
 
   function abonneerOpDeelnemers() {
-    db.removeAllChannels();
     db.channel(`docent-quiz-${sessie.id}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'quiz_deelnemers', filter: `session_id=eq.${sessie.id}` }, (payload) => {
         console.log('Realtime INSERT ontvangen:', payload.new);
