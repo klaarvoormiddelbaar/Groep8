@@ -127,14 +127,14 @@ const LESSONS = [
   {
     n: 7, g1: '#831843', g2: '#db2777',
     emoji: 'vulpen.png', title: 'Schriftelijke vaardigheden',
-    sub: 'Aantekeningen maken en mailen naar je leerkracht',
+    sub: 'Mailen naar je leerkracht en aantekeningen maken',
     duur: '50–60 min',
     url: '/les7',
     tip: 'Sta tijdens de tussenbespreking van de PlanetenPresentatie uitgebreid stil bij de tips voor aantekeningen maken, zodat leerlingen deze direct kunnen toepassen in het tweede deel van de presentatie.',
     doelen: [
-      'Leerlingen kunnen op een overzichtelijke manier aantekeningen maken tijdens de les.',
       'Leerlingen begrijpen het verschil tussen informeel en formeel taalgebruik.',
-      'Leerlingen kunnen een formele e-mail schrijven aan hun leerkracht.'
+      'Leerlingen kunnen een formele e-mail schrijven aan hun leerkracht.',
+      'Leerlingen kunnen op een overzichtelijke manier aantekeningen maken tijdens de les.'
     ],
     tl: [
       { t: '0–10 min',  n: 'Introductie',            d: 'Bespreek waarom slim aantekeningen maken en een nette mail schrijven straks op de middelbare school belangrijk wordt.' },
