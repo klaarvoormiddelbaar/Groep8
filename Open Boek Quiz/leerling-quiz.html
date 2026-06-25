@@ -37,12 +37,17 @@
     background: white; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 7px 16px;
   }
 
+  .vragen-kop {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--mid); margin: 24px 4px 12px;
+  }
   .vraag-kaart {
     background: white; border: 1.5px solid var(--border); border-radius: 24px;
     box-shadow: 0 12px 20px -8px rgba(0,0,0,0.06);
     padding: 26px 28px; margin-bottom: 16px;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
+  .vraag-kaart.algemeen { background: #ececec; }
   .vraag-kaart.ontbreekt { border-color: rgba(239,68,68,0.45); animation: schud 0.4s; }
   @keyframes schud { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
   .vraag-nr { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
@@ -190,7 +195,8 @@
   function renderVragen() {
     const lijst = document.getElementById('vragen-lijst');
     lijst.innerHTML = vragen.map((v, i) => `
-      <div class="vraag-kaart" id="vraag-${v.id}">
+      ${i === 8 ? '<div class="vragen-kop">Algemene vragen over aantekeningen maken</div>' : ''}
+      <div class="vraag-kaart ${i >= 8 ? 'algemeen' : ''}" id="vraag-${v.id}">
         <div class="vraag-nr">Vraag ${i + 1} van ${vragen.length}</div>
         <div class="vraag-tekst">${escapeHtml(v.vraag)}</div>
         <div class="vraag-opties">

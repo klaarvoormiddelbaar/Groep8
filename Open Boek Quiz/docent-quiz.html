@@ -140,23 +140,47 @@
 
   .antwoorden-panel { margin-top: 28px; }
   .antwoorden-lijst { display: flex; flex-direction: column; gap: 10px; }
+  .antwoorden-kop {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    color: var(--muted); margin: 14px 4px 2px;
+  }
   .antwoord-rij {
-    display: flex; align-items: flex-start; gap: 16px; padding: 14px 18px;
+    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
     background: #f7f8f9; border-radius: 16px;
   }
+  .antwoord-rij.algemeen { background: #e7e8ea; }
   .antwoord-nr {
     width: 26px; height: 26px; border-radius: 50%; background: white; border: 1px solid var(--border);
     color: var(--muted); font-size: 12px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   }
   .antwoord-inhoud { flex: 1; min-width: 0; }
   .antwoord-tekst { font-size: 15px; font-weight: 700; }
-  .antwoord-toelichting { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
+  .antwoord-rechts { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
   .antwoord-badge {
     font-size: 13px; font-weight: 700; border-radius: var(--r-pill); padding: 6px 16px; white-space: nowrap; flex-shrink: 0;
   }
   .antwoord-badge.waar { background: var(--green-soft); color: var(--green-dark); }
   .antwoord-badge.nietwaar { background: #fef2f2; color: #b91c1c; }
+
+  .antwoord-tip-wrap { position: relative; }
+  .antwoord-tip-icoon {
+    width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--border); background: white;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700;
+    color: var(--muted); cursor: help; transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .antwoord-tip-icoon:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  .antwoord-tip-tooltip {
+    position: absolute; bottom: calc(100% + 10px); right: 0; width: 260px; transform: translateY(4px);
+    background: #212529; color: white; font-size: 13px; font-weight: 600; line-height: 1.45;
+    padding: 10px 14px; border-radius: 10px; box-shadow: 0 10px 20px -6px rgba(0,0,0,0.3);
+    opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; z-index: 5;
+  }
+  .antwoord-tip-tooltip::after {
+    content: ''; position: absolute; top: 100%; right: 7px;
+    border: 6px solid transparent; border-top-color: #212529;
+  }
+  .antwoord-tip-icoon:hover ~ .antwoord-tip-tooltip { opacity: 1; transform: translateY(0); }
 
   @media (max-width: 720px) {
     .header-inner, .main { padding-left: 24px; padding-right: 24px; }
@@ -450,13 +474,20 @@
           </div>
           <div class="antwoorden-lijst">
             ${vragen.map((v, i) => `
-              <div class="antwoord-rij">
+              ${i === 8 ? '<div class="antwoorden-kop">Algemene vragen over aantekeningen maken</div>' : ''}
+              <div class="antwoord-rij ${i >= 8 ? 'algemeen' : ''}">
                 <div class="antwoord-nr">${i + 1}</div>
                 <div class="antwoord-inhoud">
                   <div class="antwoord-tekst">${escapeHtml(v.vraag)}</div>
-                  ${v.toelichting ? `<div class="antwoord-toelichting">${escapeHtml(v.toelichting)}</div>` : ''}
                 </div>
-                <div class="antwoord-badge ${v.goed_antwoord ? 'waar' : 'nietwaar'}">${v.goed_antwoord ? 'Waar' : 'Niet waar'}</div>
+                <div class="antwoord-rechts">
+                  <div class="antwoord-badge ${v.goed_antwoord ? 'waar' : 'nietwaar'}">${v.goed_antwoord ? 'Waar' : 'Niet waar'}</div>
+                  ${v.toelichting ? `
+                  <div class="antwoord-tip-wrap">
+                    <div class="antwoord-tip-icoon">?</div>
+                    <div class="antwoord-tip-tooltip">${escapeHtml(v.toelichting)}</div>
+                  </div>` : ''}
+                </div>
               </div>
             `).join('')}
           </div>
