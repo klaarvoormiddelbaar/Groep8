@@ -38,10 +38,11 @@
   }
 
   .vragen-kop {
-    font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    font-size: 17px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
     color: var(--mid); margin: 24px 4px 12px;
   }
   .vraag-kaart {
+    position: relative;
     background: white; border: 1.5px solid var(--border); border-radius: 24px;
     box-shadow: 0 12px 20px -8px rgba(0,0,0,0.06);
     padding: 26px 28px; margin-bottom: 16px;
@@ -69,10 +70,24 @@
   .vraag-kaart.kaart-fout { background: var(--red-soft); border-color: rgba(239,68,68,0.35); }
   .vraag-kaart.kaart-goed .optie-btn.actief, .vraag-kaart.kaart-fout .optie-btn.actief { border-color: var(--dark); background: white; color: var(--dark); }
   .vraag-kaart.kaart-goed .optie-btn.actief .optie-bol, .vraag-kaart.kaart-fout .optie-btn.actief .optie-bol { background: var(--dark); border-color: var(--dark); }
-  .antwoord-uitslag { font-size: 13px; font-weight: 700; margin-top: 14px; }
-  .vraag-kaart.kaart-goed .antwoord-uitslag { color: var(--green-dk); }
-  .vraag-kaart.kaart-fout .antwoord-uitslag { color: #b91c1c; }
-  .vraag-kaart .antwoord-toelichting { font-size: 13px; color: var(--mid); margin-top: 8px; line-height: 1.5; }
+  .vraag-tip-wrap { position: absolute; top: 18px; right: 20px; }
+  .vraag-tip-icoon {
+    width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid rgba(0,0,0,0.15); background: rgba(255,255,255,0.7);
+    display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;
+    color: var(--mid); cursor: help; transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .vraag-tip-icoon:hover { border-color: var(--blue); color: var(--blue); background: white; }
+  .vraag-tip-tooltip {
+    position: absolute; top: calc(100% + 10px); right: 0; width: 260px;
+    background: #212529; color: white; font-size: 13px; font-weight: 600; line-height: 1.45;
+    padding: 10px 14px; border-radius: 10px; box-shadow: 0 10px 20px -6px rgba(0,0,0,0.3);
+    opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; transform: translateY(-4px); z-index: 5;
+  }
+  .vraag-tip-tooltip::after {
+    content: ''; position: absolute; bottom: 100%; right: 7px;
+    border: 6px solid transparent; border-bottom-color: #212529;
+  }
+  .vraag-tip-icoon:hover ~ .vraag-tip-tooltip { opacity: 1; transform: translateY(0); }
 
   .quiz-footer {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
@@ -195,6 +210,7 @@
   function renderVragen() {
     const lijst = document.getElementById('vragen-lijst');
     lijst.innerHTML = vragen.map((v, i) => `
+      ${i === 0 ? '<div class="vragen-kop">Vragen over het verhaal van de aarde</div>' : ''}
       ${i === 8 ? '<div class="vragen-kop">Algemene vragen over aantekeningen maken</div>' : ''}
       <div class="vraag-kaart ${i >= 8 ? 'algemeen' : ''}" id="vraag-${v.id}">
         <div class="vraag-nr">Vraag ${i + 1} van ${vragen.length}</div>
@@ -288,18 +304,14 @@
       kaart.classList.add(isGoed ? 'kaart-goed' : 'kaart-fout');
       kaart.querySelectorAll('.optie-btn').forEach(b => { b.disabled = true; });
 
-      const uitslag = document.createElement('div');
-      uitslag.className = 'antwoord-uitslag';
-      uitslag.textContent = isGoed
-        ? 'Goed beantwoord!'
-        : `Helaas, dit klopte niet. Het juiste antwoord was: ${juisteAntwoord ? 'Waar' : 'Niet waar'}.`;
-      kaart.appendChild(uitslag);
-
       if (info && info.toelichting) {
-        const toelichting = document.createElement('div');
-        toelichting.className = 'antwoord-toelichting';
-        toelichting.textContent = info.toelichting;
-        kaart.appendChild(toelichting);
+        const tipWrap = document.createElement('div');
+        tipWrap.className = 'vraag-tip-wrap';
+        tipWrap.innerHTML = `
+          <div class="vraag-tip-icoon">?</div>
+          <div class="vraag-tip-tooltip">${escapeHtml(info.toelichting)}</div>
+        `;
+        kaart.appendChild(tipWrap);
       }
     });
 

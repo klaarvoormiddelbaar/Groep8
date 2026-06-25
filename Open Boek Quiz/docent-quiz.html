@@ -141,7 +141,7 @@
   .antwoorden-panel { margin-top: 28px; }
   .antwoorden-lijst { display: flex; flex-direction: column; gap: 10px; }
   .antwoorden-kop {
-    font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+    font-size: 17px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
     color: var(--muted); margin: 14px 4px 2px;
   }
   .antwoord-rij {
@@ -474,6 +474,7 @@
           </div>
           <div class="antwoorden-lijst">
             ${vragen.map((v, i) => `
+              ${i === 0 ? '<div class="antwoorden-kop">Vragen over het verhaal van de aarde</div>' : ''}
               ${i === 8 ? '<div class="antwoorden-kop">Algemene vragen over aantekeningen maken</div>' : ''}
               <div class="antwoord-rij ${i >= 8 ? 'algemeen' : ''}">
                 <div class="antwoord-nr">${i + 1}</div>
