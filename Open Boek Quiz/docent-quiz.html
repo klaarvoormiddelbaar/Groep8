@@ -141,17 +141,19 @@
   .antwoorden-panel { margin-top: 28px; }
   .antwoorden-lijst { display: flex; flex-direction: column; gap: 10px; }
   .antwoord-rij {
-    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
+    display: flex; align-items: flex-start; gap: 16px; padding: 14px 18px;
     background: #f7f8f9; border-radius: 16px;
   }
   .antwoord-nr {
     width: 26px; height: 26px; border-radius: 50%; background: white; border: 1px solid var(--border);
     color: var(--muted); font-size: 12px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
   }
-  .antwoord-tekst { flex: 1; font-size: 15px; font-weight: 700; }
+  .antwoord-inhoud { flex: 1; min-width: 0; }
+  .antwoord-tekst { font-size: 15px; font-weight: 700; }
+  .antwoord-toelichting { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.5; }
   .antwoord-badge {
-    font-size: 13px; font-weight: 700; border-radius: var(--r-pill); padding: 6px 16px; white-space: nowrap;
+    font-size: 13px; font-weight: 700; border-radius: var(--r-pill); padding: 6px 16px; white-space: nowrap; flex-shrink: 0;
   }
   .antwoord-badge.waar { background: var(--green-soft); color: var(--green-dark); }
   .antwoord-badge.nietwaar { background: #fef2f2; color: #b91c1c; }
@@ -244,7 +246,7 @@
     sessie = nieuweSessieRij;
 
     const teInserten = vragenSet.map((v, i) => ({
-      session_id: sessie.id, volgorde: i, vraag: v.vraag, goed_antwoord: v.goed
+      session_id: sessie.id, volgorde: i, vraag: v.vraag, goed_antwoord: v.goed, toelichting: v.toelichting || null
     }));
     const { error: vragenFout } = await db.from('quiz_vragen').insert(teInserten);
     if (vragenFout) { toonFout('Kon de vragen niet opslaan: ' + vragenFout.message); return; }
@@ -382,7 +384,7 @@
     if (vragenAntwoorden) return vragenAntwoorden;
     const { data, error } = await db
       .from('quiz_vragen')
-      .select('id, volgorde, vraag, goed_antwoord')
+      .select('id, volgorde, vraag, goed_antwoord, toelichting')
       .eq('session_id', sessie.id)
       .order('volgorde');
     vragenAntwoorden = error ? [] : data;
@@ -450,7 +452,10 @@
             ${vragen.map((v, i) => `
               <div class="antwoord-rij">
                 <div class="antwoord-nr">${i + 1}</div>
-                <div class="antwoord-tekst">${escapeHtml(v.vraag)}</div>
+                <div class="antwoord-inhoud">
+                  <div class="antwoord-tekst">${escapeHtml(v.vraag)}</div>
+                  ${v.toelichting ? `<div class="antwoord-toelichting">${escapeHtml(v.toelichting)}</div>` : ''}
+                </div>
                 <div class="antwoord-badge ${v.goed_antwoord ? 'waar' : 'nietwaar'}">${v.goed_antwoord ? 'Waar' : 'Niet waar'}</div>
               </div>
             `).join('')}

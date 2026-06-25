@@ -67,6 +67,7 @@
   .antwoord-uitslag { font-size: 13px; font-weight: 700; margin-top: 14px; }
   .vraag-kaart.kaart-goed .antwoord-uitslag { color: var(--green-dk); }
   .vraag-kaart.kaart-fout .antwoord-uitslag { color: #b91c1c; }
+  .vraag-kaart .antwoord-toelichting { font-size: 13px; color: var(--mid); margin-top: 8px; line-height: 1.5; }
 
   .quiz-footer {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
@@ -269,12 +270,13 @@
 
   function toonReview(antwoordenGoed) {
     document.getElementById('klaar-overlay').classList.remove('open');
-    const goedPerVraag = new Map(antwoordenGoed.map(a => [a.id, a.goed_antwoord]));
+    const infoPerVraag = new Map(antwoordenGoed.map(a => [a.id, a]));
 
     vragen.forEach(v => {
       const kaart = document.getElementById(`vraag-${v.id}`);
       const mijnAntwoord = antwoorden[v.id];
-      const juisteAntwoord = goedPerVraag.get(v.id);
+      const info = infoPerVraag.get(v.id);
+      const juisteAntwoord = info && info.goed_antwoord;
       const isGoed = mijnAntwoord === juisteAntwoord;
 
       kaart.classList.add(isGoed ? 'kaart-goed' : 'kaart-fout');
@@ -286,6 +288,13 @@
         ? 'Goed beantwoord!'
         : `Helaas, dit klopte niet. Het juiste antwoord was: ${juisteAntwoord ? 'Waar' : 'Niet waar'}.`;
       kaart.appendChild(uitslag);
+
+      if (info && info.toelichting) {
+        const toelichting = document.createElement('div');
+        toelichting.className = 'antwoord-toelichting';
+        toelichting.textContent = info.toelichting;
+        kaart.appendChild(toelichting);
+      }
     });
 
     window.scrollTo({ top: 0, behavior: 'smooth' });

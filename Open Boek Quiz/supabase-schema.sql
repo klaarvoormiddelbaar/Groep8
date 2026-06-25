@@ -18,7 +18,8 @@ CREATE TABLE IF NOT EXISTS quiz_vragen (
   session_id uuid NOT NULL REFERENCES quiz_sessions(id) ON DELETE CASCADE,
   volgorde int NOT NULL,
   vraag text NOT NULL,
-  goed_antwoord boolean NOT NULL
+  goed_antwoord boolean NOT NULL,
+  toelichting text
 );
 
 -- 3. Eén rij per leerling die meedoet.
@@ -141,12 +142,12 @@ GRANT EXECUTE ON FUNCTION quiz_sessie_status(uuid) TO anon;
 -- ingeleverd én de leerkracht de resultaten al heeft opengezet. Zo kan de leerling
 -- nooit antwoorden zien voordat hij/zij zelf klaar is of voordat de klas mag kijken.
 CREATE OR REPLACE FUNCTION quiz_antwoorden_voor_review(p_deelnemer_id uuid)
-RETURNS TABLE(id uuid, goed_antwoord boolean)
+RETURNS TABLE(id uuid, goed_antwoord boolean, toelichting text)
 LANGUAGE sql
 SECURITY DEFINER
 SET search_path = public
 AS $$
-  SELECT v.id, v.goed_antwoord
+  SELECT v.id, v.goed_antwoord, v.toelichting
   FROM quiz_vragen v
   WHERE v.session_id = (
     SELECT d.session_id FROM quiz_deelnemers d
