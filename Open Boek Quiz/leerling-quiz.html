@@ -41,6 +41,9 @@
     font-size: 17px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
     color: var(--mid); margin: 24px 4px 12px;
   }
+  .vragen-kop.tweede {
+    margin-top: 44px;
+  }
   .vraag-kaart {
     position: relative;
     background: white; border: 1.5px solid var(--border); border-radius: 24px;
@@ -211,7 +214,7 @@
     const lijst = document.getElementById('vragen-lijst');
     lijst.innerHTML = vragen.map((v, i) => `
       ${i === 0 ? '<div class="vragen-kop">Vragen over het verhaal van de aarde</div>' : ''}
-      ${i === 8 ? '<div class="vragen-kop">Algemene vragen over aantekeningen maken</div>' : ''}
+      ${i === 8 ? '<div class="vragen-kop tweede">Algemene vragen over aantekeningen maken</div>' : ''}
       <div class="vraag-kaart ${i >= 8 ? 'algemeen' : ''}" id="vraag-${v.id}">
         <div class="vraag-nr">Vraag ${i + 1} van ${vragen.length}</div>
         <div class="vraag-tekst">${escapeHtml(v.vraag)}</div>
