@@ -62,6 +62,8 @@
     { "source": "/tips-en-tops/leerkracht",            "destination": "/Tips en Tops/leerkracht-deel-link.html" },
     { "source": "/tips-en-tops/leerkracht/antwoorden", "destination": "/Tips en Tops/leerkracht-tips-en-tops.html" },
     { "source": "/feedback/:code", "destination": "/Tips en Tops/tips-en-tops.html" },
-    { "source": "/formeel/:nummer", "destination": "/Formele Mail Oefenen/formele-mail-oefenen.html" }
+    { "source": "/formeel/:nummer", "destination": "/Formele Mail Oefenen/formele-mail-oefenen.html" },
+    { "source": "/les7/open-boek-quiz", "destination": "/Open Boek Quiz/join.html" },
+    { "source": "/les7/docent/open-boek-quiz", "destination": "/Open Boek Quiz/docent-quiz.html?les=les-7" }
   ]
 }

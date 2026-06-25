@@ -95,7 +95,16 @@
       "Bash(awk '{print $1, $NF}')",
       "Bash(grep -oE 'osascript.{0,80}' /tmp/bash_flat.txt)",
       "mcp__plugin_figma_figma__download_assets",
-      "Bash(awk *)"
+      "Bash(awk *)",
+      "Bash(sed -i '' -e 's/Je mag tijdens deze toets je eigen aantekeningen gebruiken\\\\./Je mag tijdens deze quiz je eigen aantekeningen gebruiken./' -e 's/Even kijken of deze toets bestaat…/Even kijken of deze quiz bestaat…/' -e 's/of de toets is al afgelopen/of de quiz is al afgelopen/' -e 's#/les${lesNum}/toets#/les${lesNum}/open-boek-quiz#g' join.html)",
+      "Bash(sed -i '' -e 's/Leerlingen mogen tijdens deze toets hun eigen aantekeningen gebruiken\\\\./Leerlingen mogen tijdens deze quiz hun eigen aantekeningen gebruiken./' -e 's#/les${lesNum}/toets#/les${lesNum}/open-boek-quiz#g' docent-quiz.html)",
+      "Bash(sed -i '' -e 's/Tijdens deze toets mag je jouw eigen aantekeningen gebruiken\\\\./Tijdens deze quiz mag je jouw eigen aantekeningen gebruiken./' leerling-quiz.html)",
+      "Bash(sed -i '' -e 's/de toets start\\\\./de quiz start./' -e 's/Docent kan eigen toetssessie aanmaken/Docent kan eigen quizsessie aanmaken/' -e 's/Docent kan eigen toetssessie lezen/Docent kan eigen quizsessie lezen/' -e 's/Docent kan eigen toetssessie bijwerken/Docent kan eigen quizsessie bijwerken/' supabase-schema.sql)",
+      "Bash(sed -i '' -e 's/eigen tabellen \\(toets_\\\\*\\)/eigen tabellen \\(quiz_*\\)/' -e 's/een toetssessie die nog niet beëindigd is\\\\./een quizsessie die nog niet beëindigd is./' supabase-config.js)",
+      "Bash(nohup python3 dev-server.py)",
+      "Bash(disown)",
+      "Bash(ps *)",
+      "Bash(kill 78702)"
     ]
   }
 }

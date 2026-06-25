@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open boek quiz — Klaar voor Middelbaar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --blue: #4e8ef3; --blue-soft: rgba(78,142,243,0.12); --blue-dk: #2f6fd6;
+    --green: #10a37f; --green-soft: rgba(16,163,127,0.10); --green-dk: #0c8268;
+    --red: #ef4444; --red-soft: rgba(239,68,68,0.10);
+    --dark: #191c1d; --mid: #6d747a; --border: #eceeee; --bg: #f8fafa; --bgalt: #f2f4f4;
+    --r-pill: 9999px;
+  }
+
+  html, body { min-height: 100%; }
+  body {
+    font-family: 'Inria Sans', Georgia, serif; color: var(--dark);
+    background-color: var(--bg);
+    background-image: radial-gradient(ellipse at 12% -10%, rgba(114,168,249,0.18) 0%, transparent 50%);
+    background-attachment: fixed;
+    padding: 40px 24px 140px;
+  }
+
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  .quiz-top { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .quiz-logo { height: 36px; width: auto; }
+  .quiz-titel { font-size: 22px; font-weight: 700; }
+  .quiz-voortgang {
+    margin-left: auto; font-size: 13px; font-weight: 700; color: var(--mid);
+    background: white; border: 1px solid var(--border); border-radius: var(--r-pill); padding: 7px 16px;
+  }
+
+  .vraag-kaart {
+    background: white; border: 1.5px solid var(--border); border-radius: 24px;
+    box-shadow: 0 12px 20px -8px rgba(0,0,0,0.06);
+    padding: 26px 28px; margin-bottom: 16px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .vraag-kaart.ontbreekt { border-color: rgba(239,68,68,0.45); animation: schud 0.4s; }
+  @keyframes schud { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+  .vraag-nr { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+  .vraag-tekst { font-size: 17px; font-weight: 700; line-height: 1.5; margin-bottom: 20px; }
+  .vraag-opties { display: flex; gap: 12px; }
+  .optie-btn {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    border: 1.5px solid var(--border); background: var(--bgalt); border-radius: 16px;
+    padding: 14px; font-family: inherit; font-size: 15px; font-weight: 700; color: var(--mid);
+    cursor: pointer; transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.15s;
+  }
+  .optie-btn:hover { border-color: var(--blue); color: var(--blue); }
+  .optie-btn .optie-bol { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid currentColor; flex-shrink: 0; position: relative; }
+  .optie-btn.actief { transform: translateY(-1px); }
+  .optie-btn.actief.waar { border-color: var(--green); background: var(--green-soft); color: var(--green-dk); }
+  .optie-btn.actief.waar .optie-bol { background: var(--green); border-color: var(--green); }
+  .optie-btn.actief.nietwaar { border-color: var(--red); background: var(--red-soft); color: var(--red); }
+  .optie-btn.actief.nietwaar .optie-bol { background: var(--red); border-color: var(--red); }
+
+  .quiz-footer {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
+    background: rgba(248,250,250,0.92); backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border);
+    padding: 18px 24px; display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+  .quiz-footer-inner { max-width: 760px; width: 100%; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .footer-melding { flex: 1; min-width: 160px; font-size: 13px; font-weight: 700; color: var(--red); }
+  .btn-controleer {
+    background: white; border: 1.5px solid var(--border); border-radius: var(--r-pill);
+    padding: 13px 24px; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--dark);
+    cursor: pointer; transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-controleer:hover { border-color: var(--blue); color: var(--blue); }
+  .btn-inleveren {
+    background: #a8c4ba; border: none; border-radius: var(--r-pill);
+    padding: 13px 28px; font-family: inherit; font-size: 14px; font-weight: 700; color: white;
+    cursor: not-allowed; transition: background 0.25s, transform 0.2s;
+  }
+  .btn-inleveren.klaar { background: var(--green); cursor: pointer; }
+  .btn-inleveren.klaar:hover { background: var(--green-dk); transform: translateY(-2px); }
+
+  /* ── OVERLAYS ── */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(20,30,50,0.55); backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center; padding: 24px; z-index: 200;
+    opacity: 0; pointer-events: none; transition: opacity 0.25s;
+  }
+  .overlay.open { opacity: 1; pointer-events: all; }
+  .overlay-kaart {
+    background: white; border-radius: 28px; box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+    max-width: 460px; width: 100%; padding: 40px 36px; text-align: center;
+    transform: scale(0.92); transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .overlay.open .overlay-kaart { transform: scale(1); }
+  .overlay-icoon { width: 56px; height: 56px; margin: 0 auto 16px; background: var(--blue-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .overlay-icoon img { width: 28px; height: 28px; object-fit: contain; }
+  .overlay-titel { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
+  .overlay-tekst { font-size: 15px; color: var(--mid); line-height: 1.6; margin-bottom: 26px; }
+  .overlay-lijst { text-align: left; background: var(--bgalt); border-radius: 16px; padding: 16px 20px; margin-bottom: 26px; }
+  .overlay-lijst div { font-size: 14px; font-weight: 700; color: var(--dark); padding: 6px 0; }
+  .btn-beginnen {
+    width: 100%; background: var(--blue); border: none; border-radius: var(--r-pill);
+    padding: 14px; font-family: inherit; font-size: 16px; font-weight: 700; color: white;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .btn-beginnen:hover { background: var(--blue-dk); }
+
+  .klaar-icoon { width: 64px; height: 64px; margin: 0 auto 18px; background: var(--green-soft); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .klaar-icoon svg { width: 30px; height: 30px; }
+
+  @media (max-width: 600px) {
+    .vraag-opties { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="wrap">
+  <div class="quiz-top">
+    <img class="quiz-logo" src="/Dashboard/KvM%20logo%20no%20background.png" alt="">
+    <div class="quiz-titel">Open boek quiz</div>
+    <div class="quiz-voortgang" id="voortgang">0 / 0 beantwoord</div>
+  </div>
+
+  <div id="vragen-lijst"></div>
+</div>
+
+<div class="quiz-footer" id="quiz-footer" style="display:none;">
+  <div class="quiz-footer-inner">
+    <div class="footer-melding" id="footer-melding"></div>
+    <button class="btn-controleer" type="button" id="controleer-btn">Controleer mijn antwoorden</button>
+    <button class="btn-inleveren" type="button" id="inleveren-btn" disabled>Inleveren</button>
+  </div>
+</div>
+
+<!-- ── WELKOM OVERLAY ── -->
+<div class="overlay open" id="welkom-overlay">
+  <div class="overlay-kaart">
+    <div class="overlay-icoon"><img src="/Afbeeldingen/emojis%20nieuw/vulpen.png" alt=""></div>
+    <div class="overlay-titel">Open boek quiz</div>
+    <div class="overlay-tekst">Tijdens deze quiz mag je jouw eigen aantekeningen gebruiken. Beantwoord elke vraag met Waar of Niet waar.</div>
+    <div class="overlay-lijst">
+      <div>1. Lees elke vraag rustig door.</div>
+      <div>2. Kies Waar of Niet waar.</div>
+      <div>3. Controleer je antwoorden en lever in.</div>
+    </div>
+    <button class="btn-beginnen" type="button" id="welkom-start-btn">Beginnen</button>
+  </div>
+</div>
+
+<!-- ── INGELEVERD OVERLAY ── -->
+<div class="overlay" id="klaar-overlay">
+  <div class="overlay-kaart">
+    <div class="klaar-icoon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#10a37f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="overlay-titel">Ingeleverd!</div>
+    <div class="overlay-tekst">Je antwoorden zijn opgeslagen en kunnen niet meer worden aangepast. Je leerkracht bespreekt de uitslag zo met de klas.</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/Open%20Boek%20Quiz/supabase-config.js"></script>
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const sessieId = params.get('sessie');
+  const deelnemerId = params.get('deelnemer');
+
+  if (!sessieId || !deelnemerId) {
+    document.body.innerHTML = '<div style="padding:60px;text-align:center;font-family:Georgia,serif;color:#6d747a;">Deze link is niet geldig. Doe opnieuw mee via de code van je leerkracht.</div>';
+    throw new Error('Geen sessie of deelnemer in de URL');
+  }
+
+  const antwoorden = {};
+  let vragen = [];
+
+  async function init() {
+    const { data, error } = await db.rpc('quiz_vragen_voor_sessie', { p_session_id: sessieId });
+    if (error || !data || data.length === 0) {
+      document.body.innerHTML = '<div style="padding:60px;text-align:center;font-family:Georgia,serif;color:#6d747a;">Kon de vragen niet laden. Vraag je leerkracht om een nieuwe link.</div>';
+      return;
+    }
+    vragen = data.slice().sort((a, b) => a.volgorde - b.volgorde);
+    renderVragen();
+    document.getElementById('quiz-footer').style.display = 'flex';
+  }
+
+  function renderVragen() {
+    const lijst = document.getElementById('vragen-lijst');
+    lijst.innerHTML = vragen.map((v, i) => `
+      <div class="vraag-kaart" id="vraag-${v.id}">
+        <div class="vraag-nr">Vraag ${i + 1} van ${vragen.length}</div>
+        <div class="vraag-tekst">${escapeHtml(v.vraag)}</div>
+        <div class="vraag-opties">
+          <button class="optie-btn waar" type="button" data-vraag="${v.id}" data-waarde="true">
+            <span class="optie-bol"></span> Waar
+          </button>
+          <button class="optie-btn nietwaar" type="button" data-vraag="${v.id}" data-waarde="false">
+            <span class="optie-bol"></span> Niet waar
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    lijst.querySelectorAll('.optie-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const vraagId = btn.dataset.vraag;
+        const waarde = btn.dataset.waarde === 'true';
+        antwoorden[vraagId] = waarde;
+        const kaart = document.getElementById(`vraag-${vraagId}`);
+        kaart.classList.remove('ontbreekt');
+        kaart.querySelectorAll('.optie-btn').forEach(b => b.classList.remove('actief'));
+        btn.classList.add('actief');
+        ververVoortgang();
+      });
+    });
+  }
+
+  function escapeHtml(tekst) {
+    const d = document.createElement('div');
+    d.textContent = String(tekst);
+    return d.innerHTML;
+  }
+
+  function ververVoortgang() {
+    const aantalBeantwoord = Object.keys(antwoorden).length;
+    document.getElementById('voortgang').textContent = `${aantalBeantwoord} / ${vragen.length} beantwoord`;
+  }
+
+  document.getElementById('controleer-btn').addEventListener('click', () => {
+    const ontbrekend = vragen.filter(v => !(v.id in antwoorden));
+    const melding = document.getElementById('footer-melding');
+    const inleverBtn = document.getElementById('inleveren-btn');
+
+    if (ontbrekend.length > 0) {
+      melding.textContent = `Je hebt nog ${ontbrekend.length} ${ontbrekend.length === 1 ? 'vraag' : 'vragen'} niet beantwoord.`;
+      ontbrekend.forEach(v => document.getElementById(`vraag-${v.id}`).classList.add('ontbreekt'));
+      document.getElementById(`vraag-${ontbrekend[0].id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      inleverBtn.disabled = true;
+      inleverBtn.classList.remove('klaar');
+    } else {
+      melding.textContent = 'Helemaal compleet, je kunt inleveren!';
+      inleverBtn.disabled = false;
+      inleverBtn.classList.add('klaar');
+    }
+  });
+
+  document.getElementById('inleveren-btn').addEventListener('click', async () => {
+    if (document.getElementById('inleveren-btn').disabled) return;
+    document.getElementById('inleveren-btn').disabled = true;
+
+    const antwoordenJsonb = {};
+    Object.keys(antwoorden).forEach(vraagId => { antwoordenJsonb[vraagId] = antwoorden[vraagId]; });
+
+    const { error } = await db.rpc('quiz_inleveren', {
+      p_deelnemer_id: deelnemerId,
+      p_antwoorden: antwoordenJsonb
+    });
+
+    if (error) {
+      document.getElementById('footer-melding').textContent = 'Inleveren mislukt: ' + error.message;
+      document.getElementById('inleveren-btn').disabled = false;
+      return;
+    }
+
+    document.getElementById('quiz-footer').style.display = 'none';
+    document.getElementById('klaar-overlay').classList.add('open');
+  });
+
+  document.getElementById('welkom-start-btn').addEventListener('click', () => {
+    document.getElementById('welkom-overlay').classList.remove('open');
+  });
+
+  init();
+</script>
+</body>
+</html>

@@ -756,10 +756,15 @@
               <a id="btn-formele-mail" class="hero-btn" href="/Formele%20Mail%20Oefenen/docent-mail.html" target="_blank" rel="noopener">
                 <img src="/Afbeeldingen/emojis nieuw/envelop.png" alt="" style="height:1.5em;width:auto;object-fit:contain;vertical-align:-0.3em"> Opdracht formele mail
               </a>` : ''}
+              ${L.n === 7 ? `
+              <a id="btn-open-boek-quiz" class="hero-btn" href="/les${L.n}/docent/open-boek-quiz" target="_blank" rel="noopener">
+                <img src="/Afbeeldingen/emojis nieuw/vulpen.png" alt="" style="height:1.5em;width:auto;object-fit:contain;vertical-align:-0.3em"> Open boek quiz
+              </a>` : ''}
               <div style="display:flex;gap:12px;">
+                ${L.n !== 7 ? `
                 <a id="btn-quiz" class="hero-btn" href="/les${L.n}/docent/quiz" target="_blank" rel="noopener">
                   <img src="/Afbeeldingen/emojis nieuw/brein.png" alt="" style="height:1.5em;width:auto;object-fit:contain;vertical-align:-0.3em"> Start live quiz
-                </a>
+                </a>` : ''}
                 <button class="tut-help-btn" onclick="tutStart()" type="button" title="Uitleg over de knoppen" aria-label="Rondleiding starten">?</button>
               </div>
             </div>
@@ -1020,6 +1025,10 @@
       {
         id:   'btn-formele-mail',
         text: 'In deze opdracht gaan leerlingen een informele mail omschrijven naar formele mail. Klik op deze knop wanneer dit tijdens de les wordt aangegeven.'
+      },
+      {
+        id:   'btn-open-boek-quiz',
+        text: 'Leerlingen mogen tijdens deze quiz hun eigen aantekeningen gebruiken. Start hiermee een nieuwe sessie en deel de code met je klas.'
       },
       {
         id:   'btn-quiz',
