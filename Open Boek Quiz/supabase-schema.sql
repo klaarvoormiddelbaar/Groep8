@@ -67,9 +67,11 @@ CREATE POLICY "Docent kan deelnemers van eigen sessie lezen" ON quiz_deelnemers
 -- publieke anon-key alle sessiecodes of antwoorden kan uitlezen). Alles loopt via functies die
 -- maar het strikt noodzakelijke teruggeven.
 
--- Leerling mag zelf een deelnemersrij aanmaken (meedoen).
+-- Leerling mag zelf een deelnemersrij aanmaken (meedoen). Ook 'authenticated' toegestaan,
+-- voor het geval iemand de leerlingenflow test in een browser waarin nog een leerkracht
+-- is ingelogd (dan stuurt Supabase het verzoek als de ingelogde rol, niet als 'anon').
 CREATE POLICY "Leerling kan meedoen aan een sessie" ON quiz_deelnemers
-  FOR INSERT TO anon
+  FOR INSERT TO anon, authenticated
   WITH CHECK (true);
 
 -- Vertaalt een sessiecode naar het sessie-id, zonder de rest van de tabel bloot te geven.
