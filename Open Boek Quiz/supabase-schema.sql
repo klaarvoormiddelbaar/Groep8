@@ -124,5 +124,38 @@ $$;
 
 GRANT EXECUTE ON FUNCTION quiz_inleveren(uuid, jsonb) TO anon;
 
+-- Geeft de status van een sessie terug (bijv. 'lobby' of 'resultaten'), zodat de
+-- leerlingenpagina kan zien wanneer de leerkracht de resultaten heeft geopend.
+CREATE OR REPLACE FUNCTION quiz_sessie_status(p_session_id uuid)
+RETURNS text
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT status FROM quiz_sessions WHERE id = p_session_id;
+$$;
+
+GRANT EXECUTE ON FUNCTION quiz_sessie_status(uuid) TO anon;
+
+-- Geeft per vraag het goede antwoord terug, maar ALLEEN als deze leerling al heeft
+-- ingeleverd én de leerkracht de resultaten al heeft opengezet. Zo kan de leerling
+-- nooit antwoorden zien voordat hij/zij zelf klaar is of voordat de klas mag kijken.
+CREATE OR REPLACE FUNCTION quiz_antwoorden_voor_review(p_deelnemer_id uuid)
+RETURNS TABLE(id uuid, goed_antwoord boolean)
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT v.id, v.goed_antwoord
+  FROM quiz_vragen v
+  WHERE v.session_id = (
+    SELECT d.session_id FROM quiz_deelnemers d
+    WHERE d.id = p_deelnemer_id AND d.status = 'ingeleverd'
+  )
+  AND (SELECT s.status FROM quiz_sessions s WHERE s.id = (SELECT d.session_id FROM quiz_deelnemers d WHERE d.id = p_deelnemer_id)) = 'resultaten';
+$$;
+
+GRANT EXECUTE ON FUNCTION quiz_antwoorden_voor_review(uuid) TO anon;
+
 -- Realtime aanzetten zodat de docent leerlingen live ziet binnenkomen en inleveren.
 ALTER PUBLICATION supabase_realtime ADD TABLE quiz_deelnemers;

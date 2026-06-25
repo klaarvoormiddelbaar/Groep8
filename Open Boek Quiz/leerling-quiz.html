@@ -56,11 +56,17 @@
   }
   .optie-btn:hover { border-color: var(--blue); color: var(--blue); }
   .optie-btn .optie-bol { width: 16px; height: 16px; border-radius: 50%; border: 1.5px solid currentColor; flex-shrink: 0; position: relative; }
-  .optie-btn.actief { transform: translateY(-1px); }
-  .optie-btn.actief.waar { border-color: var(--green); background: var(--green-soft); color: var(--green-dk); }
-  .optie-btn.actief.waar .optie-bol { background: var(--green); border-color: var(--green); }
-  .optie-btn.actief.nietwaar { border-color: var(--red); background: var(--red-soft); color: var(--red); }
-  .optie-btn.actief.nietwaar .optie-bol { background: var(--red); border-color: var(--red); }
+  .optie-btn.actief { transform: translateY(-1px); border-color: var(--blue); background: var(--blue-soft); color: var(--blue-dk); }
+  .optie-btn.actief .optie-bol { background: var(--blue); border-color: var(--blue); }
+  .optie-btn:disabled { cursor: default; opacity: 0.85; }
+
+  .vraag-kaart.kaart-goed { background: var(--green-soft); border-color: rgba(16,163,127,0.35); }
+  .vraag-kaart.kaart-fout { background: var(--red-soft); border-color: rgba(239,68,68,0.35); }
+  .vraag-kaart.kaart-goed .optie-btn.actief, .vraag-kaart.kaart-fout .optie-btn.actief { border-color: var(--dark); background: white; color: var(--dark); }
+  .vraag-kaart.kaart-goed .optie-btn.actief .optie-bol, .vraag-kaart.kaart-fout .optie-btn.actief .optie-bol { background: var(--dark); border-color: var(--dark); }
+  .antwoord-uitslag { font-size: 13px; font-weight: 700; margin-top: 14px; }
+  .vraag-kaart.kaart-goed .antwoord-uitslag { color: var(--green-dk); }
+  .vraag-kaart.kaart-fout .antwoord-uitslag { color: #b91c1c; }
 
   .quiz-footer {
     position: fixed; left: 0; right: 0; bottom: 0; z-index: 50;
@@ -69,13 +75,7 @@
     padding: 18px 24px; display: flex; align-items: center; justify-content: center; gap: 16px;
   }
   .quiz-footer-inner { max-width: 760px; width: 100%; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  .footer-melding { flex: 1; min-width: 160px; font-size: 13px; font-weight: 700; color: var(--red); }
-  .btn-controleer {
-    background: white; border: 1.5px solid var(--border); border-radius: var(--r-pill);
-    padding: 13px 24px; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--dark);
-    cursor: pointer; transition: border-color 0.15s, color 0.15s;
-  }
-  .btn-controleer:hover { border-color: var(--blue); color: var(--blue); }
+  .footer-melding { flex: 1; min-width: 160px; font-size: 13px; font-weight: 700; color: var(--green-dk); }
   .btn-inleveren {
     background: #a8c4ba; border: none; border-radius: var(--r-pill);
     padding: 13px 28px; font-family: inherit; font-size: 14px; font-weight: 700; color: white;
@@ -132,7 +132,6 @@
 <div class="quiz-footer" id="quiz-footer" style="display:none;">
   <div class="quiz-footer-inner">
     <div class="footer-melding" id="footer-melding"></div>
-    <button class="btn-controleer" type="button" id="controleer-btn">Controleer mijn antwoorden</button>
     <button class="btn-inleveren" type="button" id="inleveren-btn" disabled>Inleveren</button>
   </div>
 </div>
@@ -227,25 +226,14 @@
   function ververVoortgang() {
     const aantalBeantwoord = Object.keys(antwoorden).length;
     document.getElementById('voortgang').textContent = `${aantalBeantwoord} / ${vragen.length} beantwoord`;
-  }
 
-  document.getElementById('controleer-btn').addEventListener('click', () => {
-    const ontbrekend = vragen.filter(v => !(v.id in antwoorden));
-    const melding = document.getElementById('footer-melding');
     const inleverBtn = document.getElementById('inleveren-btn');
-
-    if (ontbrekend.length > 0) {
-      melding.textContent = `Je hebt nog ${ontbrekend.length} ${ontbrekend.length === 1 ? 'vraag' : 'vragen'} niet beantwoord.`;
-      ontbrekend.forEach(v => document.getElementById(`vraag-${v.id}`).classList.add('ontbreekt'));
-      document.getElementById(`vraag-${ontbrekend[0].id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
-      inleverBtn.disabled = true;
-      inleverBtn.classList.remove('klaar');
-    } else {
-      melding.textContent = 'Helemaal compleet, je kunt inleveren!';
-      inleverBtn.disabled = false;
-      inleverBtn.classList.add('klaar');
-    }
-  });
+    const melding = document.getElementById('footer-melding');
+    const compleet = aantalBeantwoord === vragen.length;
+    inleverBtn.disabled = !compleet;
+    inleverBtn.classList.toggle('klaar', compleet);
+    melding.textContent = compleet ? 'Helemaal compleet, je kunt inleveren!' : '';
+  }
 
   document.getElementById('inleveren-btn').addEventListener('click', async () => {
     if (document.getElementById('inleveren-btn').disabled) return;
@@ -267,7 +255,41 @@
 
     document.getElementById('quiz-footer').style.display = 'none';
     document.getElementById('klaar-overlay').classList.add('open');
+    wachtOpResultaten();
   });
+
+  function wachtOpResultaten() {
+    const interval = setInterval(async () => {
+      const { data, error } = await db.rpc('quiz_antwoorden_voor_review', { p_deelnemer_id: deelnemerId });
+      if (error || !data || data.length === 0) return;
+      clearInterval(interval);
+      toonReview(data);
+    }, 4000);
+  }
+
+  function toonReview(antwoordenGoed) {
+    document.getElementById('klaar-overlay').classList.remove('open');
+    const goedPerVraag = new Map(antwoordenGoed.map(a => [a.id, a.goed_antwoord]));
+
+    vragen.forEach(v => {
+      const kaart = document.getElementById(`vraag-${v.id}`);
+      const mijnAntwoord = antwoorden[v.id];
+      const juisteAntwoord = goedPerVraag.get(v.id);
+      const isGoed = mijnAntwoord === juisteAntwoord;
+
+      kaart.classList.add(isGoed ? 'kaart-goed' : 'kaart-fout');
+      kaart.querySelectorAll('.optie-btn').forEach(b => { b.disabled = true; });
+
+      const uitslag = document.createElement('div');
+      uitslag.className = 'antwoord-uitslag';
+      uitslag.textContent = isGoed
+        ? 'Goed beantwoord!'
+        : `Helaas, dit klopte niet. Het juiste antwoord was: ${juisteAntwoord ? 'Waar' : 'Niet waar'}.`;
+      kaart.appendChild(uitslag);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
   document.getElementById('welkom-start-btn').addEventListener('click', () => {
     document.getElementById('welkom-overlay').classList.remove('open');

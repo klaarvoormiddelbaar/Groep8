@@ -84,28 +84,43 @@
   .panel-title { font-size: 20px; font-weight: 700; }
   .panel-count { font-size: 14px; font-weight: 700; color: var(--primary); background: var(--primary-soft); border-radius: var(--r-pill); padding: 7px 16px; }
 
-  .leerlingen-groep { margin-bottom: 28px; }
-  .leerlingen-groep:last-child { margin-bottom: 0; }
+  .leerlingen-kolommen { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .leerlingen-groep {
+    border-radius: 28px; padding: 24px 22px; border: 1.5px solid transparent;
+  }
+  .leerlingen-groep.geel { background: #fffaf0; border-color: #fbe6b8; }
+  .leerlingen-groep.groen { background: var(--green-soft); border-color: rgba(16,163,127,0.25); }
   .leerlingen-groep-titel {
     display: flex; align-items: center; gap: 10px;
-    font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: 0.4px;
-    text-transform: uppercase; margin-bottom: 12px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.6px;
+    text-transform: uppercase; margin-bottom: 16px;
   }
+  .leerlingen-groep.geel .leerlingen-groep-titel { color: #92600a; }
+  .leerlingen-groep.groen .leerlingen-groep-titel { color: var(--green-dark); }
   .leerlingen-groep-count {
-    background: var(--border); color: var(--dark); border-radius: var(--r-pill);
-    padding: 2px 10px; font-size: 12px;
+    background: rgba(255,255,255,0.7); border-radius: var(--r-pill);
+    padding: 2px 11px; font-size: 12px;
   }
-  .leerlingen-tabel { width: 100%; border-collapse: collapse; }
-  .leerlingen-tabel th { text-align: left; font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); padding: 0 16px 12px; }
-  .leerlingen-tabel td { padding: 14px 16px; font-size: 15px; font-weight: 700; border-top: 1px solid var(--border); }
-  .leerlingen-tabel tr:hover td { background: #fafbfc; }
-  .status-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 700; border-radius: var(--r-pill); padding: 6px 14px; }
-  .status-chip.bezig { background: #fff7e6; color: #92600a; }
-  .status-chip.ingeleverd { background: var(--green-soft); color: var(--green-dark); }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; }
-  .status-chip.bezig .status-dot { background: #f5a623; }
-  .status-chip.ingeleverd .status-dot { background: var(--green); }
-  .empty-hint { color: var(--muted); font-size: 15px; padding: 20px 4px; text-align: center; }
+  .participants-grid { display: flex; flex-direction: column; gap: 10px; min-height: 48px; }
+  .participant-chip {
+    display: flex; align-items: center; gap: 10px;
+    background: white; border: 1px solid var(--border); border-radius: var(--r-pill);
+    padding: 8px 18px 8px 8px;
+    animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  .participant-avatar {
+    width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+    color: white; font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .leerlingen-groep.geel .participant-avatar { background: linear-gradient(135deg, #f5a623, #c97f0a); }
+  .leerlingen-groep.groen .participant-avatar { background: linear-gradient(135deg, var(--green), #0c8268); }
+  .participant-naam { font-size: 15px; font-weight: 700; }
+  .empty-hint { color: var(--muted); font-size: 14px; padding: 12px 4px; text-align: center; }
+
+  @media (max-width: 640px) {
+    .leerlingen-kolommen { grid-template-columns: 1fr; }
+  }
 
   /* ── RESULTATEN ── */
   .podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
@@ -122,6 +137,24 @@
   .rest-naam { flex: 1.4; font-size: 16px; font-weight: 700; }
   .rest-score { flex: 1; font-size: 14px; font-weight: 700; color: var(--primary); }
   .rest-tijd, .rest-ingeleverd { flex: 1; font-size: 13px; color: var(--muted); }
+
+  .antwoorden-panel { margin-top: 28px; }
+  .antwoorden-lijst { display: flex; flex-direction: column; gap: 10px; }
+  .antwoord-rij {
+    display: flex; align-items: center; gap: 16px; padding: 14px 18px;
+    background: #f7f8f9; border-radius: 16px;
+  }
+  .antwoord-nr {
+    width: 26px; height: 26px; border-radius: 50%; background: white; border: 1px solid var(--border);
+    color: var(--muted); font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .antwoord-tekst { flex: 1; font-size: 15px; font-weight: 700; }
+  .antwoord-badge {
+    font-size: 13px; font-weight: 700; border-radius: var(--r-pill); padding: 6px 16px; white-space: nowrap;
+  }
+  .antwoord-badge.waar { background: var(--green-soft); color: var(--green-dark); }
+  .antwoord-badge.nietwaar { background: #fef2f2; color: #b91c1c; }
 
   @media (max-width: 720px) {
     .header-inner, .main { padding-left: 24px; padding-right: 24px; }
@@ -277,7 +310,10 @@
         </div>
       </div>
     `;
-    document.getElementById('btn-resultaten').addEventListener('click', toonResultaten);
+    document.getElementById('btn-resultaten').addEventListener('click', async () => {
+      await db.from('quiz_sessions').update({ status: 'resultaten' }).eq('id', sessie.id);
+      toonResultaten();
+    });
     ververLeerlingentabel();
   }
 
@@ -299,35 +335,30 @@
     const bezig = lijst.filter(d => d.status !== 'ingeleverd');
     const afgerond = lijst.filter(d => d.status === 'ingeleverd');
 
-    function maakTabel(rij, leeg) {
+    function maakChips(rij, leeg) {
       if (rij.length === 0) return `<div class="empty-hint">${leeg}</div>`;
       return `
-        <table class="leerlingen-tabel">
-          <thead><tr><th>Voornaam</th><th>Status</th></tr></thead>
-          <tbody>
-            ${rij.map(d => `
-              <tr>
-                <td>${escapeHtml(d.naam)}</td>
-                <td>
-                  <span class="status-chip ${d.status === 'ingeleverd' ? 'ingeleverd' : 'bezig'}">
-                    <span class="status-dot"></span> ${d.status === 'ingeleverd' ? 'Ingeleverd' : 'Nog bezig'}
-                  </span>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
+        <div class="participants-grid">
+          ${rij.map(d => `
+            <div class="participant-chip">
+              <div class="participant-avatar">${escapeHtml(d.naam.slice(0, 2).toUpperCase())}</div>
+              <div class="participant-naam">${escapeHtml(d.naam)}</div>
+            </div>
+          `).join('')}
+        </div>
       `;
     }
 
     wrap.innerHTML = `
-      <div class="leerlingen-groep">
-        <div class="leerlingen-groep-titel">Bezig met de quiz <span class="leerlingen-groep-count">${bezig.length}</span></div>
-        ${maakTabel(bezig, 'Niemand is nog bezig.')}
-      </div>
-      <div class="leerlingen-groep">
-        <div class="leerlingen-groep-titel">Afgerond <span class="leerlingen-groep-count">${afgerond.length}</span></div>
-        ${maakTabel(afgerond, 'Nog niemand heeft ingeleverd.')}
+      <div class="leerlingen-kolommen">
+        <div class="leerlingen-groep geel">
+          <div class="leerlingen-groep-titel">Bezig met de quiz <span class="leerlingen-groep-count">${bezig.length}</span></div>
+          ${maakChips(bezig, 'Niemand is nog bezig.')}
+        </div>
+        <div class="leerlingen-groep groen">
+          <div class="leerlingen-groep-titel">Afgerond <span class="leerlingen-groep-count">${afgerond.length}</span></div>
+          ${maakChips(afgerond, 'Nog niemand heeft ingeleverd.')}
+        </div>
       </div>
     `;
   }
@@ -345,7 +376,20 @@
     return new Date(iso).toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
   }
 
-  function toonResultaten() {
+  let vragenAntwoorden = null;
+
+  async function laadVragenAntwoorden() {
+    if (vragenAntwoorden) return vragenAntwoorden;
+    const { data, error } = await db
+      .from('quiz_vragen')
+      .select('id, volgorde, vraag, goed_antwoord')
+      .eq('session_id', sessie.id)
+      .order('volgorde');
+    vragenAntwoorden = error ? [] : data;
+    return vragenAntwoorden;
+  }
+
+  async function toonResultaten() {
     huidigeView = 'resultaten';
     const ranglijst = [...deelnemers.values()]
       .filter(d => d.status === 'ingeleverd')
@@ -357,6 +401,7 @@
     const top3 = ranglijst.slice(0, 3);
     const rest = ranglijst.slice(3);
     const medals = ['🥇', '🥈', '🥉'];
+    const vragen = await laadVragenAntwoorden();
 
     app.innerHTML = `
       <div class="view">
@@ -394,6 +439,22 @@
               <div class="rest-ingeleverd">Ingeleverd om ${formatTijd(d.ingeleverd_op)}</div>
             </div>
           `).join('')}
+        </div>
+
+        <div class="panel antwoorden-panel">
+          <div class="panel-head">
+            <div class="panel-title">Antwoorden om te bespreken</div>
+            <div class="panel-count">${vragen.length} vragen</div>
+          </div>
+          <div class="antwoorden-lijst">
+            ${vragen.map((v, i) => `
+              <div class="antwoord-rij">
+                <div class="antwoord-nr">${i + 1}</div>
+                <div class="antwoord-tekst">${escapeHtml(v.vraag)}</div>
+                <div class="antwoord-badge ${v.goed_antwoord ? 'waar' : 'nietwaar'}">${v.goed_antwoord ? 'Waar' : 'Niet waar'}</div>
+              </div>
+            `).join('')}
+          </div>
         </div>
       </div>
     `;
