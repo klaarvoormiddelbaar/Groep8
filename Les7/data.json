@@ -47,12 +47,16 @@
   ],
   "benodigdheden": [
     {
-      "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "naam": "KvM SterrenStrijd spel",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - KvM SterrenStrijd.png"
     },
     {
-      "naam": "Werkboek",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+      "naam": "Sterrenstrijd werkblad",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - Werkblad Sterrenstrijd.png"
+    },
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
     }
   ],
   "mat": [
