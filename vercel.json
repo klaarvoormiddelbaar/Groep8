@@ -33,7 +33,7 @@
     { "source": "/les4/quiz", "destination": "/KvM Quiz/join.html" },
     { "source": "/les5/quiz", "destination": "/KvM Quiz/join.html" },
     { "source": "/les6/quiz", "destination": "/KvM Quiz/join.html" },
-    { "source": "/les7/quiz", "destination": "/KvM Quiz/join.html" },
+    { "source": "/les7/quiz", "destination": "/Open Boek Quiz/join.html" },
     { "source": "/les8/quiz", "destination": "/KvM Quiz/join.html" },
     { "source": "/les1/poll", "destination": "/Live poll/join.html" },
     { "source": "/les2/poll", "destination": "/Live poll/join.html" },
