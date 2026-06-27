@@ -312,18 +312,18 @@
     .mat-carousel-fade-left {
       position: absolute;
       top: 0; bottom: 0;
-      width: 48px;
+      width: 116px;
       pointer-events: none;
       z-index: 1;
       transition: opacity 0.25s;
     }
     .mat-carousel-fade-right {
       right: 0;
-      background: linear-gradient(to right, transparent, white);
+      background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.80) 55%, white 100%);
     }
     .mat-carousel-fade-left {
       left: 0;
-      background: linear-gradient(to left, transparent, white);
+      background: linear-gradient(to left, transparent 0%, rgba(255,255,255,0.80) 55%, white 100%);
       opacity: 0;
     }
     .mat-carousel-inner {
@@ -882,7 +882,6 @@
         const fits = allFit();
         prev.style.visibility = (fits || idx === 0) ? 'hidden' : 'visible';
         next.style.visibility = (fits || idx >= cards.length - 1) ? 'hidden' : 'visible';
-        if (fadeLeft)  fadeLeft.style.opacity  = (!fits && idx > 0) ? '1' : '0';
         if (fadeRight) fadeRight.style.opacity = (!fits && idx < cards.length - 1) ? '1' : '0';
         prev.disabled = idx === 0;
         next.disabled = idx >= cards.length - 1;
