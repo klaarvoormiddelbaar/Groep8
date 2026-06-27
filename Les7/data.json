@@ -6,12 +6,12 @@
   "title": "Schriftelijke vaardigheden",
   "sub": "Mailen naar je leerkracht en aantekeningen maken",
   "duur": "50–60 min",
-  "tip": "Sta tijdens de tussenbespreking van de PlanetenPresentatie uitgebreid stil bij de tips voor aantekeningen maken, zodat leerlingen deze direct kunnen toepassen in het tweede deel van de presentatie.",
+  "tip": "Sta tijdens de tussenbespreking van de les: Verhaal van de Aarde uitgebreid stil bij de tips voor aantekeningen maken, zodat leerlingen deze direct kunnen toepassen in het tweede deel van de presentatie.",
   "canva": "https://www.canva.com/design/DAHMQNCzky4/oRrGSzUaqKyvfqlpNjVUQA/view?embed",
   "doelen": [
-    "Leerlingen begrijpen het verschil tussen informeel en formeel taalgebruik.",
-    "Leerlingen kunnen een formele e-mail schrijven aan hun leerkracht.",
-    "Leerlingen kunnen op een overzichtelijke manier aantekeningen maken tijdens de les."
+    "De leerlingen begrijpen het verschil tussen informeel en formeel taalgebruik.",
+    "De leerlingen kunnen een formele e-mail schrijven aan hun leerkracht.",
+    "De leerlingen kunnen op een overzichtelijke manier aantekeningen maken tijdens de les."
   ],
   "tl": [
     {
@@ -33,6 +33,16 @@
       "t": "45–55 min",
       "n": "Nabespreking",
       "d": "Bespreek een paar ingeleverde mails klassikaal en wat een mail formeel maakt."
+    }
+  ],
+  "benodigdheden": [
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    },
+    {
+      "naam": "Werkboek",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
     }
   ],
   "mat": [
