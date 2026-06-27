@@ -49,7 +49,7 @@
     { "source": "/les4/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-4" },
     { "source": "/les5/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-5" },
     { "source": "/les6/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-6" },
-    { "source": "/les7/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-7" },
+    { "source": "/les7/docent/quiz", "destination": "/Open Boek Quiz/docent-quiz.html?les=les-7" },
     { "source": "/les8/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-8" },
     { "source": "/les1/docent/poll", "destination": "/Live poll/docent-poll.html?les=poll-les-1" },
     { "source": "/les2/docent/poll", "destination": "/Live poll/docent-poll.html?les=poll-les-2" },
