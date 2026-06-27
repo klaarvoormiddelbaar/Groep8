@@ -337,6 +337,7 @@
       const mist       = document.getElementById('mist-input').value.trim();
       const saai       = document.getElementById('saai-input').value.trim();
 
+      if (!naam)               { toonFeedback('Vul je voornaam in.'); return; }
       if (meeste.length === 0) { toonFeedback('Kies minstens één onderwerp waar je het meest van hebt geleerd.'); return; }
       if (!mist)   { toonFeedback('Vul in wat je nog mist in het programma.'); return; }
       if (werkvormen.length === 0) { toonFeedback('Kies minstens één werkvorm die je het leukst vond.'); return; }
@@ -349,7 +350,7 @@
 
       const { error } = await db.from('tips_en_tops_reacties').insert({
         leerkracht_id: docentId,
-        leerling_naam: naam || null,
+        leerling_naam: naam,
         meeste_aan_gehad: meeste,
         mist_nog: mist,
         leukste_werkvormen: werkvormen,
