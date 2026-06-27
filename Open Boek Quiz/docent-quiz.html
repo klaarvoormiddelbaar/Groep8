@@ -313,7 +313,7 @@
 
   function toonLobby() {
     huidigeView = 'lobby';
-    const joinUrl = `${window.location.origin}/les${lesNum}/open-boek-quiz`;
+    const joinUrl = `${window.location.origin}/les${lesNum}/quiz`;
     app.innerHTML = `
       <div class="view">
         <div class="quiz-hero">
@@ -324,7 +324,7 @@
             </div>
             <div class="ingeleverd-teller" id="ingeleverd-teller">0 / 0 leerlingen</div>
           </div>
-          <div class="quiz-sub">Ga naar <strong>groep8.klaarvoormiddelbaar.nl/les${lesNum}/open-boek-quiz</strong> en voer de sessiecode in.</div>
+          <div class="quiz-sub">Ga naar <strong>groep8.klaarvoormiddelbaar.nl/les${lesNum}/quiz</strong> en voer de sessiecode in.</div>
           <div class="code-display">${sessie.code.split('').map(c => `<div class="code-digit">${c}</div>`).join('')}</div>
         </div>
 
