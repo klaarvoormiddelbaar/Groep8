@@ -55,6 +55,24 @@
       "d": "Als de leerlingen na een half uur nog vol enthousiasme aan het spelen zijn, kan het spel natuurlijk langer worden gespeeld en loopt de les iets uit."
     }
   ],
+  "benodigdheden": [
+    {
+      "naam": "Werkboek",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+    },
+    {
+      "naam": "Sterrenstrijd werkblad",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - Werkblad Sterrenstrijd.png"
+    },
+    {
+      "naam": "KvM SterrenStrijd spel",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - KvM SterrenStrijd.png"
+    },
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    }
+  ],
   "mat": [
     "Scenario-kaarten set 1 (bijlage 5)",
     "Reflectiekaartjes",

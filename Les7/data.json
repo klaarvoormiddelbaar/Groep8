@@ -47,20 +47,12 @@
   ],
   "benodigdheden": [
     {
-      "naam": "Werkboek",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
-    },
-    {
-      "naam": "Sterrenstrijd werkblad",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - Werkblad Sterrenstrijd.png"
-    },
-    {
-      "naam": "KvM SterrenStrijd spel",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - KvM SterrenStrijd.png"
-    },
-    {
       "naam": "Laptop",
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    },
+    {
+      "naam": "Werkboek",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
     }
   ],
   "mat": [
