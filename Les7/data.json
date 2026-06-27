@@ -6,7 +6,7 @@
   "title": "Schriftelijke vaardigheden",
   "sub": "Mailen naar je leerkracht en aantekeningen maken",
   "duur": "50–60 min",
-  "tip": "Sta tijdens de tussenbespreking van de les: Verhaal van de Aarde uitgebreid stil bij de tips voor aantekeningen maken, zodat leerlingen deze direct kunnen toepassen in het tweede deel van de presentatie.",
+  "tip": "Sta tijdens de tussenbespreking van de les: 'Verhaal van de Aarde' uitgebreid stil bij de tips voor aantekeningen maken, zodat leerlingen deze direct kunnen toepassen in het tweede deel van de presentatie.",
   "canva": "https://www.canva.com/design/DAHMQNCzky4/oRrGSzUaqKyvfqlpNjVUQA/view?embed",
   "doelen": [
     "De leerlingen begrijpen het verschil tussen informeel en formeel taalgebruik.",
@@ -15,24 +15,34 @@
   ],
   "tl": [
     {
-      "t": "0–10 min",
-      "n": "Introductie",
-      "d": "Bespreek waarom slim aantekeningen maken en een nette mail schrijven straks op de middelbare school belangrijk wordt."
+      "t": "0–5 min",
+      "n": "Start, terugblik en leerdoelen",
+      "d": "Blik terug op les 6 en bespreek wat leerlingen vandaag gaan leren."
     },
     {
-      "t": "10–25 min",
-      "n": "Aantekeningen maken",
-      "d": "Oefen samen met een voorbeeldtekst hoe je kort en overzichtelijk aantekeningen maakt."
+      "t": "5–20 min",
+      "n": "Mailen naar je leerkracht",
+      "d": "Leerlingen schrijven via de digitale opdracht een formele e-mail aan hun leerkracht."
+    },
+    {
+      "t": "20–25 min",
+      "n": "Uitleg aantekeningen tips en uitleg AK les",
+      "d": "Leg uit hoe je slim aantekeningen maakt en introduceer de opbouw van de AK-les."
     },
     {
       "t": "25–45 min",
-      "n": "Opdracht formele mail",
-      "d": "Leerlingen herschrijven een informeel appje naar een formele e-mail met de digitale opdracht."
+      "n": "AK les inclusief tussenbespreking",
+      "d": "Leerlingen volgen de AK-les en maken aantekeningen. Halverwege een korte tussenbespreking."
     },
     {
       "t": "45–55 min",
-      "n": "Nabespreking",
-      "d": "Bespreek een paar ingeleverde mails klassikaal en wat een mail formeel maakt."
+      "n": "Waar-Niet waar toets en nabespreken aantekeningen",
+      "d": "Leerlingen toetsen hun kennis met de Waar-Niet waar opdracht en bespreken daarna hun aantekeningen na."
+    },
+    {
+      "t": "55–60 min",
+      "n": "Uitloop en terugblik",
+      "d": "Sluit af met een korte reflectie op de leerdoelen en een blik op wat er in les 8 gaat komen."
     }
   ],
   "benodigdheden": [
@@ -41,7 +51,7 @@
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
     },
     {
-      "naam": "'Verhaal van de Aarde'",
+      "naam": "Werkboek",
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
     }
   ],
