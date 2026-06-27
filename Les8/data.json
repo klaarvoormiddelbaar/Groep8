@@ -6,10 +6,10 @@
   "title": "Klaar voor de start!",
   "sub": "Afsluiting, evaluatie en certificaat",
   "duur": "60 min",
-  "tip": "Zijn er nog vijf minuten over tijdens het bordspel? Laat het team op plek 1 naar vakje 46 gaan en het team op plek 2 naar vakje 43, zodat het spel altijd kan worden afgerond.",
+  "tip": "Zijn er nog vijf minuten over tijdens KvM RuimteRace? Laat het team op plek 1 naar vakje 46 gaan en het team op plek 2 naar vakje 43, zodat het spel altijd kan worden afgerond.",
   "canva": "https://www.canva.com/design/DAHMQG4-AJs/c9O4rs2cr5VJxucSCzFCTw/view?embed",
   "doelen": [
-    "De leerlingen testen alles wat ze hebben geleerd nog één keer met het KvM Bordspel.",
+    "De leerlingen testen alles wat ze hebben geleerd nog één keer met KvM RuimteRace.",
     "De leerlingen hebben tips en tops gegeven over het programma.",
     "De leerlingen ontvangen hun certificaat, zetten hun handtekening en zijn dan helemaal Klaar voor Middelbaar!"
   ],
@@ -21,13 +21,13 @@
     },
     {
       "t": "5–10 min",
-      "n": "Uitleg KvM Bordspel",
-      "d": "Leg de spelregels van het KvM Bordspel uit en verdeel de klas in groepjes van 4."
+      "n": "Uitleg KvM RuimteRace",
+      "d": "Leg de spelregels van KvM RuimteRace uit en verdeel de klas in groepjes van 4."
     },
     {
       "t": "10–40 min",
-      "n": "Spelen KvM Bordspel + opruimen",
-      "d": "Leerlingen spelen het bordspel in hun groepjes en ruimen aan het einde samen op."
+      "n": "Spelen KvM RuimteRace + opruimen",
+      "d": "Leerlingen spelen KvM RuimteRace in hun groepjes en ruimen aan het einde samen op."
     },
     {
       "t": "40–50 min",
@@ -46,15 +46,15 @@
     }
   ],
   "mat": [
-    "KvM Bordspel",
+    "KvM RuimteRace",
     "KvM-certificaten (bijlage 10)",
     "Samenvattingen voor leerlingen",
     "Optioneel: diploma-muziek en slingers"
   ],
   "benodigdheden": [
     {
-      "naam": "KvM Bordspel",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Bordspel.png"
+      "naam": "KvM RuimteRace",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - RuimteRace.png"
     },
     {
       "naam": "Certificaat",
