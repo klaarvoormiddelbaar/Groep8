@@ -57,12 +57,16 @@
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - RuimteRace.png"
     },
     {
-      "naam": "Certificaat",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Certificaat.png"
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
     },
     {
       "naam": "Samenvattingen",
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Samenvattingenboekje.png"
+    },
+    {
+      "naam": "Certificaat",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Certificaat.png"
     }
   ]
 }
