@@ -11,9 +11,11 @@
     }
   ],
   "redirects": [
-    { "source": "/Dashboard",    "destination": "/Dashboard/",    "permanent": false },
-    { "source": "/proef",        "destination": "/proef/",        "permanent": false },
-    { "source": "/proeflicentie","destination": "/proef/",        "permanent": false }
+    { "source": "/Dashboard",              "destination": "/Dashboard/",      "permanent": false },
+    { "source": "/proef",                  "destination": "/proef/",          "permanent": false },
+    { "source": "/proeflicentie",          "destination": "/proef/",          "permanent": false },
+    { "source": "/les7/open-boek-quiz",    "destination": "/les7/quiz",       "permanent": false },
+    { "source": "/les7/docent/open-boek-quiz", "destination": "/les7/docent/quiz", "permanent": false }
   ],
   "rewrites": [
     { "source": "/Dashboard/",      "destination": "/Dashboard/dashboard.html" },
@@ -63,7 +65,5 @@
     { "source": "/tips-en-tops/leerkracht/antwoorden", "destination": "/Tips en Tops/leerkracht-tips-en-tops.html" },
     { "source": "/feedback/:code", "destination": "/Tips en Tops/tips-en-tops.html" },
     { "source": "/formeel/:nummer", "destination": "/Formele Mail Oefenen/formele-mail-oefenen.html" },
-    { "source": "/les7/open-boek-quiz", "destination": "/Open Boek Quiz/join.html" },
-    { "source": "/les7/docent/open-boek-quiz", "destination": "/Open Boek Quiz/docent-quiz.html?les=les-7" }
   ]
 }
