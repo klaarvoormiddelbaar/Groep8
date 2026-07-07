@@ -452,6 +452,118 @@
     }
     .jay-overlay.open { display: block; }
 
+    /* ── REFLECTIEVRAGEN ── */
+    .vragen-wrapper {
+      position: relative;
+      display: flex; flex-direction: column; gap: 20px;
+      transition: filter .5s ease, opacity .5s ease;
+    }
+    .vragen-wrapper.vergrendeld {
+      pointer-events: none;
+      user-select: none;
+    }
+    .vragen-wrapper.vergrendeld .vraag-kaart > *:not(.kaart-slot),
+    .vragen-wrapper.vergrendeld .sectie-kop {
+      filter: blur(3px);
+      opacity: .45;
+    }
+    .vergrendeld-overlay {
+      position: absolute; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      padding-top: 32px;
+      gap: 10px; pointer-events: none;
+      opacity: 0; transition: opacity .3s;
+    }
+    .vergrendeld-overlay.zichtbaar { opacity: 1; pointer-events: auto; }
+    .vergrendeld-overlay-label {
+      position: sticky;
+      top: calc(50vh - 28px);
+      background: rgba(255,255,255,.95);
+      border: 1.5px solid rgba(78,142,243,.30);
+      border-radius: var(--r-pill);
+      padding: 10px 20px;
+      font-size: 14px; font-weight: 700; color: var(--primary-dark);
+      box-shadow: 0 4px 16px rgba(78,142,243,.15);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .kaart-slot {
+      display: none;
+      position: absolute; inset: 0;
+      align-items: center; justify-content: center;
+      pointer-events: none; z-index: 4;
+      border-radius: var(--r-card);
+    }
+    .vragen-wrapper.vergrendeld .kaart-slot { display: flex; }
+
+    .sectie-kop {
+      display: flex; align-items: center; gap: 14px;
+      margin: 8px 0 -8px;
+    }
+    .sectie-kop-lijn { flex: 1; height: 1px; background: var(--border); }
+    .sectie-kop-label {
+      font-size: 16px; font-weight: 700;
+      color: #9aa5b4; letter-spacing: .07em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+    .vraag-kaart {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 26px 28px;
+      position: relative;
+    }
+    .vraag-nr { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+    .vraag-tekst { font-size: 17px; font-weight: 700; color: var(--dark); line-height: 1.35; margin-bottom: 20px; }
+    .opties { display: flex; flex-direction: column; gap: 10px; }
+    .opties-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .optie-btn {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      background: #fafbfc;
+      font-family: inherit; font-size: 15px; font-weight: 700; color: var(--dark);
+      cursor: pointer; text-align: left;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .optie-btn:hover:not(.gekozen):not(.gedimd) {
+      border-color: var(--primary); background: var(--primary-soft); color: var(--primary-dark);
+    }
+    .optie-btn.gekozen { border-color: var(--primary-dark); background: var(--primary-soft); color: var(--primary-dark); }
+    .optie-btn.gedimd { opacity: .38; cursor: default; }
+    .optie-check {
+      width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0;
+      border: 2px solid #c5cdd8;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, border-color .15s;
+    }
+    .optie-btn.gekozen .optie-check { background: var(--primary-dark); border-color: var(--primary-dark); }
+    .optie-btn.radio .optie-check { border-radius: 50%; }
+    .optie-btn.radio.gekozen .optie-check { background: var(--primary-dark); border-color: var(--primary-dark); }
+    .open-tekst {
+      width: 100%; min-height: 110px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-family: inherit; font-size: 15px; color: var(--dark);
+      background: #fafbfc; resize: vertical; outline: none;
+      transition: border-color .18s, box-shadow .18s;
+      line-height: 1.6;
+    }
+    .open-tekst::placeholder { color: #b0b8c1; font-weight: 400; }
+    .open-tekst:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(114,168,249,.18);
+      background: #fff;
+    }
+    .stelling-tekst {
+      font-size: 16px; font-style: italic; color: var(--dark);
+      background: var(--primary-soft); border-left: 3px solid var(--primary);
+      border-radius: 0 12px 12px 0; padding: 14px 18px; margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    @media (max-width: 768px) {
+      .opties-grid { grid-template-columns: 1fr; }
+    }
+
     /* ── AFRONDEN ── */
     .btn-afronden {
       width: 100%; height: 54px; border: none; border-radius: var(--r-pill);
@@ -886,6 +998,73 @@
       </div>
     </div>
 
+    <!-- SECTIE: Reflectievragen over AI -->
+    <div id="reflectieSectie" class="vragen-wrapper vergrendeld">
+    <div class="sectie-kop">
+      <div class="sectie-kop-lijn"></div>
+      <div class="sectie-kop-label">Wat vind jij van AI?</div>
+      <div class="sectie-kop-lijn"></div>
+    </div>
+
+    <div class="vraag-kaart">
+      <div class="vraag-nr">Vraag 1 van 5</div>
+      <div class="vraag-tekst">Waarvoor zou jij AI gebruiken? <span style="font-size:14px;font-weight:400;color:var(--muted)">(maximaal twee antwoorden)</span></div>
+      <div class="opties opties-grid" id="optiesAiGebruik">
+        <button class="optie-btn" data-waarde="Iets laten uitleggen" onclick="kiesAiGebruik(this)"><div class="optie-check"></div>Iets laten uitleggen</button>
+        <button class="optie-btn" data-waarde="Een samenvatting maken" onclick="kiesAiGebruik(this)"><div class="optie-check"></div>Een samenvatting maken</button>
+        <button class="optie-btn" data-waarde="Oefenvragen maken" onclick="kiesAiGebruik(this)"><div class="optie-check"></div>Oefenvragen maken</button>
+        <button class="optie-btn" data-waarde="Mijzelf overhoren" onclick="kiesAiGebruik(this)"><div class="optie-check"></div>Mijzelf overhoren</button>
+        <button class="optie-btn" data-waarde="Huiswerk controleren" onclick="kiesAiGebruik(this)"><div class="optie-check"></div>Huiswerk controleren</button>
+        <button class="optie-btn" data-waarde="Ik zou AI niet gebruiken" onclick="kiesAiGebruik(this)"><div class="optie-check"></div>Ik zou AI niet gebruiken</button>
+      </div>
+    </div>
+
+    <div class="vraag-kaart">
+      <div class="vraag-nr">Vraag 2 van 5</div>
+      <div class="vraag-tekst">Wat is volgens jou het grootste voordeel van AI?</div>
+      <textarea class="open-tekst" id="vraagAiVoordeel" placeholder="Schrijf hier je antwoord..." oninput="checkAfronden()"></textarea>
+    </div>
+
+    <div class="vraag-kaart">
+      <div class="vraag-nr">Vraag 3 van 5</div>
+      <div class="vraag-tekst">Wat is volgens jou het grootste nadeel van AI?</div>
+      <textarea class="open-tekst" id="vraagAiNadeel" placeholder="Schrijf hier je antwoord..." oninput="checkAfronden()"></textarea>
+    </div>
+
+    <div class="vraag-kaart">
+      <div class="vraag-nr">Vraag 4 van 5</div>
+      <div class="vraag-tekst">Stelling</div>
+      <div class="stelling-tekst">"Ik controleer altijd of een antwoord van AI klopt."</div>
+      <div class="opties" id="optiesAiStelling">
+        <button class="optie-btn radio" data-waarde="Helemaal mee eens" onclick="kiesAiStelling(this)"><div class="optie-check"></div>Helemaal mee eens</button>
+        <button class="optie-btn radio" data-waarde="Mee eens" onclick="kiesAiStelling(this)"><div class="optie-check"></div>Mee eens</button>
+        <button class="optie-btn radio" data-waarde="Neutraal" onclick="kiesAiStelling(this)"><div class="optie-check"></div>Neutraal</button>
+        <button class="optie-btn radio" data-waarde="Mee oneens" onclick="kiesAiStelling(this)"><div class="optie-check"></div>Mee oneens</button>
+        <button class="optie-btn radio" data-waarde="Helemaal mee oneens" onclick="kiesAiStelling(this)"><div class="optie-check"></div>Helemaal mee oneens</button>
+      </div>
+    </div>
+
+    <div class="vraag-kaart">
+      <div class="vraag-nr">Vraag 5 van 5</div>
+      <div class="vraag-tekst">Welk hulpmiddel zou jij als eerste gebruiken als je iets niet begrijpt?</div>
+      <div class="opties" id="optiesHulpmiddel">
+        <button class="optie-btn radio" data-waarde="Uitlegvideo" onclick="kiesHulpmiddel(this)"><div class="optie-check"></div>Uitlegvideo</button>
+        <button class="optie-btn radio" data-waarde="Oefenwebsite" onclick="kiesHulpmiddel(this)"><div class="optie-check"></div>Oefenwebsite</button>
+        <button class="optie-btn radio" data-waarde="AI" onclick="kiesHulpmiddel(this)"><div class="optie-check"></div>AI</button>
+        <button class="optie-btn radio" data-waarde="Je docent" onclick="kiesHulpmiddel(this)"><div class="optie-check"></div>Je docent</button>
+        <button class="optie-btn radio" data-waarde="Je boek" onclick="kiesHulpmiddel(this)"><div class="optie-check"></div>Je boek</button>
+      </div>
+    </div>
+
+    <!-- Vergrendeld overlay -->
+    <div class="vergrendeld-overlay zichtbaar" id="reflectieVergrendeldOverlay">
+      <div class="vergrendeld-overlay-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary-dark)" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        De vragen worden automatisch beschikbaar wanneer je de checklist hebt afgerond.
+      </div>
+    </div>
+    </div>
+
     <!-- AFRONDEN -->
     <button class="btn-afronden" id="btnAfronden" onclick="rondAf()" disabled>
       <div class="spinner"></div>
@@ -961,6 +1140,66 @@
     let quizMode  = false, quizStep  = 0, quizScore = 0, savedQuizScore = 0;
     let fouteOnderwerpen = [];
     let wachtOpSamenvattingKeuze = false;
+
+    // ── Reflectievragen over AI ──────────────────────────────────────────────
+    let checklistVoltooid = false;
+    let vragenOp = false;
+    let gekozenAiGebruik = [];
+    let gekozenAiStelling = '';
+    let gekozenHulpmiddel = '';
+
+    function kiesAiGebruik(btn) {
+      const waarde = btn.dataset.waarde;
+      if (btn.classList.contains('gekozen')) {
+        btn.classList.remove('gekozen');
+        gekozenAiGebruik = gekozenAiGebruik.filter(w => w !== waarde);
+      } else {
+        if (gekozenAiGebruik.length >= 2) return;
+        btn.classList.add('gekozen');
+        gekozenAiGebruik.push(waarde);
+      }
+      document.querySelectorAll('#optiesAiGebruik .optie-btn').forEach(b => {
+        if (!b.classList.contains('gekozen')) b.classList.toggle('gedimd', gekozenAiGebruik.length >= 2);
+      });
+      checkAfronden();
+    }
+
+    function kiesAiStelling(btn) {
+      gekozenAiStelling = btn.dataset.waarde;
+      document.querySelectorAll('#optiesAiStelling .optie-btn').forEach(b => b.classList.toggle('gekozen', b === btn));
+      checkAfronden();
+    }
+
+    function kiesHulpmiddel(btn) {
+      gekozenHulpmiddel = btn.dataset.waarde;
+      document.querySelectorAll('#optiesHulpmiddel .optie-btn').forEach(b => b.classList.toggle('gekozen', b === btn));
+      checkAfronden();
+    }
+
+    function reflectieCompleet() {
+      const v2 = document.getElementById('vraagAiVoordeel').value.trim();
+      const v3 = document.getElementById('vraagAiNadeel').value.trim();
+      return gekozenAiGebruik.length > 0 && v2.length > 0 && v3.length > 0 && gekozenAiStelling !== '' && gekozenHulpmiddel !== '';
+    }
+
+    function checkAfronden() {
+      if ((checklistVoltooid || vragenOp)) ontgrendelReflectievragen();
+      document.getElementById('btnAfronden').disabled = !((checklistVoltooid || vragenOp) && reflectieCompleet());
+    }
+
+    function ontgrendelReflectievragen() {
+      document.getElementById('reflectieSectie').classList.remove('vergrendeld');
+      document.getElementById('reflectieVergrendeldOverlay').classList.remove('zichtbaar');
+    }
+
+    /* Slot-icoon op elk vraag-kaartje van de reflectievragen */
+    document.querySelectorAll('#reflectieSectie .vraag-kaart').forEach(kaart => {
+      const slot = document.createElement('div');
+      slot.className = 'kaart-slot';
+      slot.innerHTML = `<div style="background:rgba(255,255,255,0.85);border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.10)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4e8ef3" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>`;
+      kaart.appendChild(slot);
+    });
+
     let chatHistory = [];
     let vragenTeller = 0;
     const MAX_VRAGEN = 20;
@@ -1084,7 +1323,8 @@
       const icon = item.querySelector('.cl-icon');
       if (icon) icon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">${svgCheck}</svg>`;
       checkUnlocks();
-      document.getElementById('btnAfronden').disabled = ![0,1,2,3,4,5].every(i => isDone(i));
+      checklistVoltooid = [0,1,2,3,4,5].every(i => isDone(i));
+      checkAfronden();
     }
 
     /* ── JAY FULLSCREEN ── */
@@ -1230,7 +1470,7 @@
             if (quizScore >= 4) {
               savedQuizScore = quizScore;
               autoCheck(5);
-              typeResponse(`Gefeliciteerd! Je hebt ${quizScore} van de 5 vragen goed. Je kent de stof goed. Je kunt de missie afronden.`, 1000);
+              typeResponse(`Gefeliciteerd! Je hebt ${quizScore} van de 5 vragen goed. Je kent de stof goed. Je kunt de vragen hieronder beantwoorden en daarna de missie afronden.`, 1000);
             } else {
               const uniek = [...new Set(fouteOnderwerpen)];
               typeResponse(`Je hebt ${quizScore} van de 5 vragen goed. Je hebt minimaal 4 nodig.<br><br><strong>Besteed extra aandacht aan:</strong><br>${uniek.map(o=>'• '+o).join('<br>')}<br><br>Vraag me een nieuwe set oefenvragen als je er klaar voor bent.`, 1200);
@@ -1341,7 +1581,8 @@
             c.style.pointerEvents = 'none'; c.style.opacity = '0.35'; c.style.filter = 'blur(0.6px)';
           });
           addMsg('Je hebt alle vragen gebruikt. Rond de missie af via de knop hieronder.', false, false, false);
-          document.getElementById('btnAfronden').disabled = false;
+          vragenOp = true;
+          checkAfronden();
         }, 2500);
       }
     }
@@ -1419,7 +1660,8 @@
         { id:'kaart-situatie', html:'<div style="'+LBL+'">Lees de situatie</div>Er staat een situatie beschreven. Lees deze kort door om te begrijpen wat de opdracht is.' },
         { id:'checklistCard',  html:'<div style="'+LBL+'">Vink de stappen af</div>De zes stappen worden automatisch afgevinkt zodra je ze voltooit. De checks worden stap voor stap beschikbaar.' },
         { id:'jayPanel',       html:'<div style="'+LBL+'">Chat met Jay I</div>Gebruik Jay I als jouw leercoach. Stel vragen, laat de theorie samenvatten, maak een tijdlijn en oefen met oefenvragen. Zo werk je stap voor stap de hele checklist af.' },
-        { id:'btnAfronden',    html:'<div style="'+LBL+'">Rond de missie af</div>Zijn alle stappen afgevinkt? Dan kun je hier de missie afronden.' },
+        { id:'reflectieSectie',html:'<div style="'+LBL+'">Maak de vragen</div>Na het afronden van de checklist worden de vragen beschikbaar. Beantwoord ze allemaal.' },
+        { id:'btnAfronden',    html:'<div style="'+LBL+'">Rond de missie af</div>Zijn alle stappen afgevinkt en de vragen beantwoord? Dan kun je hier de missie afronden.' },
         { id:'tut-help-btn',   html:'<div style="'+LBL+'">Nog niet helemaal begrepen?</div>Klik op het vraagteken om de uitleg van deze opdracht opnieuw te openen.' }
       ];
 
@@ -1485,7 +1727,15 @@
       btn.disabled = true; btn.classList.add('laden');
       try {
         const { data: huidig } = await db.from('missie_groepjes').select('antwoorden').eq('id',groepId).single();
-        const antwoorden = { ...(huidig?.antwoorden||{}), missie3: { quiz_score: savedQuizScore, checklist_compleet: true } };
+        const antwoorden = { ...(huidig?.antwoorden||{}), missie3: {
+          quiz_score: savedQuizScore,
+          checklist_compleet: true,
+          v1_ai_gebruik: gekozenAiGebruik,
+          v2_voordeel: document.getElementById('vraagAiVoordeel').value.trim(),
+          v3_nadeel: document.getElementById('vraagAiNadeel').value.trim(),
+          v4_stelling: gekozenAiStelling,
+          v5_hulpmiddel: gekozenHulpmiddel
+        } };
         await db.from('missie_groepjes').update({ missie_3_klaar: true, missie_huidig: 4, antwoorden, bijgewerkt_op: new Date().toISOString() }).eq('id',groepId);
         btn.classList.remove('laden');
         document.getElementById('modalOverlay').classList.add('zichtbaar');

@@ -200,6 +200,8 @@
     const CRITERIA    = ['Duidelijke uitleg','Veel oefeningen','Makkelijk zoeken','Mooie vormgeving','Direct feedback op mijn antwoorden','Overzichtelijke website','Werkt snel','Gratis te gebruiken'];
     const STELLING    = ['Helemaal mee eens','Mee eens','Neutraal','Mee oneens','Helemaal mee oneens'];
     const WEBSITES    = ['CambiumNed','Leer Snel Engels','Wiskunde.eu','Biologiepagina'];
+    const AI_GEBRUIK  = ['Iets laten uitleggen','Een samenvatting maken','Oefenvragen maken','Mijzelf overhoren','Huiswerk controleren','Ik zou AI niet gebruiken'];
+    const HULPMIDDEL  = ['Uitlegvideo','Oefenwebsite','AI','Je docent','Je boek'];
 
     function escapeHtml(t) {
       const d = document.createElement('div');
@@ -305,7 +307,12 @@
               <div class="stat-getal" style="color:var(--oranje-dark)">${aantalMetChecklist} / ${aantalBegonnen}</div>
             </div>
           </div>
-        </div>`;
+        </div>` +
+        renderChart('Waarvoor zou jij AI gebruiken?', telMeerkeuze(groepen, 'antwoorden.missie3.v1_ai_gebruik', AI_GEBRUIK), 'oranje') +
+        renderOpenVragen('Wat is volgens jullie het grootste voordeel van AI?', groepen, 'antwoorden.missie3.v2_voordeel') +
+        renderOpenVragen('Wat is volgens jullie het grootste nadeel van AI?', groepen, 'antwoorden.missie3.v3_nadeel') +
+        renderChart('Stelling: "Ik controleer altijd of een antwoord van AI klopt."', telEnkelkeuze(groepen, 'antwoorden.missie3.v4_stelling', STELLING), 'oranje') +
+        renderChart('Welk hulpmiddel zou je als eerste gebruiken als je iets niet begrijpt?', telEnkelkeuze(groepen, 'antwoorden.missie3.v5_hulpmiddel', HULPMIDDEL), 'oranje');
     }
 
     function renderInhoud(groepen) {
