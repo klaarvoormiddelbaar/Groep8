@@ -193,16 +193,6 @@
       font-size: 16px; font-weight: 700; color: var(--dark);
       margin-top: 18px;
     }
-    .situatie-extra {
-      margin-top: 18px;
-      padding-top: 18px;
-      border-top: 1px solid var(--border);
-      font-size: 15px; line-height: 1.7; color: #3a4553;
-      opacity: 0;
-      transition: opacity .6s ease;
-    }
-    .situatie-extra.zichtbaar { opacity: 1; }
-
     /* ── VIDEO SECTIE ── */
     .video-sectie { display: flex; flex-direction: column; gap: 20px; justify-content: space-between; }
 
@@ -373,11 +363,43 @@
       display: flex; align-items: center; justify-content: center; gap: 10px;
     }
     .btn-afronden:hover:not(:disabled) { opacity: .92; transform: translateY(-2px); }
-    .btn-afronden:disabled {
+    .btn-afronden:disabled,
+    .btn-afronden.niet-compleet {
       background: linear-gradient(135deg, #9aa5b4 0%, #b0b8c1 100%);
       opacity: 1;
-      cursor: default;
+      cursor: pointer;
       box-shadow: none;
+    }
+    .btn-afronden.niet-compleet:hover { transform: none; opacity: 1; }
+
+    /* ── AFRONDEN-MELDING ── */
+    .afronden-melding {
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      background: rgba(229,62,62,.08);
+      border: 1.5px solid rgba(229,62,62,.25);
+      border-radius: 16px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    .afronden-melding.zichtbaar { display: flex; }
+    .afronden-melding-titel { font-size: 14px; font-weight: 700; color: #c53030; }
+    .afronden-melding-lijst { font-size: 13.5px; color: #c53030; padding-left: 18px; margin: 0; line-height: 1.6; }
+    .afronden-melding-lijst li { cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+
+    .vraag-kaart.aandacht {
+      animation: aandachtPuls 1.4s cubic-bezier(.36,.07,.19,.97) both;
+      border-color: #e53e3e;
+    }
+    @keyframes aandachtPuls {
+      0%, 100% { box-shadow: var(--shadow-card); }
+      15%      { transform: translateX(-4px); }
+      30%      { transform: translateX(4px); }
+      45%      { transform: translateX(-3px); }
+      60%      { transform: translateX(3px); }
+      75%      { transform: translateX(-1px); }
+      20%, 50%, 80% { box-shadow: 0 0 0 4px rgba(229,62,62,.20), var(--shadow-card); }
     }
 
     .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
@@ -886,7 +908,7 @@
         <div class="vragen-grid">
 
         <!-- MC Vraag 1 -->
-        <div class="vraag-kaart">
+        <div class="vraag-kaart" id="kaart-mc1">
           <div class="vraag-nr-wrap">
             <div class="vraag-nr">Vraag 1 van 4</div>
             <div class="mc-help-wrap">
@@ -909,7 +931,7 @@
         </div>
 
         <!-- MC Vraag 2 -->
-        <div class="vraag-kaart">
+        <div class="vraag-kaart" id="kaart-mc2">
           <div class="vraag-nr-wrap">
             <div class="vraag-nr">Vraag 2 van 4</div>
             <div class="mc-help-wrap">
@@ -932,7 +954,7 @@
         </div>
 
         <!-- MC Vraag 3 -->
-        <div class="vraag-kaart">
+        <div class="vraag-kaart" id="kaart-mc3">
           <div class="vraag-nr-wrap">
             <div class="vraag-nr">Vraag 3 van 4</div>
             <div class="mc-help-wrap">
@@ -955,7 +977,7 @@
         </div>
 
         <!-- MC Vraag 4 -->
-        <div class="vraag-kaart">
+        <div class="vraag-kaart" id="kaart-mc4">
           <div class="vraag-nr-wrap">
             <div class="vraag-nr">Vraag 4 van 4</div>
             <div class="mc-help-wrap">
@@ -987,7 +1009,7 @@
         </div>
 
         <!-- Vraag 1 -->
-        <div class="vraag-kaart">
+        <div class="vraag-kaart" id="kaart-vraag1">
           <div class="vraag-nr">Vraag 1 van 3</div>
           <div class="vraag-tekst">Hoe duidelijk vonden jullie deze uitlegvideo?</div>
           <div class="sterren" id="sterren">
@@ -1000,7 +1022,7 @@
         </div>
 
         <!-- Vraag 2 -->
-        <div class="vraag-kaart">
+        <div class="vraag-kaart" id="kaart-vraag2">
           <div class="vraag-nr">Vraag 2 van 3</div>
           <div class="vraag-tekst">Bij welke vakken denken jullie dat jullie uitlegvideo's gaan gebruiken op de middelbare school? <span style="font-size:14px;font-weight:400;color:var(--muted)">(meerdere antwoorden mogelijk)</span></div>
           <div class="opties opties-grid" id="opties2">
@@ -1015,13 +1037,18 @@
         </div>
 
         <!-- Vraag 3 -->
-        <div class="vraag-kaart">
+        <div class="vraag-kaart" id="kaart-vraag3">
           <div class="vraag-nr">Vraag 3 van 3</div>
           <div class="vraag-tekst">Wat is volgens jullie het grootste voordeel aan het kijken van uitlegvideo's?</div>
           <textarea class="open-tekst" id="vraag3" placeholder="Schrijf hier jullie antwoord..."></textarea>
         </div>
 
-        <button class="btn-afronden" id="btnAfronden" onclick="rondAf()" disabled>
+        <div class="afronden-melding" id="afrondenMelding">
+          <div class="afronden-melding-titel">Nog niet helemaal klaar:</div>
+          <ul class="afronden-melding-lijst" id="afrondenMeldingLijst"></ul>
+        </div>
+
+        <button class="btn-afronden niet-compleet" id="btnAfronden" onclick="rondAf()">
           <div class="spinner"></div>
           <span class="btn-tekst">
             <img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="" style="height:16px;width:auto;object-fit:contain;vertical-align:-.2em"> Missie afronden
@@ -1088,11 +1115,6 @@
     let gekozenVakken = [];
     const mcGedaan    = {};
     const mcFouten    = { mc1: 0, mc2: 0, mc3: 0, mc4: 0 };
-
-    // ── Situatie extra tekst na 4s ───────────────────────────────────────────
-    setTimeout(() => {
-      document.getElementById('situatieExtra').classList.add('zichtbaar');
-    }, 4000);
 
     // ── Video geopend → 10 seconden aftellen dan ontgrendelen ────────────────
     const VIDEO_TIMER = new URLSearchParams(window.location.search).get('fast') === '1' ? 1000 : 150000;
@@ -1267,11 +1289,50 @@
     // ── Validatie ─────────────────────────────────────────────────────────────
     document.getElementById('vraag3').addEventListener('input', checkAfronden);
 
-    function checkAfronden() {
+    function ontbrekendeOnderdelen() {
       const v3 = document.getElementById('vraag3').value.trim();
-      const mcKlaar = ['mc1','mc2','mc3','mc4'].every(id => mcGedaan[id]);
-      const geldig = mcKlaar && sterScore > 0 && gekozenVakken.length > 0 && v3.length > 0;
-      document.getElementById('btnAfronden').disabled = !geldig;
+      const ontbreekt = [];
+      ['mc1','mc2','mc3','mc4'].forEach((id, i) => {
+        if (!mcGedaan[id]) ontbreekt.push({ label: `Oefenvraag ${i + 1} van 4`, kaartId: `kaart-${id}` });
+      });
+      if (sterScore === 0)          ontbreekt.push({ label: 'Vraag 1 van 3 (sterrenbeoordeling)', kaartId: 'kaart-vraag1' });
+      if (gekozenVakken.length === 0) ontbreekt.push({ label: 'Vraag 2 van 3 (vakken kiezen)', kaartId: 'kaart-vraag2' });
+      if (v3.length === 0)           ontbreekt.push({ label: 'Vraag 3 van 3 (open antwoord)', kaartId: 'kaart-vraag3' });
+      return ontbreekt;
+    }
+
+    function checkAfronden() {
+      const geldig = ontbrekendeOnderdelen().length === 0;
+      document.getElementById('btnAfronden').classList.toggle('niet-compleet', !geldig);
+      if (geldig) verbergAfrondenMelding();
+    }
+
+    function verbergAfrondenMelding() {
+      document.getElementById('afrondenMelding').classList.remove('zichtbaar');
+    }
+
+    function toonAfrondenMelding(ontbreekt) {
+      const lijst = document.getElementById('afrondenMeldingLijst');
+      lijst.innerHTML = ontbreekt.map(o => `<li onclick="springNaarKaart('${o.kaartId}')">${o.label}</li>`).join('');
+      document.getElementById('afrondenMelding').classList.add('zichtbaar');
+
+      document.querySelectorAll('.vraag-kaart.aandacht').forEach(el => el.classList.remove('aandacht'));
+      const eersteKaart = document.getElementById(ontbreekt[0].kaartId);
+      if (eersteKaart) {
+        eersteKaart.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        void eersteKaart.offsetWidth;
+        eersteKaart.classList.add('aandacht');
+        setTimeout(() => eersteKaart.classList.remove('aandacht'), 1400);
+      }
+    }
+
+    function springNaarKaart(kaartId) {
+      const kaart = document.getElementById(kaartId);
+      if (!kaart) return;
+      kaart.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      void kaart.offsetWidth;
+      kaart.classList.add('aandacht');
+      setTimeout(() => kaart.classList.remove('aandacht'), 1400);
     }
 
     // ── Tutorial rondleiding ─────────────────────────────────────────────────
@@ -1449,6 +1510,13 @@
 
     // ── Afronden ─────────────────────────────────────────────────────────────
     async function rondAf() {
+      const ontbreekt = ontbrekendeOnderdelen();
+      if (ontbreekt.length > 0) {
+        toonAfrondenMelding(ontbreekt);
+        return;
+      }
+      verbergAfrondenMelding();
+
       const btn = document.getElementById('btnAfronden');
       btn.disabled = true;
       btn.classList.add('laden');
