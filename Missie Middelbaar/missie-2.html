@@ -1271,6 +1271,13 @@
       window.addEventListener('resize', reposition);
       window.addEventListener('scroll', reposition, { passive: true });
 
+      // Chrome kan deze pagina onzichtbaar voorladen (prerender) vóórdat je
+      // erop klikt; de rondleiding start dan al terwijl alles nog 0x0 is.
+      // Zodra de pagina echt getoond wordt, positie opnieuw berekenen.
+      if (document.prerendering) {
+        document.addEventListener('prerenderingchange', reposition, { once: true });
+      }
+
       function metVoltooidePagina(cb) {
         if (document.readyState === 'complete') cb();
         else window.addEventListener('load', cb);

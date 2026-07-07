@@ -1718,6 +1718,7 @@
       function reposition(){if(overlay.classList.contains('active'))positionStep(step);}
       window.addEventListener('resize',reposition);
       window.addEventListener('scroll',reposition,{passive:true});
+      if(document.prerendering){document.addEventListener('prerenderingchange',reposition,{once:true});}
       (function(){if(document.readyState==='complete'){setTimeout(tutMaybeStart,600);}else{window.addEventListener('load',function(){setTimeout(tutMaybeStart,600);});}})();
     })();
 
