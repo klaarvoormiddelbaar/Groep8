@@ -503,7 +503,12 @@
 
     function renderMissie3(a, klaar, bezig) {
       const s = missieBlokStatus(klaar, bezig);
-      const inhoud = `<div class="placeholder-tekst">Jay I (de leercoach-chat) slaat momenteel geen antwoorden op in Supabase. Zodra dat is toegevoegd verschijnen de gespreksresultaten hier automatisch.</div>`;
+      let inhoud = `<div class="placeholder-tekst">Nog geen antwoorden, dit groepje is nog niet bij Missie 3 bezig geweest.</div>`;
+      if (a) {
+        inhoud = `
+          <div class="antwoord-regel"><span class="label">Checklist met Jay I</span>${a.checklist_compleet ? 'Volledig afgevinkt' : 'Nog niet volledig'}</div>
+          <div class="antwoord-regel"><span class="label">Score oefenvragen</span>${a.quiz_score != null ? escapeHtml(a.quiz_score) : 'Geen data'}</div>`;
+      }
       return `<div class="missie-blok">
         <div class="missie-blok-kop"><div class="missie-blok-titel">Missie 3 · Jay I</div><div class="missie-blok-status" style="background:${s.bg};color:${s.kleur}">${s.tekst}</div></div>
         ${inhoud}
