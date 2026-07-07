@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missie 2 – Ik wil extra oefenen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:        #10a37f;
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --r-card:       28px;
+      --r-pill:       9999px;
+    }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 110% -5%,  rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -5%   10%,  rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%   60%,  rgba(255,255,255,0.55) 0%, transparent 55%);
+      min-height: 100vh;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pop {
+      0%   { transform: scale(.8); opacity: 0; }
+      70%  { transform: scale(1.06); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 200;
+      height: 60px;
+      background: rgba(242,246,253,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .topbar img { height: 30px; object-fit: contain; }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 1184px;
+      margin: 0 auto;
+      padding: 36px 28px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1e4a8a 0%, #4e8ef3 60%, #72a8f9 100%);
+      border-radius: var(--r-card);
+      padding: 36px 40px 28px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+      box-shadow: 0 24px 48px -8px rgba(78,142,243,.40);
+      display: flex;
+      flex-direction: column;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,.12) 0%, transparent 60%);
+    }
+    .hero-dots {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+      background-image: radial-gradient(circle, rgba(255,255,255,.15) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .hero-body {
+      position: relative; z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      flex: 1;
+    }
+    .hero-content {
+      flex: 1;
+      padding-bottom: 32px;
+    }
+
+    .progress-row {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 18px;
+    }
+    .progress-label {
+      font-size: 13px; font-weight: 700;
+      color: rgba(255,255,255,.75);
+      white-space: nowrap;
+    }
+    .progress-bar {
+      flex: 1; height: 6px;
+      background: rgba(255,255,255,.22);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #fff;
+      border-radius: 9999px;
+      transition: width .6s ease;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: var(--r-pill);
+      padding: 5px 14px;
+      font-size: 13px; font-weight: 700; color: #fff;
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: 28px; font-weight: 700; color: #fff;
+      line-height: 1.2; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-title img { height: 1.2em; width: auto; object-fit: contain; flex-shrink: 0; }
+    .hero-sub {
+      font-size: 15px; color: rgba(255,255,255,.82);
+      line-height: 1.6; max-width: 620px;
+    }
+    .hero-jay {
+      height: 200px; width: auto; object-fit: contain;
+      flex-shrink: 0; align-self: flex-end;
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,.22));
+    }
+    @media (max-width: 768px) { .hero-jay { height: 140px; } }
+
+    /* ── KAART ── */
+    .kaart {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 28px 30px;
+      animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .kaart:nth-child(2) { animation-delay: .07s; }
+    .kaart:nth-child(3) { animation-delay: .14s; }
+    .kaart:nth-child(4) { animation-delay: .21s; }
+
+    .kaart-eyebrow {
+      font-size: 16px; font-weight: 700;
+      color: #9aa5b4; letter-spacing: .08em;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .kaart-titel {
+      font-size: 20px; font-weight: 700; color: var(--dark);
+      margin-bottom: 14px; line-height: 1.3;
+    }
+    .kaart-tekst {
+      font-size: 15px; line-height: 1.7; color: #3a4553;
+    }
+
+    /* ── WEBSITE KAARTEN ── */
+    .website-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+    .website-kaart {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 28px 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .website-kaart:nth-child(1) { animation-delay: .08s; }
+    .website-kaart:nth-child(2) { animation-delay: .14s; }
+    .website-kaart:nth-child(3) { animation-delay: .20s; }
+    .website-kaart:nth-child(4) { animation-delay: .26s; }
+    .website-header { display: flex; align-items: center; gap: 14px; }
+    .website-badge {
+      width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; color: #fff; letter-spacing: -.5px;
+    }
+    .website-naam { font-size: 20px; font-weight: 700; color: var(--dark); line-height: 1.2; }
+    .website-beschrijving { font-size: 14px; color: var(--muted); line-height: 1.6; flex: 1; }
+    .btn-website {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; height: 48px;
+      border: none; border-radius: var(--r-pill);
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: #fff;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      box-shadow: 0 6px 16px rgba(78,142,243,.28);
+      transition: opacity .18s, transform .15s, box-shadow .18s;
+    }
+    .btn-website:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 10px 24px rgba(78,142,243,.36); }
+    .btn-website.geopend {
+      background: linear-gradient(135deg, #059669 0%, var(--green) 100%);
+      box-shadow: 0 6px 16px rgba(16,163,127,.24);
+    }
+    .btn-website.geopend:hover { box-shadow: 0 10px 24px rgba(16,163,127,.32); }
+    .btn-website.geblokkeerd {
+      background: linear-gradient(135deg, #9aa5b4 0%, #b0b8c1 100%);
+      box-shadow: none; cursor: not-allowed; opacity: 1;
+    }
+    .btn-website.geblokkeerd:hover { opacity: 1; transform: none; box-shadow: none; }
+
+    .website-tooltip {
+      display: none; position: fixed; z-index: 900;
+      background: rgba(15,23,42,.88); color: #fff;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 13px; font-weight: 700; line-height: 1.5;
+      border-radius: 10px; padding: 10px 14px;
+      max-width: 260px; text-align: center;
+      pointer-events: none;
+    }
+
+    /* ── TIMER BLOK ── */
+    .timer-blok {
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,.18);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .timer-icoon img { height: 28px; width: auto; object-fit: contain; }
+    .timer-tekst { flex: 1; }
+    .timer-label { font-size: 14px; font-weight: 700; color: var(--primary-dark); margin-bottom: 3px; }
+    .timer-sub { font-size: 13px; color: var(--muted); line-height: 1.45; }
+    .timer-blok.klaar {
+      background: rgba(16,163,127,.08);
+      border-color: rgba(16,163,127,.22);
+    }
+    .timer-blok.klaar .timer-label { color: var(--green); }
+
+    /* ── VRAGEN SECTIE ── */
+    .vragen-wrapper {
+      position: relative;
+      display: flex; flex-direction: column; gap: 20px;
+      transition: filter .5s ease, opacity .5s ease;
+    }
+    .vragen-wrapper.vergrendeld {
+      pointer-events: none;
+      user-select: none;
+    }
+    .vragen-wrapper.vergrendeld .vraag-kaart > *:not(.kaart-slot),
+    .vragen-wrapper.vergrendeld .sectie-kop {
+      filter: blur(3px);
+      opacity: .45;
+    }
+
+    .vergrendeld-overlay {
+      position: absolute; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      padding-top: 32px;
+      gap: 10px; pointer-events: none;
+      opacity: 0; transition: opacity .3s;
+    }
+    .vergrendeld-overlay.zichtbaar { opacity: 1; pointer-events: auto; }
+    .vergrendeld-overlay-label {
+      position: sticky;
+      top: calc(50vh - 28px);
+      background: rgba(255,255,255,.95);
+      border: 1.5px solid rgba(78,142,243,.30);
+      border-radius: var(--r-pill);
+      padding: 10px 20px;
+      font-size: 14px; font-weight: 700; color: var(--primary-dark);
+      box-shadow: 0 4px 16px rgba(78,142,243,.15);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── VRAAG KAART ── */
+    .vraag-kaart {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 26px 28px;
+      position: relative;
+    }
+    .kaart-slot {
+      display: none;
+      position: absolute; inset: 0;
+      align-items: center; justify-content: center;
+      pointer-events: none; z-index: 4;
+      border-radius: var(--r-card);
+    }
+    .vragen-wrapper.vergrendeld .kaart-slot { display: flex; }
+    .vraag-nr { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+    .vraag-tekst { font-size: 17px; font-weight: 700; color: var(--dark); line-height: 1.35; margin-bottom: 20px; }
+
+    /* ── OPTIES ── */
+    .opties { display: flex; flex-direction: column; gap: 10px; }
+    .optie-btn {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      background: #fafbfc;
+      font-family: inherit; font-size: 15px; font-weight: 700; color: var(--dark);
+      cursor: pointer; text-align: left;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .optie-btn:hover:not(.gekozen):not(.gedimd) {
+      border-color: var(--primary); background: var(--primary-soft); color: var(--primary-dark);
+    }
+    .optie-btn.gekozen {
+      border-color: var(--primary-dark); background: var(--primary-soft); color: var(--primary-dark);
+    }
+    .optie-btn.gedimd { opacity: .38; cursor: default; }
+    .optie-check {
+      width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0;
+      border: 2px solid #c5cdd8;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, border-color .15s;
+    }
+    .optie-btn.gekozen .optie-check {
+      background: var(--primary-dark); border-color: var(--primary-dark);
+    }
+    .optie-btn.radio .optie-check { border-radius: 50%; }
+    .optie-btn.radio.gekozen .optie-check { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+    /* Vakken / opties grid */
+    .opties-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    /* Tekstveld */
+    .open-tekst {
+      width: 100%; min-height: 110px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-family: inherit; font-size: 15px; color: var(--dark);
+      background: #fafbfc; resize: vertical; outline: none;
+      transition: border-color .18s, box-shadow .18s;
+      line-height: 1.6;
+    }
+    .open-tekst::placeholder { color: #b0b8c1; font-weight: 400; }
+    .open-tekst:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(114,168,249,.18);
+      background: #fff;
+    }
+
+    /* ── SECTIE HEADERS ── */
+    .sectie-kop {
+      display: flex; align-items: center; gap: 14px;
+      margin: 8px 0 -8px;
+    }
+    .sectie-kop-lijn { flex: 1; height: 1px; background: var(--border); }
+    .sectie-kop-label {
+      font-size: 16px; font-weight: 700;
+      color: #9aa5b4; letter-spacing: .07em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+
+    /* ── AFRONDEN KNOP ── */
+    .btn-afronden {
+      width: 100%; height: 54px;
+      border: none; border-radius: var(--r-pill);
+      background: linear-gradient(135deg, #059669 0%, var(--green) 100%);
+      color: #fff;
+      font-family: inherit; font-size: 16px; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(16,163,127,.30);
+      transition: opacity .18s, transform .15s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-afronden:hover:not(:disabled) { opacity: .92; transform: translateY(-2px); }
+    .btn-afronden:disabled {
+      background: linear-gradient(135deg, #9aa5b4 0%, #b0b8c1 100%);
+      opacity: 1; cursor: default; box-shadow: none;
+    }
+    .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+    .btn-afronden.laden .spinner { display: block; }
+    .btn-afronden.laden .btn-tekst { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SLEEPVRAAG ── */
+    .sleep-lijst { display: flex; flex-direction: column; gap: 8px; }
+    .sleep-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      background: #fafbfc;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      cursor: grab;
+      user-select: none;
+      transition: border-color .15s, box-shadow .15s, opacity .15s;
+    }
+    .sleep-item:hover { border-color: var(--primary); background: var(--primary-soft); }
+    .sleep-item.dragging { opacity: .35; cursor: grabbing; }
+    .sleep-item.drag-over { border-color: var(--primary-dark); box-shadow: 0 0 0 3px rgba(78,142,243,.15); background: #edf3ff; }
+    .sleep-rank {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--primary-soft); color: var(--primary-dark);
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .sleep-badge {
+      width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #fff; letter-spacing: -.5px;
+    }
+    .sleep-naam { flex: 1; font-size: 15px; font-weight: 700; color: var(--dark); }
+    .sleep-handle { color: #c5cdd8; font-size: 18px; line-height: 1; }
+
+    /* ── STELLING ── */
+    .stelling-tekst {
+      font-size: 16px; font-style: italic; color: var(--dark);
+      background: var(--primary-soft); border-left: 3px solid var(--primary);
+      border-radius: 0 12px 12px 0; padding: 14px 18px; margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    /* ── LIGHTBOX ── */
+    .kaart-img {
+      width: 100%; border-radius: 14px;
+      cursor: zoom-in; transition: opacity .15s; display: block;
+    }
+    .kaart-img:hover { opacity: .88; }
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      align-items: center; justify-content: center; cursor: zoom-out;
+    }
+    .lightbox.zichtbaar { display: flex; animation: fadeIn .2s ease both; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 16px; box-shadow: 0 32px 64px rgba(0,0,0,.4); cursor: default; }
+    .lightbox-sluit {
+      position: absolute; top: 20px; right: 20px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.25);
+      color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .lightbox-sluit:hover { background: rgba(255,255,255,.28); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(15,23,42,.50);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .modal-overlay.zichtbaar { opacity: 1; pointer-events: auto; }
+    .modal-kaart {
+      background: #fff;
+      border-radius: var(--r-card);
+      padding: 52px 44px 44px;
+      text-align: center;
+      max-width: 380px; width: 90%;
+      box-shadow: 0 32px 64px rgba(0,0,0,.22);
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      animation: pop .45s cubic-bezier(.22,1,.36,1) both;
+    }
+    .modal-vink {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #059669 0%, var(--green) 100%);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 28px rgba(16,163,127,.35);
+      animation: pop .5s .1s cubic-bezier(.22,1,.36,1) both;
+    }
+    .modal-titel { font-size: 28px; font-weight: 700; color: var(--dark); }
+    .modal-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+    .modal-voortgang {
+      width: 100%; height: 4px;
+      background: var(--border); border-radius: 9999px; overflow: hidden; margin-top: 8px;
+    }
+    .modal-voortgang-balk {
+      height: 100%; background: var(--green); border-radius: 9999px;
+      width: 100%; transform-origin: left;
+      animation: aftel 3.5s linear forwards;
+    }
+    @keyframes aftel { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+    /* ── HELP BTN WIGGLE ── */
+    @keyframes tutBounce {
+      0%         { transform: scale(1) rotate(0deg); }
+      10%        { transform: scale(2.6) rotate(-18deg); background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+      25%        { transform: scale(2.4) rotate(16deg); background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+      40%        { transform: scale(2.5) rotate(-14deg); background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+      55%        { transform: scale(2.2) rotate(12deg); background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+      70%        { transform: scale(1.8) rotate(-7deg); background: var(--primary); color: #fff; border-color: var(--primary); }
+      85%        { transform: scale(1.3) rotate(4deg); background: var(--primary-soft); color: var(--primary-dark); border-color: var(--primary); }
+      100%       { transform: scale(1) rotate(0deg); }
+    }
+
+    /* ── TUTORIAL RONDLEIDING ── */
+    #tut-overlay {
+      position: fixed; inset: 0; z-index: 1100;
+      visibility: hidden; opacity: 0; pointer-events: none;
+      transition: opacity 0.28s ease, visibility 0.28s;
+    }
+    #tut-overlay.active { visibility: visible; opacity: 1; pointer-events: all; }
+    #tut-spotlight {
+      position: fixed; pointer-events: none; z-index: 1101;
+      box-shadow:
+        0 0 0 3px rgba(255,255,255,0.78),
+        0 0 0 6px rgba(114,168,249,0.42),
+        0 0 0 9999px rgba(0,0,0,0.56);
+      transition:
+        top    0.38s cubic-bezier(0.22,1,0.36,1),
+        left   0.38s cubic-bezier(0.22,1,0.36,1),
+        width  0.38s cubic-bezier(0.22,1,0.36,1),
+        height 0.38s cubic-bezier(0.22,1,0.36,1),
+        border-radius 0.38s cubic-bezier(0.22,1,0.36,1);
+    }
+    #tut-card {
+      position: fixed; z-index: 1102; pointer-events: all;
+      width: 360px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 28px 22px;
+      box-shadow: 0 24px 56px rgba(0,0,0,0.22), 0 6px 16px rgba(0,0,0,0.08);
+      transition:
+        top  0.38s cubic-bezier(0.22,1,0.36,1),
+        left 0.38s cubic-bezier(0.22,1,0.36,1);
+    }
+    #tut-card::before {
+      content: '';
+      position: absolute; top: -10px;
+      left: var(--tut-ax, 50%); transform: translateX(-50%);
+      width: 20px; height: 10px;
+      background: #fff;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      transition: left 0.38s cubic-bezier(0.22,1,0.36,1);
+    }
+    #tut-card.arrow-down::before {
+      top: auto; bottom: -10px;
+      clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    }
+    #tut-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #f0f2f5; border: none; cursor: pointer;
+      font-family: inherit; font-size: 14px; color: #6d747a;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+    #tut-close:hover { background: #e1e3e3; color: #191c1d; }
+    #tut-lbl { font-size: 11px; font-weight: 700; color: #72a8f9; text-transform: uppercase; letter-spacing: 1.3px; margin-bottom: 10px; }
+    #tut-body { font-size: 15px; line-height: 1.65; color: #191c1d; margin-bottom: 22px; padding-right: 22px; }
+    #tut-footer { display: flex; align-items: center; justify-content: space-between; }
+    #tut-dots { display: flex; gap: 7px; align-items: center; }
+    .t-dot { height: 7px; background: #e1e3e3; width: 7px; border-radius: 4px; transition: background 0.22s, width 0.22s; }
+    .t-dot.active { background: #72a8f9; width: 18px; }
+    #tut-nav { display: flex; gap: 10px; }
+    #tut-prev {
+      padding: 9px 18px; border-radius: 9999px;
+      background: none; border: 1.5px solid #eceeee;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700; color: #6d747a; cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    #tut-prev:hover:not(:disabled) { border-color: #72a8f9; color: #72a8f9; }
+    #tut-prev:disabled { opacity: 0.32; cursor: default; }
+    #tut-next {
+      position: relative; overflow: hidden;
+      padding: 9px 22px; border-radius: 9999px;
+      background: #72a8f9; border: none;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700; color: white; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(78,142,243,0.30), 0 0 0 0 rgba(78,142,243,0.45);
+      animation: tutNextPuls 1.8s ease-in-out infinite;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    #tut-next::after {
+      content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+      background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: skewX(-20deg);
+      animation: tutNextGlans 2.6s ease-in-out infinite;
+    }
+    @keyframes tutNextPuls {
+      0%, 100% { box-shadow: 0 4px 12px rgba(78,142,243,0.30), 0 0 0 0 rgba(78,142,243,0.45); }
+      50%      { box-shadow: 0 4px 12px rgba(78,142,243,0.30), 0 0 0 7px rgba(78,142,243,0); }
+    }
+    @keyframes tutNextGlans {
+      0%   { left: -60%; }
+      55%  { left: 130%; }
+      100% { left: 130%; }
+    }
+    #tut-next:hover { background: #4e8ef3; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(78,142,243,0.40); }
+
+    .tut-help-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; aspect-ratio: 1; flex: 0 0 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      border: 1.5px solid rgba(255,255,255,0.5);
+      color: white;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .tut-help-btn:hover { background: rgba(255,255,255,0.34); }
+
+    @media (max-width: 768px) {
+      #tut-card { width: calc(100vw - 32px); max-width: 360px; }
+      .website-grid { grid-template-columns: 1fr; }
+      .opties-grid { grid-template-columns: 1fr; }
+      .main { padding: 24px 16px 64px; }
+      .hero { padding: 24px 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar">
+  </header>
+
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-dots"></div>
+      <div class="progress-row">
+        <span class="progress-label">Missie 2 van 3</span>
+        <div class="progress-bar"><div class="progress-fill" style="width:66.6%"></div></div>
+      </div>
+      <div class="hero-body">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <img src="/Afbeeldingen/EMOJI PACK IOS/laptop_1f4bb.png" alt="" style="height:14px;width:auto;object-fit:contain">
+            Missie 2
+          </div>
+          <div class="hero-title">
+            <img src="/Afbeeldingen/EMOJI PACK IOS/laptop_1f4bb.png" alt="">
+            Ik wil extra oefenen
+            <button class="tut-help-btn" id="tut-help-btn" onclick="tutStart()" aria-label="Rondleiding starten" title="Rondleiding">?</button>
+          </div>
+          <p class="hero-sub">Soms wil je een onderwerp extra oefenen. In deze missie ontdek je handige websites waarmee je thuis gratis kunt oefenen.</p>
+        </div>
+        <img class="hero-jay" src="/Missie Middelbaar/Oefenen.png" alt="Oefenen">
+      </div>
+    </div>
+
+    <!-- SITUATIEKAART -->
+    <div class="kaart" id="kaart-situatie" style="animation-delay:.08s;display:flex;align-items:center;gap:20px">
+      <div style="flex:1">
+        <p class="kaart-eyebrow">Oeps... alle opdrachten zijn op</p>
+        <p class="kaart-tekst" style="margin-top:10px">Je hebt alle opdrachten in je werkboek gemaakt, maar het ging nog niet helemaal goed. Tijdens deze missie ontdek je een aantal van de vele websites waarop je extra opdrachten kunt vinden.<br><br><strong>Onderzoek de vier websites hieronder en beantwoord daarna alle vragen. Veel succes!</strong></p>
+      </div>
+      <div style="position:relative;flex-shrink:0;width:600px;cursor:zoom-in" onclick="openLightbox(this.querySelector('img'))">
+        <img class="kaart-img" src="/Missie Middelbaar/Werkboek vol.png" alt="Werkboek" style="width:600px;margin:0;display:block">
+        <div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.55);border-radius:8px;padding:4px 8px;display:flex;align-items:center;gap:5px;pointer-events:none">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          <span style="font-size:11px;font-weight:700;color:#fff">Vergroten</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OEFENWEBSITES -->
+    <div class="website-grid" id="websites-sectie" style="animation-delay:.14s">
+      <!-- kaarten worden gegenereerd via JS -->
+    </div>
+
+    <!-- EVEN WACHTEN BLOK -->
+    <div class="timer-blok" id="timerBlok" style="display:none">
+      <div class="timer-icoon"><img src="/Afbeeldingen/EMOJI PACK IOS/eyes_1f440.png" alt=""></div>
+      <div class="timer-tekst">
+        <div class="timer-label" id="timerLabel">Even wachten...</div>
+        <div class="timer-sub" id="timerSub">De vragen worden automatisch beschikbaar nadat je de websites hebt bekeken.</div>
+      </div>
+    </div>
+
+    <!-- VRAGEN -->
+    <div style="position:relative">
+      <div class="vragen-wrapper vergrendeld" id="vragenWrapper">
+
+        <!-- Q1: Sleepvraag -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 1 van 7</div>
+          <div class="vraag-tekst">Welke website vond jij het fijnst werken?<br><span style="font-size:14px;font-weight:400;color:var(--muted)">Zet de websites op volgorde van fijnst werken naar minst fijn werken.</span></div>
+          <div class="sleep-lijst" id="sleepLijst"></div>
+        </div>
+
+        <!-- Q2: Open -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 2 van 7</div>
+          <div class="vraag-tekst" id="v2tekst">Waarom vond je ... het fijnst werken?</div>
+          <textarea class="open-tekst" id="vraag2" placeholder="Schrijf hier jullie antwoord..." oninput="checkAfronden()"></textarea>
+        </div>
+
+        <!-- Q3: Open -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 3 van 7</div>
+          <div class="vraag-tekst" id="v3tekst">Wat vond je minder fijn aan ...?</div>
+          <textarea class="open-tekst" id="vraag3" placeholder="Schrijf hier jullie antwoord..." oninput="checkAfronden()"></textarea>
+        </div>
+
+        <!-- Q4: Criteria max 2 -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 4 van 7</div>
+          <div class="vraag-tekst">Waar let jij op bij een goede oefenwebsite? <span style="font-size:14px;font-weight:400;color:var(--muted)">(maximaal twee antwoorden)</span></div>
+          <div class="opties opties-grid" id="opties4">
+            <button class="optie-btn" data-waarde="Duidelijke uitleg" onclick="kiesQ4(this)"><div class="optie-check"></div>Duidelijke uitleg</button>
+            <button class="optie-btn" data-waarde="Veel oefeningen" onclick="kiesQ4(this)"><div class="optie-check"></div>Veel oefeningen</button>
+            <button class="optie-btn" data-waarde="Makkelijk zoeken" onclick="kiesQ4(this)"><div class="optie-check"></div>Makkelijk zoeken</button>
+            <button class="optie-btn" data-waarde="Mooie vormgeving" onclick="kiesQ4(this)"><div class="optie-check"></div>Mooie vormgeving</button>
+            <button class="optie-btn" data-waarde="Direct feedback op mijn antwoorden" onclick="kiesQ4(this)"><div class="optie-check"></div>Direct feedback op mijn antwoorden</button>
+            <button class="optie-btn" data-waarde="Overzichtelijke website" onclick="kiesQ4(this)"><div class="optie-check"></div>Overzichtelijke website</button>
+            <button class="optie-btn" data-waarde="Werkt snel" onclick="kiesQ4(this)"><div class="optie-check"></div>Werkt snel</button>
+            <button class="optie-btn" data-waarde="Gratis te gebruiken" onclick="kiesQ4(this)"><div class="optie-check"></div>Gratis te gebruiken</button>
+          </div>
+        </div>
+
+        <!-- Q5: Stelling -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 5 van 7</div>
+          <div class="vraag-tekst">Stelling</div>
+          <div class="stelling-tekst">"Ik vind het belangrijk dat een oefenwebsite er mooi en overzichtelijk uitziet."</div>
+          <div class="opties" id="opties5">
+            <button class="optie-btn radio" data-waarde="Helemaal mee eens" onclick="kiesRadio(this,'stelling')"><div class="optie-check"></div>Helemaal mee eens</button>
+            <button class="optie-btn radio" data-waarde="Mee eens" onclick="kiesRadio(this,'stelling')"><div class="optie-check"></div>Mee eens</button>
+            <button class="optie-btn radio" data-waarde="Neutraal" onclick="kiesRadio(this,'stelling')"><div class="optie-check"></div>Neutraal</button>
+            <button class="optie-btn radio" data-waarde="Mee oneens" onclick="kiesRadio(this,'stelling')"><div class="optie-check"></div>Mee oneens</button>
+            <button class="optie-btn radio" data-waarde="Helemaal mee oneens" onclick="kiesRadio(this,'stelling')"><div class="optie-check"></div>Helemaal mee oneens</button>
+          </div>
+        </div>
+
+        <!-- Q6: Open -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 6 van 7</div>
+          <div class="vraag-tekst">Ken jij nog andere websites die je op de middelbare school kunt gebruiken om te leren of te oefenen?</div>
+          <textarea class="open-tekst" id="vraag6" placeholder="Schrijf hier jullie antwoord..." oninput="checkAfronden()"></textarea>
+        </div>
+
+        <!-- Q7: Radio -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 7 van 7</div>
+          <div class="vraag-tekst">Welke van deze websites denk je dat je volgend schooljaar het vaakst gaat gebruiken?</div>
+          <div class="opties" id="opties7">
+            <!-- gegenereerd via JS -->
+          </div>
+        </div>
+
+        <button class="btn-afronden" id="btnAfronden" onclick="rondAf()" disabled>
+          <div class="spinner"></div>
+          <span class="btn-tekst">
+            <img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="" style="height:16px;width:auto;object-fit:contain;vertical-align:-.2em"> Missie afronden
+          </span>
+        </button>
+
+      </div>
+
+      <!-- Vergrendeld overlay -->
+      <div class="vergrendeld-overlay zichtbaar" id="vergrendeldOverlay">
+        <div class="vergrendeld-overlay-label" id="vergrendeld-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary-dark)" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          De vragen worden automatisch beschikbaar wanneer je de websites hebt bekeken.
+        </div>
+      </div>
+    </div>
+
+    <!-- TUTORIAL OVERLAY -->
+    <div id="tut-overlay" role="dialog" aria-modal="true" aria-label="Rondleiding door de missie">
+      <div id="tut-spotlight" aria-hidden="true"></div>
+      <div id="tut-card">
+        <button id="tut-close" aria-label="Rondleiding sluiten">✕</button>
+        <div id="tut-lbl">Stap 1 van 5</div>
+        <div id="tut-body"></div>
+        <div id="tut-footer">
+          <div id="tut-dots"></div>
+          <div id="tut-nav">
+            <button id="tut-prev">Vorige</button>
+            <button id="tut-next">Volgende →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="sluitLightbox()">
+      <button class="lightbox-sluit" onclick="sluitLightbox()" aria-label="Sluiten">✕</button>
+      <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-kaart">
+        <div class="modal-vink">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="modal-titel">Goed gedaan!</div>
+        <p class="modal-sub">Missie 2 is voltooid. Je gaat nu terug naar het missiescherm.</p>
+        <div class="modal-voortgang"><div class="modal-voortgang-balk"></div></div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const groepId = sessionStorage.getItem('missie_groep_id');
+    if (!groepId) window.location.href = 'index.html';
+
+    /* ── Website data — pas hier aan om sites te wijzigen ── */
+    const WEBSITES = [
+      {
+        naam: 'CambiumNed',
+        beschrijving: 'Hier vind je super veel oefeningen over onder andere grammatica, spelling en woordenschat.',
+        url: 'https://www.cambiumned.nl',
+        kleur: '#2563eb',
+        letter: 'C'
+      },
+      {
+        naam: 'Leer Snel Engels',
+        beschrijving: 'Bij Leer Snel Engels kun je eindeloos Engelse grammatica en woordenschat oefenen.',
+        url: 'https://leersnelengels.nl/',
+        kleur: '#d97706',
+        letter: 'LSE'
+      },
+      {
+        naam: 'Wiskunde.eu',
+        beschrijving: 'Oefen alle wiskundeonderwerpen op jouw eigen niveau met duidelijke uitleg en handige voorbeelden.',
+        url: 'https://www.wiskunde.eu/demo-opgaven/1-vmbo-KGT',
+        kleur: '#7c3aed',
+        letter: 'W'
+      },
+      {
+        naam: 'Biologiepagina',
+        beschrijving: 'Alles over biologie: uitleg, filmpjes en oefenvragen over planten, dieren en het menselijk lichaam.',
+        url: 'https://biologiepagina.nl/',
+        kleur: '#059669',
+        letter: 'B'
+      }
+    ];
+
+    /* ── State ── */
+    const WEBSITE_TIMER  = new URLSearchParams(window.location.search).get('fast') === '1' ? 1000 : 60000;
+    let timerActief      = -1;
+    const sitesVoltooid  = new Set();
+    let volgorde         = WEBSITES.map((_, i) => i);
+    let gekozenCriteria  = [];
+    let gekozenStelling  = '';
+    let gekozenVolgendJaar = '';
+
+    /* ── Genereer website-kaarten ── */
+    (function () {
+      const grid = document.getElementById('websites-sectie');
+
+      WEBSITES.forEach((site, i) => {
+        const kaart = document.createElement('div');
+        kaart.className = 'website-kaart';
+        kaart.id = 'site-kaart-' + i;
+        kaart.innerHTML = `
+          <div class="website-header">
+            <div class="website-badge" style="background:${site.kleur}">${site.letter}</div>
+            <div class="website-naam">${site.naam}</div>
+          </div>
+          <p class="website-beschrijving">${site.beschrijving}</p>
+          <a class="btn-website" id="btn-site-${i}" href="${site.url}" target="_blank" rel="noopener" onclick="return websiteGeopend(event,${i})">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Open website
+          </a>
+        `;
+        grid.appendChild(kaart);
+      });
+
+      /* Q7: radio-opties genereren vanuit WEBSITES array */
+      const o7 = document.getElementById('opties7');
+      WEBSITES.forEach(site => {
+        const btn = document.createElement('button');
+        btn.className = 'optie-btn radio';
+        btn.dataset.waarde = site.naam;
+        btn.innerHTML = `<div class="optie-check"></div>${site.naam}`;
+        btn.addEventListener('click', () => kiesRadio(btn, 'volgendJaar'));
+        o7.appendChild(btn);
+      });
+
+      /* Slot-icoon op elk vraag-kaartje */
+      document.querySelectorAll('.vraag-kaart').forEach(kaart => {
+        const slot = document.createElement('div');
+        slot.className = 'kaart-slot';
+        slot.innerHTML = `<div style="background:rgba(255,255,255,0.85);border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.10)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4e8ef3" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>`;
+        kaart.appendChild(slot);
+      });
+    })();
+
+    /* ── Tooltip ── */
+    const tooltip = document.createElement('div');
+    tooltip.className = 'website-tooltip';
+    document.body.appendChild(tooltip);
+
+    function toonTooltip(btn, tekst) {
+      tooltip.textContent = tekst;
+      tooltip.style.display = 'block';
+      const r = btn.getBoundingClientRect();
+      tooltip.style.left = Math.max(8, r.left + r.width / 2 - 130) + 'px';
+      tooltip.style.top  = (r.top - tooltip.offsetHeight - 10) + 'px';
+    }
+    function verbergTooltip() { tooltip.style.display = 'none'; }
+
+    /* ── Website geopend ── */
+    function websiteGeopend(e, i) {
+      /* Geblokkeerd: andere timer actief */
+      if (timerActief !== -1 && timerActief !== i) {
+        e.preventDefault();
+        return false;
+      }
+      /* Al voltooid: gewoon openen, geen nieuwe timer */
+      if (sitesVoltooid.has(i)) return true;
+      /* Al actief (dubbele klik): niets doen, timer loopt al */
+      if (timerActief === i) { e.preventDefault(); return false; }
+
+      /* Nieuwe timer starten */
+      timerActief = i;
+      blokkeerAndereKnoppen(i);
+
+      setTimeout(() => {
+        timerActief = -1;
+        sitesVoltooid.add(i);
+        markeerBekeken(i);
+        deblokkeerAndereKnoppen();
+        if (sitesVoltooid.size === WEBSITES.length) {
+          const blok = document.getElementById('timerBlok');
+          blok.style.display = 'flex';
+          blok.classList.add('klaar');
+          document.getElementById('timerLabel').innerHTML = '<img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="" style="height:16px;width:auto;vertical-align:-.2em;margin-right:6px">Klaar! De vragen zijn nu beschikbaar.';
+          document.getElementById('timerSub').textContent = 'Beantwoord de vragen hieronder.';
+          ontgrendelVragen();
+        }
+      }, WEBSITE_TIMER);
+
+      return true;
+    }
+
+    function blokkeerAndereKnoppen(actiefI) {
+      WEBSITES.forEach((_, j) => {
+        if (j === actiefI || sitesVoltooid.has(j)) return;
+        const btn = document.getElementById('btn-site-' + j);
+        if (!btn) return;
+        btn.classList.add('geblokkeerd');
+        btn._tooltipEnter = () => toonTooltip(btn, 'Goed geprobeerd, maar eerst even ' + WEBSITES[actiefI].naam + ' goed onderzoeken.');
+        btn._tooltipLeave = verbergTooltip;
+        btn.addEventListener('mouseenter', btn._tooltipEnter);
+        btn.addEventListener('mouseleave', btn._tooltipLeave);
+      });
+    }
+
+    function deblokkeerAndereKnoppen() {
+      verbergTooltip();
+      WEBSITES.forEach((_, j) => {
+        if (sitesVoltooid.has(j)) return;
+        const btn = document.getElementById('btn-site-' + j);
+        if (!btn) return;
+        btn.classList.remove('geblokkeerd');
+        if (btn._tooltipEnter) { btn.removeEventListener('mouseenter', btn._tooltipEnter); btn._tooltipEnter = null; }
+        if (btn._tooltipLeave) { btn.removeEventListener('mouseleave', btn._tooltipLeave); btn._tooltipLeave = null; }
+      });
+    }
+
+    function markeerBekeken(i) {
+      const btn = document.getElementById('btn-site-' + i);
+      if (btn) {
+        btn.classList.add('geopend');
+        btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Bekeken`;
+      }
+    }
+
+    /* ── Vragen ontgrendelen ── */
+    function ontgrendelVragen() {
+      document.getElementById('vragenWrapper').classList.remove('vergrendeld');
+      document.getElementById('vergrendeldOverlay').classList.remove('zichtbaar');
+    }
+
+    /* ── Q1: Sleepvraag ── */
+    let draggingEl = null;
+
+    function initSleepLijst() {
+      const lijst = document.getElementById('sleepLijst');
+      lijst.innerHTML = '';
+      volgorde.forEach((siteIdx, pos) => {
+        const site = WEBSITES[siteIdx];
+        const item = document.createElement('div');
+        item.className = 'sleep-item';
+        item.draggable = true;
+        item.dataset.siteIdx = siteIdx;
+        item.innerHTML = `
+          <div class="sleep-rank">${pos + 1}</div>
+          <div class="sleep-badge" style="background:${site.kleur}">${site.letter}</div>
+          <div class="sleep-naam">${site.naam}</div>
+          <div class="sleep-handle">⠿</div>
+        `;
+        item.addEventListener('dragstart', e => {
+          draggingEl = item;
+          item.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+        });
+        item.addEventListener('dragend', () => {
+          item.classList.remove('dragging');
+          draggingEl = null;
+          document.querySelectorAll('.sleep-item').forEach(el => el.classList.remove('drag-over'));
+        });
+        item.addEventListener('dragover', e => {
+          e.preventDefault();
+          if (item !== draggingEl) {
+            document.querySelectorAll('.sleep-item').forEach(el => el.classList.remove('drag-over'));
+            item.classList.add('drag-over');
+          }
+        });
+        item.addEventListener('drop', e => {
+          e.preventDefault();
+          if (!draggingEl || draggingEl === item) return;
+          const fromIdx = parseInt(draggingEl.dataset.siteIdx);
+          const toIdx   = parseInt(item.dataset.siteIdx);
+          const fromPos = volgorde.indexOf(fromIdx);
+          const toPos   = volgorde.indexOf(toIdx);
+          volgorde.splice(fromPos, 1);
+          volgorde.splice(toPos, 0, fromIdx);
+          initSleepLijst();
+          updateDynamischeVragen();
+          checkAfronden();
+        });
+        lijst.appendChild(item);
+      });
+    }
+
+    function updateDynamischeVragen() {
+      const eerste = WEBSITES[volgorde[0]].naam;
+      const laatste = WEBSITES[volgorde[volgorde.length - 1]].naam;
+      const v2 = document.getElementById('v2tekst');
+      const v3 = document.getElementById('v3tekst');
+      if (v2) v2.innerHTML = `Waarom vond je <strong>${eerste}</strong> het fijnst werken?`;
+      if (v3) v3.innerHTML = `Wat vond je minder fijn aan <strong>${laatste}</strong>?`;
+    }
+
+    /* ── Q4: max 2 ── */
+    function kiesQ4(btn) {
+      if (btn.classList.contains('gekozen')) {
+        btn.classList.remove('gekozen');
+        gekozenCriteria = gekozenCriteria.filter(c => c !== btn.dataset.waarde);
+      } else {
+        if (gekozenCriteria.length >= 2) return;
+        btn.classList.add('gekozen');
+        gekozenCriteria.push(btn.dataset.waarde);
+      }
+      const alle = document.querySelectorAll('#opties4 .optie-btn');
+      if (gekozenCriteria.length >= 2) {
+        alle.forEach(b => { if (!b.classList.contains('gekozen')) b.classList.add('gedimd'); });
+      } else {
+        alle.forEach(b => b.classList.remove('gedimd'));
+      }
+      checkAfronden();
+    }
+
+    /* ── Q5 & Q7: radio ── */
+    function kiesRadio(btn, groep) {
+      const containerId = groep === 'stelling' ? 'opties5' : 'opties7';
+      document.querySelectorAll('#' + containerId + ' .optie-btn').forEach(b => b.classList.remove('gekozen'));
+      btn.classList.add('gekozen');
+      if (groep === 'stelling') gekozenStelling = btn.dataset.waarde;
+      else if (groep === 'volgendJaar') gekozenVolgendJaar = btn.dataset.waarde;
+      checkAfronden();
+    }
+
+    /* Init sleep na laden */
+    initSleepLijst();
+    updateDynamischeVragen();
+
+    /* ── Validatie ── */
+    function checkAfronden() {
+      const v2 = document.getElementById('vraag2').value.trim();
+      const v3 = document.getElementById('vraag3').value.trim();
+      const v6 = document.getElementById('vraag6').value.trim();
+      const geldig = v2.length > 0 && v3.length > 0 &&
+                     gekozenCriteria.length >= 1 &&
+                     gekozenStelling !== '' &&
+                     v6.length > 0 &&
+                     gekozenVolgendJaar !== '';
+      document.getElementById('btnAfronden').disabled = !geldig;
+    }
+
+    /* ── Tutorial rondleiding ── */
+    (function () {
+      var TUT_KEY = 'kvm_missie2_tut_v1';
+      var step = 0;
+      var activeSteps = [];
+
+      var overlay   = document.getElementById('tut-overlay');
+      var spotlight = document.getElementById('tut-spotlight');
+      var card      = document.getElementById('tut-card');
+      var closeBtn  = document.getElementById('tut-close');
+      var nextBtn   = document.getElementById('tut-next');
+      var prevBtn   = document.getElementById('tut-prev');
+      var lbl       = document.getElementById('tut-lbl');
+      var bodyEl    = document.getElementById('tut-body');
+      var dotsEl    = document.getElementById('tut-dots');
+
+      var STEPS = [
+        {
+          id:   'kaart-situatie',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Lees de situatie</div>Er staat een situatie beschreven. Lees deze kort door om te begrijpen wat de opdracht is.'
+        },
+        {
+          id:   'websites-sectie',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Ontdek de oefenwebsites</div>Onderzoek de vier websites en vergelijk ze met elkaar.'
+        },
+        {
+          id:   'vergrendeld-label',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Maak de vragen</div>Na het bekijken van de websites worden de vragen beschikbaar. Beantwoord ze allemaal.'
+        },
+        {
+          id:   'btnAfronden',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Rond de missie af</div>Zijn alle vragen ingevuld? Dan kun je de missie hier afronden.'
+        },
+        {
+          id:   'tut-help-btn',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Nog niet helemaal begrepen?</div>Klik op het vraagteken om de uitleg van deze opdracht opnieuw te openen.'
+        }
+      ];
+
+      function buildDots(n) {
+        dotsEl.innerHTML = '';
+        for (var i = 0; i < n; i++) {
+          var d = document.createElement('div');
+          d.className = 't-dot';
+          dotsEl.appendChild(d);
+        }
+      }
+
+      function positionStep(s) {
+        var st     = activeSteps[s];
+        var target = document.getElementById(st.id);
+        if (!target) { tutClose(); return; }
+
+        lbl.textContent = 'Stap ' + (s + 1) + ' van ' + activeSteps.length;
+        if (st.html) { bodyEl.innerHTML = st.html; } else { bodyEl.textContent = st.text || ''; }
+        var dots = dotsEl.querySelectorAll('.t-dot');
+        dots.forEach(function (d, i) { d.classList.toggle('active', i === s); });
+        prevBtn.disabled    = (s === 0);
+        nextBtn.textContent = (s === activeSteps.length - 1) ? 'Klaar!' : 'Volgende →';
+
+        var r   = target.getBoundingClientRect();
+        var pad = 10;
+        var cW  = card.offsetWidth  || 360;
+        var cH  = card.offsetHeight || 220;
+        var gap = 16;
+
+        spotlight.style.top          = (r.top    - pad) + 'px';
+        spotlight.style.left         = (r.left   - pad) + 'px';
+        spotlight.style.width        = (r.width  + pad * 2) + 'px';
+        spotlight.style.height       = (r.height + pad * 2) + 'px';
+        spotlight.style.borderRadius = getComputedStyle(target).borderRadius || '9999px';
+
+        var cardTop   = r.bottom + pad + gap;
+        var arrowDown = false;
+        if (cardTop + cH > window.innerHeight - 16) {
+          cardTop   = r.top - cH;
+          arrowDown = true;
+        }
+        cardTop = Math.max(16, cardTop);
+
+        var cardLeft = (r.left + r.width / 2) - cW / 2;
+        cardLeft = Math.max(16, Math.min(cardLeft, window.innerWidth - cW - 16));
+
+        card.style.top  = cardTop  + 'px';
+        card.style.left = cardLeft + 'px';
+        card.classList.toggle('arrow-down', arrowDown);
+
+        var ax = (r.left + r.width / 2) - cardLeft;
+        ax = Math.max(24, Math.min(ax, cW - 24));
+        card.style.setProperty('--tut-ax', ax + 'px');
+      }
+
+      function show(s) {
+        step = s;
+        var st = activeSteps[s];
+        var target = document.getElementById(st.id);
+        if (!target) return;
+
+        var r = target.getBoundingClientRect();
+        var alZichtbaar = r.top >= 0 && r.bottom <= window.innerHeight;
+
+        if (alZichtbaar) {
+          requestAnimationFrame(function () { positionStep(s); });
+        } else {
+          target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          setTimeout(function () { positionStep(s); }, 620);
+        }
+      }
+
+      function tutOpenWith(steps) {
+        if (steps.length === 0) return;
+        activeSteps = steps;
+        buildDots(steps.length);
+
+        spotlight.style.transition = 'none';
+        card.style.transition      = 'none';
+        step = 0;
+
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        requestAnimationFrame(function () {
+          positionStep(0);
+          spotlight.style.transition = '';
+          card.style.transition      = '';
+          overlay.classList.add('active');
+        });
+      }
+
+      function tutClose() {
+        overlay.classList.remove('active');
+        try { localStorage.setItem(TUT_KEY, '1'); } catch (e) {}
+      }
+
+      window.tutStart = function () {
+        try { localStorage.removeItem(TUT_KEY); } catch (e) {}
+        if (overlay.classList.contains('active')) tutClose();
+        var steps = STEPS.filter(function (s) { return !!document.getElementById(s.id); });
+        tutOpenWith(steps);
+      };
+
+      window.tutMaybeStart = function () {
+        try { if (localStorage.getItem(TUT_KEY)) return; } catch (e) {}
+        if (overlay.classList.contains('active')) return;
+        var steps = STEPS.filter(function (s) { return !!document.getElementById(s.id); });
+        tutOpenWith(steps);
+      };
+
+      closeBtn.addEventListener('click', tutClose);
+      nextBtn.addEventListener('click', function () {
+        if (step < activeSteps.length - 1) show(step + 1);
+        else tutClose();
+      });
+      prevBtn.addEventListener('click', function () {
+        if (step > 0) show(step - 1);
+      });
+
+      function reposition() {
+        if (overlay.classList.contains('active')) positionStep(step);
+      }
+      window.addEventListener('resize', reposition);
+      window.addEventListener('scroll', reposition, { passive: true });
+
+      window.addEventListener('load', function () {
+        setTimeout(tutMaybeStart, 600);
+      });
+    })();
+
+    /* ── Afronden ── */
+    async function rondAf() {
+      const btn = document.getElementById('btnAfronden');
+      btn.disabled = true;
+      btn.classList.add('laden');
+
+      try {
+        const { data: huidig } = await db
+          .from('missie_groepjes')
+          .select('antwoorden')
+          .eq('id', groepId)
+          .single();
+
+        const antwoorden = {
+          ...(huidig?.antwoorden || {}),
+          missie2: {
+            bekeken_sites:  Array.from(sitesVoltooid).map(i => WEBSITES[i].naam),
+            volgorde:       volgorde.map(i => WEBSITES[i].naam),
+            v2_fijnst:      document.getElementById('vraag2').value.trim(),
+            v3_minst_fijn:  document.getElementById('vraag3').value.trim(),
+            v4_criteria:    gekozenCriteria,
+            v5_stelling:    gekozenStelling,
+            v6_andere_sites: document.getElementById('vraag6').value.trim(),
+            v7_volgend_jaar: gekozenVolgendJaar
+          }
+        };
+
+        await db.from('missie_groepjes').update({
+          missie_2_klaar: true,
+          missie_huidig:  3,
+          antwoorden,
+          bijgewerkt_op:  new Date().toISOString()
+        }).eq('id', groepId);
+
+        btn.classList.remove('laden');
+        document.getElementById('modalOverlay').classList.add('zichtbaar');
+        setTimeout(() => { window.location.href = 'overzicht.html'; }, 3500);
+      } catch (e) {
+        btn.disabled = false;
+        btn.classList.remove('laden');
+      }
+    }
+
+    function openLightbox(img) {
+      document.getElementById('lightboxImg').src = img.src;
+      document.getElementById('lightboxImg').alt = img.alt;
+      document.getElementById('lightbox').classList.add('zichtbaar');
+      document.body.style.overflow = 'hidden';
+    }
+    function sluitLightbox() {
+      document.getElementById('lightbox').classList.remove('zichtbaar');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') sluitLightbox(); });
+  </script>
+</body>
+</html>

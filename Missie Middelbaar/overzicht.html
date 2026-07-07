@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missie Middelbaar — Overzicht</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:        #10a37f;
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --r-card:       28px;
+      --r-pill:       9999px;
+    }
+
+    html, body { min-height: 100vh; }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 110% -5%,  rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -5%   10%,  rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%   60%,  rgba(255,255,255,0.55) 0%, transparent 55%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      width: 100%;
+      height: 64px;
+      background: rgba(242,246,253,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .topbar img { height: 32px; width: auto; object-fit: contain; }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      width: 100%;
+      max-width: 560px;
+      padding: 40px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* ── HEADER ── */
+    .page-header { text-align: center; }
+    .groep-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,.20);
+      border-radius: var(--r-pill);
+      padding: 6px 16px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 14px;
+    }
+    .page-title {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .page-sub {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── MISSIE KAARTEN ── */
+    .missies { display: flex; flex-direction: column; gap: 16px; }
+
+    .missie-kaart {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 24px 26px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow .18s, filter .4s, opacity .4s;
+      position: relative;
+      animation: fadeUp .4s cubic-bezier(.22,1,.36,1) both;
+    }
+    .kaarten-klaar .missie-kaart.actief {
+      transition: transform .22s cubic-bezier(.22,1,.36,1), box-shadow .22s;
+    }
+    .missie-kaart:nth-child(2) { animation-delay: .07s; }
+    .missie-kaart:nth-child(3) { animation-delay: .14s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .missie-kaart.actief:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 32px 44px -8px rgba(0,0,0,.18);
+    }
+    .missie-kaart.actief { cursor: pointer; border-color: rgba(78,142,243,.25); }
+
+    .missie-kaart.vergrendeld {
+      filter: blur(1.5px);
+      opacity: 0.45;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .missie-kaart.voltooid {
+      border-color: rgba(16,163,127,.30);
+      background: rgba(16,163,127,.04);
+    }
+
+    /* Unlock animatie */
+    @keyframes unlockGlow {
+      0%   { box-shadow: var(--shadow-card); }
+      30%  { box-shadow: 0 0 0 4px rgba(114,168,249,.40), var(--shadow-card); }
+      70%  { box-shadow: 0 0 0 6px rgba(114,168,249,.18), var(--shadow-card); }
+      100% { box-shadow: var(--shadow-card); }
+    }
+    .missie-kaart.unlocking {
+      animation: unlockGlow 1.1s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    /* Icoon */
+    .missie-icoon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 26px;
+    }
+    .missie-icoon.blauw  { background: linear-gradient(135deg, #4e8ef3 0%, #72a8f9 100%); }
+    .missie-icoon.groen  { background: linear-gradient(135deg, #059669 0%, #10a37f 100%); }
+    .missie-icoon.paars  { background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%); }
+
+    /* Tekst */
+    .missie-tekst { flex: 1; min-width: 0; }
+    .missie-nr {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .missie-titel {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 4px;
+      line-height: 1.25;
+    }
+    .missie-tool {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* Status badge */
+    .missie-status {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      width: 118px;
+      height: 34px;
+      border-radius: var(--r-pill);
+    }
+    .missie-status.bezig {
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+    }
+    .missie-status.vergrendeld-badge {
+      background: #f0f2f5;
+      color: #9aa5b4;
+    }
+    .missie-status.klaar {
+      background: rgba(16,163,127,.12);
+      color: #059669;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar">
+  </header>
+
+  <main class="main">
+
+    <div class="page-header">
+      <div class="groep-badge" id="groepBadge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Laden...
+      </div>
+      <h1 class="page-title">Kies je missie</h1>
+      <p class="page-sub">Rond de missies op volgorde af. Na elke missie wordt de volgende ontgrendeld.</p>
+    </div>
+
+    <div class="missies" id="missies">
+
+      <!-- Missie 1 -->
+      <a class="missie-kaart vergrendeld" id="kaart1" href="missie-1.html">
+        <div class="missie-icoon blauw"><img src="/Afbeeldingen/EMOJI PACK IOS/clapper-board_1f3ac.png" alt="" style="width:30px;height:30px;object-fit:contain"></div>
+        <div class="missie-tekst">
+          <div class="missie-nr">Missie 1</div>
+          <div class="missie-titel">Ik begrijp de uitleg niet</div>
+          <div class="missie-tool">Math with Menno</div>
+        </div>
+        <div class="missie-status bezig" id="status1">Starten</div>
+      </a>
+
+      <!-- Missie 2 -->
+      <a class="missie-kaart vergrendeld" id="kaart2" href="missie-2.html">
+        <div class="missie-icoon groen"><img src="/Afbeeldingen/EMOJI PACK IOS/laptop_1f4bb.png" alt="" style="width:30px;height:30px;object-fit:contain"></div>
+        <div class="missie-tekst">
+          <div class="missie-nr">Missie 2</div>
+          <div class="missie-titel">Ik wil extra oefenen</div>
+          <div class="missie-tool">Online oefenwebsites</div>
+        </div>
+        <div class="missie-status vergrendeld-badge" id="status2">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Vergrendeld
+        </div>
+      </a>
+
+      <!-- Missie 3 -->
+      <a class="missie-kaart vergrendeld" id="kaart3" href="Jay AI/index.html">
+        <div class="missie-icoon paars"><img src="/Afbeeldingen/EMOJI PACK IOS/nerd-face_1f913.png" alt="" style="width:30px;height:30px;object-fit:contain"></div>
+        <div class="missie-tekst">
+          <div class="missie-nr">Missie 3</div>
+          <div class="missie-titel">Ik wil een leercoach</div>
+          <div class="missie-tool">Jay I</div>
+        </div>
+        <div class="missie-status vergrendeld-badge" id="status3">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Vergrendeld
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const groepId = sessionStorage.getItem('missie_groep_id');
+    const namen   = JSON.parse(sessionStorage.getItem('missie_namen') || '[]');
+
+    if (!groepId) {
+      window.location.href = 'index.html';
+    }
+
+    // Groepsnamen tonen
+    function toonNamen(namen) {
+      const badge = document.getElementById('groepBadge');
+      const tekst = namen.length <= 3
+        ? namen.join(' & ')
+        : namen.slice(0, 2).join(', ') + ' en ' + (namen.length - 2) + ' anderen';
+      badge.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> ${tekst}`;
+    }
+
+    toonNamen(namen);
+
+    // Kaarten updaten op basis van voortgang
+    function updateKaarten(groep) {
+      const k1 = document.getElementById('kaart1');
+      const k2 = document.getElementById('kaart2');
+      const k3 = document.getElementById('kaart3');
+      const s1 = document.getElementById('status1');
+      const s2 = document.getElementById('status2');
+      const s3 = document.getElementById('status3');
+
+      const svgSlot = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+      const svgVink = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+      function setActief(kaart, status) {
+        const wasVergrendeld = kaart.classList.contains('vergrendeld');
+        kaart.classList.remove('vergrendeld');
+        kaart.classList.add('actief');
+        status.className = 'missie-status bezig';
+        status.innerHTML = 'Starten';
+        if (wasVergrendeld) {
+          void kaart.offsetWidth;
+          kaart.classList.add('unlocking');
+          setTimeout(() => kaart.classList.remove('unlocking'), 1200);
+        }
+      }
+
+      function setVoltooid(kaart, status) {
+        kaart.classList.remove('vergrendeld', 'actief');
+        kaart.classList.add('voltooid', 'actief');
+        status.className = 'missie-status klaar';
+        status.innerHTML = svgVink + ' Voltooid';
+      }
+
+      function setVergrendeld(kaart, status) {
+        kaart.classList.remove('actief', 'voltooid');
+        kaart.classList.add('vergrendeld');
+        status.className = 'missie-status vergrendeld-badge';
+        status.innerHTML = svgSlot + ' Vergrendeld';
+      }
+
+      // Missie 1 — altijd beschikbaar
+      if (groep.missie_1_klaar) {
+        setVoltooid(k1, s1);
+      } else {
+        setActief(k1, s1);
+        s1.textContent = groep.missie_huidig === 1 ? 'Starten' : 'Verder';
+      }
+
+      // Missie 2 — na missie 1
+      if (groep.missie_1_klaar) {
+        if (groep.missie_2_klaar) setVoltooid(k2, s2);
+        else setActief(k2, s2);
+      } else {
+        setVergrendeld(k2, s2);
+      }
+
+      // Missie 3 — na missie 2
+      if (groep.missie_2_klaar) {
+        if (groep.missie_3_klaar) setVoltooid(k3, s3);
+        else setActief(k3, s3);
+      } else {
+        setVergrendeld(k3, s3);
+      }
+    }
+
+    // Initieel laden
+    async function laadGroep() {
+      const { data, error } = await db
+        .from('missie_groepjes')
+        .select('*')
+        .eq('id', groepId)
+        .single();
+      if (!error && data) {
+        toonNamen(data.namen);
+        updateKaarten(data);
+      }
+    }
+
+    // Realtime updates
+    db.channel('groep-' + groepId)
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'missie_groepjes',
+        filter: `id=eq.${groepId}`
+      }, payload => updateKaarten(payload.new))
+      .subscribe();
+
+    laadGroep();
+    setTimeout(() => document.getElementById('missies').classList.add('kaarten-klaar'), 700);
+  </script>
+</body>
+</html>

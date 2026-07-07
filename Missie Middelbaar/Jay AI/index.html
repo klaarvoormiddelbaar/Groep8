@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jay AI — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:        #10a37f;
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --max-w:        1184px;
+      --pad:          48px;
+      --r-card:       28px;
+      --r-pill:       9999px;
+      --header-h:     72px;
+    }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 110% -5%,  rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -5%   10%,  rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%   60%,  rgba(255,255,255,0.55) 0%, transparent 55%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 200;
+      height: var(--header-h);
+      background: rgba(242,246,253,0.90);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 var(--pad); height: 100%;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+      flex-shrink: 0;
+    }
+    .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
+    .logo-sub  { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .bc-link { color: var(--muted); text-decoration: none; transition: color .2s; }
+    .bc-link:hover { color: var(--primary); }
+    .bc-sep  { color: rgba(109,116,122,.4); }
+    .bc-current { color: var(--primary); font-weight: 700; }
+    .back-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,.20);
+      border-radius: var(--r-pill);
+      padding: 8px 18px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      color: var(--primary-dark); cursor: pointer; text-decoration: none;
+      transition: background .18s, box-shadow .18s;
+    }
+    .back-btn:hover { background: rgba(78,142,243,.16); box-shadow: 0 4px 12px rgba(78,142,243,.12); }
+
+    /* ── MAIN LAYOUT ── */
+    .main {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 24px var(--pad) 36px;
+      display: flex; flex-direction: column;
+      gap: 22px;
+      min-height: calc(100vh - var(--header-h));
+    }
+
+    /* ── PAGINAKOP ── */
+    .page-hero { padding: 4px 0 6px; }
+    .page-hero-eyebrow {
+      font-size: 16px; font-weight: 700;
+      color: var(--primary-dark);
+      letter-spacing: .08em; text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .page-hero-title {
+      font-size: 32px; font-weight: 700;
+      color: var(--dark); line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .page-hero-sub {
+      font-size: 15px; font-weight: 400;
+      color: var(--muted); line-height: 1.6;
+      max-width: 640px;
+    }
+
+    /* Bovenste rij: theorie-thumbnail links, checklist rechts */
+    .top-row {
+      display: grid;
+      grid-template-columns: 42fr 58fr;
+      gap: 22px;
+      align-items: stretch;
+      flex-shrink: 0;
+    }
+
+    /* ── LEFT: BUREAU + BOEKPAGINA ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Bureau — de achtergrond waarop de pagina ligt */
+    .book-desk {
+      background: #c8d0db;
+      background-image:
+        radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 85%, rgba(0,0,0,0.06) 0%, transparent 50%);
+      border-radius: var(--r-card);
+      padding: 20px 18px 22px;
+      position: relative;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.35),
+        inset 0 -1px 0 rgba(0,0,0,0.08),
+        0 20px 40px -8px rgba(0,0,0,0.14);
+      animation: fadeUp .45s cubic-bezier(.22,1,.36,1) both;
+      display: flex; flex-direction: column;
+    }
+
+    /* Klikbare thumbnail */
+    .book-thumb {
+      position: relative; cursor: pointer;
+      border-radius: 3px; overflow: hidden;
+      display: flex; flex-direction: column;
+      flex: 1;
+    }
+    .book-thumb:focus { outline: 3px solid var(--primary); outline-offset: 3px; }
+
+    /* De A4-pagina zelf */
+    .book-a4 {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 3px;
+      box-shadow:
+        0 1px 2px rgba(0,0,0,0.06),
+        0 4px 14px rgba(0,0,0,0.10),
+        0 16px 48px rgba(0,0,0,0.14);
+      overflow: hidden;
+      flex: 1; display: flex; min-height: 0;
+    }
+    .book-a4 img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: top;
+      display: block;
+    }
+
+    /* Hover-overlay op de thumbnail */
+    .book-thumb-overlay {
+      position: absolute; inset: 0;
+      background: rgba(17,38,80,0);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .22s;
+      border-radius: 3px;
+    }
+    .book-thumb:hover .book-thumb-overlay { background: rgba(17,38,80,0.60); }
+
+    .book-thumb-zoom {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      color: white; font-weight: 700; font-size: 15px;
+      opacity: 0; transform: scale(0.82) translateY(6px);
+      transition: opacity .22s, transform .22s;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .book-thumb:hover .book-thumb-zoom { opacity: 1; transform: scale(1) translateY(0); }
+
+    /* Persistente klik-hint onder de thumbnail */
+    .book-click-hint {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 11px;
+      font-size: 12px; font-weight: 700; color: #7a8898;
+      letter-spacing: .3px;
+    }
+
+    /* Lopende koptekst (running head) */
+    .page-running-head {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 28px;
+      border-bottom: 1px solid #e8ecf0;
+      background: #fafbfc;
+    }
+    .running-chapter {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: #8a9ab5;
+    }
+    .running-page {
+      font-size: 10px; color: #adb5c2; font-weight: 400;
+    }
+
+    /* Binnenste pagina-inhoud */
+    .page-body {
+      padding: 24px 32px 32px;
+    }
+
+    .book-subject-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(114,168,249,0.10);
+      border: 1px solid rgba(114,168,249,0.25);
+      border-radius: var(--r-pill);
+      padding: 4px 13px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--primary-dark);
+      margin-bottom: 12px;
+    }
+    .book-title {
+      font-size: 28px; font-weight: 700; color: #17336a;
+      line-height: 1.1; margin-bottom: 4px;
+    }
+    .book-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+
+    .book-lead {
+      font-size: 14px; line-height: 1.72; color: #2d3748;
+      border-left: 3px solid var(--primary);
+      padding-left: 14px; font-style: italic;
+      margin-bottom: 22px;
+    }
+
+    /* Figuren */
+    .book-figure {
+      width: 100%; border-radius: 10px; overflow: hidden;
+      margin-bottom: 6px;
+      background: linear-gradient(140deg, #dbeafe 0%, #bfdbfe 100%);
+      display: flex; align-items: center; justify-content: center;
+      min-height: 148px;
+    }
+    .book-figure-caption {
+      font-size: 11px; color: #8a9ab5; text-align: center;
+      font-style: italic; margin-bottom: 22px;
+    }
+
+    /* Koppen */
+    .book-h2 {
+      font-size: 16px; font-weight: 700; color: #17336a;
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 9px;
+    }
+    .book-h2::before {
+      content: '';
+      width: 3.5px; height: 16px;
+      background: var(--primary);
+      border-radius: 2px; flex-shrink: 0;
+    }
+    .book-p {
+      font-size: 14px; line-height: 1.75; color: #2d3748;
+      margin-bottom: 14px;
+    }
+
+    /* Moeilijke woorden */
+    .woordenbox {
+      background: #fef9e9;
+      border: 1.5px solid #f8d760;
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 18px 0;
+    }
+    .woordenbox-label {
+      font-size: 10px; font-weight: 700;
+      color: #c29111; letter-spacing: 1.1px;
+      text-transform: uppercase; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .woord-row {
+      display: flex; gap: 10px;
+      font-size: 13px; margin-bottom: 7px;
+      align-items: baseline;
+    }
+    .woord-term { font-weight: 700; color: #191c1d; min-width: 130px; flex-shrink: 0; }
+    .woord-def  { color: #453b1a; line-height: 1.4; }
+
+    /* Lijst */
+    .book-list { list-style: none; margin: 0 0 16px; }
+    .book-list li {
+      display: flex; align-items: flex-start; gap: 9px;
+      font-size: 14px; line-height: 1.65; color: #2d3748;
+      margin-bottom: 7px;
+    }
+    .book-list li::before {
+      content: '→';
+      color: var(--primary); font-weight: 700;
+      flex-shrink: 0; margin-top: 1px;
+    }
+
+    /* Paginanummer onderaan */
+    .page-foot {
+      text-align: center;
+      padding: 8px 0 10px;
+      font-size: 11px; color: #b0bac6;
+      border-top: 1px solid #f0f2f4;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed; inset: 0; z-index: 900;
+      background: rgba(10,14,20,0.80);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      overflow-y: auto;
+      padding: 32px 20px 48px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    .lightbox.open {
+      display: flex;
+      animation: lbIn .22s ease both;
+    }
+    @keyframes lbIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .lb-toolbar {
+      width: 100%; max-width: 1080px;
+      display: flex; justify-content: flex-end;
+      margin-bottom: 14px;
+    }
+    .lb-close-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: white;
+      border: none; border-radius: var(--r-pill);
+      padding: 10px 22px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      color: #191c1d; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.20);
+      transition: transform .18s, box-shadow .18s;
+    }
+    .lb-close-btn:hover { transform: scale(1.04); box-shadow: 0 6px 20px rgba(0,0,0,0.28); }
+
+    /* De pagina in de lightbox — iets groter, volledig zichtbaar */
+    .lb-page {
+      width: 100%; max-width: 1080px;
+      background: white;
+      border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 8px 48px rgba(0,0,0,0.36);
+      overflow: visible;
+      animation: lbPageIn .28s cubic-bezier(.22,1,.36,1) both;
+    }
+    .lb-page img { width: 100%; height: auto; display: block; border-radius: 4px; }
+    @keyframes lbPageIn {
+      from { opacity: 0; transform: scale(.97) translateY(12px); }
+      to   { opacity: 1; transform: scale(1)   translateY(0); }
+    }
+
+    /* Inhoud in de lightbox erft book-* klassen */
+    .lb-page .page-running-head { padding: 12px 36px; }
+    .lb-page .page-body         { padding: 32px 48px 44px; }
+    .lb-page .book-title        { font-size: 34px; }
+    .lb-page .book-subtitle     { font-size: 16px; margin-bottom: 22px; }
+    .lb-page .book-lead         { font-size: 16px; margin-bottom: 28px; }
+    .lb-page .book-h2           { font-size: 18px; margin-bottom: 12px; }
+    .lb-page .book-p            { font-size: 15px; margin-bottom: 16px; }
+    .lb-page .book-figure       { min-height: 180px; }
+    .lb-page .woordenbox        { padding: 20px 26px; margin: 22px 0; }
+    .lb-page .woord-row         { font-size: 14px; margin-bottom: 9px; }
+    .lb-page .woord-term        { min-width: 155px; }
+    .lb-page .book-list li      { font-size: 15px; margin-bottom: 9px; }
+    .lb-page .book-figure-caption { font-size: 12px; margin-bottom: 28px; }
+
+    /* ── RIGHT: JAY AI PANEL ── */
+    .jay-panel {
+      height: 520px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      animation: fadeUp .45s .08s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    /* ── CHECKLIST ── */
+    .checklist-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 22px 24px 6px;
+      animation: fadeUp .45s cubic-bezier(.22,1,.36,1) both;
+    }
+    .cl-eyebrow {
+      font-size: 16px; font-weight: 700; color: #9aa5b4;
+      letter-spacing: .08em; text-transform: uppercase;
+      margin: 0 0 14px;
+    }
+    .cl-item {
+      padding: 14px 0;
+      border-radius: 10px;
+      transition: filter .45s ease, opacity .45s ease, background .35s ease;
+    }
+    .cl-item + .cl-item { border-top: 1px solid #eef0f3; }
+    .cl-main-row {
+      display: flex; align-items: center; gap: 14px;
+    }
+    /* Locked state */
+    .cl-item.locked {
+      filter: blur(2.5px);
+      opacity: 0.38;
+      pointer-events: none;
+      user-select: none;
+    }
+    /* Unlock glow animation */
+    @keyframes clUnlockGlow {
+      0%   { box-shadow: none; }
+      25%  { box-shadow: 0 0 0 3px rgba(114,168,249,.45), inset 0 0 18px rgba(114,168,249,.08); }
+      65%  { box-shadow: 0 0 0 5px rgba(114,168,249,.18); }
+      100% { box-shadow: none; }
+    }
+    .cl-item.just-unlocked {
+      animation: clUnlockGlow 1.1s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes clCheckBounce {
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.28); }
+      58%  { transform: scale(0.90); }
+      78%  { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    .cl-icon {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      border: none; cursor: default;
+      background: #fee2e2;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .3s;
+    }
+    .cl-icon svg { color: #e53e3e; transition: color .3s; }
+    .cl-item.done .cl-icon {
+      background: #10a37f;
+      animation: clCheckBounce .5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .cl-item.done .cl-icon svg { color: #fff; }
+    .cl-label {
+      flex: 1; font-size: 15px; font-weight: 700; color: var(--txt-head);
+      line-height: 1.3;
+    }
+    .cl-item.done .cl-label { color: #10a37f; }
+    .cl-help-wrap {
+      position: relative; flex-shrink: 0;
+    }
+    .cl-help {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #f0f2f5; border: none; cursor: default;
+      font-size: 13px; font-weight: 600; color: #9aa5b4;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .cl-help-wrap:hover .cl-help { background: var(--kvm-blue); color: #fff; }
+    /* Tooltip */
+    .cl-tooltip {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      right: 0;
+      width: 240px;
+      background: #1c2130;
+      color: #fff;
+      font-size: 14px; font-weight: 600; line-height: 1.5;
+      padding: 13px 16px;
+      border-radius: 14px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .15s;
+      z-index: 200;
+      white-space: normal;
+    }
+    /* pijltje naar rechtsonder */
+    .cl-tooltip::after {
+      content: '';
+      position: absolute;
+      bottom: -8px; right: 10px;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 8px solid #1c2130;
+    }
+    .cl-help-wrap:hover .cl-tooltip { opacity: 1; }
+
+    /* Jay header — compact, alleen naam en badge */
+    .jay-header {
+      background: linear-gradient(150deg, #17336a 0%, #2a549c 55%, var(--primary-dark) 100%);
+      padding: 18px 24px 16px;
+      flex-shrink: 0;
+    }
+    .jay-title-row {
+      display: flex; align-items: center; gap: 13px; margin-bottom: 0;
+    }
+    .jay-expand-btn {
+      margin-left: auto; flex-shrink: 0;
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.13);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: white;
+      transition: background .18s, transform .15s;
+    }
+    .jay-expand-btn:hover {
+      background: rgba(255,255,255,0.24);
+      transform: scale(1.08);
+    }
+    .jay-expand-btn:active { transform: scale(.95); }
+
+    /* Jay AI overlay (donkere achtergrond) */
+    .jay-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 799;
+      background: rgba(10,14,20,0.76);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      animation: lbIn .22s ease both;
+    }
+    .jay-overlay.open { display: block; }
+
+    /* Jay paneel in fullscreen-modus */
+    .jay-panel.fullscreen {
+      position: fixed !important;
+      top: 44px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      width: min(860px, calc(100vw - 80px)) !important;
+      height: calc(100vh - 88px) !important;
+      z-index: 800 !important;
+      border-radius: 24px !important;
+      box-shadow: 0 24px 72px rgba(0,0,0,0.45) !important;
+      animation: lbPageIn .26s cubic-bezier(.22,1,.36,1) both;
+    }
+    .jay-avatar {
+      width: 48px; height: 48px; flex-shrink: 0;
+      background: rgba(255,255,255,0.14);
+      border: 2px solid rgba(255,255,255,0.30);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+    }
+    .jay-name-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .jay-name  { font-size: 22px; font-weight: 700; color: white; }
+    .jay-badge {
+      background: rgba(255,255,255,0.16);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: var(--r-pill);
+      padding: 3px 11px;
+      font-size: 11px; font-weight: 700;
+      color: rgba(255,255,255,0.86);
+      letter-spacing: .8px; text-transform: uppercase;
+    }
+
+    /* Divider onder naam/avatar */
+    .jay-header-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,0.12);
+      margin: 0 0 16px;
+    }
+
+    /* Intro-tekst */
+    .jay-intro-hi {
+      font-size: 15px; font-weight: 700; color: white;
+      margin-bottom: 8px;
+    }
+    .jay-intro-body {
+      font-size: 13.5px; color: rgba(255,255,255,0.72);
+      line-height: 1.65;
+    }
+
+    /* Status */
+    .jay-status {
+      display: flex; align-items: center; gap: 6px;
+      margin-top: 14px;
+    }
+    .status-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #4ade80;
+      animation: statusPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes statusPulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(.8); }
+    }
+    .status-text { font-size: 12px; color: rgba(255,255,255,0.55); }
+
+    /* Snelle actieknoppen */
+    /* Klikbare afbeelding in chat */
+    .chat-img {
+      width: 100%; border-radius: 10px; margin-top: 10px;
+      display: block; cursor: zoom-in;
+      transition: opacity .15s, transform .15s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.14);
+    }
+    .chat-img:hover { opacity: .88; transform: scale(1.01); }
+
+    /* Chatberichten */
+    .jay-chat {
+      flex: 1; overflow-y: auto;
+      padding: 20px 18px;
+      display: flex; flex-direction: column;
+      gap: 14px;
+    }
+    .jay-chat::-webkit-scrollbar { width: 4px; }
+    .jay-chat::-webkit-scrollbar-thumb { background: #e0e3e7; border-radius: 4px; }
+
+    .msg { display: flex; gap: 9px; align-items: flex-end; }
+    .msg.user { flex-direction: row-reverse; }
+
+    .msg-avatar {
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      background: rgba(78,142,243,.12);
+      border: 1.5px solid rgba(78,142,243,.20);
+    }
+    .msg.user .msg-avatar {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white; font-size: 12px; font-weight: 700;
+    }
+
+    .msg-bubble {
+      max-width: 82%;
+      padding: 11px 15px;
+      border-radius: 18px;
+      font-size: 14.5px; line-height: 1.58;
+    }
+    .msg-bubble.wide { max-width: 94%; }
+    .msg.jay .msg-bubble {
+      background: white;
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+      color: var(--dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .msg.user .msg-bubble {
+      background: var(--primary);
+      border-bottom-right-radius: 4px;
+      color: white;
+    }
+    .msg-bubble strong { font-weight: 700; }
+    .msg-bubble ul { margin: 8px 0 0 16px; }
+    .msg-bubble li { margin-bottom: 5px; }
+
+    /* Typ-indicator */
+    .typing-row {
+      display: none;
+      align-items: flex-end; gap: 9px;
+    }
+    .typing-row.visible { display: flex; }
+    .typing-label {
+      font-size: 11.5px; color: var(--muted);
+      font-style: italic; margin-bottom: 4px; padding-left: 2px;
+    }
+    .typing-dots {
+      background: white; border: 1px solid var(--border);
+      border-radius: 16px; border-bottom-left-radius: 4px;
+      padding: 11px 16px;
+      display: inline-flex; align-items: center; gap: 5px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .typing-dots span {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #b0b8c1;
+      animation: dotBounce 1.4s ease-in-out infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: .2s; }
+    .typing-dots span:nth-child(3) { animation-delay: .4s; }
+    @keyframes dotBounce {
+      0%,60%,100% { transform: translateY(0); opacity: .45; }
+      30%          { transform: translateY(-7px); opacity: 1; }
+    }
+
+    /* Quiz opties */
+    .quiz-options { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+    .quiz-opt {
+      background: var(--primary-soft);
+      border: 1.5px solid rgba(78,142,243,.22);
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-family: inherit; font-size: 13.5px; font-weight: 700;
+      color: var(--primary-dark);
+      cursor: pointer; text-align: left;
+      transition: background .16s, transform .14s, border-color .16s;
+    }
+    .quiz-opt:hover:not(:disabled) {
+      background: rgba(78,142,243,.18);
+      border-color: rgba(78,142,243,.40);
+      transform: translateX(3px);
+    }
+    .quiz-opt:disabled { cursor: default; }
+    .quiz-opt.correct { background: rgba(16,163,127,.12); border-color: #10a37f; color: #0a6b52; }
+    .quiz-opt.wrong   { background: rgba(239,68,68,.08);  border-color: #ef4444; color: #b91c1c; }
+
+    /* Input */
+    .jay-input-area {
+      border-top: 1px solid var(--border);
+      padding: 13px 16px 14px;
+      flex-shrink: 0; background: #fafbfc;
+    }
+    .jay-input-row { display: flex; gap: 9px; align-items: flex-end; }
+    .jay-input {
+      flex: 1;
+      background: white; border: 1.5px solid #dde2e8;
+      border-radius: 22px;
+      padding: 10px 16px;
+      font-family: inherit; font-size: 14.5px; color: var(--dark);
+      resize: none; outline: none; min-height: 42px; max-height: 120px;
+      overflow-y: auto; line-height: 1.45;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .jay-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(78,142,243,.12);
+    }
+    .jay-input::placeholder { color: #b5bdc6; }
+    .jay-send {
+      width: 42px; height: 42px; flex-shrink: 0;
+      background: var(--green);
+      border: none; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: white;
+      box-shadow: 0 4px 14px rgba(16,163,127,.30);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .jay-send:hover { transform: scale(1.08); box-shadow: 0 6px 18px rgba(16,163,127,.38); }
+    .jay-send:active { transform: scale(.95); }
+    .jay-disclaimer {
+      font-size: 11.5px; color: #c0c7d0;
+      text-align: center; margin-top: 7px;
+    }
+
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .msg { animation: msgIn .22s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <a href="../" class="logo">
+      <div class="logo-mark">KvM</div>
+      <div>
+        <div class="logo-name">Klaar voor Middelbaar</div>
+        <div class="logo-sub">Groep 8</div>
+      </div>
+    </a>
+    <nav class="breadcrumb">
+      <a href="../" class="bc-link">Dashboard</a>
+      <span class="bc-sep">/</span>
+      <span class="bc-link">Les 5</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-current">Jay AI</span>
+    </nav>
+    <a href="../" class="back-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Terug naar les
+    </a>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ── PAGINAKOP ── -->
+  <div class="page-hero">
+    <h1 class="page-hero-title" style="color: var(--primary-dark);">Jay I als hulpmiddel</h1>
+    <p class="page-hero-sub">Lees de theoriepagina en vink alle stappen af door vragen te stellen aan Jay I.</p>
+  </div>
+
+  <!-- ── BOVENSTE RIJ: thumbnail + checklist ── -->
+  <div class="top-row">
+
+  <!-- ── LINKS: THEORIEBOEK-PAGINA ── -->
+  <div class="book-desk">
+
+    <!-- Klikbare thumbnail van de theoriepagina -->
+    <div class="book-thumb" onclick="openLightbox()" tabindex="0" role="button"
+         aria-label="Vergroot theoriepagina"
+         onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox()">
+      <div class="book-a4" id="bookA4">
+        <img
+          src="ontstaan wo2.png"
+          alt="Het ontstaan van de Tweede Wereldoorlog — theoriepagina"
+          style="width:100%;display:block;"
+          draggable="false"
+        >
+      </div>
+      <!-- Hover-overlay -->
+      <div class="book-thumb-overlay" aria-hidden="true">
+        <div class="book-thumb-zoom">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+          </svg>
+          Vergroot pagina
+        </div>
+      </div>
+    </div>
+
+    <!-- Persistente klik-hint -->
+    <div class="book-click-hint" aria-hidden="true">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+      </svg>
+      Klik om te vergroten
+    </div>
+  </div><!-- /book-desk -->
+
+  <!-- ── RECHTS: CHECKLIST ── -->
+  <div class="checklist-card" id="checklistCard">
+    <p class="cl-eyebrow">Checklist</p>
+
+    <!-- 0: Theorie — direct actief -->
+    <div class="cl-item" id="clItem0">
+      <div class="cl-main-row">
+        <div class="cl-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <span class="cl-label">Lees de theoriepagina</span>
+        <div class="cl-help-wrap">
+          <button class="cl-help" aria-label="Uitleg">?</button>
+          <div class="cl-tooltip">Lees de theoriepagina rustig door. Zodra je de pagina minimaal 10 seconden hebt bekeken, wordt deze automatisch afgevinkt.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1: Vraag — locked tot item 0 klaar -->
+    <div class="cl-item locked" id="clItem1">
+      <div class="cl-main-row">
+        <div class="cl-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <span class="cl-label">Stel minimaal 1 vraag aan Jay</span>
+        <div class="cl-help-wrap">
+          <button class="cl-help" aria-label="Uitleg">?</button>
+          <div class="cl-tooltip">Typ minimaal één vraag over de theorie. Jay helpt je om de lesstof beter te begrijpen.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2: Samenvatting — locked tot item 0 klaar -->
+    <div class="cl-item locked" id="clItem2">
+      <div class="cl-main-row">
+        <div class="cl-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <span class="cl-label">Laat Jay de pagina samenvatten</span>
+        <div class="cl-help-wrap">
+          <button class="cl-help" aria-label="Uitleg">?</button>
+          <div class="cl-tooltip">Vraag Jay om de pagina samen te vatten in de belangrijkste punten.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: Tijdlijn — locked tot item 0 klaar -->
+    <div class="cl-item locked" id="clItem3">
+      <div class="cl-main-row">
+        <div class="cl-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <span class="cl-label">Laat Jay een tijdlijn maken</span>
+        <div class="cl-help-wrap">
+          <button class="cl-help" aria-label="Uitleg">?</button>
+          <div class="cl-tooltip">Vraag Jay om de belangrijkste gebeurtenissen in een overzichtelijke tijdlijn te zetten.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: Oefenvragen — locked tot items 1+2+3 klaar -->
+    <div class="cl-item locked" id="clItem4">
+      <div class="cl-main-row">
+        <div class="cl-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <span class="cl-label">Laat Jay oefenvragen maken</span>
+        <div class="cl-help-wrap">
+          <button class="cl-help" aria-label="Uitleg">?</button>
+          <div class="cl-tooltip">Vraag Jay om 8 oefenvragen over deze theoriepagina te maken.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5: Quiz score — locked tot items 1+2+3 klaar -->
+    <div class="cl-item locked" id="clItem5">
+      <div class="cl-main-row">
+        <div class="cl-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <span class="cl-label">Behaal minimaal 6 van de 8 oefenvragen</span>
+        <div class="cl-help-wrap">
+          <button class="cl-help" aria-label="Uitleg">?</button>
+          <div class="cl-tooltip">Beantwoord de oefenvragen. Heb je minder dan 6 antwoorden goed? Vraag Jay om extra uitleg en probeer het opnieuw.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /checklist-card -->
+
+  </div><!-- /top-row -->
+
+  <!-- TIJDELIJK VERWIJDERD BLOK - HIERONDER STAAT DE OUDE HTML-INHOUD DIE NIET MEER WORDT GETOOND -->
+  <div style="display:none">
+    <div class="book-a4" id="bookA4Oud">
+
+      <!-- Lopende koptekst -->
+      <div class="page-running-head">
+        <span class="running-chapter">Hoofdstuk 4 &middot; Aarde en Milieu</span>
+        <span class="running-page">Blz. 78</span>
+      </div>
+
+      <!-- Pagina-inhoud -->
+      <div class="page-body">
+        <div class="book-subject-tag">🌍 Aardrijkskunde</div>
+        <h1 class="book-title">Klimaat en Klimaatverandering</h1>
+        <p class="book-subtitle">Begrijpen hoe ons klimaat werkt en waarom het verandert</p>
+
+        <p class="book-lead">Het klimaat op aarde verandert sneller dan ooit. Wetenschappers waarschuwen dat dit grote gevolgen heeft voor mensen, dieren en planten over de hele wereld.</p>
+
+        <!-- Figuur 1 -->
+        <div class="book-figure">
+          <svg width="380" height="160" viewBox="0 0 380 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="348" cy="30" r="24" fill="#fbbf24" opacity=".92"/>
+            <line x1="348" y1="2"  x2="348" y2="-4"  stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="374" y1="14" x2="379" y2="9"   stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="322" y1="14" x2="317" y2="9"   stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+            <rect x="20" y="56" width="320" height="20" rx="10" fill="rgba(114,168,249,.22)" stroke="#72a8f9" stroke-width="1.5" stroke-dasharray="6 3"/>
+            <text x="180" y="70" fill="#3a78e0" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">ATMOSFEER  (CO₂ laag)</text>
+            <rect x="20" y="132" width="320" height="22" rx="4" fill="#4ade80" opacity=".65"/>
+            <rect x="20" y="132" width="85"  height="22" rx="4" fill="#60a5fa" opacity=".6"/>
+            <rect x="246" y="132" width="94" height="22" rx="4" fill="#60a5fa" opacity=".6"/>
+            <text x="180" y="148" fill="white" font-size="10" font-weight="bold" text-anchor="middle" font-family="sans-serif">AARDOPPERVLAK</text>
+            <line x1="330" y1="56" x2="286" y2="132" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5 3" opacity=".7"/>
+            <line x1="316" y1="56" x2="200" y2="132" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="5 3" opacity=".7"/>
+            <path d="M 148 132 Q 122 96 162 78 Q 196 64 222 78 Q 252 96 228 132" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="5 3" opacity=".75"/>
+            <text x="52" y="100" fill="#ef4444" font-size="10" font-weight="bold" font-family="sans-serif">Warmte</text>
+            <text x="52" y="114" fill="#ef4444" font-size="10" font-weight="bold" font-family="sans-serif">gevangen</text>
+            <circle cx="178" cy="95" r="5"   fill="rgba(239,68,68,.38)"/>
+            <circle cx="210" cy="89" r="4.5" fill="rgba(239,68,68,.38)"/>
+            <circle cx="242" cy="96" r="5"   fill="rgba(239,68,68,.38)"/>
+            <text x="210" y="116" fill="#6d747a" font-size="9" text-anchor="middle" font-family="sans-serif">CO₂ moleculen</text>
+          </svg>
+        </div>
+        <p class="book-figure-caption">Figuur 4.1 — Het broeikaseffect: zonlicht dringt door de atmosfeer, maar warmte blijft gevangen door CO₂</p>
+
+        <h2 class="book-h2">Het broeikaseffect</h2>
+        <p class="book-p">De aarde wordt verwarmd door de zon. Zonlicht dringt door onze atmosfeer heen en bereikt het aardoppervlak. Een deel van die warmte wil terug de ruimte in. Maar broeikasgassen zoals koolstofdioxide (CO₂) en methaan (CH₄) houden een deel van die warmte vast. Dit noemen we het <strong>broeikaseffect</strong>.</p>
+        <p class="book-p">Het broeikaseffect is van nature aanwezig op aarde en zorgt ervoor dat onze planeet warm genoeg is voor leven. Zonder dit effect zou het gemiddeld &minus;18&deg;C zijn. Maar door menselijke activiteiten zoals autorijden, fabrieken en ontbossing neemt de hoeveelheid CO₂ in de atmosfeer sterk toe.</p>
+
+        <!-- Moeilijke woorden -->
+        <div class="woordenbox">
+          <div class="woordenbox-label"><span>📚</span> Moeilijke woorden</div>
+          <div class="woord-row"><span class="woord-term">Atmosfeer</span><span class="woord-def">De luchtlaag rondom de aarde</span></div>
+          <div class="woord-row"><span class="woord-term">CO₂</span><span class="woord-def">Koolstofdioxide: een gas dat vrijkomt bij verbranding</span></div>
+          <div class="woord-row"><span class="woord-term">Broeikaseffect</span><span class="woord-def">Het vasthouden van warmte door gassen in de atmosfeer</span></div>
+          <div class="woord-row"><span class="woord-term">Ontbossing</span><span class="woord-def">Het kappen van grote stukken bos</span></div>
+          <div class="woord-row"><span class="woord-term">Zeespiegel</span><span class="woord-def">De hoogte van het zeeoppervlak, gemeten als gemiddelde</span></div>
+        </div>
+
+        <h2 class="book-h2">Gevolgen voor de aarde</h2>
+        <p class="book-p">Door de toenemende hoeveelheid broeikasgassen stijgt de gemiddelde temperatuur op aarde. Dit heeft grote gevolgen:</p>
+        <ul class="book-list">
+          <li>IJskappen op de Noord- en Zuidpool smelten, waardoor de zeespiegel stijgt</li>
+          <li>Extreem weer neemt toe: hevige stormen, droogtes en overstromingen</li>
+          <li>Dieren en planten kunnen hun leefgebied verliezen</li>
+          <li>Lage landen, zoals delen van Nederland, kunnen in de toekomst onder water komen te staan</li>
+        </ul>
+
+        <!-- Figuur 2 -->
+        <div class="book-figure" style="background: linear-gradient(140deg,#dbeafe 0%,#bfdbfe 60%,#93c5fd 100%); min-height:130px">
+          <svg width="360" height="116" viewBox="0 0 360 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="88" width="360" height="28" rx="4" fill="#60a5fa" opacity=".45"/>
+            <polygon points="76,88 112,28 150,88" fill="white" stroke="#bfdbfe" stroke-width="1.5" opacity=".9"/>
+            <polygon points="210,88 236,56 262,88" fill="white" stroke="#bfdbfe" stroke-width="1.5" opacity=".72"/>
+            <line x1="42" y1="76" x2="42" y2="20" stroke="#ef4444" stroke-width="2.5"/>
+            <polygon points="42,14 37,24 47,24" fill="#ef4444"/>
+            <text x="52" y="20"  fill="#ef4444" font-size="11" font-weight="bold" font-family="sans-serif">+2°C</text>
+            <text x="28" y="86"  fill="#6d747a" font-size="8.5" font-family="sans-serif" text-anchor="middle">Temp.</text>
+            <line x1="308" y1="76" x2="308" y2="46" stroke="#3b82f6" stroke-width="2.5"/>
+            <polygon points="308,40 303,50 313,50" fill="#3b82f6"/>
+            <text x="318" y="52" fill="#3b82f6" font-size="9" font-weight="bold" font-family="sans-serif">Zeespiegel</text>
+            <text x="318" y="64" fill="#3b82f6" font-size="9" font-weight="bold" font-family="sans-serif">stijgt</text>
+            <text x="180" y="110" fill="#6d747a" font-size="9" text-anchor="middle" font-family="sans-serif">Smeltende ijskappen verhogen de zeespiegel</text>
+          </svg>
+        </div>
+        <p class="book-figure-caption">Figuur 4.2 — Door opwarming smelten ijskappen en stijgt de zeespiegel</p>
+
+        <h2 class="book-h2">Wat kunnen wij doen?</h2>
+        <p class="book-p">Zowel overheden, bedrijven als gewone mensen kunnen bijdragen aan het verminderen van de uitstoot van broeikasgassen. Enkele voorbeelden:</p>
+        <ul class="book-list">
+          <li>Minder vlees eten: de veeteelt stoot veel methaan uit</li>
+          <li>Gebruikmaken van duurzame energie: zon, wind en water in plaats van kolen en gas</li>
+          <li>Minder autorijden en vaker de fiets of het openbaar vervoer nemen</li>
+          <li>Bossen planten: bomen slaan CO₂ op en zuiveren de lucht</li>
+          <li>Energiezuinige apparaten gebruiken en minder energie verspillen thuis</li>
+        </ul>
+        <p class="book-p">Internationale samenwerking is ook erg belangrijk. In het <strong>Klimaatakkoord van Parijs</strong> (2015) hebben bijna alle landen ter wereld afgesproken om de opwarming te beperken tot maximaal 1,5 graden Celsius.</p>
+      </div>
+
+      <!-- Paginanummer -->
+      <div class="page-foot">78</div>
+    </div>
+  </div>
+
+  <!-- ── RECHTS: JAY AI ── -->
+  <div class="jay-panel">
+
+    <!-- Header -->
+    <div class="jay-header">
+      <div class="jay-title-row">
+        <div class="jay-avatar">🤖</div>
+        <div class="jay-name-wrap">
+          <span class="jay-name">Jay AI</span>
+          <span class="jay-badge">Leercoach</span>
+        </div>
+        <button class="jay-expand-btn" id="jayExpandBtn"
+                onclick="toggleJayFullscreen()"
+                title="Vergroot Jay AI"
+                aria-label="Vergroot Jay AI">
+          <svg id="jayExpandIcon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+            <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Chat -->
+    <div class="jay-chat" id="jayChat">
+      <div class="msg jay">
+        <div class="msg-avatar">🤖</div>
+        <div class="msg-bubble">
+          Hoi! Ik ben <strong>Jay</strong>, jouw leercoach. 👋<br><br>
+          Ik help je deze pagina over <strong>het ontstaan van de Tweede Wereldoorlog</strong> beter begrijpen.<br><br>
+          Heb je een vraag over de stof? Stel hem gerust!
+        </div>
+      </div>
+
+      <!-- Typ-indicator -->
+      <div class="typing-row" id="typingRow">
+        <div class="msg-avatar" style="background:rgba(78,142,243,.12);border:1.5px solid rgba(78,142,243,.20)">🤖</div>
+        <div>
+          <div class="typing-label">Jay is aan het typen...</div>
+          <div class="typing-dots"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="jay-input-area">
+      <div class="jay-input-row">
+        <textarea
+          id="jayInput"
+          class="jay-input"
+          placeholder="Typ hier je vraag..."
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+        ></textarea>
+        <button class="jay-send" onclick="sendMessage()" title="Verstuur">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+      <p class="jay-disclaimer">Jay helpt alleen bij vragen over deze pagina</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- Jay AI overlay (donkere achtergrond bij fullscreen) -->
+<div class="jay-overlay" id="jayOverlay" onclick="toggleJayFullscreen()"></div>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxBuiten(event)">
+  <div class="lb-toolbar">
+    <button class="lb-close-btn" onclick="closeLightbox()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      Sluiten
+    </button>
+  </div>
+  <div class="lb-page" id="lbPage">
+    <!-- Inhoud wordt via JS gekopieerd -->
+  </div>
+</div>
+
+<script>
+  const chatEl   = document.getElementById('jayChat');
+  const typingEl = document.getElementById('typingRow');
+  const inputEl  = document.getElementById('jayInput');
+
+  let quizMode = false;
+  let quizStep = 0;
+  let quizScore = 0;
+  let wachtOpSamenvattingKeuze = false;
+  /* Theorie 10-seconden timer */
+  let theorieViewedMs  = 0;
+  let theorieViewStart = null;
+  let theorieTimer     = null;
+
+  // ── Jay AI fullscreen ─────────────────────────────────────────────────────
+  let jayIsFullscreen = false;
+  const jayPanel   = document.querySelector('.jay-panel');
+  const jayOverlay = document.getElementById('jayOverlay');
+  const expandIcon = document.getElementById('jayExpandIcon');
+
+  const iconExpand  = `<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>`;
+  const iconShrink  = `<polyline points="4 14 10 14 10 20"/><polyline points="20 4 14 4 14 10"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>`;
+
+  /* ── CHECKLIST ── */
+  const svgX     = `<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>`;
+  const svgCheck = `<polyline points="20 6 9 17 4 12"/>`;
+
+  function isDone(idx) {
+    return document.getElementById('clItem' + idx)?.classList.contains('done') ?? false;
+  }
+
+  function unlockItem(idx) {
+    const item = document.getElementById('clItem' + idx);
+    if (!item || !item.classList.contains('locked')) return;
+    item.classList.remove('locked');
+    void item.offsetWidth;
+    item.classList.add('just-unlocked');
+    setTimeout(() => item.classList.remove('just-unlocked'), 1200);
+  }
+
+  function checkUnlocks() {
+    if (isDone(0)) {
+      [1, 2, 3].forEach(unlockItem);
+    }
+    if (isDone(1) && isDone(2) && isDone(3)) {
+      [4, 5].forEach(unlockItem);
+    }
+  }
+
+  function autoCheck(idx) {
+    const item = document.getElementById('clItem' + idx);
+    if (!item || item.classList.contains('done')) return;
+    item.classList.remove('locked');
+    item.classList.add('done');
+    const icon = item.querySelector('.cl-icon');
+    if (icon) icon.querySelector('svg').innerHTML = svgCheck;
+    checkUnlocks();
+  }
+
+  function toggleJayFullscreen() {
+    jayIsFullscreen = !jayIsFullscreen;
+    jayPanel.classList.toggle('fullscreen', jayIsFullscreen);
+    jayOverlay.classList.toggle('open', jayIsFullscreen);
+    expandIcon.innerHTML = jayIsFullscreen ? iconShrink : iconExpand;
+    document.getElementById('jayExpandBtn').title = jayIsFullscreen ? 'Verklein Jay AI' : 'Vergroot Jay AI';
+    document.body.style.overflow = jayIsFullscreen ? 'hidden' : '';
+    if (jayIsFullscreen) scrollDown();
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && jayIsFullscreen) toggleJayFullscreen();
+  });
+
+  // ── Lightbox ─────────────────────────────────────────────────────────────
+  function openLightbox() {
+    const bron   = document.getElementById('bookA4');
+    const lbPage = document.getElementById('lbPage');
+    lbPage.innerHTML = '';
+    lbPage.appendChild(bron.cloneNode(true));
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    /* Start 10-seconden teller */
+    if (!document.getElementById('clItem0').classList.contains('done')) {
+      theorieViewStart = Date.now();
+      const remaining = Math.max(0, 10000 - theorieViewedMs);
+      theorieTimer = setTimeout(() => autoCheck(0), remaining);
+    }
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+    /* Pauzeer teller */
+    clearTimeout(theorieTimer);
+    if (theorieViewStart) {
+      theorieViewedMs += Date.now() - theorieViewStart;
+      theorieViewStart = null;
+    }
+  }
+  function closeLightboxBuiten(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // ── Quiz ─────────────────────────────────────────────────────────────────
+  // ── Vragenbank WO2 (16 vragen, elke ronde 8 willekeurig) ──────────────────
+  const vragenBank = [
+    { vraag: 'Welk verdrag werd na de Eerste Wereldoorlog gesloten waarbij Duitsland verantwoordelijk werd gehouden?',
+      opties: ['Het Verdrag van Parijs','Het Verdrag van Versailles','Het Verdrag van Berlijn','Het Verdrag van Genève'],
+      goed: 1, onderwerp: 'Verdrag van Versailles',
+      uitleg: 'In het Verdrag van Versailles (1919) werd Duitsland verantwoordelijk gehouden voor de Eerste Wereldoorlog. Duitsland moest schadevergoeding betalen, gebieden afstaan en het leger verkleinen.' },
+    { vraag: 'Wanneer werd het Verdrag van Versailles getekend?',
+      opties: ['1914','1918','1919','1933'],
+      goed: 2, onderwerp: 'Verdrag van Versailles',
+      uitleg: 'Het Verdrag van Versailles werd in 1919 getekend, een jaar na het einde van de Eerste Wereldoorlog in 1918.' },
+    { vraag: 'Wat moest Duitsland NIET doen volgens het Verdrag van Versailles?',
+      opties: ['Een schadevergoeding betalen','Gebieden afstaan','Het leger sterk verkleinen','Zijn koloniën uitbreiden'],
+      goed: 3, onderwerp: 'Verdrag van Versailles',
+      uitleg: 'Duitsland moest betalen, gebieden afstaan en het leger verkleinen. Koloniën uitbreiden was juist het tegenovergestelde van wat het verdrag toestond.' },
+    { vraag: 'Welke partij leidde Adolf Hitler?',
+      opties: ['De Communistische Partij','De NSDAP','De Sociaaldemocratische Partij','De Christendemocraten'],
+      goed: 1, onderwerp: 'Hitler en de NSDAP',
+      uitleg: 'Hitler was leider van de NSDAP: de Nationaalsocialistische Duitse Arbeiderspartij.' },
+    { vraag: 'In welk jaar kwam Hitler aan de macht in Duitsland?',
+      opties: ['1919','1929','1933','1939'],
+      goed: 2, onderwerp: 'Hitler en de NSDAP',
+      uitleg: 'In 1933 kwam Adolf Hitler aan de macht in Duitsland. Hij beloofde de economie te herstellen en Duitsland sterk te maken.' },
+    { vraag: 'Wat is een dictatuur?',
+      opties: ['Een land met meerdere politieke partijen','Een staatsvorm waarbij het volk regeert','Een staatsvorm waarbij één leider alle beslissingen neemt','Een land zonder leger'],
+      goed: 2, onderwerp: 'Dictatuur',
+      uitleg: 'In een dictatuur neemt één leider alle belangrijke beslissingen. Politieke tegenstanders worden uitgeschakeld en de democratie verdwijnt.' },
+    { vraag: 'Wat betekent "Lebensraum"?',
+      opties: ['Leefruimte voor de Duitse bevolking','De naam van het Duitse leger','Een onderdeel van het Verdrag van Versailles','Een Duits woord voor democratie'],
+      goed: 0, onderwerp: 'Lebensraum',
+      uitleg: 'Lebensraum betekent leefruimte. Hitler vond dat Duitsland meer grondgebied nodig had voor de Duitse bevolking.' },
+    { vraag: 'Op welke datum viel Duitsland Polen binnen?',
+      opties: ['3 september 1939','1 september 1939','10 mei 1940','1 januari 1939'],
+      goed: 1, onderwerp: 'Inval in Polen',
+      uitleg: 'Op 1 september 1939 viel Duitsland Polen binnen. Dit werd de directe aanleiding voor het begin van de Tweede Wereldoorlog.' },
+    { vraag: 'Welke landen verklaarden Duitsland de oorlog op 3 september 1939?',
+      opties: ['Polen en Rusland','Amerika en Canada','Groot-Brittannië en Frankrijk','België en Nederland'],
+      goed: 2, onderwerp: 'Begin Tweede Wereldoorlog',
+      uitleg: 'Op 3 september 1939 verklaarden Groot-Brittannië en Frankrijk Duitsland de oorlog als reactie op de inval in Polen.' },
+    { vraag: 'Wanneer werd Nederland door Duitsland binnengevallen?',
+      opties: ['1 september 1939','3 september 1939','10 mei 1940','6 juni 1944'],
+      goed: 2, onderwerp: 'Nederland in de oorlog',
+      uitleg: 'Op 10 mei 1940 viel Duitsland Nederland binnen. Nederland was daarmee een van de landen die na Polen werden bezet.' },
+    { vraag: 'Van wanneer tot wanneer duurde de Tweede Wereldoorlog?',
+      opties: ['1914-1918','1933-1945','1939-1945','1940-1945'],
+      goed: 2, onderwerp: 'Duur van de oorlog',
+      uitleg: 'De Tweede Wereldoorlog duurde van 1939 tot 1945. Het begon met de inval in Polen en eindigde met de capitulatie van Duitsland en Japan.' },
+    { vraag: 'Hoeveel mensen kwamen om het leven tijdens de Tweede Wereldoorlog?',
+      opties: ['Meer dan 10 miljoen','Meer dan 6 miljoen','Meer dan 100 miljoen','Meer dan 60 miljoen'],
+      goed: 3, onderwerp: 'Duur van de oorlog',
+      uitleg: 'De Tweede Wereldoorlog kostte meer dan 60 miljoen mensen het leven. Het was de grootste en meest verwoestende oorlog uit de geschiedenis.' },
+    { vraag: 'Waarom verloor de Duitse bevolking het vertrouwen in de regering na WO1?',
+      opties: ['Door een verloren sporttoernooi','Door werkloosheid, inflatie en armoede','Door een strenge winter','Door conflicten met Oostenrijk'],
+      goed: 1, onderwerp: 'Gevolgen van WO1 voor Duitsland',
+      uitleg: 'Na de Eerste Wereldoorlog leidde de zware voorwaarden van het Verdrag van Versailles tot werkloosheid, inflatie en armoede in Duitsland. Dit ondermijnde het vertrouwen in de democratische regering.' },
+    { vraag: 'Wat verdween in Duitsland nadat Hitler aan de macht was gekomen?',
+      opties: ['De economie','Het leger','De democratie','De universiteiten'],
+      goed: 2, onderwerp: 'Dictatuur',
+      uitleg: 'Nadat Hitler de macht greep, werden politieke tegenstanders uitgeschakeld en verdween de democratie. Duitsland veranderde in een dictatuur.' },
+    { vraag: 'Welke gebieden bezette Duitsland vóór de inval in Polen?',
+      opties: ['Nederland, België en Frankrijk','Het Rijnland, Oostenrijk en een deel van Tsjechoslowakije','Polen, Rusland en Roemenië','Groot-Brittannië en Spanje'],
+      goed: 1, onderwerp: 'Expansie van Duitsland',
+      uitleg: 'Vóór de inval in Polen bezette Duitsland achtereenvolgens het Rijnland, Oostenrijk en een deel van Tsjechoslowakije.' },
+    { vraag: 'Wat deed Hitler in strijd met het Verdrag van Versailles?',
+      opties: ['Hij bouwde opnieuw een groot leger op','Hij sloot een vredesverdrag met Polen','Hij gaf gebieden terug aan buurlanden','Hij betaalde de schadevergoeding eerder terug'],
+      goed: 0, onderwerp: 'Verdrag van Versailles',
+      uitleg: 'Het Verdrag van Versailles verbood Duitsland een groot leger te hebben. Hitler negeerde dit en begon stiekem met herbewapening.' }
+  ];
+
+  let activeVragen     = [];
+  let vorigeIndices    = new Set();
+  let fouteOnderwerpen = [];
+
+  function shuffleArr(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function selecteerVragen() {
+    const alle = vragenBank.map((_, i) => i);
+    const vers = shuffleArr(alle.filter(i => !vorigeIndices.has(i)));
+    const oud  = shuffleArr(alle.filter(i =>  vorigeIndices.has(i)));
+    const gekozen = [...vers, ...oud].slice(0, 8);
+    vorigeIndices = new Set(gekozen);
+    return gekozen.map(i => vragenBank[i]);
+  }
+
+  function buildQuizMsg(i) {
+    const v = activeVragen[i];
+    const opties = v.opties
+      .map((o, idx) => `<button class="quiz-opt" onclick="beantwoordQuiz(${i},${idx})">${String.fromCharCode(65+idx)}) ${o}</button>`)
+      .join('');
+    return `<strong>Vraag ${i+1} van 8</strong><br><br>${v.vraag}<div class="quiz-options">${opties}</div>`;
+  }
+
+  function beantwoordQuiz(vraagIdx, antwoordIdx) {
+    const v    = activeVragen[vraagIdx];
+    const goed = antwoordIdx === v.goed;
+
+    document.querySelectorAll('.quiz-opt').forEach((btn, idx) => {
+      btn.disabled = true;
+      btn.onclick  = null;
+      if (idx === v.goed)                    btn.classList.add('correct');
+      else if (idx === antwoordIdx && !goed)  btn.classList.add('wrong');
+    });
+
+    if (goed) {
+      quizScore++;
+    } else {
+      fouteOnderwerpen.push(v.onderwerp);
+    }
+
+    const fb = goed
+      ? `✅ <strong>Goed!</strong> ${v.uitleg}`
+      : `❌ <strong>Niet helemaal.</strong> Het goede antwoord was: <strong>${String.fromCharCode(65+v.goed)}) ${v.opties[v.goed]}</strong><br><br>${v.uitleg}`;
+
+    setTimeout(() => {
+      addMsg(fb);
+      quizStep++;
+      if (quizStep < 8) {
+        setTimeout(() => typeResponse(buildQuizMsg(quizStep), 900, true), 500);
+      } else {
+        setTimeout(() => {
+          if (quizScore >= 6) {
+            autoCheck(5);
+            typeResponse(`Gefeliciteerd! Je hebt ${quizScore} van de 8 vragen goed. Je kent de stof goed.`, 1000);
+          } else {
+            const uniek = [...new Set(fouteOnderwerpen)];
+            const lijst = uniek.map(o => `• ${o}`).join('<br>');
+            typeResponse(`Je hebt ${quizScore} van de 8 vragen goed. Je hebt minimaal 6 nodig.<br><br><strong>Besteed extra aandacht aan:</strong><br>${lijst}<br><br>Vraag me gerust een nieuwe set oefenvragen als je er klaar voor bent.`, 1200);
+          }
+          quizMode = false;
+          quizScore = 0;
+          fouteOnderwerpen = [];
+        }, 500);
+      }
+    }, 450);
+  }
+
+  const samenvattingVerhaal = `<strong>Samenvatting – Het ontstaan van de Tweede Wereldoorlog</strong><br><br>
+Na de Eerste Wereldoorlog (1914–1918) kreeg Duitsland de schuld van de oorlog. In het Verdrag van Versailles (1919) werd afgesproken dat Duitsland veel geld moest betalen, gebieden moest afstaan en een kleiner leger moest houden. Hierdoor ontstonden veel armoede en werkloosheid.<br><br>
+In 1933 kwam Adolf Hitler aan de macht. Hij beloofde Duitsland weer sterk en rijk te maken. Hitler schafte de democratie af en maakte van Duitsland een dictatuur, waarbij één leider alle macht heeft.<br><br>
+Hitler hield zich niet aan het Verdrag van Versailles. Hij bouwde opnieuw een groot leger op en wilde meer lebensraum (leefruimte) voor Duitsland. Daarom bezette hij onder andere Oostenrijk en een deel van Tsjechoslowakije.<br><br>
+Op 1 september 1939 viel Duitsland Polen binnen. Groot-Brittannië en Frankrijk verklaarden daarop de oorlog aan Duitsland. Dit was het officiële begin van de Tweede Wereldoorlog.<br><br>
+De oorlog breidde zich snel uit. Ook Nederland werd op 10 mei 1940 binnengevallen. De Tweede Wereldoorlog duurde van 1939 tot 1945 en kostte meer dan 60 miljoen mensen het leven.`;
+
+  const samenvattingBullets = `<strong>Samenvatting – Het ontstaan van de Tweede Wereldoorlog</strong><br><br>
+• Na de Eerste Wereldoorlog kreeg Duitsland de schuld van de oorlog.<br>
+• In het Verdrag van Versailles (1919) moest Duitsland veel geld betalen, gebieden afstaan en het leger verkleinen.<br>
+• Hierdoor ontstonden veel armoede, werkloosheid en ontevredenheid in Duitsland.<br>
+• In 1933 kwam Adolf Hitler aan de macht.<br>
+• Hitler maakte van Duitsland een dictatuur: één leider had alle macht.<br>
+• Hitler hield zich niet aan het Verdrag van Versailles en bouwde opnieuw een groot leger op.<br>
+• Hij wilde meer lebensraum (leefruimte) voor Duitsland en veroverde steeds meer gebieden.<br>
+• Op 1 september 1939 viel Duitsland Polen binnen.<br>
+• Groot-Brittannië en Frankrijk verklaarden daarna de oorlog aan Duitsland.<br>
+• Daarmee begon de Tweede Wereldoorlog.<br>
+• Op 10 mei 1940 viel Duitsland ook Nederland binnen.<br>
+• De Tweede Wereldoorlog duurde van 1939 tot 1945. Meer dan 60 miljoen mensen kwamen om het leven.`;
+
+  function geefSamenvatting() {
+    quizMode = false; quizStep = 0;
+    autoCheck(2);
+    wachtOpSamenvattingKeuze = true;
+    typeResponse(`Hoe wil je de samenvatting?<br><br>📖 <strong>Kort verhaaltje</strong> — de stof in lopende zinnen, alsof je het leest in een boek.<br>• <strong>Bulletpoints</strong> — de belangrijkste punten kort op een rij, makkelijk om te leren.<br><br>Typ <strong>verhaaltje</strong> of <strong>bulletpoints</strong>.`, 700);
+  }
+
+  function geefTijdlijn() {
+    quizMode = false; quizStep = 0;
+    autoCheck(3);
+    typeResponse(`Hier is de tijdlijn van het ontstaan van de Tweede Wereldoorlog. Klik op de afbeelding om hem te vergroten.<br><br><img src="tijdlijn.png" alt="Tijdlijn WO2" class="chat-img" onclick="openTijdlijn()">`, 900);
+  }
+
+  function openTijdlijn() {
+    const lbPage = document.getElementById('lbPage');
+    lbPage.innerHTML = '<img src="tijdlijn.png" alt="Tijdlijn WO2" style="width:100%;height:auto;display:block;border-radius:4px;">';
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function startOefenronde() {
+    quizMode = false; quizStep = 0; quizScore = 0; fouteOnderwerpen = [];
+    autoCheck(4);
+    activeVragen = selecteerVragen();
+    typeResponse(`Ik heb 8 vragen klaarstaan over het ontstaan van de Tweede Wereldoorlog. Klik steeds op het goede antwoord!`, 800, false);
+    setTimeout(() => { quizMode = true; typeResponse(buildQuizMsg(0), 1100, true); }, 1000);
+  }
+
+  // ── Slimme mock-antwoorden ────────────────────────────────────────────────
+  const sleutelwoorden = [
+    'wereldoorlog','wo2','wo1','eerste','tweede','duitsland','duits',
+    'verdrag','versailles','schadevergoeding','schuld','verantwoordelijk',
+    'hitler','nsdap','nationaalsocialistisch','arbeiderspartij',
+    'economie','economisch','werkloosheid','inflatie','armoede','vertrouwen','regering',
+    'democratie','dictatuur','dictator','leider','macht','partij',
+    'lebensraum','leefruimte','grondgebied','uitbreiden','bezette','bezetting','herbewapening',
+    'rijnland','oostenrijk','tsjechoslowakije','polen','inval','aanval','binnengevallen',
+    'groot-brittannië','engeland','frankrijk','oorlog','verklaren','nederland',
+    '1914','1918','1919','1933','1939','1940','1945',
+    'bron','paragraaf','pagina','tekst','uitleg','begrijp','snap',
+    'wat is','waarom','hoe','verschil','betekent','voorbeeld',
+    'gevolg','oorzaak','reden','conflict','leger','wapen','expansie'
+  ];
+  function isOnderwerp(t) {
+    const l = t.toLowerCase();
+    return sleutelwoorden.some(w => l.includes(w));
+  }
+  function maakAntwoord(tekst) {
+    const l = tekst.toLowerCase();
+    if (l.includes('versailles') || l.includes('verdrag'))
+      return `Het <strong>Verdrag van Versailles</strong> (1919) was het vredesverdrag na de Eerste Wereldoorlog. Duitsland werd verantwoordelijk gehouden voor de oorlog en moest:<br><br>• Een enorme <strong>schadevergoeding</strong> betalen<br>• <strong>Gebieden afstaan</strong> aan buurlanden<br>• Het <strong>leger sterk verkleinen</strong><br><br>Dit had grote gevolgen: werkloosheid, inflatie en armoede. Veel Duitsers waren woedend over dit verdrag. Hitler gebruikte die woede later om aan de macht te komen.`;
+    if (l.includes('hitler') || l.includes('nsdap') || l.includes('nationaalsocialistisch') || l.includes('macht') || (l.includes('aan de macht') || l.includes('partij')))
+      return `<strong>Adolf Hitler</strong> was de leider van de NSDAP (Nationaalsocialistische Duitse Arbeiderspartij). In <strong>1933</strong> greep hij de macht in Duitsland.<br><br>Hij beloofde de economie te herstellen, meer werk te creëren en Duitsland sterk te maken. Politieke tegenstanders werden uitgeschakeld. De democratie verdween en Duitsland veranderde in een <strong>dictatuur</strong>.`;
+    if (l.includes('dictatuur') || l.includes('dictator') || l.includes('democratie'))
+      return `Een <strong>dictatuur</strong> is een staatsvorm waarbij één leider alle belangrijke beslissingen neemt. Andere politieke partijen en vrijheden worden verboden.<br><br>Toen Hitler in 1933 aan de macht kwam, schafte hij stap voor stap de democratie af. Politieke tegenstanders werden opgepakt of gedwongen te zwijgen. Duitsland was voortaan een dictatuur met Hitler als alleenheerser.`;
+    if (l.includes('lebensraum') || l.includes('leefruimte') || l.includes('grondgebied') || l.includes('uitbrei') || l.includes('rijnland') || l.includes('oostenrijk') || l.includes('tsjecho'))
+      return `Hitler vond dat Duitsland meer <strong>Lebensraum</strong> (leefruimte) nodig had voor de Duitse bevolking. Dat betekende: meer grondgebied veroveren.<br><br>Hij begon stap voor stap met uitbreiden:<br>• <strong>Het Rijnland</strong> — herbezet in 1936<br>• <strong>Oostenrijk</strong> — geannexeerd in 1938<br>• <strong>Deel van Tsjechoslowakije</strong> — bezet in 1938/1939<br><br>Dit was allemaal in strijd met het Verdrag van Versailles.`;
+    if (l.includes('polen') || l.includes('inval') || (l.includes('1 september') || l.includes('september 1939')))
+      return `Op <strong>1 september 1939</strong> viel Duitsland Polen binnen. Dit was de directe aanleiding voor het begin van de Tweede Wereldoorlog.<br><br>Groot-Brittannië en Frankrijk hadden Polen beloofd te helpen als het aangevallen werd. Op <strong>3 september 1939</strong> verklaarden zij Duitsland de oorlog. De Tweede Wereldoorlog was officieel begonnen.`;
+    if (l.includes('nederland') || l.includes('10 mei') || l.includes('mei 1940'))
+      return `Op <strong>10 mei 1940</strong> viel Duitsland Nederland binnen. Na vijf dagen strijd capituleerde het Nederlandse leger op 15 mei 1940.<br><br>Nederland was daarmee een van de vele landen die Duitsland in korte tijd bezette. De oorlog breidde zich snel uit over heel Europa.`;
+    if (l.includes('1939') && l.includes('1945') || l.includes('duurde') || l.includes('einde') || l.includes('60 miljoen'))
+      return `De <strong>Tweede Wereldoorlog</strong> duurde van 1939 tot 1945. Het was de grootste en meest verwoestende oorlog uit de geschiedenis.<br><br>• Begin: <strong>1 september 1939</strong> — inval in Polen<br>• Nederland bezet: <strong>10 mei 1940</strong><br>• Einde: <strong>1945</strong> — capitulatie van Duitsland en Japan<br>• Slachtoffers: meer dan <strong>60 miljoen mensen</strong>`;
+    if (l.includes('werkloosheid') || l.includes('inflatie') || l.includes('armoede') || l.includes('economie') || l.includes('schadevergoeding'))
+      return `Na de Eerste Wereldoorlog zat Duitsland in een zware economische crisis. Door het Verdrag van Versailles moest Duitsland een enorme <strong>schadevergoeding</strong> betalen. Dat leidde tot:<br><br>• Hoge <strong>werkloosheid</strong><br>• Extreme <strong>inflatie</strong> (geld werd bijna waardeloos)<br>• Wijdverspreide <strong>armoede</strong><br><br>Veel mensen verloren het vertrouwen in de democratische regering. Dit maakte het makkelijker voor Hitler om aan de macht te komen.`;
+    if (l.includes('wo1') || l.includes('eerste wereldoorlog') || l.includes('1914') || l.includes('1918'))
+      return `De <strong>Eerste Wereldoorlog</strong> duurde van <strong>1914 tot 1918</strong>. Na de oorlog werd Duitsland in het Verdrag van Versailles (1919) verantwoordelijk gehouden voor het uitbreken ervan.<br><br>De zware straffen uit dat verdrag — schadevergoeding, gebiedsverlies, beperking van het leger — zaaide onvrede in Duitsland. Die onvrede gebruikte Hitler later om aan de macht te komen en zo begon de weg naar de Tweede Wereldoorlog.`;
+    return `Op deze pagina gaat het over <strong>het ontstaan van de Tweede Wereldoorlog</strong>.<br><br>De belangrijkste oorzaken waren:<br>• De zware straffen in het <strong>Verdrag van Versailles</strong> (1919)<br>• De economische crisis in Duitsland (werkloosheid, armoede)<br>• De machtsovername door <strong>Hitler</strong> in 1933 en zijn dictatuur<br>• De expansiepolitiek (Lebensraum) en de <strong>inval in Polen</strong> op 1 september 1939<br><br>Waar wil je meer over weten?`;
+  }
+
+  const offTopicReacties = [
+    `Goede poging, maar ik ben jouw leercoach voor <strong>deze pagina</strong> over het ontstaan van de Tweede Wereldoorlog. Daar kan ik je niet mee helpen.<br><br>Heb je een vraag over Hitler, het Verdrag van Versailles, of de inval in Polen? Dan help ik je meteen!`,
+    `Dat valt buiten de stof van vandaag. Ik help je het liefst met vragen over <strong>het ontstaan van WO2</strong>, zoals de oorzaken, Hitler, of de inval in Polen.<br><br>Wat vond je lastig aan de tekst?`,
+    `Dat gaat over iets anders dan deze les. Stel gerust een vraag over het Verdrag van Versailles, de dictatuur of het begin van de Tweede Wereldoorlog!`
+  ];
+  let offTopicTeller = 0;
+
+  function isVervolg(l) {
+    if (/^(ja|nee|ok|oke|oké|goed|super|top|dank|bedankt|duidelijk|helder|snap het|snapt|help me|vertel|meer|ga door|verder|volgende|precies|klopt|juist|cool|nice|wow|perfect|niet helemaal|een beetje|beetje|eigenlijk|kun je|kan je|en dan|maar|dus|hoe zit|wat dan|hoe dan|ik begrijp|begrijp het|wat bedoel)/.test(l.trim())) return true;
+    return l.trim().split(/\s+/).length <= 3;
+  }
+
+  const vervolgAntwoorden = [
+    `Tuurlijk! Waar wil je meer over weten? Ik kan het <strong>Verdrag van Versailles</strong>, <strong>Hitler en de NSDAP</strong>, de <strong>inval in Polen</strong> of de <strong>dictatuur</strong> verder uitleggen.`,
+    `Geen probleem! Stel maar gerust een vraag over de stof.`,
+    `Zeker! Gaat het over de oorzaken van WO2, Hitler, of iets anders van deze pagina?`
+  ];
+  let vervolgTeller = 0;
+  function maakVervolgAntwoord() {
+    return vervolgAntwoorden[vervolgTeller++ % vervolgAntwoorden.length];
+  }
+
+  // ── Chatfuncties ──────────────────────────────────────────────────────────
+  function addMsg(html, isUser = false, wide = false) {
+    const div    = document.createElement('div');
+    div.className = `msg ${isUser ? 'user' : 'jay'}`;
+    const av     = document.createElement('div');
+    av.className  = 'msg-avatar';
+    av.textContent = isUser ? 'J' : '🤖';
+    const bubble  = document.createElement('div');
+    bubble.className = `msg-bubble${wide ? ' wide' : ''}`;
+    bubble.innerHTML  = html;
+    div.appendChild(av);
+    div.appendChild(bubble);
+    chatEl.insertBefore(div, typingEl);
+    scrollDown();
+  }
+  function showTyping() { typingEl.classList.add('visible'); scrollDown(); }
+  function hideTyping() { typingEl.classList.remove('visible'); }
+  function scrollDown()  { setTimeout(() => { chatEl.scrollTop = chatEl.scrollHeight; }, 40); }
+  function typeResponse(html, vertraging = 1300, wide = false) {
+    showTyping();
+    setTimeout(() => { hideTyping(); addMsg(html, false, wide); }, vertraging);
+  }
+
+  function sendMessage() {
+    const tekst = inputEl.value.trim();
+    if (!tekst) return;
+    addMsg(tekst, true);
+    inputEl.value = ''; inputEl.style.height = 'auto';
+    if (wachtOpSamenvattingKeuze) {
+      wachtOpSamenvattingKeuze = false;
+      const keuze = tekst.toLowerCase();
+      if (/bullet|punt|lijst|punten|stip/.test(keuze)) {
+        typeResponse(samenvattingBullets, 1200);
+      } else {
+        typeResponse(samenvattingVerhaal, 1200);
+      }
+      return;
+    }
+    if (quizMode) {
+      typeResponse(`Je bent nog in de quiz. Klik op een antwoordknop om verder te gaan.`, 700);
+      return;
+    }
+    const l = tekst.toLowerCase();
+    if (/samenvatten|samenvatting|vat samen|vat de pagina|korte uitleg|overzicht|hoofdpunten|wat staat er/.test(l)) {
+      geefSamenvatting(); return;
+    }
+    if (/oefenvragen|oefenvraag|maak vragen|geef vragen|oefen mij|toets mij|test mij|vraag mij|vragen maken|overhoor/.test(l)) {
+      startOefenronde(); return;
+    }
+    if (/tijdlijn|tijdlijn maken|maak een tijdlijn|geef een tijdlijn|laat een tijdlijn/.test(l)) {
+      geefTijdlijn(); return;
+    }
+    if (isOnderwerp(tekst)) {
+      autoCheck(1);
+      typeResponse(maakAntwoord(tekst), 1200 + Math.random() * 700);
+    } else if (isVervolg(l)) {
+      typeResponse(maakVervolgAntwoord(), 800);
+    } else {
+      typeResponse(offTopicReacties[offTopicTeller % offTopicReacties.length], 1100);
+      offTopicTeller++;
+    }
+  }
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+</script>
+</body>
+</html>

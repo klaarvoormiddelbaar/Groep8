@@ -42,9 +42,9 @@ const LESSONS = [
   },
   {
     n: 3, g1: '#92400e', g2: '#f59e0b',
-    emoji: 'notitieboek.png', title: 'Online hulpmiddelen tijdens het leren',
+    emoji: 'notitieboek.png', title: 'Hulpmiddelen tijdens het leren',
     sub: 'Handige digitale tools voor op school',
-    duur: '60 min',
+    duur: '50–60 min',
     url: '/les3',
     tip: 'Gebruik de checklist "Wat gaat er mee naar school?" als tastbaar hulpmiddel dat leerlingen ook thuis kunnen ophangen.',
     doelen: [

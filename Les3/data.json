@@ -3,36 +3,52 @@
   "g1": "#92400e",
   "g2": "#f59e0b",
   "emoji": "notitieboek.png",
-  "title": "Slim plannen",
-  "sub": "Agenda, huiswerk en roosters",
-  "duur": "60 min",
-  "tip": "Gebruik de checklist \"Wat gaat er mee naar school?\" als tastbaar hulpmiddel dat leerlingen ook thuis kunnen ophangen.",
-  "canva": null,
+  "title": "Hulpmiddelen tijdens het leren",
+  "sub": "Handige digitale tools voor op school",
+  "duur": "50–60 min",
+  "tip": "Benadruk dat iedereen op een andere manier leert. De één vindt het prettig om een online uitlegvideo te bekijken, terwijl een ander liever alleen online oefent of vragen stelt aan AI.",
+  "canva": "https://www.canva.com/design/DAHMQL8FBpc/akR78LWlDeacngt6IREkjA/view?embed",
   "doelen": [
-    "Leerlingen kunnen een agenda correct invullen.",
-    "Leerlingen weten hoe ze huiswerk verspreiden over de week.",
-    "Leerlingen leren hun schooltas planmatig inpakken."
+    "De leerlingen kennen de 'Slim Leren'-tips nog beter.",
+    "De leerlingen weten wat zij kunnen doen als zij de leerstof niet helemaal begrijpen.",
+    "De leerlingen kunnen verschillende hulpmiddelen benoemen die zij tijdens het leren kunnen gebruiken."
   ],
   "tl": [
     {
       "t": "0–5 min",
-      "n": "Instapvraag",
-      "d": "Hoe plan jij nu jouw werk? Leerlingen delen ervaringen."
+      "n": "Start, terugblik en leerdoelen",
+      "d": "Open de les, blik kort terug op les 2 en bespreek de leerdoelen van vandaag."
     },
     {
-      "t": "5–20 min",
-      "n": "Uitleg weekplanning",
-      "d": "Toon een voorbeeld weekplanning voor de middelbare school."
+      "t": "5–10 min",
+      "n": "Slim leren & online hulpmiddelen",
+      "d": "Bespreek de slides over slim leren. Ga samen met de leerlingen in gesprek over wat je kunt doen als je iets niet begrijpt."
     },
     {
-      "t": "20–40 min",
-      "n": "Oefening",
-      "d": "Leerlingen maken een weekplanning op basis van een fictief rooster."
+      "t": "10–35 min",
+      "n": "Missie Middelbaar",
+      "d": "Leg de opdracht uit, open Missie Middelbaar in het docentenportaal en laat de leerlingen in tweetallen de drie missies uitvoeren. Loop rond, help waar nodig en moedig leerlingen aan om de verschillende online hulpmiddelen te ontdekken."
     },
     {
-      "t": "40–55 min",
-      "n": "Bespreking",
-      "d": "Deel planningen in de klas en bespreek handige strategieën."
+      "t": "35–40 min",
+      "n": "Nabespreking",
+      "d": "Bespreek klassikaal wat de leerlingen hebben ontdekt. Bekijk samen de resultaten in het docentenportaal en vraag welke online hulpmiddelen zij in de brugklas zouden gebruiken en waarom."
+    },
+    {
+      "t": "40–50 min",
+      "n": "Quiz",
+      "d": "Open de quiz in het docentenportaal en speel deze klassikaal."
+    },
+    {
+      "t": "50–60 min",
+      "n": "Afsluiting & vooruitblik",
+      "d": "Vat de belangrijkste inzichten van de les samen, blik kort vooruit op de volgende les en geef ruimte voor vragen of een korte uitloop."
+    }
+  ],
+  "benodigdheden": [
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
     }
   ],
   "mat": [

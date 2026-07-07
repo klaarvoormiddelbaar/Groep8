@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missie 3 – Stel vragen aan Jay I</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:        #10a37f;
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --r-card:       28px;
+      --r-pill:       9999px;
+    }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 110% -5%,  rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -5%   10%,  rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%   60%,  rgba(255,255,255,0.55) 0%, transparent 55%);
+      min-height: 100vh;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes pop {
+      0%   { transform: scale(.8); opacity: 0; }
+      70%  { transform: scale(1.06); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes aftel { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+    @keyframes lbIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes lbPageIn {
+      from { opacity: 0; transform: scale(.97) translateY(12px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    @keyframes dotBounce {
+      0%,60%,100% { transform: translateY(0); opacity: .45; }
+      30%          { transform: translateY(-7px); opacity: 1; }
+    }
+    @keyframes msgIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes clCheckBounce {
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.28); }
+      58%  { transform: scale(0.90); }
+      78%  { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+    @keyframes clUnlockGlow {
+      0%   { box-shadow: none; }
+      25%  { box-shadow: 0 0 0 3px rgba(114,168,249,.45); }
+      65%  { box-shadow: 0 0 0 5px rgba(114,168,249,.18); }
+      100% { box-shadow: none; }
+    }
+    @keyframes statusPulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(.8); }
+    }
+    @keyframes tutNextPuls {
+      0%, 100% { box-shadow: 0 4px 12px rgba(78,142,243,0.30), 0 0 0 0 rgba(78,142,243,0.45); }
+      50%      { box-shadow: 0 4px 12px rgba(78,142,243,0.30), 0 0 0 7px rgba(78,142,243,0); }
+    }
+    @keyframes tutNextGlans {
+      0%   { left: -60%; }
+      55%  { left: 130%; }
+      100% { left: 130%; }
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 200;
+      height: 60px;
+      background: rgba(242,246,253,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .topbar img { height: 30px; object-fit: contain; }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 1184px;
+      margin: 0 auto;
+      padding: 36px 28px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1e4a8a 0%, #4e8ef3 60%, #72a8f9 100%);
+      border-radius: var(--r-card);
+      padding: 36px 40px 28px;
+      position: relative; overflow: hidden;
+      animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+      box-shadow: 0 24px 48px -8px rgba(78,142,243,.40);
+      display: flex; flex-direction: column;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,.12) 0%, transparent 60%);
+    }
+    .hero-dots {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+      background-image: radial-gradient(circle, rgba(255,255,255,.15) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .hero-body { position: relative; z-index: 1; display: flex; align-items: flex-end; flex: 1; }
+    .hero-content { flex: 1; padding-bottom: 32px; }
+    .progress-row {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 12px; margin-bottom: 18px;
+    }
+    .progress-label { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.75); white-space: nowrap; }
+    .progress-bar { flex: 1; height: 6px; background: rgba(255,255,255,.22); border-radius: 9999px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #fff; border-radius: 9999px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.28);
+      border-radius: var(--r-pill); padding: 5px 14px;
+      font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: 28px; font-weight: 700; color: #fff;
+      line-height: 1.2; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-title img { height: 1.2em; width: auto; object-fit: contain; flex-shrink: 0; }
+    .hero-sub { font-size: 15px; color: rgba(255,255,255,.82); line-height: 1.6; max-width: 620px; }
+    .hero-jay {
+      height: 200px; width: auto; object-fit: contain;
+      flex-shrink: 0; align-self: flex-end;
+      filter: drop-shadow(0 12px 24px rgba(0,0,0,.22));
+    }
+    .tut-help-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; aspect-ratio: 1; flex: 0 0 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22); border: 1.5px solid rgba(255,255,255,0.5);
+      color: white; font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: background 0.18s;
+    }
+    .tut-help-btn:hover { background: rgba(255,255,255,0.34); }
+
+    /* ── TOP ROW: boek + checklist ── */
+    .top-rij {
+      display: grid;
+      grid-template-columns: 42fr 58fr;
+      gap: 24px;
+      align-items: stretch;
+      animation: fadeUp .5s .08s cubic-bezier(.22,1,.36,1) both;
+    }
+
+    /* ── BOEK-BUREAU ── */
+    .book-desk {
+      background: #c8d0db;
+      background-image:
+        radial-gradient(ellipse at 25% 15%, rgba(255,255,255,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 85%, rgba(0,0,0,0.06) 0%, transparent 50%);
+      border-radius: var(--r-card);
+      padding: 20px 18px 22px;
+      position: relative;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.35),
+        inset 0 -1px 0 rgba(0,0,0,0.08),
+        0 20px 40px -8px rgba(0,0,0,0.14);
+      display: flex; flex-direction: column;
+    }
+    .book-thumb {
+      position: relative; cursor: pointer;
+      border-radius: 3px; overflow: hidden;
+      display: flex; flex-direction: column; flex: 1;
+    }
+    .book-thumb:focus { outline: 3px solid var(--primary); outline-offset: 3px; }
+    .book-a4 {
+      background: white;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: 3px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06), 0 4px 14px rgba(0,0,0,0.10), 0 16px 48px rgba(0,0,0,0.14);
+      overflow: hidden; flex: 1; display: flex; min-height: 0;
+    }
+    .book-a4 img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .book-thumb-overlay {
+      position: absolute; inset: 0;
+      background: rgba(17,38,80,0);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .22s; border-radius: 3px;
+    }
+    .book-thumb:hover .book-thumb-overlay { background: rgba(17,38,80,0.60); }
+    .book-thumb-zoom {
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      color: white; font-weight: 700; font-size: 15px;
+      opacity: 0; transform: scale(0.82) translateY(6px);
+      transition: opacity .22s, transform .22s;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+    .book-thumb:hover .book-thumb-zoom { opacity: 1; transform: scale(1) translateY(0); }
+    .book-click-hint {
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      margin-top: 11px; font-size: 12px; font-weight: 700; color: #7a8898; letter-spacing: .3px;
+    }
+
+    /* ── CHECKLIST KAART ── */
+    .checklist-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 26px 28px 22px;
+      display: flex; flex-direction: column;
+    }
+    .cl-eyebrow {
+      font-size: 16px; font-weight: 700; color: #9aa5b4;
+      letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px;
+    }
+    .cl-items {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, auto);
+      grid-auto-flow: column;
+      gap: 8px;
+    }
+    .cl-item {
+      padding: 12px 14px;
+      border: 1.5px solid #eef0f3;
+      border-radius: 14px;
+      background: #fafbfc;
+      transition: filter .45s ease, opacity .45s ease;
+    }
+    .cl-main-row { display: flex; align-items: center; gap: 14px; }
+    .cl-item.locked { filter: blur(2.5px); opacity: 0.38; pointer-events: none; user-select: none; }
+    .cl-item.cl-hidden { display: none; }
+    .cl-item.just-unlocked { animation: clUnlockGlow 1.1s cubic-bezier(.22,1,.36,1) both; }
+    .cl-icon {
+      width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+      background: #fee2e2; display: flex; align-items: center; justify-content: center;
+      transition: background .3s;
+    }
+    .cl-item.done .cl-icon {
+      background: var(--green);
+      animation: clCheckBounce .5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .cl-label { flex: 1; font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.3; }
+    .cl-item.done .cl-label { color: var(--green); }
+
+    /* ── JAY PANEL ── */
+    .jay-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      height: 560px;
+      animation: fadeUp .5s .18s cubic-bezier(.22,1,.36,1) both;
+    }
+    .jay-panel.fullscreen {
+      position: fixed !important;
+      top: 44px !important; left: 50% !important;
+      transform: translateX(-50%) !important;
+      width: min(1128px, calc(100vw - 56px)) !important;
+      height: calc(100vh - 88px) !important;
+      z-index: 800 !important; border-radius: 24px !important;
+      box-shadow: 0 24px 72px rgba(0,0,0,0.45) !important;
+      animation: none !important;
+    }
+    .jay-header {
+      background: linear-gradient(150deg, #17336a 0%, #2a549c 55%, var(--primary-dark) 100%);
+      padding: 18px 24px 16px; flex-shrink: 0;
+    }
+    .jay-title-row { display: flex; align-items: center; gap: 13px; }
+    .jay-avatar {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.30);
+      border-radius: 50%; overflow: hidden;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+      background: white;
+    }
+    .jay-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .jay-name-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .jay-name  { font-size: 20px; font-weight: 700; color: white; }
+    .jay-badge {
+      background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.28);
+      border-radius: var(--r-pill); padding: 3px 11px;
+      font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.86);
+      letter-spacing: .8px; text-transform: uppercase;
+    }
+    .jay-expand-btn {
+      margin-left: auto; flex-shrink: 0;
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.13); border: 1.5px solid rgba(255,255,255,0.25);
+      border-radius: 9px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: white; transition: background .18s, transform .15s;
+    }
+    .jay-expand-btn:hover { background: rgba(255,255,255,0.24); transform: scale(1.08); }
+
+    /* Chat */
+    .jay-chat {
+      flex: 1; overflow-y: auto; padding: 20px 18px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+    .jay-chat::-webkit-scrollbar { width: 4px; }
+    .jay-chat::-webkit-scrollbar-thumb { background: #e0e3e7; border-radius: 4px; }
+    .msg { display: flex; gap: 9px; align-items: flex-end; animation: msgIn .22s ease both; }
+    .msg.user { flex-direction: row-reverse; }
+    .msg-avatar {
+      width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700;
+      background: white; border: 1.5px solid #e5e8ec; overflow: hidden;
+    }
+    .msg-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .msg.user .msg-avatar { background: var(--primary); border-color: var(--primary); font-size: 12px; color: white; }
+    .msg-bubble { max-width: 82%; padding: 11px 15px; border-radius: 18px; font-size: 14.5px; line-height: 1.58; }
+    .msg-bubble.wide { max-width: 94%; }
+    .msg.jay .msg-bubble {
+      background: white; border: 1px solid var(--border); border-bottom-left-radius: 4px;
+      color: var(--dark); box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .msg.user .msg-bubble { background: var(--primary); border-bottom-right-radius: 4px; color: white; }
+    .msg-bubble strong { font-weight: 700; }
+
+    /* Typing */
+    .typing-row { display: none; align-items: flex-end; gap: 9px; }
+    .typing-row.visible { display: flex; }
+    .typing-label { font-size: 11.5px; color: var(--muted); font-style: italic; margin-bottom: 4px; }
+    .typing-dots {
+      background: white; border: 1px solid var(--border); border-radius: 16px;
+      border-bottom-left-radius: 4px; padding: 11px 16px;
+      display: inline-flex; align-items: center; gap: 5px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.05);
+    }
+    .typing-dots span {
+      width: 7px; height: 7px; border-radius: 50%; background: #b0b8c1;
+      animation: dotBounce 1.4s ease-in-out infinite;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: .2s; }
+    .typing-dots span:nth-child(3) { animation-delay: .4s; }
+
+    /* Chat image thumbnail */
+    .chat-thumb {
+      position: relative; display: inline-block; cursor: zoom-in;
+      border-radius: 10px; overflow: hidden; max-width: 220px; margin-top: 10px;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.20); transition: transform .15s, box-shadow .15s;
+    }
+    .chat-thumb:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,0,0,0.28); }
+    .chat-thumb img { width: 220px; display: block; }
+    .chat-thumb-badge {
+      position: absolute; bottom: 8px; right: 8px;
+      background: rgba(0,0,0,0.60); border-radius: 6px; padding: 4px 10px;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; color: white; pointer-events: none;
+      letter-spacing: .03em;
+    }
+
+    /* Quiz */
+    .sam-keuze { display: flex; gap: 10px; margin-top: 16px; }
+    .sam-btn {
+      flex: 1; padding: 16px 12px; border-radius: 18px;
+      border: 1.5px solid rgba(78,142,243,0.22); background: #f7f9ff;
+      font-family: inherit; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      transition: border-color .18s, background .18s, transform .18s, box-shadow .18s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .sam-btn:hover:not(:disabled) {
+      border-color: var(--primary); background: var(--primary-soft);
+      transform: translateY(-2px); box-shadow: 0 6px 18px rgba(78,142,243,0.18);
+    }
+    .sam-btn:disabled { opacity: 0.40; cursor: default; }
+    .sam-icon {
+      width: 38px; height: 38px; border-radius: 12px;
+      background: rgba(78,142,243,0.12); color: var(--primary-dark);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sam-label { font-size: 14px; font-weight: 700; color: var(--dark); }
+    .sam-sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+    .quiz-options { display: flex; flex-direction: column; gap: 7px; margin-top: 12px; }
+    .quiz-opt {
+      background: var(--primary-soft); border: 1.5px solid rgba(78,142,243,.22);
+      border-radius: 10px; padding: 9px 13px;
+      font-family: inherit; font-size: 13.5px; font-weight: 700; color: var(--primary-dark);
+      cursor: pointer; text-align: left;
+      transition: background .16s, transform .14s, border-color .16s;
+    }
+    .quiz-opt:hover:not(:disabled) { background: rgba(78,142,243,.18); border-color: rgba(78,142,243,.40); transform: translateX(3px); }
+    .quiz-opt:disabled { cursor: default; }
+    .quiz-opt.correct { background: rgba(16,163,127,.12); border-color: #10a37f; color: #0a6b52; }
+    .quiz-opt.wrong   { background: rgba(239,68,68,.08);  border-color: #ef4444; color: #b91c1c; }
+
+    /* Input */
+    .jay-input-area { border-top: 1px solid var(--border); padding: 10px 16px 12px; flex-shrink: 0; background: #fafbfc; }
+    .jay-quick-actions { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 9px; }
+    .jay-quick-label { font-size: 12px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+    .jay-quick-chip {
+      background: var(--primary-soft); border: 1.5px solid rgba(78,142,243,.22);
+      border-radius: var(--r-pill); padding: 4px 13px;
+      font-family: inherit; font-size: 13px; font-weight: 700; color: var(--primary-dark);
+      cursor: pointer; transition: background .15s, border-color .15s;
+    }
+    .jay-quick-chip:hover { background: rgba(78,142,243,.16); border-color: rgba(78,142,243,.40); }
+    .jay-input-row { display: flex; gap: 9px; align-items: flex-end; }
+    .jay-input {
+      flex: 1; background: white; border: 1.5px solid #dde2e8; border-radius: 22px;
+      padding: 10px 16px; font-family: inherit; font-size: 14.5px; color: var(--dark);
+      resize: none; outline: none; min-height: 42px; max-height: 120px; overflow-y: auto;
+      line-height: 1.45; transition: border-color .2s, box-shadow .2s;
+    }
+    .jay-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(78,142,243,.12); }
+    .jay-input::placeholder { color: #b5bdc6; }
+    .jay-send {
+      width: 42px; height: 42px; flex-shrink: 0; background: var(--green);
+      border: none; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: white; box-shadow: 0 4px 14px rgba(16,163,127,.30);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .jay-send:hover { transform: scale(1.08); box-shadow: 0 6px 18px rgba(16,163,127,.38); }
+    .jay-send:active { transform: scale(.95); }
+    .jay-disclaimer { font-size: 11.5px; color: #c0c7d0; text-align: center; margin-top: 7px; }
+
+    /* Jay overlay */
+    .jay-overlay {
+      display: none; position: fixed; inset: 0; z-index: 799;
+      background: rgba(10,14,20,0.76); backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px); animation: fadeIn .22s ease both;
+    }
+    .jay-overlay.open { display: block; }
+
+    /* ── AFRONDEN ── */
+    .btn-afronden {
+      width: 100%; height: 54px; border: none; border-radius: var(--r-pill);
+      background: linear-gradient(135deg, #059669 0%, var(--green) 100%);
+      color: #fff; font-family: inherit; font-size: 16px; font-weight: 700;
+      cursor: pointer; box-shadow: 0 8px 20px rgba(16,163,127,.30);
+      transition: opacity .18s, transform .15s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      animation: fadeUp .5s .28s cubic-bezier(.22,1,.36,1) both;
+    }
+    .btn-afronden:hover:not(:disabled) { opacity: .92; transform: translateY(-2px); }
+    .btn-afronden:disabled {
+      background: linear-gradient(135deg, #9aa5b4 0%, #b0b8c1 100%);
+      opacity: 1; cursor: default; box-shadow: none;
+    }
+    .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+    .btn-afronden.laden .spinner { display: block; }
+    .btn-afronden.laden .btn-tekst { display: none; }
+
+    /* ── MINI BOEK ── */
+    .mini-boek {
+      display: flex; flex-shrink: 0; width: 500px;
+      border-radius: 3px 5px 5px 3px; overflow: hidden; cursor: pointer;
+      box-shadow:
+        -4px 4px 0 rgba(0,0,0,0.08),
+        -8px 8px 0 rgba(0,0,0,0.05),
+        0 12px 40px rgba(0,0,0,0.32);
+      transition: transform .2s, box-shadow .2s;
+    }
+    .mini-boek:hover {
+      transform: translateY(-3px);
+      box-shadow:
+        -4px 4px 0 rgba(0,0,0,0.08),
+        -8px 8px 0 rgba(0,0,0,0.05),
+        0 20px 50px rgba(0,0,0,0.38);
+    }
+    .boek-links {
+      flex: 1; min-width: 0; overflow: hidden;
+      box-shadow: inset -3px 0 8px rgba(0,0,0,0.18);
+    }
+    .boek-links img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .boek-rug {
+      width: 16px; flex-shrink: 0;
+      background: linear-gradient(to right,
+        #4a4a4a 0%, #888 25%, #d0d0d0 45%,
+        #b8b8b8 55%, #707070 75%, #4a4a4a 100%);
+    }
+    .boek-rechts {
+      flex: 1; min-width: 0; position: relative; overflow: hidden;
+      box-shadow: inset 3px 0 6px rgba(0,0,0,0.10);
+    }
+    .boek-rechts::after {
+      content: ''; position: absolute; top: 0; right: 0; bottom: 0; width: 6px;
+      background: linear-gradient(to right, transparent, rgba(0,0,0,0.07));
+      pointer-events: none;
+    }
+    .boek-rechts img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+    .mini-boek:hover .boek-zoom { opacity: 1; }
+    .boek-zoom {
+      position: absolute; inset: 0; background: rgba(17,38,80,0.48);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s; pointer-events: none;
+    }
+    .boek-zoom-label {
+      background: rgba(0,0,0,0.60); border-radius: 8px; padding: 7px 14px;
+      display: flex; align-items: center; gap: 7px;
+      font-size: 13px; font-weight: 700; color: white;
+    }
+
+    /* ── LIGHTBOX (scrollbaar) ── */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 900;
+      background: rgba(10,14,20,0.80); backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      overflow-y: auto; padding: 32px 20px 48px;
+    }
+    .lightbox.open { display: block; animation: lbIn .22s ease both; }
+    .lb-toolbar {
+      width: 100%; max-width: 840px; margin: 0 auto;
+      display: flex; justify-content: flex-end; margin-bottom: 14px;
+    }
+    .lb-close-btn {
+      display: flex; align-items: center; gap: 8px; background: white;
+      border: none; border-radius: var(--r-pill); padding: 10px 22px;
+      font-family: inherit; font-size: 14px; font-weight: 700; color: #191c1d; cursor: pointer;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.20); transition: transform .18s, box-shadow .18s;
+    }
+    .lb-close-btn:hover { transform: scale(1.04); box-shadow: 0 6px 20px rgba(0,0,0,0.28); }
+    .lb-page {
+      width: 100%; max-width: 840px; margin: 0 auto; background: white; border-radius: 4px;
+      border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 8px 48px rgba(0,0,0,0.36);
+      overflow: hidden; animation: lbPageIn .28s cubic-bezier(.22,1,.36,1) both;
+    }
+    .lb-page img { width: 100%; height: auto; display: block; }
+
+    /* ── LIGHTBOX SCROLL HINT ── */
+    @keyframes scrollBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(7px); }
+    }
+    @keyframes lbHintFadeIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+    .lb-scroll-hint {
+      display: none;
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+      flex-direction: column; align-items: center; gap: 8px;
+      pointer-events: none; z-index: 1100;
+    }
+    .lb-scroll-hint.visible {
+      display: flex;
+      animation: lbHintFadeIn .35s ease both;
+    }
+    .lb-scroll-hint-text {
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.85);
+      letter-spacing: .07em; text-transform: uppercase;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    }
+    .lb-scroll-hint-arrow {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.40);
+      display: flex; align-items: center; justify-content: center;
+      animation: scrollBounce 1.3s ease-in-out infinite;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.30);
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(15,23,42,.50); backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; transition: opacity .3s ease;
+    }
+    .modal-overlay.zichtbaar { opacity: 1; pointer-events: auto; }
+    .modal-kaart {
+      background: #fff; border-radius: var(--r-card); padding: 52px 44px 44px;
+      text-align: center; max-width: 380px; width: 90%;
+      box-shadow: 0 32px 64px rgba(0,0,0,.22);
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      animation: pop .45s cubic-bezier(.22,1,.36,1) both;
+    }
+    .modal-vink {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #059669 0%, var(--green) 100%);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 28px rgba(16,163,127,.35);
+      animation: pop .5s .1s cubic-bezier(.22,1,.36,1) both;
+    }
+    .modal-titel { font-size: 28px; font-weight: 700; color: var(--dark); }
+    .modal-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+    .modal-voortgang { width: 100%; height: 4px; background: var(--border); border-radius: 9999px; overflow: hidden; margin-top: 8px; }
+    .modal-voortgang-balk { height: 100%; background: var(--green); border-radius: 9999px; width: 100%; transform-origin: left; animation: aftel 3.5s linear forwards; }
+
+    /* ── TUTORIAL ── */
+    #tut-overlay {
+      position: fixed; inset: 0; z-index: 1100;
+      visibility: hidden; opacity: 0; pointer-events: none;
+      transition: opacity 0.28s ease, visibility 0.28s;
+    }
+    #tut-overlay.active { visibility: visible; opacity: 1; pointer-events: all; }
+    #tut-spotlight {
+      position: fixed; pointer-events: none; z-index: 1101;
+      box-shadow:
+        0 0 0 3px rgba(255,255,255,0.78),
+        0 0 0 6px rgba(114,168,249,0.42),
+        0 0 0 9999px rgba(0,0,0,0.56);
+      transition:
+        top .38s cubic-bezier(0.22,1,0.36,1), left .38s cubic-bezier(0.22,1,0.36,1),
+        width .38s cubic-bezier(0.22,1,0.36,1), height .38s cubic-bezier(0.22,1,0.36,1),
+        border-radius .38s cubic-bezier(0.22,1,0.36,1);
+    }
+    #tut-card {
+      position: fixed; z-index: 1102; pointer-events: all;
+      width: 360px; background: #fff; border-radius: 20px; padding: 28px 28px 22px;
+      box-shadow: 0 24px 56px rgba(0,0,0,0.22), 0 6px 16px rgba(0,0,0,0.08);
+      transition: top .38s cubic-bezier(0.22,1,0.36,1), left .38s cubic-bezier(0.22,1,0.36,1);
+    }
+    #tut-card::before {
+      content: ''; position: absolute; top: -10px;
+      left: var(--tut-ax, 50%); transform: translateX(-50%);
+      width: 20px; height: 10px; background: #fff;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      transition: left .38s cubic-bezier(0.22,1,0.36,1);
+    }
+    #tut-card.arrow-down::before { top: auto; bottom: -10px; clip-path: polygon(0% 0%, 100% 0%, 50% 100%); }
+    #tut-close {
+      position: absolute; top: 14px; right: 14px; width: 30px; height: 30px;
+      border-radius: 50%; background: #f0f2f5; border: none; cursor: pointer;
+      font-family: inherit; font-size: 14px; color: #6d747a;
+      display: flex; align-items: center; justify-content: center; transition: background .15s;
+    }
+    #tut-close:hover { background: #e1e3e3; }
+    #tut-lbl { font-size: 11px; font-weight: 700; color: #72a8f9; text-transform: uppercase; letter-spacing: 1.3px; margin-bottom: 10px; }
+    #tut-body { font-size: 15px; line-height: 1.65; color: #191c1d; margin-bottom: 22px; padding-right: 22px; }
+    #tut-footer { display: flex; align-items: center; justify-content: space-between; }
+    #tut-dots { display: flex; gap: 7px; align-items: center; }
+    .t-dot { height: 7px; background: #e1e3e3; width: 7px; border-radius: 4px; transition: background .22s, width .22s; }
+    .t-dot.active { background: #72a8f9; width: 18px; }
+    #tut-nav { display: flex; gap: 10px; }
+    #tut-prev {
+      padding: 9px 18px; border-radius: 9999px; background: none; border: 1.5px solid #eceeee;
+      font-family: 'Inria Sans', Georgia, serif; font-size: 14px; font-weight: 700; color: #6d747a; cursor: pointer;
+    }
+    #tut-prev:hover:not(:disabled) { border-color: #72a8f9; color: #72a8f9; }
+    #tut-prev:disabled { opacity: .32; cursor: default; }
+    #tut-next {
+      position: relative; overflow: hidden; padding: 9px 22px; border-radius: 9999px;
+      background: #72a8f9; border: none; font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700; color: white; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(78,142,243,0.30); animation: tutNextPuls 1.8s ease-in-out infinite;
+      transition: background .15s, transform .15s;
+    }
+    #tut-next::after {
+      content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+      background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: skewX(-20deg); animation: tutNextGlans 2.6s ease-in-out infinite;
+    }
+    #tut-next:hover { background: #4e8ef3; transform: translateY(-1px); }
+
+    /* ── SITUATIEKAART ── */
+    .situatiekaart {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 38px 32px 36px;
+      animation: fadeUp .5s .04s cubic-bezier(.22,1,.36,1) both;
+    }
+    .situatiekaart-eyebrow {
+      font-size: 16px; font-weight: 700; color: #9aa5b4;
+      letter-spacing: .08em; text-transform: uppercase; margin-bottom: 12px;
+    }
+    .situatiekaart-titel {
+      font-size: 22px; font-weight: 700; color: var(--dark); margin-bottom: 14px; line-height: 1.3;
+    }
+    .situatiekaart-tekst {
+      font-size: 16px; color: #3a4553; line-height: 1.75;
+    }
+    .situatiekaart-tekst p + p { margin-top: 18px; }
+
+    @media (max-width: 900px) {
+      .top-rij { grid-template-columns: 1fr; }
+      .book-desk { min-height: 300px; }
+    }
+    @media (max-width: 768px) {
+      .main { padding: 24px 16px 64px; }
+      .hero { padding: 24px 24px 20px; }
+      .hero-jay { height: 140px; }
+      #tut-card { width: calc(100vw - 32px); max-width: 360px; }
+      .jay-panel { height: 440px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar">
+  </header>
+
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-dots"></div>
+      <div class="progress-row">
+        <span class="progress-label">Missie 3 van 3</span>
+        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+      </div>
+      <div class="hero-body">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <img src="/Afbeeldingen/EMOJI PACK IOS/laptop_1f4bb.png" alt="" style="height:14px;width:auto;object-fit:contain">
+            Missie 3
+          </div>
+          <div class="hero-title">
+            <img src="/Afbeeldingen/EMOJI PACK IOS/robot-face_1f916.png" alt="">
+            Stel vragen aan jouw leercoach: Jay I
+            <button class="tut-help-btn" id="tut-help-btn" onclick="tutStart()" title="Rondleiding">?</button>
+          </div>
+          <p class="hero-sub">Snap je de theorie niet helemaal? Gebruik Jay I onder andere om vragen te stellen, een samenvatting te krijgen en jezelf te laten overhoren.</p>
+        </div>
+        <img class="hero-jay" src="/Missie Middelbaar/Jay I.png" alt="Jay I">
+      </div>
+    </div>
+
+    <!-- SITUATIEKAART -->
+    <div class="situatiekaart" id="kaart-situatie" style="display:flex;align-items:center;gap:28px">
+      <div style="flex:1">
+        <p class="situatiekaart-eyebrow">Veel tekst? Geen probleem!</p>
+        <div class="situatiekaart-tekst">
+          <p>Gebruik Jay I als jouw persoonlijke leercoach om grote stukken theorie sneller te begrijpen. Je kunt Jay I vragen stellen, een samenvatting laten maken, een tijdlijn laten genereren en ook nog eens oefenopdrachten laten opstellen. Alles is mogelijk!</p>
+          <p><strong>Bekijk de theoriepagina en doorloop daarna de volledige checklist.</strong></p>
+        </div>
+      </div>
+      <div class="mini-boek" onclick="openLightbox()" role="button" tabindex="0"
+           aria-label="Bekijk theoriepagina"
+           onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox()">
+          <div class="boek-links">
+            <img src="/Missie Middelbaar/Cover ontstaan wo2.png" alt="Cover Ontstaan WO2" draggable="false">
+          </div>
+          <div class="boek-rug"></div>
+          <div class="boek-rechts">
+            <img src="/Missie Middelbaar/Jay AI/Ontstaan WO2.png" alt="Theoriepagina WO2" draggable="false">
+            <div class="boek-zoom">
+              <div class="boek-zoom-label">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Vergroten
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- CHECKLIST -->
+      <div class="checklist-card" id="checklistCard">
+        <p class="cl-eyebrow">Checklist</p>
+        <div class="cl-items">
+
+          <div class="cl-item" id="clItem0">
+            <div class="cl-main-row">
+              <div class="cl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+              <span class="cl-label">Lees de theoriepagina</span>
+            </div>
+          </div>
+
+          <div class="cl-item locked" id="clItem1">
+            <div class="cl-main-row">
+              <div class="cl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+              <span class="cl-label">Stel minimaal 1 vraag aan Jay I</span>
+            </div>
+          </div>
+
+          <div class="cl-item locked" id="clItem2">
+            <div class="cl-main-row">
+              <div class="cl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+              <span class="cl-label">Laat Jay I de theorie samenvatten</span>
+            </div>
+          </div>
+
+          <div class="cl-item locked" id="clItem3">
+            <div class="cl-main-row">
+              <div class="cl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+              <span class="cl-label">Laat Jay I een tijdlijn maken</span>
+            </div>
+          </div>
+
+          <div class="cl-item locked" id="clItem4">
+            <div class="cl-main-row">
+              <div class="cl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+              <span class="cl-label">Laat Jay I oefenvragen maken</span>
+            </div>
+          </div>
+
+          <div class="cl-item locked" id="clItem5">
+            <div class="cl-main-row">
+              <div class="cl-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e53e3e" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+              <span class="cl-label">Behaal minimaal 4 van de 5 oefenvragen</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    <!-- JAY I PANEL -->
+    <div class="jay-panel" id="jayPanel">
+      <div class="jay-header">
+        <div class="jay-title-row">
+          <div class="jay-avatar"><img src="/Missie Middelbaar/Jay I.png" alt="Jay I"></div>
+          <div class="jay-name-wrap">
+            <span class="jay-name">Jay I</span>
+            <span class="jay-badge">Leercoach</span>
+          </div>
+          <span id="vragenCounter" style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.70);letter-spacing:.03em;white-space:nowrap;">20/20 vragen over</span>
+          <button class="jay-expand-btn" id="jayExpandBtn" onclick="toggleJayFullscreen()" title="Vergroot Jay I" aria-label="Vergroot Jay I">
+            <svg id="jayExpandIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/>
+              <line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="jay-chat" id="jayChat">
+        <div class="msg jay">
+          <div class="msg-avatar"><img src="/Missie Middelbaar/Jay I.png" alt="Jay I"></div>
+          <div class="msg-bubble">
+            Hoi!<br><br>Ik ben <strong>Jay I</strong>, jouw leercoach.<br><br>
+            Ik help je de theoriepagina over <strong>het ontstaan van de Tweede Wereldoorlog</strong> beter begrijpen.<br><br>
+            Heb je een vraag? Stel hem gerust of gebruik de knoppen hieronder.
+          </div>
+        </div>
+        <div class="typing-row" id="typingRow">
+          <div class="msg-avatar"><img src="/Missie Middelbaar/Jay I.png" alt="Jay I"></div>
+          <div>
+            <div class="typing-label">Jay I is aan het typen...</div>
+            <div class="typing-dots"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="jay-input-area">
+        <div class="jay-quick-actions">
+          <span class="jay-quick-label">Snel starten:</span>
+          <button class="jay-quick-chip" onclick="snel('samenvatting')">Samenvatten</button>
+          <button class="jay-quick-chip" onclick="snel('tijdlijn')">Tijdlijn</button>
+          <button class="jay-quick-chip" id="chipOefenvragen" onclick="snel('oefenvragen')" style="filter:blur(0.6px);opacity:0.55;pointer-events:none">Oefenvragen</button>
+        </div>
+        <div class="jay-input-row">
+          <textarea id="jayInput" class="jay-input" placeholder="Typ hier je vraag..." rows="1"
+            onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="jay-send" onclick="sendMessage()" title="Verstuur">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+            </svg>
+          </button>
+        </div>
+        <p class="jay-disclaimer">Jay I helpt alleen bij vragen over deze pagina</p>
+      </div>
+    </div>
+
+    <!-- AFRONDEN -->
+    <button class="btn-afronden" id="btnAfronden" onclick="rondAf()" disabled>
+      <div class="spinner"></div>
+      <span class="btn-tekst">
+        <img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="" style="height:16px;width:auto;object-fit:contain;vertical-align:-.2em"> Missie afronden
+      </span>
+    </button>
+
+    <!-- TUTORIAL -->
+    <div id="tut-overlay" role="dialog" aria-modal="true">
+      <div id="tut-spotlight" aria-hidden="true"></div>
+      <div id="tut-card">
+        <button id="tut-close" aria-label="Sluiten">✕</button>
+        <div id="tut-lbl">Stap 1 van 5</div>
+        <div id="tut-body"></div>
+        <div id="tut-footer">
+          <div id="tut-dots"></div>
+          <div id="tut-nav">
+            <button id="tut-prev">Vorige</button>
+            <button id="tut-next">Volgende →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JAY OVERLAY -->
+    <div class="jay-overlay" id="jayOverlay" onclick="toggleJayFullscreen()"></div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="closeLightboxBuiten(event)">
+      <div class="lb-toolbar">
+        <button class="lb-close-btn" onclick="closeLightbox()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          Sluiten
+        </button>
+      </div>
+      <div class="lb-page" id="lbPage"></div>
+    </div>
+
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-kaart">
+        <div class="modal-vink">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="modal-titel">Goed gedaan!</div>
+        <p class="modal-sub">Missie 3 is voltooid. Je gaat nu terug naar het missiescherm.</p>
+        <div class="modal-voortgang"><div class="modal-voortgang-balk"></div></div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const groepId = sessionStorage.getItem('missie_groep_id');
+    if (!groepId) window.location.href = 'index.html';
+
+    const namen = JSON.parse(sessionStorage.getItem('missie_namen') || '["?"]');
+    const userInitiaal = (namen[0] || 'J').charAt(0).toUpperCase();
+
+    const THEORIE_TIMER = new URLSearchParams(window.location.search).get('fast') === '1' ? 1000 : 10000;
+
+    /* ── CHAT ── */
+    const chatEl   = document.getElementById('jayChat');
+    const typingEl = document.getElementById('typingRow');
+    const inputEl  = document.getElementById('jayInput');
+
+    let quizMode  = false, quizStep  = 0, quizScore = 0, savedQuizScore = 0;
+    let fouteOnderwerpen = [];
+    let wachtOpSamenvattingKeuze = false;
+    let chatHistory = [];
+    let vragenTeller = 0;
+    const MAX_VRAGEN = 20;
+
+    /* ── THEORIE TIMER ── */
+    let theorieViewedMs = 0, theorieViewStart = null, theorieTimerRef = null;
+
+    function startTheorieTimer() {
+      if (isDone(0)) return;
+      theorieViewStart = Date.now();
+      const remaining = Math.max(0, THEORIE_TIMER - theorieViewedMs);
+      theorieTimerRef = setTimeout(() => autoCheck(0), remaining);
+    }
+    function pauseTheorieTimer() {
+      if (theorieViewStart !== null) { theorieViewedMs += Date.now() - theorieViewStart; theorieViewStart = null; }
+      if (theorieTimerRef) { clearTimeout(theorieTimerRef); theorieTimerRef = null; }
+    }
+
+    /* ── LIGHTBOX ── */
+    function openLightbox() {
+      const lb = document.getElementById('lightbox');
+      const lbPage = document.getElementById('lbPage');
+      lbPage.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = '/Missie Middelbaar/Jay AI/Ontstaan WO2.png';
+      img.alt = 'Het ontstaan van de Tweede Wereldoorlog';
+      lbPage.appendChild(img);
+      lb.classList.add('open');
+      lb.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+      showLbScrollHint(lb);
+      startTheorieTimer();
+    }
+    function showLbScrollHint(lb) {
+      var old = document.getElementById('lbScrollHint');
+      if (old) old.remove();
+      var hint = document.createElement('div');
+      hint.id = 'lbScrollHint';
+      hint.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:0;';
+      hint.innerHTML = '<div style="background:rgba(0,0,0,0.72);border-radius:18px;padding:20px 32px;display:flex;flex-direction:column;align-items:center;gap:14px;box-shadow:0 6px 40px rgba(0,0,0,0.50);">' +
+        '<div style="font-size:14px;font-weight:700;color:rgba(255,255,255,0.92);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;">Scroll om meer te zien</div>' +
+        '<div id="lbScrollArrow" style="width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.40);display:flex;align-items:center;justify-content:center;">' +
+        '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div></div>';
+      document.body.appendChild(hint);
+      var arrow = hint.querySelector('#lbScrollArrow');
+      var t = 0, dir = 1, pos = 0;
+      (function bounce() {
+        pos += dir * 0.4;
+        if (pos >= 7) dir = -1;
+        if (pos <= 0) dir = 1;
+        arrow.style.transform = 'translateY(' + pos + 'px)';
+        t = requestAnimationFrame(bounce);
+      })();
+      function removeHint() {
+        cancelAnimationFrame(t);
+        if (hint.parentNode) hint.remove();
+        lb.removeEventListener('scroll', removeHint);
+      }
+      lb.addEventListener('scroll', removeHint);
+      setTimeout(removeHint, 4000);
+    }
+    function openTijdlijn() {
+      const lb = document.getElementById('lightbox');
+      const lbPage = document.getElementById('lbPage');
+      lbPage.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = '/Missie Middelbaar/Jay AI/Tijdlijn.png';
+      img.alt = 'Tijdlijn WO2';
+      lbPage.appendChild(img);
+      lb.classList.add('open');
+      lb.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      pauseTheorieTimer();
+      document.getElementById('lightbox').classList.remove('open');
+      var hint = document.getElementById('lbScrollHint'); if (hint) hint.remove();
+      document.body.style.overflow = '';
+    }
+    function closeLightboxBuiten(e) {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { closeLightbox(); if (jayIsFullscreen) toggleJayFullscreen(); }
+    });
+
+    /* ── CHECKLIST ── */
+    const svgCheck = `<polyline points="20 6 9 17 4 12"/>`;
+
+    function isDone(idx) { return document.getElementById('clItem'+idx)?.classList.contains('done') ?? false; }
+
+    const pendingChecks = new Set();
+
+    function unlockItem(idx) {
+      const item = document.getElementById('clItem'+idx);
+      if (!item || !item.classList.contains('locked')) return;
+      item.classList.remove('locked');
+      void item.offsetWidth;
+      item.classList.add('just-unlocked');
+      setTimeout(() => {
+        item.classList.remove('just-unlocked');
+        if (pendingChecks.has(idx)) { pendingChecks.delete(idx); autoCheck(idx); }
+      }, 1200);
+    }
+
+    function checkUnlocks() {
+      if (isDone(0)) [1,2,3].forEach(unlockItem);
+      if (isDone(0) && isDone(1) && isDone(2) && isDone(3)) {
+        [4,5].forEach(unlockItem);
+        const chip = document.getElementById('chipOefenvragen');
+        if (chip) { chip.style.filter = ''; chip.style.opacity = ''; chip.style.pointerEvents = ''; }
+      }
+    }
+
+    function autoCheck(idx) {
+      const item = document.getElementById('clItem'+idx);
+      if (!item || item.classList.contains('done')) return;
+      if (item.classList.contains('locked')) { pendingChecks.add(idx); return; }
+      item.classList.remove('locked');
+      item.classList.add('done');
+      const icon = item.querySelector('.cl-icon');
+      if (icon) icon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round">${svgCheck}</svg>`;
+      checkUnlocks();
+      document.getElementById('btnAfronden').disabled = ![0,1,2,3,4,5].every(i => isDone(i));
+    }
+
+    /* ── JAY FULLSCREEN ── */
+    let jayIsFullscreen = false;
+    const jayPanel   = document.getElementById('jayPanel');
+    const jayOverlay = document.getElementById('jayOverlay');
+    const expandIcon = document.getElementById('jayExpandIcon');
+    const iconExpand = `<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>`;
+    const iconShrink = `<polyline points="4 14 10 14 10 20"/><polyline points="20 4 14 4 14 10"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/>`;
+
+    function toggleJayFullscreen() {
+      jayIsFullscreen = !jayIsFullscreen;
+      jayPanel.classList.toggle('fullscreen', jayIsFullscreen);
+      jayOverlay.classList.toggle('open', jayIsFullscreen);
+      expandIcon.innerHTML = jayIsFullscreen ? iconShrink : iconExpand;
+      document.getElementById('jayExpandBtn').title = jayIsFullscreen ? 'Verklein Jay I' : 'Vergroot Jay I';
+      document.body.style.overflow = jayIsFullscreen ? 'hidden' : '';
+      if (jayIsFullscreen) scrollDown();
+    }
+
+    /* ── CHAT FUNCTIES ── */
+    function typewriter(container, html, onDone) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = html;
+      const SPEED = 13;
+      function walkNodes(nodes, target, cb) {
+        if (!nodes.length) { cb(); return; }
+        const node = nodes[0], rest = Array.prototype.slice.call(nodes, 1);
+        if (node.nodeType === 3) {
+          const chars = Array.from(node.textContent);
+          let ci = 0;
+          (function nextChar() {
+            if (ci >= chars.length) { walkNodes(rest, target, cb); return; }
+            target.appendChild(document.createTextNode(chars[ci++]));
+            scrollDown();
+            setTimeout(nextChar, SPEED);
+          })();
+        } else if (node.nodeType === 1) {
+          const tag = node.tagName;
+          if (['BR','HR','IMG','INPUT'].includes(tag) ||
+              (node.querySelector && node.querySelector('button,img,input'))) {
+            target.appendChild(node.cloneNode(true));
+            scrollDown();
+            walkNodes(rest, target, cb);
+          } else {
+            const clone = node.cloneNode(false);
+            target.appendChild(clone);
+            walkNodes(Array.from(node.childNodes), clone, () => walkNodes(rest, target, cb));
+          }
+        } else {
+          walkNodes(rest, target, cb);
+        }
+      }
+      walkNodes(Array.from(tmp.childNodes), container, onDone || function(){});
+    }
+
+    function addMsg(html, isUser = false, wide = false, animate = false) {
+      const div = document.createElement('div');
+      div.className = `msg ${isUser ? 'user' : 'jay'}`;
+      const av = document.createElement('div');
+      av.className = 'msg-avatar';
+      if (isUser) {
+        av.textContent = userInitiaal;
+      } else {
+        av.innerHTML = '<img src="/Missie Middelbaar/Jay I.png" alt="Jay I">';
+      }
+      const bubble = document.createElement('div');
+      bubble.className = `msg-bubble${wide ? ' wide' : ''}`;
+      div.appendChild(av); div.appendChild(bubble);
+      chatEl.insertBefore(div, typingEl);
+      if (animate && !isUser) {
+        typewriter(bubble, html, () => scrollDown());
+      } else {
+        bubble.innerHTML = html;
+      }
+      scrollDown();
+    }
+    function showTyping() { typingEl.classList.add('visible'); scrollDown(); }
+    function hideTyping() { typingEl.classList.remove('visible'); }
+    function scrollDown()  { setTimeout(() => { chatEl.scrollTop = chatEl.scrollHeight; }, 40); }
+    function typeResponse(html, vertraging = 1300, wide = false) {
+      showTyping();
+      setTimeout(() => { hideTyping(); addMsg(html, false, wide, true); }, vertraging);
+    }
+
+    /* ── QUIZ ── */
+    const vragenBank = [
+      { vraag: 'Wat bepaalde het Verdrag van Versailles voor Duitsland?', opties: ['Duitsland mocht een groot leger opbouwen','Duitsland moest schadevergoeding betalen, gebieden afstaan en het leger verkleinen','Duitsland mocht nieuwe kolonies veroveren','Duitsland werd gesplitst in twee landen'], goed: 1, onderwerp: 'Verdrag van Versailles', uitleg: 'In het Verdrag van Versailles (1919) moest Duitsland veel schadevergoeding betalen, gebieden afstaan en het leger sterk verkleinen.' },
+      { vraag: 'In welk jaar kwam Hitler aan de macht in Duitsland?', opties: ['1919','1929','1933','1939'], goed: 2, onderwerp: 'Hitler en de NSDAP', uitleg: 'In 1933 kwam Adolf Hitler aan de macht in Duitsland.' },
+      { vraag: 'Wat is een dictatuur?', opties: ['Een land met meerdere politieke partijen','Een staatsvorm waarbij het volk regeert','Een staatsvorm waarbij één leider alle beslissingen neemt','Een land zonder leger'], goed: 2, onderwerp: 'Dictatuur', uitleg: 'In een dictatuur neemt één leider alle beslissingen en verdwijnt de democratie.' },
+      { vraag: 'Wat betekent "Lebensraum"?', opties: ['Leefruimte voor de Duitse bevolking','De naam van het Duitse leger','Een onderdeel van het Verdrag van Versailles','Een Duits woord voor democratie'], goed: 0, onderwerp: 'Lebensraum', uitleg: 'Lebensraum betekent leefruimte. Hitler vond dat Duitsland meer grondgebied nodig had.' },
+      { vraag: 'Op welke datum viel Duitsland Polen binnen?', opties: ['3 september 1939','1 september 1939','10 mei 1940','1 januari 1939'], goed: 1, onderwerp: 'Inval in Polen', uitleg: 'Op 1 september 1939 viel Duitsland Polen binnen, het officiële begin van de Tweede Wereldoorlog.' },
+      { vraag: 'Welke landen verklaarden Duitsland de oorlog op 3 september 1939?', opties: ['Polen en Rusland','Amerika en Canada','Groot-Brittannië en Frankrijk','België en Nederland'], goed: 2, onderwerp: 'Begin Tweede Wereldoorlog', uitleg: 'Op 3 september 1939 verklaarden Groot-Brittannië en Frankrijk Duitsland de oorlog.' },
+      { vraag: 'Wanneer werd Nederland door Duitsland binnengevallen?', opties: ['1 september 1939','3 september 1939','10 mei 1940','6 juni 1944'], goed: 2, onderwerp: 'Nederland in de oorlog', uitleg: 'Op 10 mei 1940 viel Duitsland Nederland binnen.' },
+      { vraag: 'Van wanneer tot wanneer duurde de Tweede Wereldoorlog?', opties: ['1914-1918','1933-1945','1939-1945','1940-1945'], goed: 2, onderwerp: 'Duur van de oorlog', uitleg: 'De Tweede Wereldoorlog duurde van 1939 tot 1945.' },
+      { vraag: 'Hoeveel mensen kwamen om het leven tijdens de Tweede Wereldoorlog?', opties: ['Meer dan 10 miljoen','Meer dan 6 miljoen','Meer dan 100 miljoen','Meer dan 60 miljoen'], goed: 3, onderwerp: 'Duur van de oorlog', uitleg: 'Meer dan 60 miljoen mensen kwamen om het leven.' },
+      { vraag: 'Waarom verloor de Duitse bevolking het vertrouwen in de regering na WO1?', opties: ['Door een verloren sporttoernooi','Door werkloosheid, inflatie en armoede','Door een strenge winter','Door conflicten met Oostenrijk'], goed: 1, onderwerp: 'Gevolgen van WO1', uitleg: 'Werkloosheid, inflatie en armoede ondermijnden het vertrouwen in de democratische regering.' },
+      { vraag: 'Wat verdween in Duitsland nadat Hitler aan de macht was gekomen?', opties: ['De economie','Het leger','De democratie','De universiteiten'], goed: 2, onderwerp: 'Dictatuur', uitleg: 'Nadat Hitler de macht greep, verdween de democratie.' },
+      { vraag: 'Welke gebieden bezette Duitsland vóór de inval in Polen?', opties: ['Nederland, België en Frankrijk','Het Rijnland, Oostenrijk en een deel van Tsjechoslowakije','Polen, Rusland en Roemenië','Groot-Brittannië en Spanje'], goed: 1, onderwerp: 'Expansie van Duitsland', uitleg: 'Duitsland bezette het Rijnland, Oostenrijk en een deel van Tsjechoslowakije.' },
+      { vraag: 'Wat deed Hitler in strijd met het Verdrag van Versailles?', opties: ['Hij bouwde opnieuw een groot leger op','Hij sloot een vredesverdrag met Polen','Hij gaf gebieden terug aan buurlanden','Hij betaalde de schadevergoeding eerder terug'], goed: 0, onderwerp: 'Verdrag van Versailles', uitleg: 'Hitler negeerde het verdrag en begon stiekem met herbewapening.' }
+    ];
+
+    let activeVragen = [], vorigeIndices = new Set();
+
+    function shuffleArr(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    function selecteerVragen() {
+      const alle = vragenBank.map((_,i) => i);
+      const vers = shuffleArr(alle.filter(i => !vorigeIndices.has(i)));
+      const oud  = shuffleArr(alle.filter(i =>  vorigeIndices.has(i)));
+      const gekozen = [...vers,...oud].slice(0,5);
+      vorigeIndices = new Set(gekozen);
+      return gekozen.map(i => vragenBank[i]);
+    }
+    function buildQuizMsg(i) {
+      const v = activeVragen[i];
+      const opties = v.opties.map((o,idx) => `<button class="quiz-opt" onclick="beantwoordQuiz(${i},${idx},this)">${String.fromCharCode(65+idx)}) ${o}</button>`).join('');
+      return `<strong>Vraag ${i+1} van 5</strong><br><br>${v.vraag}<div class="quiz-options">${opties}</div>`;
+    }
+    function beantwoordQuiz(vraagIdx, antwoordIdx, clickedBtn) {
+      const v = activeVragen[vraagIdx];
+      const goed = antwoordIdx === v.goed;
+      const container = clickedBtn.closest('.quiz-options');
+      container.querySelectorAll('.quiz-opt').forEach((btn,idx) => {
+        btn.disabled = true; btn.onclick = null;
+        if (idx === v.goed) btn.classList.add('correct');
+        else if (idx === antwoordIdx && !goed) btn.classList.add('wrong');
+      });
+      if (goed) quizScore++; else fouteOnderwerpen.push(v.onderwerp);
+      const fb = goed ? `Goed! ${v.uitleg}` : `Niet helemaal. Het goede antwoord was: <strong>${String.fromCharCode(65+v.goed)}) ${v.opties[v.goed]}</strong><br><br>${v.uitleg}`;
+      setTimeout(() => {
+        addMsg(fb, false, false, true);
+        quizStep++;
+        if (quizStep < 5) {
+          setTimeout(() => typeResponse(buildQuizMsg(quizStep), 900, true), 500);
+        } else {
+          setTimeout(() => {
+            if (quizScore >= 4) {
+              savedQuizScore = quizScore;
+              autoCheck(5);
+              typeResponse(`Gefeliciteerd! Je hebt ${quizScore} van de 5 vragen goed. Je kent de stof goed. Je kunt de missie afronden.`, 1000);
+            } else {
+              const uniek = [...new Set(fouteOnderwerpen)];
+              typeResponse(`Je hebt ${quizScore} van de 5 vragen goed. Je hebt minimaal 4 nodig.<br><br><strong>Besteed extra aandacht aan:</strong><br>${uniek.map(o=>'• '+o).join('<br>')}<br><br>Vraag me een nieuwe set oefenvragen als je er klaar voor bent.`, 1200);
+            }
+            quizMode = false; quizScore = 0; fouteOnderwerpen = [];
+          }, 500);
+        }
+      }, 450);
+    }
+
+    const samenvattingVerhaal = `<strong>Samenvatting – Het ontstaan van de Tweede Wereldoorlog</strong><br><br>Na de Eerste Wereldoorlog (1914–1918) kreeg Duitsland de schuld van de oorlog. In het Verdrag van Versailles (1919) moest Duitsland veel geld betalen, gebieden afstaan en het leger inkrimpen. Dit leidde tot armoede en werkloosheid.<br><br>In 1933 kwam Adolf Hitler aan de macht. Hij schafte de democratie af en maakte van Duitsland een dictatuur. Hij bouwde opnieuw een groot leger op en wilde meer lebensraum voor de Duitse bevolking. Daarvoor bezette hij Oostenrijk en een deel van Tsjechoslowakije.<br><br>Op 1 september 1939 viel Duitsland Polen binnen. Groot-Brittannië en Frankrijk verklaarden daarop de oorlog. De Tweede Wereldoorlog was begonnen. Op 10 mei 1940 werd ook Nederland binnengevallen. De oorlog duurde tot 1945 en kostte meer dan 60 miljoen mensen het leven.`;
+
+    const samenvattingBullets = `<strong>Samenvatting – Het ontstaan van de Tweede Wereldoorlog</strong><br><br>• Na de Eerste Wereldoorlog kreeg Duitsland de schuld van de oorlog.<br>• In het Verdrag van Versailles (1919) moest Duitsland schadevergoeding betalen, gebieden afstaan en het leger verkleinen.<br>• Dit leidde tot armoede, werkloosheid en ontevredenheid.<br>• In 1933 kwam Adolf Hitler aan de macht en maakte van Duitsland een dictatuur.<br>• Hitler hield zich niet aan het Verdrag van Versailles en bewapende Duitsland opnieuw.<br>• Hij wilde meer lebensraum en bezette Oostenrijk en delen van Tsjechoslowakije.<br>• Op 1 september 1939 viel Duitsland Polen binnen.<br>• Groot-Brittannië en Frankrijk verklaarden Duitsland de oorlog: de Tweede Wereldoorlog begon.<br>• Op 10 mei 1940 viel Duitsland ook Nederland binnen.<br>• De oorlog duurde tot 1945 en kostte meer dan 60 miljoen mensen het leven.`;
+
+    function geefSamenvatting() {
+      quizMode = false; quizStep = 0;
+      telVraag();
+      wachtOpSamenvattingKeuze = true;
+      const html = `Hoe wil je de samenvatting?<div class="sam-keuze"><button class="sam-btn" onclick="kiesSamenvatting('verhaal',this)"><div class="sam-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="4" y1="14" x2="17" y2="14"/><line x1="4" y1="18" x2="14" y2="18"/></svg></div><div class="sam-label">Verhaaltje</div><div class="sam-sub">in lopende zinnen</div></button><button class="sam-btn" onclick="kiesSamenvatting('bullets',this)"><div class="sam-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4.5" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="4.5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="4.5" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg></div><div class="sam-label">Bulletpoints</div><div class="sam-sub">punten op een rij</div></button></div>`;
+      typeResponse(html, 700);
+    }
+    function kiesSamenvatting(keuze, btn) {
+      wachtOpSamenvattingKeuze = false;
+      btn.closest('.sam-keuze').querySelectorAll('.sam-btn').forEach(b => b.disabled = true);
+      addMsg(keuze === 'verhaal' ? 'Verhaaltje' : 'Bulletpoints', true);
+      autoCheck(2);
+      typeResponse(keuze === 'bullets' ? samenvattingBullets : samenvattingVerhaal, 1200);
+    }
+    function geefTijdlijn() {
+      quizMode = false; quizStep = 0;
+      telVraag();
+      autoCheck(3);
+      const thumb = `<div class="chat-thumb" onclick="openTijdlijn()"><img src="/Missie Middelbaar/Jay AI/Tijdlijn.png" alt="Tijdlijn WO2"><div class="chat-thumb-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Vergroten</div></div>`;
+      typeResponse(`Hier is de tijdlijn van <strong>het ontstaan van de Tweede Wereldoorlog</strong>.<br><br>${thumb}`, 900, true);
+    }
+    function startOefenronde() {
+      quizMode = false; quizStep = 0; quizScore = 0; fouteOnderwerpen = [];
+      telVraag();
+      autoCheck(4);
+      activeVragen = selecteerVragen();
+      typeResponse(`Ik heb 5 vragen klaarstaan over <strong>het ontstaan van de Tweede Wereldoorlog</strong>. Klik steeds op het goede antwoord!`, 800);
+      setTimeout(() => { quizMode = true; typeResponse(buildQuizMsg(0), 1100, true); }, 1000);
+    }
+
+    /* Slimme antwoorden */
+    const sleutelwoorden = ['wereldoorlog','wo2','wo1','eerste','tweede','duitsland','duits','verdrag','versailles','schadevergoeding','schuld','verantwoordelijk','hitler','nsdap','nationaalsocialistisch','economie','werkloosheid','inflatie','armoede','democratie','dictatuur','dictator','leider','macht','lebensraum','leefruimte','grondgebied','rijnland','oostenrijk','tsjechoslowakije','polen','inval','aanval','binnengevallen','groot-brittannië','engeland','frankrijk','oorlog','nederland','1914','1918','1919','1933','1939','1940','1945','wat is','waarom','hoe','betekent','gevolg','oorzaak','leger','expansie'];
+    function isOnderwerp(t) { const l = t.toLowerCase(); return sleutelwoorden.some(w => l.includes(w)); }
+    function maakAntwoord(tekst) {
+      const l = tekst.toLowerCase();
+      if (l.includes('versailles') || l.includes('verdrag'))
+        return `Het <strong>Verdrag van Versailles</strong> (1919) was het vredesverdrag na de Eerste Wereldoorlog. Duitsland moest:<br><br>• Een enorme <strong>schadevergoeding</strong> betalen<br>• <strong>Gebieden afstaan</strong> aan buurlanden<br>• Het <strong>leger sterk verkleinen</strong><br><br>Dit leidde tot werkloosheid, inflatie en armoede en ondermijnde het vertrouwen in de democratische regering.`;
+      if (l.includes('hitler') || l.includes('nsdap') || l.includes('macht') || l.includes('partij'))
+        return `<strong>Adolf Hitler</strong> was de leider van de NSDAP. In <strong>1933</strong> greep hij de macht in Duitsland. Hij schafte de democratie af en maakte van Duitsland een <strong>dictatuur</strong> — één leider had alle macht.`;
+      if (l.includes('dictatuur') || l.includes('dictator') || l.includes('democratie'))
+        return `Een <strong>dictatuur</strong> is een staatsvorm waarbij één leider alle beslissingen neemt. Andere partijen en vrijheden worden verboden. Toen Hitler aan de macht kwam, verdween de democratie in Duitsland.`;
+      if (l.includes('lebensraum') || l.includes('leefruimte') || l.includes('rijnland') || l.includes('oostenrijk') || l.includes('tsjecho'))
+        return `Hitler vond dat Duitsland meer <strong>Lebensraum</strong> (leefruimte) nodig had. Hij bezette stap voor stap:<br><br>• <strong>Het Rijnland</strong> (1936)<br>• <strong>Oostenrijk</strong> (1938)<br>• <strong>Deel van Tsjechoslowakije</strong> (1938/1939)<br><br>Dit was allemaal in strijd met het Verdrag van Versailles.`;
+      if (l.includes('polen') || l.includes('inval') || l.includes('september 1939'))
+        return `Op <strong>1 september 1939</strong> viel Duitsland Polen binnen. Op <strong>3 september 1939</strong> verklaarden Groot-Brittannië en Frankrijk Duitsland de oorlog. Dit was het officiële begin van de Tweede Wereldoorlog.`;
+      if (l.includes('nederland') || l.includes('mei 1940'))
+        return `Op <strong>10 mei 1940</strong> viel Duitsland Nederland binnen. Na vijf dagen strijd capituleerde het Nederlandse leger.`;
+      if (l.includes('werkloosheid') || l.includes('inflatie') || l.includes('armoede') || l.includes('economie'))
+        return `Na de Eerste Wereldoorlog leidde het Verdrag van Versailles tot:<br><br>• Hoge <strong>werkloosheid</strong><br>• Extreme <strong>inflatie</strong><br>• Wijdverspreide <strong>armoede</strong><br><br>Veel Duitsers verloren het vertrouwen in de democratische regering — wat Hitler de kans gaf om aan de macht te komen.`;
+      if (l.includes('wo1') || l.includes('eerste wereldoorlog') || l.includes('1914') || l.includes('1918'))
+        return `De <strong>Eerste Wereldoorlog</strong> duurde van 1914 tot 1918. Daarna werd Duitsland in het Verdrag van Versailles (1919) verantwoordelijk gehouden. De zware straffen zaaide onvrede, die Hitler later gebruikte om aan de macht te komen.`;
+      return `Op deze pagina gaat het over <strong>het ontstaan van de Tweede Wereldoorlog</strong>. De belangrijkste oorzaken waren:<br><br>• Het <strong>Verdrag van Versailles</strong> (1919)<br>• De economische crisis in Duitsland<br>• De machtsovername door <strong>Hitler</strong> in 1933<br>• De <strong>inval in Polen</strong> op 1 september 1939<br><br>Waar wil je meer over weten?`;
+    }
+
+    const offTopicReacties = [
+      `Dat valt buiten de stof van vandaag. Stel gerust een vraag over het Verdrag van Versailles, Hitler, de dictatuur of de inval in Polen!`,
+      `Jay I helpt je het liefst met vragen over <strong>het ontstaan van WO2</strong>. Wat vond je lastig aan de tekst?`,
+      `Goede poging, maar ik ga alleen over deze pagina. Heb je een vraag over de stof?`
+    ];
+    let offTopicTeller = 0;
+    const vervolgAntwoorden = [
+      `Tuurlijk! Waar wil je meer over weten? Ik kan het <strong>Verdrag van Versailles</strong>, <strong>Hitler</strong>, de <strong>dictatuur</strong> of de <strong>inval in Polen</strong> verder uitleggen.`,
+      `Geen probleem! Stel maar gerust een vraag over de stof.`,
+      `Zeker! Gaat het over de oorzaken van WO2, Hitler, of iets anders van deze pagina?`
+    ];
+    let vervolgTeller = 0;
+    function isVervolg(l) {
+      if (/^(ja|nee|ok|oke|oké|goed|super|top|dank|bedankt|duidelijk|helder|snap|help me|vertel|meer|verder|volgende|precies|klopt|juist|cool|nice|perfect|niet helemaal|beetje|kun je|kan je|maar|dus|hoe zit|wat dan|hoe dan|begrijp)/.test(l.trim())) return true;
+      return l.trim().split(/\s+/).length <= 3;
+    }
+
+    function snel(type) {
+      const msgs = { samenvatting: 'Kun je de pagina voor mij samenvatten?', tijdlijn: 'Kun je een tijdlijn maken?', oefenvragen: 'Kun je oefenvragen maken?' };
+      inputEl.value = msgs[type];
+      sendMessage();
+    }
+
+    function telVraag() {
+      vragenTeller++;
+      const resterend = MAX_VRAGEN - vragenTeller;
+      const counter = document.getElementById('vragenCounter');
+      if (counter) counter.textContent = `${resterend}/20 vragen over`;
+      if ([5, 4, 3, 2, 1].includes(resterend)) {
+        setTimeout(() => {
+          addMsg(`<strong>Let op:</strong> je hebt nog maar ${resterend} ${resterend === 1 ? 'vraag' : 'vragen'} om de opdracht af te ronden.`, false, false, false);
+        }, 2500);
+      }
+      if (vragenTeller >= MAX_VRAGEN) {
+        setTimeout(() => {
+          inputEl.disabled = true;
+          inputEl.placeholder = 'Je hebt alle vragen gebruikt.';
+          document.querySelector('.jay-send').disabled = true;
+          document.querySelectorAll('.jay-quick-chip').forEach(c => {
+            c.style.pointerEvents = 'none'; c.style.opacity = '0.35'; c.style.filter = 'blur(0.6px)';
+          });
+          addMsg('Je hebt alle vragen gebruikt. Rond de missie af via de knop hieronder.', false, false, false);
+          document.getElementById('btnAfronden').disabled = false;
+        }, 2500);
+      }
+    }
+    function sendMessage() {
+      if (vragenTeller >= MAX_VRAGEN) return;
+      const tekst = inputEl.value.trim();
+      if (!tekst) return;
+      addMsg(tekst, true);
+      inputEl.value = ''; inputEl.style.height = 'auto';
+      if (wachtOpSamenvattingKeuze) {
+        const keuze = tekst.toLowerCase();
+        if (/bullet|punt|lijst|punten|verhaal/.test(keuze)) {
+          wachtOpSamenvattingKeuze = false;
+          autoCheck(2);
+          typeResponse(/bullet|punt|lijst|punten/.test(keuze) ? samenvattingBullets : samenvattingVerhaal, 1200);
+          return;
+        }
+        wachtOpSamenvattingKeuze = false;
+        document.querySelectorAll('.sam-btn').forEach(b => b.disabled = true);
+      }
+      if (quizMode) { typeResponse(`Je bent nog in de quiz. Klik op een antwoordknop om verder te gaan.`, 700); return; }
+      const l = tekst.toLowerCase();
+      if (/samenvatten|samenvatting|vat samen|overzicht|hoofdpunten/.test(l)) { geefSamenvatting(); return; }
+      if (/oefenvragen|oefenvraag|maak vragen|geef vragen|toets mij|test mij|overhoor/.test(l)) { startOefenronde(); return; }
+      if (/tijdlijn|maak een tijdlijn|geef een tijdlijn/.test(l)) { geefTijdlijn(); return; }
+      autoCheck(1);
+      askJayI(tekst);
+    }
+    function mdNaarHtml(t) {
+      return t
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n/g, '<br>')
+        .trim();
+    }
+    async function askJayI(tekst) {
+      telVraag();
+      chatHistory.push({ role: 'user', content: tekst });
+      showTyping();
+      try {
+        const res = await fetch('https://cqcncausbclwvoomqdpy.supabase.co/functions/v1/Jay-I-Chat', {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ messages: chatHistory }),
+        });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error);
+        chatHistory.push({ role: 'assistant', content: data.text });
+        hideTyping();
+        addMsg(mdNaarHtml(data.text), false, false, true);
+      } catch (e) {
+        hideTyping();
+        addMsg('Er ging iets mis. Probeer het nog eens.', false, false, false);
+      }
+    }
+    function handleKey(e) { if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+    function autoResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
+
+    /* ── TUTORIAL ── */
+    (function () {
+      var TUT_KEY = 'kvm_missie3_tut_v1';
+      var step = 0, activeSteps = [];
+      var overlay=document.getElementById('tut-overlay'), spotlight=document.getElementById('tut-spotlight');
+      var card=document.getElementById('tut-card'), closeBtn=document.getElementById('tut-close');
+      var nextBtn=document.getElementById('tut-next'), prevBtn=document.getElementById('tut-prev');
+      var lbl=document.getElementById('tut-lbl'), bodyEl=document.getElementById('tut-body');
+      var dotsEl=document.getElementById('tut-dots');
+
+      var LBL = 'font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px';
+      var STEPS = [
+        { id:'kaart-situatie', html:'<div style="'+LBL+'">Lees de situatie</div>Er staat een situatie beschreven. Lees deze kort door om te begrijpen wat de opdracht is.' },
+        { id:'checklistCard',  html:'<div style="'+LBL+'">Vink de stappen af</div>De zes stappen worden automatisch afgevinkt zodra je ze voltooit. De checks worden stap voor stap beschikbaar.' },
+        { id:'jayPanel',       html:'<div style="'+LBL+'">Chat met Jay I</div>Gebruik Jay I als jouw leercoach. Stel vragen, laat de theorie samenvatten, maak een tijdlijn en oefen met oefenvragen. Zo werk je stap voor stap de hele checklist af.' },
+        { id:'btnAfronden',    html:'<div style="'+LBL+'">Rond de missie af</div>Zijn alle stappen afgevinkt? Dan kun je hier de missie afronden.' },
+        { id:'tut-help-btn',   html:'<div style="'+LBL+'">Nog niet helemaal begrepen?</div>Klik op het vraagteken om de uitleg van deze opdracht opnieuw te openen.' }
+      ];
+
+      function buildDots(n) { dotsEl.innerHTML=''; for(var i=0;i<n;i++){var d=document.createElement('div');d.className='t-dot';dotsEl.appendChild(d);} }
+
+      function positionStep(s) {
+        var st=activeSteps[s], target=document.getElementById(st.id);
+        if(!target){tutClose();return;}
+        lbl.textContent='Stap '+(s+1)+' van '+activeSteps.length;
+        bodyEl.innerHTML=st.html;
+        dotsEl.querySelectorAll('.t-dot').forEach(function(d,i){d.classList.toggle('active',i===s);});
+        prevBtn.disabled=(s===0);
+        nextBtn.textContent=(s===activeSteps.length-1)?'Klaar!':'Volgende →';
+        var r=target.getBoundingClientRect(),pad=10,cW=card.offsetWidth||360,cH=card.offsetHeight||220,gap=16;
+        spotlight.style.top=(r.top-pad)+'px'; spotlight.style.left=(r.left-pad)+'px';
+        spotlight.style.width=(r.width+pad*2)+'px'; spotlight.style.height=(r.height+pad*2)+'px';
+        spotlight.style.borderRadius=getComputedStyle(target).borderRadius||'9999px';
+        var cardTop=r.bottom+pad+gap, arrowDown=false;
+        if(cardTop+cH>window.innerHeight-16){cardTop=r.top-cH;arrowDown=true;}
+        cardTop=Math.max(16,cardTop);
+        var cardLeft=(r.left+r.width/2)-cW/2;
+        cardLeft=Math.max(16,Math.min(cardLeft,window.innerWidth-cW-16));
+        card.style.top=cardTop+'px'; card.style.left=cardLeft+'px';
+        card.classList.toggle('arrow-down',arrowDown);
+        var ax=(r.left+r.width/2)-cardLeft;
+        ax=Math.max(24,Math.min(ax,cW-24));
+        card.style.setProperty('--tut-ax',ax+'px');
+      }
+
+      function show(s) {
+        step=s;
+        var target=document.getElementById(activeSteps[s].id);
+        if(!target)return;
+        var r=target.getBoundingClientRect();
+        if(r.top>=0&&r.bottom<=window.innerHeight){requestAnimationFrame(function(){positionStep(s);});}
+        else{target.scrollIntoView({block:'center',behavior:'smooth'});setTimeout(function(){positionStep(s);},620);}
+      }
+
+      function tutOpenWith(steps) {
+        if(!steps.length)return;
+        activeSteps=steps; buildDots(steps.length);
+        spotlight.style.transition='none'; card.style.transition='none'; step=0;
+        window.scrollTo({top:0,behavior:'instant'});
+        requestAnimationFrame(function(){positionStep(0);spotlight.style.transition='';card.style.transition='';overlay.classList.add('active');});
+      }
+      function tutClose(){overlay.classList.remove('active');try{localStorage.setItem(TUT_KEY,'1');}catch(e){}}
+
+      window.tutStart=function(){try{localStorage.removeItem(TUT_KEY);}catch(e){}if(overlay.classList.contains('active'))tutClose();tutOpenWith(STEPS.filter(function(s){return!!document.getElementById(s.id);}));};
+      window.tutMaybeStart=function(){try{if(localStorage.getItem(TUT_KEY))return;}catch(e){}if(overlay.classList.contains('active'))return;tutOpenWith(STEPS.filter(function(s){return!!document.getElementById(s.id);}));};
+
+      closeBtn.addEventListener('click',tutClose);
+      nextBtn.addEventListener('click',function(){if(step<activeSteps.length-1)show(step+1);else tutClose();});
+      prevBtn.addEventListener('click',function(){if(step>0)show(step-1);});
+      function reposition(){if(overlay.classList.contains('active'))positionStep(step);}
+      window.addEventListener('resize',reposition);
+      window.addEventListener('scroll',reposition,{passive:true});
+      window.addEventListener('load',function(){setTimeout(tutMaybeStart,600);});
+    })();
+
+    /* ── AFRONDEN ── */
+    async function rondAf() {
+      const btn = document.getElementById('btnAfronden');
+      btn.disabled = true; btn.classList.add('laden');
+      try {
+        const { data: huidig } = await db.from('missie_groepjes').select('antwoorden').eq('id',groepId).single();
+        const antwoorden = { ...(huidig?.antwoorden||{}), missie3: { quiz_score: savedQuizScore, checklist_compleet: true } };
+        await db.from('missie_groepjes').update({ missie_3_klaar: true, missie_huidig: 4, antwoorden, bijgewerkt_op: new Date().toISOString() }).eq('id',groepId);
+        btn.classList.remove('laden');
+        document.getElementById('modalOverlay').classList.add('zichtbaar');
+        setTimeout(() => { window.location.href = 'overzicht.html'; }, 3500);
+      } catch(e) { btn.disabled=false; btn.classList.remove('laden'); }
+    }
+  </script>
+</body>
+</html>

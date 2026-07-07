@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missie Middelbaar — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:        #10a37f;
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --r-card:       28px;
+      --r-pill:       9999px;
+    }
+
+    html, body { min-height: 100vh; }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 110% -5%,  rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -5%   10%,  rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%   60%,  rgba(255,255,255,0.55) 0%, transparent 55%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      width: 100%;
+      height: 64px;
+      background: rgba(242,246,253,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .topbar img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      width: 100%;
+      max-width: 480px;
+      padding: 48px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,.20);
+      border-radius: var(--r-pill);
+      padding: 5px 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary-dark);
+      letter-spacing: .04em;
+      margin-bottom: 16px;
+    }
+    .hero-title {
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--dark);
+      line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── CARD ── */
+    .card {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 32px 28px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      animation: fadeUp .4s cubic-bezier(.22,1,.36,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+
+    /* ── NAAM INPUTS ── */
+    .namen-lijst {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .naam-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: fadeUp .3s cubic-bezier(.22,1,.36,1) both;
+    }
+    .naam-nr {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .naam-input {
+      flex: 1;
+      height: 46px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 0 16px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--dark);
+      background: #fafbfc;
+      outline: none;
+      transition: border-color .18s, box-shadow .18s;
+    }
+    .naam-input::placeholder { font-weight: 400; color: #b0b8c1; }
+    .naam-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(114,168,249,.18);
+      background: #fff;
+    }
+    .naam-input.error {
+      border-color: #e53e3e;
+      box-shadow: 0 0 0 3px rgba(229,62,62,.12);
+    }
+    .naam-verwijder {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: #fee2e2;
+      color: #e53e3e;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background .15s;
+    }
+    .naam-verwijder:hover { background: #fecaca; }
+
+    /* ── TOEVOEGEN KNOP ── */
+    .btn-toevoegen {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1.5px dashed #c5cdd8;
+      border-radius: 12px;
+      padding: 11px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--muted);
+      cursor: pointer;
+      width: 100%;
+      transition: border-color .18s, color .18s, background .18s;
+    }
+    .btn-toevoegen:hover {
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      background: var(--primary-soft);
+    }
+
+    /* ── FOUTMELDING ── */
+    .fout {
+      font-size: 14px;
+      font-weight: 700;
+      color: #e53e3e;
+      display: none;
+    }
+    .fout.zichtbaar { display: block; }
+
+    /* ── START KNOP ── */
+    .btn-start {
+      width: 100%;
+      height: 52px;
+      border: none;
+      border-radius: var(--r-pill);
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: #fff;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(78,142,243,.30);
+      transition: opacity .18s, transform .15s, box-shadow .18s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-start:hover:not(:disabled) {
+      opacity: .92;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 28px rgba(78,142,243,.38);
+    }
+    .btn-start:active:not(:disabled) { transform: translateY(0); }
+    .btn-start:disabled { opacity: .55; cursor: default; box-shadow: none; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255,255,255,.35);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      display: none;
+    }
+    .btn-start.laden .spinner { display: block; }
+    .btn-start.laden .btn-tekst { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar">
+  </header>
+
+  <main class="main">
+
+    <div class="hero">
+      <div class="hero-badge">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Les 3 van 8
+      </div>
+      <h1 class="hero-title">Missie Middelbaar</h1>
+      <p class="hero-sub">Vul jullie voornamen in en ontdek samen welke online hulpmiddelen het beste bij jou passen.</p>
+    </div>
+
+    <div class="card">
+      <p class="card-label">Wie zitten er in jullie groepje?</p>
+
+      <div class="namen-lijst" id="namenLijst"></div>
+
+      <button class="btn-toevoegen" id="btnToevoegen" onclick="voegNaamToe()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Voeg groepsgenoot toe
+      </button>
+
+      <p class="fout" id="foutmelding">Vul minimaal één voornaam in.</p>
+
+      <button class="btn-start" id="btnStart" onclick="startMissie()">
+        <div class="spinner"></div>
+        <span class="btn-tekst">Start Missie Middelbaar</span>
+      </button>
+    </div>
+
+  </main>
+
+  <script>
+    const SUPABASE_URL     = 'https://cqcncausbclwvoomqdpy.supabase.co/';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let aantalNamen = 0;
+
+    function voegNaamToe(placeholder) {
+      if (aantalNamen >= 6) return;
+      aantalNamen++;
+      const nr = aantalNamen;
+      const lijst = document.getElementById('namenLijst');
+      const row = document.createElement('div');
+      row.className = 'naam-row';
+      row.id = 'naamRow' + nr;
+      row.innerHTML = `
+        <div class="naam-nr">${nr}</div>
+        <input class="naam-input" id="naam${nr}" type="text"
+          placeholder="${placeholder || 'Voornaam ' + nr}"
+          autocomplete="off" autocorrect="off" spellcheck="false"
+          onkeydown="if(event.key==='Enter')startMissie()">
+        ${nr > 1 ? `<button class="naam-verwijder" onclick="verwijderNaam(${nr})" aria-label="Verwijder">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>` : '<div style="width:32px;flex-shrink:0"></div>'}
+      `;
+      lijst.appendChild(row);
+      if (aantalNamen >= 6) document.getElementById('btnToevoegen').style.display = 'none';
+      document.getElementById('naam' + nr).focus();
+    }
+
+    function verwijderNaam(nr) {
+      const row = document.getElementById('naamRow' + nr);
+      if (row) row.remove();
+      hernummerNamen();
+    }
+
+    function hernummerNamen() {
+      const rows = document.querySelectorAll('.naam-row');
+      aantalNamen = rows.length;
+      rows.forEach((row, i) => {
+        const n = i + 1;
+        row.id = 'naamRow' + n;
+        row.querySelector('.naam-nr').textContent = n;
+        const input = row.querySelector('.naam-input');
+        input.id = 'naam' + n;
+        if (input.placeholder.startsWith('Voornaam')) input.placeholder = 'Voornaam ' + n;
+        const verwijderBtn = row.querySelector('.naam-verwijder');
+        if (verwijderBtn) verwijderBtn.setAttribute('onclick', `verwijderNaam(${n})`);
+      });
+      document.getElementById('btnToevoegen').style.display = aantalNamen >= 6 ? 'none' : 'flex';
+    }
+
+    async function startMissie() {
+      const fout = document.getElementById('foutmelding');
+      fout.classList.remove('zichtbaar');
+
+      const inputs = document.querySelectorAll('.naam-input');
+      const namen = Array.from(inputs)
+        .map(i => i.value.trim())
+        .filter(n => n.length > 0);
+
+      if (namen.length === 0) {
+        fout.classList.add('zichtbaar');
+        document.querySelector('.naam-input').classList.add('error');
+        return;
+      }
+
+      const btn = document.getElementById('btnStart');
+      btn.disabled = true;
+      btn.classList.add('laden');
+
+      try {
+        const { data, error } = await db
+          .from('missie_groepjes')
+          .insert({ namen, missie_huidig: 1 })
+          .select('id')
+          .single();
+
+        if (error) throw error;
+
+        sessionStorage.setItem('missie_groep_id', data.id);
+        sessionStorage.setItem('missie_namen', JSON.stringify(namen));
+        window.location.href = 'overzicht.html';
+      } catch (e) {
+        btn.disabled = false;
+        btn.classList.remove('laden');
+        fout.textContent = 'Er ging iets mis. Probeer het nog eens.';
+        fout.classList.add('zichtbaar');
+      }
+    }
+
+    // Start met 2 velden
+    voegNaamToe('Voornaam 1');
+    voegNaamToe('Voornaam 2');
+    document.getElementById('naam1').focus();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missie 1 – Ik begrijp de uitleg niet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:        #10a37f;
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --r-card:       28px;
+      --r-pill:       9999px;
+    }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 110% -5%,  rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -5%   10%,  rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%   60%,  rgba(255,255,255,0.55) 0%, transparent 55%);
+      min-height: 100vh;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    @keyframes pop {
+      0%   { transform: scale(.8); opacity: 0; }
+      70%  { transform: scale(1.06); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      position: sticky; top: 0; z-index: 200;
+      height: 60px;
+      background: rgba(242,246,253,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .topbar img { height: 30px; object-fit: contain; }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 1184px;
+      margin: 0 auto;
+      padding: 36px 28px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1e4a8a 0%, #4e8ef3 60%, #72a8f9 100%);
+      border-radius: var(--r-card);
+      padding: 36px 40px 28px;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+      box-shadow: 0 24px 48px -8px rgba(78,142,243,.40);
+      display: flex;
+      flex-direction: column;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(255,255,255,.12) 0%, transparent 60%);
+    }
+    .hero-dots {
+      position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+      background-image: radial-gradient(circle, rgba(255,255,255,.15) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+    .hero-body {
+      position: relative; z-index: 1;
+      display: flex;
+      align-items: flex-end;
+      gap: 0;
+      flex: 1;
+    }
+    .hero-content {
+      flex: 1;
+      padding-bottom: 32px;
+    }
+    .hero-jay {
+      flex-shrink: 0;
+      height: 220px;
+      width: auto;
+      object-fit: contain;
+      object-position: bottom;
+      align-self: flex-end;
+      margin-right: 20px;
+      padding: 10px;
+      border-radius: 10px;
+      filter: drop-shadow(-8px 0 24px rgba(30,74,138,.35));
+    }
+
+    .progress-row {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 18px;
+    }
+    .progress-label {
+      font-size: 13px; font-weight: 700;
+      color: rgba(255,255,255,.75);
+      white-space: nowrap;
+    }
+    .progress-bar {
+      flex: 1; height: 6px;
+      background: rgba(255,255,255,.22);
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 33.3%;
+      background: #fff;
+      border-radius: 9999px;
+      transition: width .6s ease;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.28);
+      border-radius: var(--r-pill);
+      padding: 5px 14px;
+      font-size: 13px; font-weight: 700; color: #fff;
+      margin-bottom: 14px;
+    }
+    .hero-title {
+      font-size: 28px; font-weight: 700; color: #fff;
+      line-height: 1.2; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .hero-title img { height: 1.2em; width: auto; object-fit: contain; flex-shrink: 0; }
+    .hero-sub {
+      font-size: 15px; color: rgba(255,255,255,.82);
+      line-height: 1.6; max-width: 520px;
+    }
+
+    /* ── KAART ── */
+    .kaart {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 28px 30px;
+      animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .kaart:nth-child(2) { animation-delay: .07s; }
+    .kaart:nth-child(3) { animation-delay: .14s; }
+    .kaart:nth-child(4) { animation-delay: .21s; }
+
+    .kaart-eyebrow {
+      font-size: 16px; font-weight: 700;
+      color: #9aa5b4; letter-spacing: .08em;
+      text-transform: uppercase; margin-bottom: 12px;
+    }
+    .kaart-titel {
+      font-size: 20px; font-weight: 700; color: var(--dark);
+      margin-bottom: 14px; line-height: 1.3;
+    }
+    .kaart-tekst {
+      font-size: 15px; line-height: 1.7; color: #3a4553;
+    }
+    .kaart-vraag {
+      font-size: 16px; font-weight: 700; color: var(--dark);
+      margin-top: 18px;
+    }
+    .situatie-extra {
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      font-size: 15px; line-height: 1.7; color: #3a4553;
+      opacity: 0;
+      transition: opacity .6s ease;
+    }
+    .situatie-extra.zichtbaar { opacity: 1; }
+
+    /* ── VIDEO SECTIE ── */
+    .video-sectie { display: flex; flex-direction: column; gap: 20px; justify-content: space-between; }
+
+    .btn-video {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      width: 100%;
+      height: 58px;
+      border: none; border-radius: var(--r-pill);
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: #fff;
+      font-family: inherit; font-size: 16px; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(78,142,243,.32);
+      transition: opacity .18s, transform .15s, box-shadow .18s;
+      text-decoration: none;
+    }
+    .btn-video:hover {
+      opacity: .92; transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(78,142,243,.40);
+    }
+    .btn-video img { height: 22px; width: auto; object-fit: contain; }
+
+    /* Timer blok */
+    .timer-blok {
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,.18);
+      border-radius: 18px;
+      padding: 18px 22px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .timer-icoon img { height: 28px; width: auto; object-fit: contain; }
+    .timer-tekst { flex: 1; }
+    .timer-label {
+      font-size: 14px; font-weight: 700; color: var(--primary-dark);
+      margin-bottom: 3px;
+    }
+    .timer-sub { font-size: 13px; color: var(--muted); line-height: 1.45; }
+    .timer-countdown {
+      font-size: 22px; font-weight: 700; color: var(--primary-dark);
+      white-space: nowrap; font-variant-numeric: tabular-nums;
+    }
+    .timer-blok.klaar {
+      background: rgba(16,163,127,.08);
+      border-color: rgba(16,163,127,.22);
+    }
+    .timer-blok.klaar .timer-label { color: var(--green); }
+    .timer-blok.klaar .timer-countdown { color: var(--green); }
+
+    /* ── VRAGEN SECTIE ── */
+    .vragen-wrapper {
+      position: relative;
+      display: flex; flex-direction: column; gap: 20px;
+      transition: filter .5s ease, opacity .5s ease;
+    }
+    .vragen-wrapper.vergrendeld {
+      pointer-events: none;
+      user-select: none;
+    }
+    .vragen-wrapper.vergrendeld .vraag-kaart > *:not(.kaart-slot),
+    .vragen-wrapper.vergrendeld .sectie-kop {
+      filter: blur(3px);
+      opacity: .45;
+    }
+
+    .vergrendeld-overlay {
+      position: absolute; inset: 0; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      padding-top: 32px;
+      gap: 10px; pointer-events: none;
+      opacity: 0; transition: opacity .3s;
+    }
+    .vergrendeld-overlay.zichtbaar { opacity: 1; pointer-events: auto; }
+    .vergrendeld-overlay-label {
+      position: sticky;
+      top: calc(50vh - 28px);
+      background: rgba(255,255,255,.95);
+      border: 1.5px solid rgba(78,142,243,.30);
+      border-radius: var(--r-pill);
+      padding: 10px 20px;
+      font-size: 14px; font-weight: 700; color: var(--primary-dark);
+      box-shadow: 0 4px 16px rgba(78,142,243,.15);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* Vraag kaart */
+    .vraag-kaart { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 26px 28px; }
+    .vraag-nr { font-size: 13px; font-weight: 700; color: var(--primary-dark); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+    .vraag-tekst { font-size: 17px; font-weight: 700; color: var(--dark); line-height: 1.35; margin-bottom: 20px; }
+
+    /* Sterren */
+    .sterren { display: flex; gap: 10px; }
+    .ster {
+      width: 44px; height: 44px;
+      cursor: pointer; border: none; background: none; padding: 0;
+      transition: transform .15s;
+    }
+    .ster:hover { transform: scale(1.15); }
+    .ster img { width: 44px; height: 44px; object-fit: contain; filter: grayscale(1) opacity(.3); transition: filter .15s; }
+    .ster.actief img, .ster.hover img { filter: none; }
+
+    /* Multi-select */
+    .opties { display: flex; flex-direction: column; gap: 10px; }
+    .optie-btn {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      background: #fafbfc;
+      font-family: inherit; font-size: 15px; font-weight: 700; color: var(--dark);
+      cursor: pointer; text-align: left;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .optie-btn:hover:not(.gekozen):not(.gedimd) {
+      border-color: var(--primary); background: var(--primary-soft); color: var(--primary-dark);
+    }
+    .optie-btn.gekozen {
+      border-color: var(--primary-dark); background: var(--primary-soft); color: var(--primary-dark);
+    }
+    .optie-btn.gedimd { opacity: .38; cursor: default; }
+    .optie-check {
+      width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0;
+      border: 2px solid #c5cdd8;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, border-color .15s;
+    }
+    .optie-btn.gekozen .optie-check {
+      background: var(--primary-dark); border-color: var(--primary-dark);
+    }
+    /* Radio-stijl voor enkelvoudige keuze */
+    .optie-btn.radio .optie-check { border-radius: 50%; }
+    .optie-btn.radio.gekozen .optie-check { background: var(--primary-dark); border-color: var(--primary-dark); }
+
+    /* Tekstveld */
+    .open-tekst {
+      width: 100%; min-height: 110px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      font-family: inherit; font-size: 15px; color: var(--dark);
+      background: #fafbfc; resize: vertical; outline: none;
+      transition: border-color .18s, box-shadow .18s;
+      line-height: 1.6;
+    }
+    .open-tekst::placeholder { color: #b0b8c1; font-weight: 400; }
+    .open-tekst:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(114,168,249,.18);
+      background: #fff;
+    }
+
+    /* Vakken grid */
+    .opties-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    /* ── AFRONDEN KNOP ── */
+    .btn-afronden {
+      width: 100%; height: 54px;
+      border: none; border-radius: var(--r-pill);
+      background: linear-gradient(135deg, #059669 0%, var(--green) 100%);
+      color: #fff;
+      font-family: inherit; font-size: 16px; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(16,163,127,.30);
+      transition: opacity .18s, transform .15s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-afronden:hover:not(:disabled) { opacity: .92; transform: translateY(-2px); }
+    .btn-afronden:disabled {
+      background: linear-gradient(135deg, #9aa5b4 0%, #b0b8c1 100%);
+      opacity: 1;
+      cursor: default;
+      box-shadow: none;
+    }
+
+    .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: none; }
+    .btn-afronden.laden .spinner { display: block; }
+    .btn-afronden.laden .btn-tekst { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SUCCESKAART ── */
+    .succes-kaart {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid rgba(16,163,127,.25);
+      border-radius: var(--r-card);
+      box-shadow: 0 24px 48px -8px rgba(16,163,127,.18);
+      padding: 48px 36px;
+      text-align: center;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .succes-kaart.zichtbaar {
+      display: flex;
+      animation: fadeUp .5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .succes-vink {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #059669 0%, var(--green) 100%);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 28px rgba(16,163,127,.30);
+      animation: pop .5s cubic-bezier(.22,1,.36,1) both;
+    }
+    .succes-titel {
+      font-size: 28px; font-weight: 700; color: var(--dark);
+    }
+    .succes-tekst {
+      font-size: 16px; line-height: 1.65; color: var(--muted);
+      max-width: 420px;
+    }
+    .btn-missie2 {
+      margin-top: 8px;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 0 32px; height: 52px;
+      border: none; border-radius: var(--r-pill);
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: #fff; font-family: inherit; font-size: 16px; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(78,142,243,.30);
+      text-decoration: none;
+      transition: opacity .18s, transform .15s;
+    }
+    .btn-missie2:hover { opacity: .92; transform: translateY(-2px); }
+
+    /* ── AFBEELDING LIGHTBOX ── */
+    .kaart-img {
+      width: 100%; border-radius: 14px;
+      cursor: zoom-in;
+      transition: opacity .15s;
+      margin-top: 14px;
+      display: block;
+    }
+    .kaart-img:hover { opacity: .88; }
+
+    .lightbox {
+      display: none;
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+      cursor: zoom-out;
+    }
+    .lightbox.zichtbaar { display: flex; animation: fadeIn .2s ease both; }
+    .lightbox img {
+      max-width: 90vw; max-height: 90vh;
+      border-radius: 16px;
+      box-shadow: 0 32px 64px rgba(0,0,0,.4);
+      cursor: default;
+    }
+    .lightbox-sluit {
+      position: absolute; top: 20px; right: 20px;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      border: 1.5px solid rgba(255,255,255,.25);
+      color: #fff; font-size: 18px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .lightbox-sluit:hover { background: rgba(255,255,255,.28); }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(15,23,42,.50);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    .modal-overlay.zichtbaar { opacity: 1; pointer-events: auto; }
+    .modal-kaart {
+      background: #fff;
+      border-radius: var(--r-card);
+      padding: 52px 44px 44px;
+      text-align: center;
+      max-width: 380px; width: 90%;
+      box-shadow: 0 32px 64px rgba(0,0,0,.22);
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+      animation: pop .45s cubic-bezier(.22,1,.36,1) both;
+    }
+    .modal-vink {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #059669 0%, var(--green) 100%);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 12px 28px rgba(16,163,127,.35);
+      animation: pop .5s .1s cubic-bezier(.22,1,.36,1) both;
+    }
+    .modal-titel { font-size: 28px; font-weight: 700; color: var(--dark); }
+    .modal-sub { font-size: 15px; color: var(--muted); line-height: 1.6; }
+    .modal-voortgang {
+      width: 100%; height: 4px;
+      background: var(--border);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+    .modal-voortgang-balk {
+      height: 100%;
+      background: var(--green);
+      border-radius: 9999px;
+      width: 100%;
+      transform-origin: left;
+      animation: aftel 3.5s linear forwards;
+    }
+    @keyframes aftel {
+      from { transform: scaleX(1); }
+      to   { transform: scaleX(0); }
+    }
+
+    /* ── STAPPENPLAN (zelfde stijl als lesverloop) ── */
+    .tl-row { display: flex; gap: 16px; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+    .tl-row:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .tl-time {
+      font-size: 11px; font-weight: 700; color: var(--primary-dark);
+      background: var(--primary-soft);
+      border-radius: 8px; padding: 4px 6px;
+      white-space: nowrap; flex-shrink: 0;
+      height: fit-content; margin-top: 2px;
+      width: 70px; text-align: center;
+    }
+    .tl-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: var(--dark); }
+    .tl-desc { font-size: 14px; color: var(--muted); line-height: 1.5; }
+
+    /* ── SECTIE HEADERS ── */
+    .sectie-kop {
+      display: flex; align-items: center; gap: 14px;
+      margin: 8px 0 -8px;
+    }
+    .sectie-kop-lijn {
+      flex: 1; height: 1px; background: var(--border);
+    }
+    .sectie-kop-label {
+      font-size: 16px; font-weight: 700;
+      color: #9aa5b4; letter-spacing: .07em;
+      text-transform: uppercase; white-space: nowrap;
+    }
+
+    /* ── MEERKEUZE VRAGEN ── */
+    .vraag-kaart { position: relative; }
+    .kaart-slot {
+      display: none;
+      position: absolute; inset: 0;
+      align-items: center; justify-content: center;
+      pointer-events: none; z-index: 4;
+      border-radius: var(--r-card);
+    }
+    .vragen-wrapper.vergrendeld .kaart-slot { display: flex; }
+    .vraag-opdracht {
+      font-size: 13px; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .07em;
+      margin-bottom: 6px;
+    }
+    .mc-opties { display: flex; flex-direction: column; gap: 10px; }
+    .mc-optie {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      background: #fafbfc;
+      font-family: inherit; font-size: 15px; font-weight: 700; color: var(--dark);
+      cursor: pointer; text-align: left; width: 100%;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .mc-optie:hover:not(:disabled) {
+      border-color: var(--primary); background: var(--primary-soft); color: var(--primary-dark);
+    }
+    .mc-optie:disabled { cursor: default; }
+    .mc-optie.correct {
+      border-color: var(--green); background: rgba(16,163,127,.09); color: var(--green);
+    }
+    .mc-optie.fout {
+      border-color: #e53e3e; background: rgba(229,62,62,.07); color: #c53030;
+      animation: schud .35s ease;
+    }
+    .mc-letter {
+      width: 28px; height: 28px; border-radius: 8px; flex-shrink: 0;
+      background: var(--primary-soft); color: var(--primary-dark);
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .mc-optie.correct .mc-letter { background: rgba(16,163,127,.18); color: var(--green); }
+    .mc-optie.fout    .mc-letter { background: rgba(229,62,62,.14); color: #c53030; }
+
+    @keyframes schud {
+      0%,100% { transform: translateX(0); }
+      25%     { transform: translateX(-7px); }
+      75%     { transform: translateX(7px); }
+    }
+
+    /* ── HELP KNOP & TOOLTIP ── */
+    .vraag-nr-wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .mc-help-wrap { position: relative; flex-shrink: 0; }
+    .mc-help-btn {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: #fafbfc;
+      color: var(--muted);
+      font-family: inherit; font-size: 13px; font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .mc-help-btn:hover { border-color: var(--primary); color: var(--primary-dark); background: var(--primary-soft); }
+    .mc-tooltip {
+      display: none;
+      position: absolute; top: calc(100% + 8px); right: 0;
+      width: 240px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow-card);
+      font-size: 13px; line-height: 1.6; color: var(--dark);
+      z-index: 200;
+    }
+    .mc-tooltip.zichtbaar { display: block; animation: fadeUp .2s ease both; }
+    .mc-tooltip-titel { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; font-size: 13px; }
+
+    /* ── VRAGEN GRID (2 kolommen) ── */
+    .vragen-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    /* ── NAAST ELKAAR ── */
+    .rij-2 {
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+    }
+    .rij-2 > .kaart { flex: 1 1 0; min-width: 0; }
+    .video-sectie { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ── TUTORIAL RONDLEIDING ── */
+    #tut-overlay {
+      position: fixed; inset: 0; z-index: 1100;
+      visibility: hidden; opacity: 0; pointer-events: none;
+      transition: opacity 0.28s ease, visibility 0.28s;
+    }
+    #tut-overlay.active { visibility: visible; opacity: 1; pointer-events: all; }
+
+    #tut-spotlight {
+      position: fixed; pointer-events: none; z-index: 1101;
+      box-shadow:
+        0 0 0 3px rgba(255,255,255,0.78),
+        0 0 0 6px rgba(114,168,249,0.42),
+        0 0 0 9999px rgba(0,0,0,0.56);
+      transition:
+        top    0.38s cubic-bezier(0.22,1,0.36,1),
+        left   0.38s cubic-bezier(0.22,1,0.36,1),
+        width  0.38s cubic-bezier(0.22,1,0.36,1),
+        height 0.38s cubic-bezier(0.22,1,0.36,1),
+        border-radius 0.38s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    #tut-card {
+      position: fixed; z-index: 1102; pointer-events: all;
+      width: 360px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 28px 28px 22px;
+      box-shadow: 0 24px 56px rgba(0,0,0,0.22), 0 6px 16px rgba(0,0,0,0.08);
+      transition:
+        top  0.38s cubic-bezier(0.22,1,0.36,1),
+        left 0.38s cubic-bezier(0.22,1,0.36,1);
+    }
+    #tut-card::before {
+      content: '';
+      position: absolute; top: -10px;
+      left: var(--tut-ax, 50%); transform: translateX(-50%);
+      width: 20px; height: 10px;
+      background: #fff;
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+      transition: left 0.38s cubic-bezier(0.22,1,0.36,1);
+    }
+    #tut-card.arrow-down::before {
+      top: auto; bottom: -10px;
+      clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    }
+
+    #tut-close {
+      position: absolute; top: 14px; right: 14px;
+      width: 30px; height: 30px; border-radius: 50%;
+      background: #f0f2f5; border: none; cursor: pointer;
+      font-family: inherit; font-size: 14px; color: #6d747a;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+    #tut-close:hover { background: #e1e3e3; color: #191c1d; }
+
+    #tut-lbl {
+      font-size: 11px; font-weight: 700; color: #72a8f9;
+      text-transform: uppercase; letter-spacing: 1.3px; margin-bottom: 10px;
+    }
+    #tut-body {
+      font-size: 15px; line-height: 1.65; color: #191c1d;
+      margin-bottom: 22px; padding-right: 22px;
+    }
+    #tut-footer { display: flex; align-items: center; justify-content: space-between; }
+    #tut-dots { display: flex; gap: 7px; align-items: center; }
+    .t-dot {
+      height: 7px; background: #e1e3e3;
+      width: 7px; border-radius: 4px;
+      transition: background 0.22s, width 0.22s;
+    }
+    .t-dot.active { background: #72a8f9; width: 18px; }
+    #tut-nav { display: flex; gap: 10px; }
+
+    #tut-prev {
+      padding: 9px 18px; border-radius: 9999px;
+      background: none; border: 1.5px solid #eceeee;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700; color: #6d747a; cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    #tut-prev:hover:not(:disabled) { border-color: #72a8f9; color: #72a8f9; }
+    #tut-prev:disabled { opacity: 0.32; cursor: default; }
+
+    #tut-next {
+      position: relative; overflow: hidden;
+      padding: 9px 22px; border-radius: 9999px;
+      background: #72a8f9; border: none;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700; color: white; cursor: pointer;
+      box-shadow: 0 4px 12px rgba(78,142,243,0.30), 0 0 0 0 rgba(78,142,243,0.45);
+      animation: tutNextPuls 1.8s ease-in-out infinite;
+      transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+    #tut-next::after {
+      content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+      background: linear-gradient(115deg, transparent 0%, rgba(255,255,255,0.55) 50%, transparent 100%);
+      transform: skewX(-20deg);
+      animation: tutNextGlans 2.6s ease-in-out infinite;
+    }
+    @keyframes tutNextPuls {
+      0%, 100% { box-shadow: 0 4px 12px rgba(78,142,243,0.30), 0 0 0 0 rgba(78,142,243,0.45); }
+      50%      { box-shadow: 0 4px 12px rgba(78,142,243,0.30), 0 0 0 7px rgba(78,142,243,0); }
+    }
+    @keyframes tutNextGlans {
+      0%   { left: -60%; }
+      55%  { left: 130%; }
+      100% { left: 130%; }
+    }
+    #tut-next:hover {
+      background: #4e8ef3;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(78,142,243,0.40);
+    }
+
+    .tut-help-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px; aspect-ratio: 1; flex: 0 0 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      border: 1.5px solid rgba(255,255,255,0.5);
+      color: white;
+      font-family: 'Inria Sans', Georgia, serif;
+      font-size: 14px; font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .tut-help-btn:hover { background: rgba(255,255,255,0.34); }
+    @keyframes tutBounce {
+      0%         { transform: scale(1) rotate(0deg); background: #fafbfc; color: var(--muted); border-color: var(--border); }
+      10%        { transform: scale(2.6) rotate(-18deg); background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+      25%        { transform: scale(2.4) rotate(16deg); background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+      40%        { transform: scale(2.5) rotate(-14deg); background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+      55%        { transform: scale(2.2) rotate(12deg); background: var(--primary-dark); color: #fff; border-color: var(--primary-dark); }
+      70%        { transform: scale(1.8) rotate(-7deg); background: var(--primary); color: #fff; border-color: var(--primary); }
+      85%        { transform: scale(1.3) rotate(4deg); background: var(--primary-soft); color: var(--primary-dark); border-color: var(--primary); }
+      100%       { transform: scale(1) rotate(0deg); background: #fafbfc; color: var(--muted); border-color: var(--border); }
+    }
+    .tut-help-btn.bouncy { animation: tutBounce .9s cubic-bezier(.22,1,.36,1); }
+    .mc-help-btn.bouncy  { animation: tutBounce .9s cubic-bezier(.22,1,.36,1); }
+
+    @media (max-width: 768px) {
+      #tut-card { width: calc(100vw - 32px); max-width: 360px; }
+      .rij-2 { flex-direction: column; }
+      .vragen-grid { grid-template-columns: 1fr; }
+      .main { padding: 24px 16px 64px; }
+      .hero { padding: 24px 24px 20px; }
+      .hero-jay { height: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar">
+  </header>
+
+  <main class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-dots"></div>
+      <div class="progress-row">
+        <span class="progress-label">Missie 1 van 3</span>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+      </div>
+      <div class="hero-body">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <img src="/Afbeeldingen/EMOJI PACK IOS/clapper-board_1f3ac.png" alt="" style="height:14px;width:auto;object-fit:contain">
+          Missie 1
+        </div>
+        <div class="hero-title">
+          <img src="/Afbeeldingen/EMOJI PACK IOS/movie-camera_1f3a5.png" alt="">
+          Ik begrijp de uitleg niet
+          <button class="tut-help-btn" id="tut-help-btn" onclick="tutStart()" aria-label="Rondleiding starten" title="Rondleiding">?</button>
+        </div>
+        <p class="hero-sub">Soms lees je de uitleg in je boek, maar snap je het nog steeds niet. Een goede uitlegvideo kan dan helpen. In deze missie ontdek je hoe dat werkt.</p>
+      </div>
+      <img class="hero-jay" src="/Missie Middelbaar/Uitlegvideo.png" alt="Uitlegvideo">
+      </div><!-- .hero-body -->
+    </div>
+
+    <!-- SITUATIE + VIDEO naast elkaar -->
+    <div class="rij-2" style="animation-delay:.08s">
+
+      <!-- SITUATIEKAART -->
+      <div class="kaart" id="kaart-situatie" style="animation-delay:.08s">
+        <p class="kaart-eyebrow">Onduidelijke uitleg</p>
+        <div style="display:flex;align-items:center;gap:20px;margin-top:10px">
+          <p class="kaart-tekst" style="flex:1;margin:0">Poe, deze uitleg in het boek hier rechts is zo onduidelijk... Gelukkig is er een veel handigere manier om de uitleg toch te snappen.<br><br><strong>Bekijk de uitlegvideo van Math with Menno en beantwoord daarna alle vragen. Veel succes!</strong></p>
+          <div style="position:relative;flex-shrink:0;width:140px;cursor:zoom-in" onclick="openLightbox(this.querySelector('img'))">
+            <img class="kaart-img" src="/Missie Middelbaar/Onduidelijke theorie.png" alt="Onduidelijke theorie" style="width:140px;margin:0;display:block">
+            <div style="position:absolute;bottom:6px;right:6px;background:rgba(0,0,0,.55);border-radius:8px;padding:4px 8px;display:flex;align-items:center;gap:5px;pointer-events:none">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+              <span style="font-size:11px;font-weight:700;color:#fff">Vergroten</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEO SECTIE -->
+      <div class="kaart video-sectie" id="kaart-video" style="animation-delay:.16s">
+        <p class="kaart-eyebrow">Uitlegvideo</p>
+        <p class="kaart-tekst" style="margin-bottom:20px">Bekijk de uitlegvideo op YouTube. De vragen worden automatisch beschikbaar nadat je de video hebt bekeken.</p>
+
+        <a id="btnVideo" class="btn-video" href="https://www.youtube.com/watch?v=IXS6aTEAwc4&list=PLqmYEL-9zWjNHFmXonvtaNs3XdOMivZOE&index=11" target="_blank" rel="noopener" onclick="videoGeopend()">
+          <img src="/Afbeeldingen/EMOJI PACK IOS/clapper-board_1f3ac.png" alt="">
+          Bekijk uitlegvideo op YouTube
+        </a>
+
+        <div class="timer-blok" id="timerBlok" style="display:none">
+          <div class="timer-icoon"><img src="/Afbeeldingen/EMOJI PACK IOS/eyes_1f440.png" alt=""></div>
+          <div class="timer-tekst">
+            <div class="timer-label" id="timerLabel">Even wachten...</div>
+            <div class="timer-sub" id="timerSub">De vragen worden automatisch beschikbaar nadat je de video hebt bekeken.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VRAGEN -->
+    <div style="position:relative">
+      <div class="vragen-wrapper vergrendeld" id="vragenWrapper">
+
+        <!-- SECTIE: Controlevragen -->
+        <div class="sectie-kop">
+          <div class="sectie-kop-lijn"></div>
+          <div class="sectie-kop-label">Controleer of je de uitleg hebt begrepen</div>
+          <div class="sectie-kop-lijn"></div>
+        </div>
+
+        <div class="vragen-grid">
+
+        <!-- MC Vraag 1 -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr-wrap">
+            <div class="vraag-nr">Vraag 1 van 4</div>
+            <div class="mc-help-wrap">
+              <button class="mc-help-btn" onclick="toggleUitleg(this)" aria-label="Uitleg">?</button>
+              <div class="mc-tooltip">
+                <div class="mc-tooltip-titel">Hoe werkt dit?</div>
+                Gelijksoortige termen hebben dezelfde letter. Trek de getallen van elkaar af en laat de letter staan.<br><br>
+                <strong>Voorbeeld:</strong> 10b − 3b = 7b
+              </div>
+            </div>
+          </div>
+          <div class="vraag-opdracht">Schrijf korter op.</div>
+          <div class="vraag-tekst" id="mc1-tekst">18b − 4b = ?</div>
+          <div class="mc-opties" id="mc1">
+            <button class="mc-optie" onclick="kiesMC(this,'mc1')"><div class="mc-letter">A</div>22b</button>
+            <button class="mc-optie" data-correct="true" onclick="kiesMC(this,'mc1')"><div class="mc-letter">B</div>14b</button>
+            <button class="mc-optie" onclick="kiesMC(this,'mc1')"><div class="mc-letter">C</div>14</button>
+            <button class="mc-optie" onclick="kiesMC(this,'mc1')"><div class="mc-letter">D</div>4b</button>
+          </div>
+        </div>
+
+        <!-- MC Vraag 2 -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr-wrap">
+            <div class="vraag-nr">Vraag 2 van 4</div>
+            <div class="mc-help-wrap">
+              <button class="mc-help-btn" onclick="toggleUitleg(this)" aria-label="Uitleg">?</button>
+              <div class="mc-tooltip">
+                <div class="mc-tooltip-titel">Hoe werkt dit?</div>
+                Gelijksoortige termen hebben dezelfde letter. Trek de getallen van elkaar af en laat de letter staan.<br><br>
+                <strong>Voorbeeld:</strong> 10y − 4y = 6y
+              </div>
+            </div>
+          </div>
+          <div class="vraag-opdracht">Schrijf korter op.</div>
+          <div class="vraag-tekst" id="mc2-tekst">12y − 7y = ?</div>
+          <div class="mc-opties" id="mc2">
+            <button class="mc-optie" onclick="kiesMC(this,'mc2')"><div class="mc-letter">A</div>19y</button>
+            <button class="mc-optie" onclick="kiesMC(this,'mc2')"><div class="mc-letter">B</div>5</button>
+            <button class="mc-optie" data-correct="true" onclick="kiesMC(this,'mc2')"><div class="mc-letter">C</div>5y</button>
+            <button class="mc-optie" onclick="kiesMC(this,'mc2')"><div class="mc-letter">D</div>−5y</button>
+          </div>
+        </div>
+
+        <!-- MC Vraag 3 -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr-wrap">
+            <div class="vraag-nr">Vraag 3 van 4</div>
+            <div class="mc-help-wrap">
+              <button class="mc-help-btn" onclick="toggleUitleg(this)" aria-label="Uitleg">?</button>
+              <div class="mc-tooltip">
+                <div class="mc-tooltip-titel">Hoe werkt dit?</div>
+                Vergeet het minteken niet. Tel de getallen bij elkaar op en laat de letter staan.<br><br>
+                <strong>Voorbeeld:</strong> −6x + 8x = 2x
+              </div>
+            </div>
+          </div>
+          <div class="vraag-opdracht">Schrijf korter op.</div>
+          <div class="vraag-tekst" id="mc3-tekst">−5x + 8x = ?</div>
+          <div class="mc-opties" id="mc3">
+            <button class="mc-optie" onclick="kiesMC(this,'mc3')"><div class="mc-letter">A</div>−13x</button>
+            <button class="mc-optie" onclick="kiesMC(this,'mc3')"><div class="mc-letter">B</div>13x</button>
+            <button class="mc-optie" onclick="kiesMC(this,'mc3')"><div class="mc-letter">C</div>−3x</button>
+            <button class="mc-optie" data-correct="true" onclick="kiesMC(this,'mc3')"><div class="mc-letter">D</div>3x</button>
+          </div>
+        </div>
+
+        <!-- MC Vraag 4 -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr-wrap">
+            <div class="vraag-nr">Vraag 4 van 4</div>
+            <div class="mc-help-wrap">
+              <button class="mc-help-btn" onclick="toggleUitleg(this)" aria-label="Uitleg">?</button>
+              <div class="mc-tooltip">
+                <div class="mc-tooltip-titel">Hoe werkt dit?</div>
+                x en y zijn verschillende letters. Dat zijn ongelijksoortige termen. Die kun je <em>niet</em> samenvoegen.<br><br>
+                <strong>Voorbeeld:</strong> 5x − 3y blijft 5x − 3y
+              </div>
+            </div>
+          </div>
+          <div class="vraag-opdracht">Schrijf korter op.</div>
+          <div class="vraag-tekst" id="mc4-tekst">5x − 3y = ?</div>
+          <div class="mc-opties" id="mc4">
+            <button class="mc-optie" onclick="kiesMC(this,'mc4')"><div class="mc-letter">A</div>2x</button>
+            <button class="mc-optie" onclick="kiesMC(this,'mc4')"><div class="mc-letter">B</div>2y</button>
+            <button class="mc-optie" onclick="kiesMC(this,'mc4')"><div class="mc-letter">C</div>2xy</button>
+            <button class="mc-optie" data-correct="true" onclick="kiesMC(this,'mc4')"><div class="mc-letter">D</div>Kan niet</button>
+          </div>
+        </div>
+
+        </div><!-- .vragen-grid -->
+
+        <!-- SECTIE: Reflectievragen -->
+        <div class="sectie-kop">
+          <div class="sectie-kop-lijn"></div>
+          <div class="sectie-kop-label">Wat vond je van deze uitlegvideo?</div>
+          <div class="sectie-kop-lijn"></div>
+        </div>
+
+        <!-- Vraag 1 -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 1 van 3</div>
+          <div class="vraag-tekst">Hoe duidelijk vonden jullie deze uitlegvideo?</div>
+          <div class="sterren" id="sterren">
+            <button class="ster" data-n="1" onclick="kiesSter(1)"><img src="/Afbeeldingen/EMOJI PACK IOS/star_2b50.png" alt="1 ster"></button>
+            <button class="ster" data-n="2" onclick="kiesSter(2)"><img src="/Afbeeldingen/EMOJI PACK IOS/star_2b50.png" alt="2 sterren"></button>
+            <button class="ster" data-n="3" onclick="kiesSter(3)"><img src="/Afbeeldingen/EMOJI PACK IOS/star_2b50.png" alt="3 sterren"></button>
+            <button class="ster" data-n="4" onclick="kiesSter(4)"><img src="/Afbeeldingen/EMOJI PACK IOS/star_2b50.png" alt="4 sterren"></button>
+            <button class="ster" data-n="5" onclick="kiesSter(5)"><img src="/Afbeeldingen/EMOJI PACK IOS/star_2b50.png" alt="5 sterren"></button>
+          </div>
+        </div>
+
+        <!-- Vraag 2 -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 2 van 3</div>
+          <div class="vraag-tekst">Bij welke vakken denken jullie dat jullie uitlegvideo's gaan gebruiken op de middelbare school? <span style="font-size:14px;font-weight:400;color:var(--muted)">(meerdere antwoorden mogelijk)</span></div>
+          <div class="opties opties-grid" id="opties2">
+            <button class="optie-btn" onclick="kiesVak(this)"><div class="optie-check"></div>Wiskunde</button>
+            <button class="optie-btn" onclick="kiesVak(this)"><div class="optie-check"></div>Nederlands</button>
+            <button class="optie-btn" onclick="kiesVak(this)"><div class="optie-check"></div>Engels</button>
+            <button class="optie-btn" onclick="kiesVak(this)"><div class="optie-check"></div>Frans</button>
+            <button class="optie-btn" onclick="kiesVak(this)"><div class="optie-check"></div>Biologie</button>
+            <button class="optie-btn" onclick="kiesVak(this)"><div class="optie-check"></div>Aardrijkskunde</button>
+            <button class="optie-btn" onclick="kiesVak(this)"><div class="optie-check"></div>Geschiedenis</button>
+          </div>
+        </div>
+
+        <!-- Vraag 3 -->
+        <div class="vraag-kaart">
+          <div class="vraag-nr">Vraag 3 van 3</div>
+          <div class="vraag-tekst">Wat is volgens jullie het grootste voordeel aan het kijken van uitlegvideo's?</div>
+          <textarea class="open-tekst" id="vraag3" placeholder="Schrijf hier jullie antwoord..."></textarea>
+        </div>
+
+        <button class="btn-afronden" id="btnAfronden" onclick="rondAf()" disabled>
+          <div class="spinner"></div>
+          <span class="btn-tekst">
+            <img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="" style="height:16px;width:auto;object-fit:contain;vertical-align:-.2em"> Missie afronden
+          </span>
+        </button>
+
+      </div>
+
+      <!-- Vergrendeld overlay -->
+      <div class="vergrendeld-overlay zichtbaar" id="vergrendeldOverlay">
+        <div class="vergrendeld-overlay-label" id="vergrendeld-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary-dark)" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          De vragen worden automatisch beschikbaar wanneer je de video hebt bekeken.
+        </div>
+      </div>
+    </div>
+
+    <!-- TUTORIAL OVERLAY -->
+    <div id="tut-overlay" role="dialog" aria-modal="true" aria-label="Rondleiding door de missie">
+      <div id="tut-spotlight" aria-hidden="true"></div>
+      <div id="tut-card">
+        <button id="tut-close" aria-label="Rondleiding sluiten">✕</button>
+        <div id="tut-lbl">Stap 1 van 4</div>
+        <div id="tut-body"></div>
+        <div id="tut-footer">
+          <div id="tut-dots"></div>
+          <div id="tut-nav">
+            <button id="tut-prev">Vorige</button>
+            <button id="tut-next">Volgende →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIGHTBOX -->
+    <div class="lightbox" id="lightbox" onclick="sluitLightbox()">
+      <button class="lightbox-sluit" onclick="sluitLightbox()" aria-label="Sluiten">✕</button>
+      <img id="lightboxImg" src="" alt="" onclick="event.stopPropagation()">
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+      <div class="modal-kaart">
+        <div class="modal-vink">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="modal-titel">Goed gedaan!</div>
+        <p class="modal-sub">Missie 1 is voltooid. Je gaat nu terug naar het missiescherm.</p>
+        <div class="modal-voortgang"><div class="modal-voortgang-balk"></div></div>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const groepId = sessionStorage.getItem('missie_groep_id');
+    if (!groepId) window.location.href = 'index.html';
+
+    let sterScore     = 0;
+    let gekozenVakken = [];
+    const mcGedaan    = {};
+    const mcFouten    = { mc1: 0, mc2: 0, mc3: 0, mc4: 0 };
+
+    // ── Situatie extra tekst na 4s ───────────────────────────────────────────
+    setTimeout(() => {
+      document.getElementById('situatieExtra').classList.add('zichtbaar');
+    }, 4000);
+
+    // ── Video geopend → 10 seconden aftellen dan ontgrendelen ────────────────
+    const VIDEO_TIMER = new URLSearchParams(window.location.search).get('fast') === '1' ? 1000 : 150000;
+    let timerGestart = false;
+    function videoGeopend() {
+      if (timerGestart) return;
+      timerGestart = true;
+
+      const blok = document.getElementById('timerBlok');
+      blok.style.display = 'flex';
+
+      setTimeout(() => {
+        blok.classList.add('klaar'); // 2 min 30 sec = 150000ms
+        document.getElementById('timerLabel').innerHTML = '<img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="" style="height:16px;width:auto;vertical-align:-.2em;margin-right:6px">Klaar! De vragen zijn nu beschikbaar.';
+        document.getElementById('timerSub').textContent = 'Beantwoord de vragen hieronder.';
+        ontgrendelVragen();
+      }, VIDEO_TIMER);
+    }
+
+    // ── Vragen ontgrendelen ──────────────────────────────────────────────────
+    function ontgrendelVragen() {
+      document.getElementById('vragenWrapper').classList.remove('vergrendeld');
+      document.getElementById('vergrendeldOverlay').classList.remove('zichtbaar');
+    }
+
+    // ── Sterren ──────────────────────────────────────────────────────────────
+    function kiesSter(n) {
+      sterScore = n;
+      document.querySelectorAll('.ster').forEach((s, i) => {
+        s.classList.toggle('actief', i < n);
+      });
+      checkAfronden();
+    }
+
+    document.querySelectorAll('.ster').forEach(s => {
+      s.addEventListener('mouseenter', () => {
+        const n = parseInt(s.dataset.n);
+        document.querySelectorAll('.ster').forEach((st, i) => st.classList.toggle('hover', i < n));
+      });
+      s.addEventListener('mouseleave', () => {
+        document.querySelectorAll('.ster').forEach(st => st.classList.remove('hover'));
+      });
+    });
+
+    // ── Vraag generators ─────────────────────────────────────────────────────
+    function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+    function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+
+    function genAftrekkel(v) {
+      const a = rand(10, 20), b = rand(2, a - 2), c = a - b;
+      return {
+        q: `${a}${v} − ${b}${v} = ?`,
+        opts: shuffle([
+          { text: `${c}${v}`, correct: true },
+          { text: `${a + b}${v}`, correct: false },
+          { text: `${c}`, correct: false },
+          { text: `${b}${v}`, correct: false },
+        ])
+      };
+    }
+    function genNegPlus(v) {
+      const a = rand(2, 8), b = rand(a + 2, a + 10), c = b - a;
+      return {
+        q: `−${a}${v} + ${b}${v} = ?`,
+        opts: shuffle([
+          { text: `${c}${v}`, correct: true },
+          { text: `−${a + b}${v}`, correct: false },
+          { text: `${a + b}${v}`, correct: false },
+          { text: `−${c}${v}`, correct: false },
+        ])
+      };
+    }
+    function genOngelijk(v1, v2) {
+      const a = rand(3, 9), b = rand(2, 7);
+      return {
+        q: `${a}${v1} − ${b}${v2} = ?`,
+        opts: shuffle([
+          { text: 'Kan niet', correct: true },
+          { text: `${a - b}${v1}`, correct: false },
+          { text: `${a - b}${v2}`, correct: false },
+          { text: `${a - b}${v1}${v2}`, correct: false },
+        ])
+      };
+    }
+
+    const MC_GEN = {
+      mc1: () => genAftrekkel('b'),
+      mc2: () => genAftrekkel('y'),
+      mc3: () => genNegPlus('x'),
+      mc4: () => genOngelijk('x', 'y'),
+    };
+
+    function renderMC(id) {
+      const data = MC_GEN[id]();
+      document.getElementById(id + '-tekst').textContent = data.q;
+      const letters = 'ABCD';
+      document.getElementById(id).innerHTML = data.opts.map((opt, i) =>
+        `<button class="mc-optie" ${opt.correct ? 'data-correct="true"' : ''} onclick="kiesMC(this,'${id}')">
+          <div class="mc-letter">${letters[i]}</div>${opt.text}
+        </button>`
+      ).join('');
+    }
+
+    // ── Meerkeuze controlevragen ─────────────────────────────────────────────
+    function kiesMC(btn, groepId) {
+      const container = document.getElementById(groepId);
+      if (container.classList.contains('gedaan')) return;
+      const isCorrect = btn.dataset.correct === 'true';
+      if (isCorrect) {
+        container.classList.add('gedaan');
+        btn.classList.add('correct');
+        container.querySelectorAll('.mc-optie').forEach(b => b.disabled = true);
+        mcGedaan[groepId] = true;
+        checkAfronden();
+      } else {
+        mcFouten[groepId]++;
+        btn.classList.add('fout');
+        container.querySelectorAll('.mc-optie').forEach(b => b.disabled = true);
+        const mcHelpBtn = container.closest('.vraag-kaart')?.querySelector('.mc-help-btn');
+        if (mcHelpBtn) {
+          mcHelpBtn.classList.remove('bouncy');
+          void mcHelpBtn.offsetWidth;
+          mcHelpBtn.classList.add('bouncy');
+          mcHelpBtn.addEventListener('animationend', () => mcHelpBtn.classList.remove('bouncy'), { once: true });
+        }
+        setTimeout(() => renderMC(groepId), 900);
+      }
+    }
+
+    // ── Slot-icoon op elk vraag-kaartje ─────────────────────────────────────
+    document.querySelectorAll('.vraag-kaart').forEach(kaart => {
+      const slot = document.createElement('div');
+      slot.className = 'kaart-slot';
+      slot.innerHTML = `<div style="background:rgba(255,255,255,0.85);border-radius:50%;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.10)"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#4e8ef3" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>`;
+      kaart.appendChild(slot);
+    });
+
+    // ── Lightbox ──────────────────────────────────────────────────────────────
+    function openLightbox(img) {
+      document.getElementById('lightboxImg').src = img.src;
+      document.getElementById('lightboxImg').alt = img.alt;
+      document.getElementById('lightbox').classList.add('zichtbaar');
+      document.body.style.overflow = 'hidden';
+    }
+    function sluitLightbox() {
+      document.getElementById('lightbox').classList.remove('zichtbaar');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') sluitLightbox(); });
+
+    // ── Tooltip ──────────────────────────────────────────────────────────────
+    function toggleUitleg(btn) {
+      const tooltip = btn.nextElementSibling;
+      const wasOpen = tooltip.classList.contains('zichtbaar');
+      document.querySelectorAll('.mc-tooltip').forEach(t => t.classList.remove('zichtbaar'));
+      if (!wasOpen) tooltip.classList.add('zichtbaar');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.mc-help-btn')) {
+        document.querySelectorAll('.mc-tooltip').forEach(t => t.classList.remove('zichtbaar'));
+      }
+    });
+
+    // ── Vakken multi-select ──────────────────────────────────────────────────
+    function kiesVak(btn) {
+      btn.classList.toggle('gekozen');
+      gekozenVakken = Array.from(document.querySelectorAll('#opties2 .gekozen'))
+        .map(b => b.textContent.trim().replace(/\s+/g, ' '));
+      checkAfronden();
+    }
+
+    // ── Validatie ─────────────────────────────────────────────────────────────
+    document.getElementById('vraag3').addEventListener('input', checkAfronden);
+
+    function checkAfronden() {
+      const v3 = document.getElementById('vraag3').value.trim();
+      const mcKlaar = ['mc1','mc2','mc3','mc4'].every(id => mcGedaan[id]);
+      const geldig = mcKlaar && sterScore > 0 && gekozenVakken.length > 0 && v3.length > 0;
+      document.getElementById('btnAfronden').disabled = !geldig;
+    }
+
+    // ── Tutorial rondleiding ─────────────────────────────────────────────────
+    (function () {
+      var TUT_KEY = 'kvm_missie1_tut_v1';
+      var step = 0;
+      var activeSteps = [];
+
+      var overlay   = document.getElementById('tut-overlay');
+      var spotlight = document.getElementById('tut-spotlight');
+      var card      = document.getElementById('tut-card');
+      var closeBtn  = document.getElementById('tut-close');
+      var nextBtn   = document.getElementById('tut-next');
+      var prevBtn   = document.getElementById('tut-prev');
+      var lbl       = document.getElementById('tut-lbl');
+      var bodyEl    = document.getElementById('tut-body');
+      var dotsEl    = document.getElementById('tut-dots');
+
+      var STEPS = [
+        {
+          id:   'kaart-situatie',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Lees de situatie</div>Er staat een situatie beschreven. Lees deze kort door om te begrijpen wat de opdracht is.'
+        },
+        {
+          id:   'kaart-video',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Kijk de uitlegvideo</div>Gelukkig staan er op YouTube heel veel goede uitlegvideo\'s voor bijna alle vakken! Zo wordt de moeilijke theorie een stuk makkelijker. Bekijk de uitlegvideo.'
+        },
+        {
+          id:   'vergrendeld-label',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Maak de vragen</div>Na de video worden de vragen beschikbaar. Beantwoord ze allemaal.'
+        },
+        {
+          id:   'btnAfronden',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Rond de missie af</div>Zijn alle vragen ingevuld? Dan kun je de missie hier afronden.'
+        },
+        {
+          id:   'tut-help-btn',
+          html: '<div style="font-size:12px;font-weight:700;color:#4e8ef3;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Nog niet helemaal begrepen?</div>Klik op het vraagteken om de uitleg van deze opdracht opnieuw te openen.'
+        }
+      ];
+
+      function buildDots(n) {
+        dotsEl.innerHTML = '';
+        for (var i = 0; i < n; i++) {
+          var d = document.createElement('div');
+          d.className = 't-dot';
+          dotsEl.appendChild(d);
+        }
+      }
+
+      function positionStep(s) {
+        var st     = activeSteps[s];
+        var target = document.getElementById(st.id);
+        if (!target) { tutClose(); return; }
+
+        /* Zet content eerst zodat de kaarthoogte klopt */
+        lbl.textContent = 'Stap ' + (s + 1) + ' van ' + activeSteps.length;
+        if (st.html) { bodyEl.innerHTML = st.html; } else { bodyEl.textContent = st.text || ''; }
+        var dots = dotsEl.querySelectorAll('.t-dot');
+        dots.forEach(function (d, i) { d.classList.toggle('active', i === s); });
+        prevBtn.disabled    = (s === 0);
+        nextBtn.textContent = (s === activeSteps.length - 1) ? 'Klaar!' : 'Volgende →';
+
+        /* Meet nu de werkelijke kaarthoogte */
+        var r   = target.getBoundingClientRect();
+        var pad = 10;
+        var cW  = card.offsetWidth  || 360;
+        var cH  = card.offsetHeight || 220;
+        var gap = 16;
+
+        spotlight.style.top          = (r.top    - pad) + 'px';
+        spotlight.style.left         = (r.left   - pad) + 'px';
+        spotlight.style.width        = (r.width  + pad * 2) + 'px';
+        spotlight.style.height       = (r.height + pad * 2) + 'px';
+        spotlight.style.borderRadius = getComputedStyle(target).borderRadius || '9999px';
+
+        var cardTop   = r.bottom + pad + gap;
+        var arrowDown = false;
+        if (cardTop + cH > window.innerHeight - 16) {
+          cardTop   = r.top - cH;
+          arrowDown = true;
+        }
+        cardTop = Math.max(16, cardTop);
+
+        var cardLeft = (r.left + r.width / 2) - cW / 2;
+        cardLeft = Math.max(16, Math.min(cardLeft, window.innerWidth - cW - 16));
+
+        card.style.top  = cardTop  + 'px';
+        card.style.left = cardLeft + 'px';
+        card.classList.toggle('arrow-down', arrowDown);
+
+        var ax = (r.left + r.width / 2) - cardLeft;
+        ax = Math.max(24, Math.min(ax, cW - 24));
+        card.style.setProperty('--tut-ax', ax + 'px');
+      }
+
+      function show(s) {
+        step = s;
+        var st = activeSteps[s];
+        var target = document.getElementById(st.id);
+        if (!target) return;
+
+        var r = target.getBoundingClientRect();
+        var alZichtbaar = r.top >= 0 && r.bottom <= window.innerHeight;
+
+        if (alZichtbaar) {
+          /* Element al volledig in beeld — meteen positioneren zonder scrollen */
+          requestAnimationFrame(function () { positionStep(s); });
+        } else {
+          /* Smooth scrollen zodat leerling ziet dat hij omhoog/omlaag gaat */
+          target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          setTimeout(function () { positionStep(s); }, 620);
+        }
+      }
+
+      function tutOpenWith(steps) {
+        if (steps.length === 0) return;
+        activeSteps = steps;
+        buildDots(steps.length);
+
+        spotlight.style.transition = 'none';
+        card.style.transition      = 'none';
+        step = 0;
+
+        window.scrollTo({ top: 0, behavior: 'instant' });
+
+        requestAnimationFrame(function () {
+          positionStep(0);
+          spotlight.style.transition = '';
+          card.style.transition      = '';
+          overlay.classList.add('active');
+        });
+      }
+
+      function tutClose() {
+        overlay.classList.remove('active');
+        try { localStorage.setItem(TUT_KEY, '1'); } catch (e) {}
+      }
+
+      window.tutStart = function () {
+        try { localStorage.removeItem(TUT_KEY); } catch (e) {}
+        if (overlay.classList.contains('active')) tutClose();
+        var steps = STEPS.filter(function (s) { return !!document.getElementById(s.id); });
+        tutOpenWith(steps);
+      };
+
+      window.tutMaybeStart = function () {
+        try { if (localStorage.getItem(TUT_KEY)) return; } catch (e) {}
+        if (overlay.classList.contains('active')) return;
+        var steps = STEPS.filter(function (s) { return !!document.getElementById(s.id); });
+        tutOpenWith(steps);
+      };
+
+      closeBtn.addEventListener('click', tutClose);
+
+      nextBtn.addEventListener('click', function () {
+        if (step < activeSteps.length - 1) show(step + 1);
+        else tutClose();
+      });
+
+      prevBtn.addEventListener('click', function () {
+        if (step > 0) show(step - 1);
+      });
+
+      function reposition() {
+        if (overlay.classList.contains('active')) positionStep(step);
+      }
+      window.addEventListener('resize', reposition);
+      window.addEventListener('scroll', reposition, { passive: true });
+
+      window.addEventListener('load', function () {
+        setTimeout(tutMaybeStart, 600);
+      });
+    })();
+
+    // ── Afronden ─────────────────────────────────────────────────────────────
+    async function rondAf() {
+      const btn = document.getElementById('btnAfronden');
+      btn.disabled = true;
+      btn.classList.add('laden');
+
+      const antwoorden = {
+        missie1: {
+          v1_sterren: sterScore,
+          v2_vakken: gekozenVakken,
+          v3_voordeel: document.getElementById('vraag3').value.trim(),
+          wiskunde_fouten: {
+            vraag1: mcFouten.mc1,
+            vraag2: mcFouten.mc2,
+            vraag3: mcFouten.mc3,
+            vraag4: mcFouten.mc4,
+            totaal: mcFouten.mc1 + mcFouten.mc2 + mcFouten.mc3 + mcFouten.mc4
+          }
+        }
+      };
+
+      try {
+        await db.from('missie_groepjes').update({
+          missie_1_klaar: true,
+          missie_huidig: 2,
+          antwoorden,
+          bijgewerkt_op: new Date().toISOString()
+        }).eq('id', groepId);
+
+        btn.classList.remove('laden');
+        document.getElementById('modalOverlay').classList.add('zichtbaar');
+        setTimeout(() => { window.location.href = 'overzicht.html'; }, 3500);
+      } catch (e) {
+        btn.disabled = false;
+        btn.classList.remove('laden');
+      }
+    }
+  </script>
+</body>
+</html>
