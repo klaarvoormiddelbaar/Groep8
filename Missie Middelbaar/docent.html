@@ -85,7 +85,6 @@
     /* ── MAIN ── */
     .main { max-width: var(--max-w); margin: 0 auto; padding: 40px 32px 96px; }
 
-    .page-kop { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
     .page-titel { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
     .page-sub   { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
 
@@ -277,15 +276,8 @@
 
   <main class="main">
 
-    <div class="page-kop">
-      <div>
-        <div class="page-titel">Missie Middelbaar — Docentendashboard</div>
-        <div class="page-sub">Volg de groepjes live tijdens de les. Geen sessiecode nodig, iedereen gebruikt dezelfde link.</div>
-      </div>
-      <a class="btn-resultaten" href="/Missie%20Middelbaar/docent-resultaten.html">
-        Naar resultaten <span style="transition:transform .2s">→</span>
-      </a>
-    </div>
+    <div class="page-titel">Missie Middelbaar — Docentendashboard</div>
+    <div class="page-sub">Volg de groepjes live tijdens de les. Geen sessiecode nodig, iedereen gebruikt dezelfde link.</div>
 
     <div class="link-kaart">
       <div class="link-tekst">
@@ -305,6 +297,12 @@
     <div class="filters" id="filters"></div>
 
     <div id="grid-wrapper"></div>
+
+    <div style="display:flex;justify-content:center;margin-top:28px">
+      <a class="btn-resultaten" href="/Missie%20Middelbaar/docent-resultaten.html">
+        Naar resultaten <span style="transition:transform .2s">→</span>
+      </a>
+    </div>
   </main>
 
   <div class="drawer-overlay" id="drawer-overlay" onclick="if(event.target===this) sluitDetail()">
@@ -334,8 +332,7 @@
     let actieveGroepId = null;
 
     // ── Leerlinglink ─────────────────────────────────────────────────────────
-    const leerlingLink = `${window.location.origin}/les3/missie`;
-    document.getElementById('link-url').textContent = leerlingLink.replace(/^https?:\/\//, '');
+    let leerlingLink = '';
 
     function kopieerLink() {
       navigator.clipboard.writeText(leerlingLink).then(() => {
@@ -554,12 +551,11 @@
       `;
     }
 
-    // ── Live data uit Supabase ───────────────────────────────────────────────
-    // Let op: dit haalt alle rijen uit missie_groepjes op (geen sessiecode/klasfilter).
-    // Prima voor één klas tegelijk; bij meerdere gelijktijdige klassen lopen groepjes
-    // hier door elkaar, dat vraagt later een sessie- of klas-scoping op deze tabel.
+    // ── Live data uit Supabase, geschaald op de eigen klas-link ─────────────
+    let linkId = null;
+
     async function laadGroepjes() {
-      const { data, error } = await db.from('missie_groepjes').select('*');
+      const { data, error } = await db.from('missie_groepjes').select('*').eq('link_id', linkId);
       if (!error && data) {
         groepjes = data;
         render();
@@ -576,27 +572,64 @@
       groepjes = groepjes.filter(g => g.id !== id);
     }
 
-    db.channel('docent-missie-monitor')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'missie_groepjes' }, payload => {
-        upsertGroepje(payload.new);
-        render();
-        if (actieveGroepId === payload.new.id) renderDetail();
-      })
-      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'missie_groepjes' }, payload => {
-        upsertGroepje(payload.new);
-        render();
-        if (actieveGroepId === payload.new.id) renderDetail();
-      })
-      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'missie_groepjes' }, payload => {
-        verwijderGroepje(payload.old.id);
-        render();
-        if (actieveGroepId === payload.old.id) sluitDetail();
-      })
-      .subscribe();
+    function abonneerOpGroepjes() {
+      db.channel('docent-missie-monitor')
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'missie_groepjes', filter: `link_id=eq.${linkId}` }, payload => {
+          upsertGroepje(payload.new);
+          render();
+          if (actieveGroepId === payload.new.id) renderDetail();
+        })
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'missie_groepjes', filter: `link_id=eq.${linkId}` }, payload => {
+          upsertGroepje(payload.new);
+          render();
+          if (actieveGroepId === payload.new.id) renderDetail();
+        })
+        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'missie_groepjes', filter: `link_id=eq.${linkId}` }, payload => {
+          verwijderGroepje(payload.old.id);
+          render();
+          if (actieveGroepId === payload.old.id) sluitDetail();
+        })
+        .subscribe();
+    }
 
-    render();
-    laadGroepjes();
-    setInterval(render, 30000); // relatieve tijdteksten ("3 min geleden") actueel houden
+    async function haalOfMaakLink() {
+      const { data: bestaand, error: leesFout } = await db
+        .from('missie_links')
+        .select('id, volgnummer')
+        .eq('docent_id', huidigeGebruiker.id)
+        .maybeSingle();
+
+      if (leesFout) { alert('Kon je leerlinglink niet ophalen: ' + leesFout.message); return null; }
+      if (bestaand) return bestaand;
+
+      const { data: nieuw, error: maakFout } = await db
+        .from('missie_links')
+        .insert({ docent_id: huidigeGebruiker.id })
+        .select('id, volgnummer')
+        .single();
+      if (maakFout) { alert('Kon geen leerlinglink aanmaken: ' + maakFout.message); return null; }
+      return nieuw;
+    }
+
+    let huidigeGebruiker = null;
+
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (!session) { window.location.href = '/Inlogpagina/'; return; }
+      huidigeGebruiker = session.user;
+
+      const link = await haalOfMaakLink();
+      if (!link) return;
+      linkId = link.id;
+
+      leerlingLink = `https://groep8.klaarvoormiddelbaar.nl/missie/${link.volgnummer}`;
+      document.getElementById('link-url').textContent = leerlingLink.replace(/^https?:\/\//, '');
+
+      render();
+      laadGroepjes();
+      abonneerOpGroepjes();
+      setInterval(render, 30000); // relatieve tijdteksten ("3 min geleden") actueel houden
+    })();
   </script>
 </body>
 </html>

@@ -131,6 +131,19 @@
       margin-bottom: 2px;
     }
 
+    /* ── FOUT-/LAADKAART (ongeldige of nog niet opgezochte link) ── */
+    .status-kaart {
+      width: 100%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 40px 28px;
+      text-align: center;
+      color: var(--muted);
+    }
+    .status-kaart-titel { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+
     /* ── NAAM INPUTS ── */
     .namen-lijst {
       display: flex;
@@ -285,7 +298,17 @@
       <p class="hero-sub">Vul jullie voornamen in en ontdek samen welke online hulpmiddelen het beste bij jou passen.</p>
     </div>
 
-    <div class="card">
+    <div class="status-kaart" id="ladenKaart">
+      <div class="status-kaart-titel">Link controleren…</div>
+      <div>Een ogenblik geduld.</div>
+    </div>
+
+    <div class="status-kaart" id="ongeldigeLinkKaart" style="display:none">
+      <div class="status-kaart-titel">Deze link werkt niet (meer)</div>
+      <div>Vraag je leerkracht om de juiste link naar Missie Middelbaar.</div>
+    </div>
+
+    <div class="card" id="groepjeKaart" style="display:none">
       <p class="card-label">Wie zitten er in jullie groepje?</p>
 
       <div class="namen-lijst" id="namenLijst"></div>
@@ -309,6 +332,33 @@
     const SUPABASE_URL     = 'https://cqcncausbclwvoomqdpy.supabase.co/';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let linkId = null;
+
+    (function () {
+      const padMatch = window.location.pathname.match(/missie\/(\d+)/i);
+      const volgnummer = padMatch ? padMatch[1] : null;
+
+      if (!volgnummer) {
+        document.getElementById('ladenKaart').style.display = 'none';
+        document.getElementById('ongeldigeLinkKaart').style.display = 'block';
+        return;
+      }
+
+      db.rpc('resolve_missie_link', { p_volgnummer: Number(volgnummer) })
+        .then(({ data, error }) => {
+          document.getElementById('ladenKaart').style.display = 'none';
+          if (error || !data) {
+            document.getElementById('ongeldigeLinkKaart').style.display = 'block';
+            return;
+          }
+          linkId = data;
+          document.getElementById('groepjeKaart').style.display = 'flex';
+          voegNaamToe('Voornaam 1');
+          voegNaamToe('Voornaam 2');
+          document.getElementById('naam1').focus();
+        });
+    })();
 
     let aantalNamen = 0;
 
@@ -379,7 +429,7 @@
       try {
         const { data, error } = await db
           .from('missie_groepjes')
-          .insert({ namen, missie_huidig: 1 })
+          .insert({ namen, missie_huidig: 1, link_id: linkId })
           .select('id')
           .single();
 
@@ -395,11 +445,6 @@
         fout.classList.add('zichtbaar');
       }
     }
-
-    // Start met 2 velden
-    voegNaamToe('Voornaam 1');
-    voegNaamToe('Voornaam 2');
-    document.getElementById('naam1').focus();
   </script>
 </body>
 </html>

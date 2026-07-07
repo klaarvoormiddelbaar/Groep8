@@ -281,9 +281,10 @@
     }
 
     let groepjes = [];
+    let linkId = null;
 
     async function laadGroepjes() {
-      const { data, error } = await db.from('missie_groepjes').select('*');
+      const { data, error } = await db.from('missie_groepjes').select('*').eq('link_id', linkId);
       if (!error && data) {
         groepjes = data;
         renderStats(groepjes);
@@ -291,11 +292,28 @@
       }
     }
 
-    db.channel('docent-missie-resultaten')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'missie_groepjes' }, () => laadGroepjes())
-      .subscribe();
+    async function haalEigenLink(docentId) {
+      const { data, error } = await db.from('missie_links').select('id').eq('docent_id', docentId).maybeSingle();
+      if (error || !data) return null;
+      return data.id;
+    }
 
-    laadGroepjes();
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (!session) { window.location.href = '/Inlogpagina/'; return; }
+
+      linkId = await haalEigenLink(session.user.id);
+      if (!linkId) {
+        document.getElementById('inhoud').innerHTML = `<div class="leeg-kaart">Je hebt nog geen leerlinglink aangemaakt. Open eerst het <a href="/Missie%20Middelbaar/docent.html">dashboard</a> om er een te genereren.</div>`;
+        return;
+      }
+
+      db.channel('docent-missie-resultaten')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'missie_groepjes', filter: `link_id=eq.${linkId}` }, () => laadGroepjes())
+        .subscribe();
+
+      laadGroepjes();
+    })();
   </script>
 </body>
 </html>

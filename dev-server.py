@@ -119,6 +119,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
         # (de pagina leest de code zelf uit window.location.pathname, net als /les8 e.d.)
         if path.startswith("/feedback/") and path.count("/") == 2:
             serve_path = "/Tips en Tops/tips-en-tops.html"
+        elif path.startswith("/missie/") and path.count("/") == 2:
+            serve_path = "/Missie Middelbaar/index.html"
         else:
             # 2b. Statische rewrite (bestand serveren, URL blijft)
             serve_path = REWRITES.get(path, path)
