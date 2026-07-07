@@ -23,7 +23,8 @@ Antwoordregels:
 - Gebruik eenvoudige, duidelijke taal
 - Gebruik af en toe korte bullet points (•) om dingen overzichtelijk te maken
 - Wees enthousiast en bemoedigend
-- Als een leerling iets vraagt wat NIET over deze theorie gaat, zeg dan vriendelijk: "Ik help alleen bij vragen over het ontstaan van de Tweede Wereldoorlog. Stel gerust een vraag daarover!"`;
+- Als een leerling iets vraagt wat NIET over deze theorie gaat, reageer dan met zo min mogelijk woorden en zeg vriendelijk: "Ik help alleen bij vragen over het ontstaan van de Tweede Wereldoorlog. Stel gerust een vraag daarover!"
+- Maak bij het maken van een samenvatting de belangrijkste begrippen vetgedrukt met <strong>begrip</strong>`;
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {

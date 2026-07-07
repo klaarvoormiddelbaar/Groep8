@@ -1117,7 +1117,7 @@
     const mcFouten    = { mc1: 0, mc2: 0, mc3: 0, mc4: 0 };
 
     // ── Video geopend → 10 seconden aftellen dan ontgrendelen ────────────────
-    const VIDEO_TIMER = new URLSearchParams(window.location.search).get('fast') === '1' ? 1000 : 150000;
+    const VIDEO_TIMER = new URLSearchParams(window.location.search).get('fast') === '1' ? 1000 : 90000;
     let timerGestart = false;
     function videoGeopend() {
       if (timerGestart) return;
@@ -1127,7 +1127,7 @@
       blok.style.display = 'flex';
 
       setTimeout(() => {
-        blok.classList.add('klaar'); // 2 min 30 sec = 150000ms
+        blok.classList.add('klaar'); // 1 min 30 sec = 90000ms
         document.getElementById('timerLabel').innerHTML = '<img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="" style="height:16px;width:auto;vertical-align:-.2em;margin-right:6px">Klaar! De vragen zijn nu beschikbaar.';
         document.getElementById('timerSub').textContent = 'Beantwoord de vragen hieronder.';
         ontgrendelVragen();
