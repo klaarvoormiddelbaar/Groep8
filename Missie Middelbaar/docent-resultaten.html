@@ -18,7 +18,14 @@
       --primary:      #72a8f9;
       --primary-dark: #4e8ef3;
       --primary-soft: rgba(78,142,243,0.10);
+      --paars:        #7c3aed;
+      --paars-dark:   #6d28d9;
+      --paars-soft:   rgba(124,58,237,0.10);
+      --oranje:       #f59e0b;
+      --oranje-dark:  #d97706;
+      --oranje-soft:  rgba(245,158,11,0.12);
       --groen:        #10a37f;
+      --groen-dark:   #0c8268;
       --dark:         #191c1d;
       --muted:        #6d747a;
       --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
@@ -86,8 +93,16 @@
 
     @keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
 
-    .missie-sectie-kop { font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--primary-dark); margin: 32px 0 12px; }
-    .missie-sectie-kop:first-of-type { margin-top: 0; }
+    .missie-sectie-kop {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--primary-dark); background: var(--primary-soft);
+      border-radius: var(--r-pill); padding: 6px 16px;
+      margin: 32px 0 12px;
+    }
+    .missie-sectie-kop.paars  { color: var(--paars-dark);  background: var(--paars-soft); }
+    .missie-sectie-kop.oranje { color: var(--oranje-dark); background: var(--oranje-soft); }
+    #inhoud > .missie-sectie-kop:first-child { margin-top: 0; }
 
     .sectie {
       background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
@@ -124,7 +139,11 @@
       font-size: 11.5px; font-weight: 700; line-height: 1;
       padding: 5px 12px; border-radius: var(--r-pill);
       box-shadow: 0 6px 14px rgba(78,142,243,0.35);
+      opacity: 0; transform: translateY(4px);
+      transition: opacity 0.15s, transform 0.15s;
+      pointer-events: none; white-space: nowrap;
     }
+    .open-antwoord:hover .open-auteur { opacity: 1; transform: translateY(0); }
 
     .leeg-kaart, .laden-tekst {
       background: var(--card-bg); border: 1px dashed var(--border); border-radius: var(--r-card);
@@ -147,7 +166,10 @@
   </header>
 
   <main class="main">
-    <a class="terug-link" href="/Missie%20Middelbaar/docent.html">← Terug naar dashboard</a>
+    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px">
+      <a class="terug-link" style="margin-bottom:0" href="/Missie%20Middelbaar/docent.html">← Terug naar dashboard</a>
+      <a class="terug-link" style="margin-bottom:0" href="/les3">← Terug naar Les 3</a>
+    </div>
 
     <div class="page-titel">Resultaten om klassikaal te bespreken</div>
     <div class="page-sub">Deze pagina ververst live, je hoeft niet te herladen.</div>
@@ -193,10 +215,13 @@
       return [...tellingen.entries()].sort((a, b) => b[1] - a[1]);
     }
 
-    function renderChart(titel, rangschikking) {
+    const KLEUR_ACCENT = { blauw: 'var(--primary)', paars: 'var(--paars)', oranje: 'var(--oranje)' };
+
+    function renderChart(titel, rangschikking, kleur) {
       const totaal = rangschikking.reduce((s, [, n]) => s + n, 0);
       if (totaal === 0) return '';
       const max = Math.max(1, rangschikking[0][1]);
+      const accent = KLEUR_ACCENT[kleur] || KLEUR_ACCENT.blauw;
       return `
         <div class="sectie">
           <div class="sectie-titel">${escapeHtml(titel)}</div>
@@ -205,7 +230,7 @@
               <div class="chart-rij">
                 <div class="chart-lbl">${escapeHtml(optie)}</div>
                 <div class="balk-track">
-                  <div class="balk" style="width:${aantal ? Math.max(8, Math.round((aantal / max) * 100)) : 0}%">
+                  <div class="balk" style="width:${aantal ? Math.max(8, Math.round((aantal / max) * 100)) : 0}%;background:${accent}">
                     ${aantal ? `<span class="balk-pct">${aantal}</span>` : ''}
                   </div>
                 </div>
@@ -241,16 +266,34 @@
 
     function renderStats(groepen) {
       const aantalGroepjes = groepen.length;
-      const gemSterren = gemiddelde(groepen, 'antwoorden.missie1.v1_sterren');
-      const gemQuizScore = gemiddelde(groepen, 'antwoorden.missie3.quiz_score');
       const aantalKlaar = groepen.filter(g => g.missie_3_klaar).length;
 
       document.getElementById('statsRij').innerHTML = `
         <div class="stat-kaart"><div class="stat-label">Aantal groepjes</div><div class="stat-getal">${aantalGroepjes}</div></div>
-        <div class="stat-kaart"><div class="stat-label">Gem. waardering uitlegvideo</div><div class="stat-getal">${gemSterren != null ? gemSterren.toFixed(1) + ' ★' : '–'}</div></div>
-        <div class="stat-kaart"><div class="stat-label">Gem. score oefenvragen M3</div><div class="stat-getal">${gemQuizScore != null ? gemQuizScore.toFixed(1) : '–'}</div></div>
-        <div class="stat-kaart"><div class="stat-label">Groepjes helemaal klaar</div><div class="stat-getal">${aantalKlaar} / ${aantalGroepjes}</div></div>
+        <div class="stat-kaart"><div class="stat-label">Groepjes helemaal klaar</div><div class="stat-getal" style="color:var(--groen-dark)">${aantalKlaar} / ${aantalGroepjes}</div></div>
       `;
+    }
+
+    function renderMissie3Sectie(groepen) {
+      const gemQuizScore = gemiddelde(groepen, 'antwoorden.missie3.quiz_score');
+      const aantalMetChecklist = groepen.filter(g => pad(g, 'antwoorden.missie3.checklist_compleet')).length;
+      const aantalBegonnen = groepen.filter(g => g.antwoorden && g.antwoorden.missie3).length;
+      if (aantalBegonnen === 0) return '';
+
+      return `
+        <div class="sectie">
+          <div class="sectie-titel">Voortgang met Jay I</div>
+          <div style="display:flex;gap:32px;flex-wrap:wrap">
+            <div>
+              <div class="stat-label">Gem. score oefenvragen</div>
+              <div class="stat-getal" style="color:var(--oranje-dark)">${gemQuizScore != null ? gemQuizScore.toFixed(1) : '–'}</div>
+            </div>
+            <div>
+              <div class="stat-label">Checklist compleet</div>
+              <div class="stat-getal" style="color:var(--oranje-dark)">${aantalMetChecklist} / ${aantalBegonnen}</div>
+            </div>
+          </div>
+        </div>`;
     }
 
     function renderInhoud(groepen) {
@@ -261,19 +304,23 @@
         return;
       }
 
+      const missie3Inhoud = renderMissie3Sectie(groepen);
+
       const secties = [
         `<div class="missie-sectie-kop">Missie 1 · Math with Menno</div>`,
-        renderChart('Bij welke vakken denken jullie uitlegvideo\'s te gaan gebruiken?', telMeerkeuze(groepen, 'antwoorden.missie1.v2_vakken', VAKKEN)),
+        renderChart('Bij welke vakken denken jullie uitlegvideo\'s te gaan gebruiken?', telMeerkeuze(groepen, 'antwoorden.missie1.v2_vakken', VAKKEN), 'blauw'),
         renderOpenVragen('Wat is het grootste voordeel van uitlegvideo\'s?', groepen, 'antwoorden.missie1.v3_voordeel'),
 
-        `<div class="missie-sectie-kop">Missie 2 · Online oefenwebsites</div>`,
-        renderChart('Welke oefenwebsites zijn bekeken?', telMeerkeuze(groepen, 'antwoorden.missie2.bekeken_sites', WEBSITES)),
-        renderChart('Waar letten jullie op bij een goede oefenwebsite?', telMeerkeuze(groepen, 'antwoorden.missie2.v4_criteria', CRITERIA)),
-        renderChart('Stelling: "Ik vind het belangrijk dat een oefenwebsite er mooi en overzichtelijk uitziet."', telEnkelkeuze(groepen, 'antwoorden.missie2.v5_stelling', STELLING)),
-        renderChart('Welke website ga je volgend schooljaar het vaakst gebruiken?', telEnkelkeuze(groepen, 'antwoorden.missie2.v7_volgend_jaar', WEBSITES)),
+        `<div class="missie-sectie-kop paars">Missie 2 · Online oefenwebsites</div>`,
+        renderChart('Welke oefenwebsites zijn bekeken?', telMeerkeuze(groepen, 'antwoorden.missie2.bekeken_sites', WEBSITES), 'paars'),
+        renderChart('Waar letten jullie op bij een goede oefenwebsite?', telMeerkeuze(groepen, 'antwoorden.missie2.v4_criteria', CRITERIA), 'paars'),
+        renderChart('Stelling: "Ik vind het belangrijk dat een oefenwebsite er mooi en overzichtelijk uitziet."', telEnkelkeuze(groepen, 'antwoorden.missie2.v5_stelling', STELLING), 'paars'),
+        renderChart('Welke website ga je volgend schooljaar het vaakst gebruiken?', telEnkelkeuze(groepen, 'antwoorden.missie2.v7_volgend_jaar', WEBSITES), 'paars'),
         renderOpenVragen('Wat vonden jullie het fijnst?', groepen, 'antwoorden.missie2.v2_fijnst'),
         renderOpenVragen('Wat vonden jullie minder fijn?', groepen, 'antwoorden.missie2.v3_minst_fijn'),
         renderOpenVragen('Kennen jullie nog andere leerwebsites?', groepen, 'antwoorden.missie2.v6_andere_sites'),
+
+        (missie3Inhoud ? `<div class="missie-sectie-kop oranje">Missie 3 · Jay I</div>` + missie3Inhoud : ''),
       ].join('');
 
       inhoud.innerHTML = secties || `<div class="leeg-kaart">Nog geen enkele missie afgerond, dus nog geen resultaten om te bespreken.</div>`;
