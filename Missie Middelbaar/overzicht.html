@@ -218,6 +218,21 @@
       color: #059669;
     }
 
+    /* ── ALLES KLAAR ── */
+    .klaar-kaart {
+      display: none;
+      background: rgba(16,163,127,.04);
+      border: 1px solid rgba(16,163,127,.30);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 32px 28px;
+      text-align: center;
+      animation: fadeUp .4s cubic-bezier(.22,1,.36,1) both;
+    }
+    .klaar-kaart img { height: 40px; width: auto; object-fit: contain; margin-bottom: 12px; }
+    .klaar-titel { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+    .klaar-sub { font-size: 15px; color: var(--muted); line-height: 1.5; }
+
   </style>
 </head>
 <body>
@@ -278,6 +293,12 @@
         </div>
       </a>
 
+    </div>
+
+    <div class="klaar-kaart" id="klaarKaart">
+      <img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">
+      <div class="klaar-titel">Je bent helemaal klaar!</div>
+      <div class="klaar-sub">Wacht totdat de juf of meester de resultaten klassikaal gaat bespreken.</div>
     </div>
   </main>
 
@@ -366,6 +387,8 @@
       } else {
         setVergrendeld(k3, s3);
       }
+
+      document.getElementById('klaarKaart').style.display = groep.missie_3_klaar ? 'block' : 'none';
     }
 
     // Initieel laden
