@@ -145,6 +145,16 @@
     }
     .open-antwoord:hover .open-auteur { opacity: 1; transform: translateY(0); }
 
+    .btn-resultaten {
+      display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0;
+      border: none; border-radius: var(--r-pill); cursor: pointer; text-decoration: none;
+      font-family: inherit; font-size: 15px; font-weight: 700; color: white;
+      background: var(--groen); box-shadow: 0 10px 15px -3px rgba(16,163,127,.30);
+      padding: 13px 24px; white-space: nowrap;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
+    }
+    .btn-resultaten:hover { background: var(--groen-dark); transform: translateY(-2px); box-shadow: 0 14px 20px -3px rgba(16,163,127,.34); }
+
     .leeg-kaart, .laden-tekst {
       background: var(--card-bg); border: 1px dashed var(--border); border-radius: var(--r-card);
       padding: 48px 32px; text-align: center; color: var(--muted); font-size: 15px;
@@ -166,16 +176,19 @@
   </header>
 
   <main class="main">
-    <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:20px">
-      <a class="terug-link" style="margin-bottom:0" href="/Missie%20Middelbaar/docent.html">← Terug naar dashboard</a>
-      <a class="terug-link" style="margin-bottom:0" href="/les3">← Terug naar Les 3</a>
-    </div>
+    <a class="terug-link" href="/Missie%20Middelbaar/docent.html">← Terug naar dashboard</a>
 
     <div class="page-titel">Resultaten om klassikaal te bespreken</div>
     <div class="page-sub">Deze pagina ververst live, je hoeft niet te herladen.</div>
 
     <div class="stats-rij" id="statsRij"></div>
     <div id="inhoud"><div class="laden-tekst">Resultaten worden geladen…</div></div>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:28px">
+      <a class="btn-resultaten" href="/les3">
+        ← Terug naar Les 3
+      </a>
+    </div>
   </main>
 
   <script>
@@ -251,8 +264,7 @@
           <div class="open-lijst${antwoorden.length > 5 ? ' scrollbaar' : ''}">
             ${antwoorden.map(a => `
               <div class="open-antwoord">
-                <span class="open-auteur">${escapeHtml(a.namen || 'Onbekend groepje')}</span><br>
-                ${escapeHtml(a.tekst)}
+                <span class="open-auteur">${escapeHtml(a.namen || 'Onbekend groepje')}</span>${escapeHtml(a.tekst)}
               </div>`).join('')}
           </div>
         </div>`;
