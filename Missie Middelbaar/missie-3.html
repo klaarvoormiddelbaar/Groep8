@@ -946,7 +946,7 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const groepId = sessionStorage.getItem('missie_groep_id');
-    if (!groepId) window.location.href = 'index.html';
+    if (!groepId) window.location.href = '/Missie%20Middelbaar/index.html';
 
     const namen = JSON.parse(sessionStorage.getItem('missie_namen') || '["?"]');
     const userInitiaal = (namen[0] || 'J').charAt(0).toUpperCase();
@@ -1489,7 +1489,7 @@
         await db.from('missie_groepjes').update({ missie_3_klaar: true, missie_huidig: 4, antwoorden, bijgewerkt_op: new Date().toISOString() }).eq('id',groepId);
         btn.classList.remove('laden');
         document.getElementById('modalOverlay').classList.add('zichtbaar');
-        setTimeout(() => { window.location.href = 'overzicht.html'; }, 3500);
+        setTimeout(() => { window.location.href = '/Missie%20Middelbaar/overzicht.html'; }, 3500);
       } catch(e) { btn.disabled=false; btn.classList.remove('laden'); }
     }
   </script>

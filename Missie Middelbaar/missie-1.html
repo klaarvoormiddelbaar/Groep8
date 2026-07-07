@@ -1082,7 +1082,7 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const groepId = sessionStorage.getItem('missie_groep_id');
-    if (!groepId) window.location.href = 'index.html';
+    if (!groepId) window.location.href = '/Missie%20Middelbaar/index.html';
 
     let sterScore     = 0;
     let gekozenVakken = [];
@@ -1478,7 +1478,7 @@
 
         btn.classList.remove('laden');
         document.getElementById('modalOverlay').classList.add('zichtbaar');
-        setTimeout(() => { window.location.href = 'overzicht.html'; }, 3500);
+        setTimeout(() => { window.location.href = '/Missie%20Middelbaar/overzicht.html'; }, 3500);
       } catch (e) {
         btn.disabled = false;
         btn.classList.remove('laden');
