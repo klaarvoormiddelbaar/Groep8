@@ -125,7 +125,7 @@
     .chart-cnt { width: 70px; flex-shrink: 0; text-align: right; font-size: 12.5px; color: var(--muted); }
 
     .open-lijst { display: flex; flex-direction: column; gap: 10px; }
-    .open-lijst.scrollbaar { max-height: 320px; overflow-y: auto; padding: 4px 4px 4px 0; margin: -4px -4px -4px 0; }
+    .open-lijst.scrollbaar { max-height: 210px; overflow-y: auto; padding: 4px 4px 4px 0; margin: -4px -4px -4px 0; }
     .open-antwoord {
       position: relative;
       background: #f7f8f9; border: 1.5px solid var(--border); border-radius: 16px;
@@ -263,7 +263,7 @@
       return `
         <div class="sectie">
           <div class="sectie-titel">${escapeHtml(titel)}</div>
-          <div class="open-lijst${antwoorden.length > 5 ? ' scrollbaar' : ''}">
+          <div class="open-lijst${antwoorden.length > 3 ? ' scrollbaar' : ''}">
             ${antwoorden.map(a => `
               <div class="open-antwoord">
                 <span class="open-auteur">${escapeHtml(a.namen || 'Onbekend groepje')}</span>${escapeHtml(a.tekst)}
