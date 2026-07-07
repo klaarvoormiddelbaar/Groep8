@@ -72,6 +72,7 @@ REWRITES = {
     "/les8/poll":         "/Live poll/join.html",
     "/les3/missie":       "/Missie Middelbaar/index.html",
     "/les3/docent/missie": "/Missie Middelbaar/docent.html",
+    "/les5/docent/voorspel": "/Voorspel de Klas/docent.html",
     "/Inlogpagina":        "/Inlogpagina/index.html",
     "/Inlogpagina/":       "/Inlogpagina/index.html",
     "/proef/":             "/Proeflicentie/dashboard.html",
@@ -121,6 +122,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             serve_path = "/Tips en Tops/tips-en-tops.html"
         elif path.startswith("/missie/") and path.count("/") == 2:
             serve_path = "/Missie Middelbaar/index.html"
+        elif path.startswith("/voorspel/") and path.count("/") == 2:
+            serve_path = "/Voorspel de Klas/index.html"
         else:
             # 2b. Statische rewrite (bestand serveren, URL blijft)
             serve_path = REWRITES.get(path, path)

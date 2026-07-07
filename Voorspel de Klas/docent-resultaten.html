@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voorspel de klas — Resultaten</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --groen:        #10a37f;
+      --groen-dark:   #0c8268;
+      --groen-soft:   rgba(16,163,127,0.10);
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --r-card:       28px;
+      --r-pill:       9999px;
+      --max-w:        820px;
+    }
+
+    html, body { min-height: 100vh; }
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 108% -5%, rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -8%  10%, rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%  60%, rgba(255,255,255,0.55) 0%, transparent 55%);
+      background-attachment: fixed;
+    }
+
+    .header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(242,246,253,0.92);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-mark {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700; letter-spacing: -0.3px;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+    }
+    .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
+    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+
+    .main { max-width: var(--max-w); margin: 0 auto; padding: 32px 32px 96px; }
+
+    .terug-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 700; color: var(--primary-dark);
+      text-decoration: none; margin-bottom: 20px;
+    }
+    .terug-link:hover { text-decoration: underline; }
+
+    .page-titel { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+    .page-sub   { font-size: 15px; color: var(--muted); margin-bottom: 24px; }
+
+    .stats-rij { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+    .stat-kaart {
+      flex: 1 1 180px;
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 22px;
+      box-shadow: var(--shadow-card); padding: 20px 22px;
+    }
+    .stat-label { font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+    .stat-getal { font-size: 30px; font-weight: 700; color: var(--primary-dark); }
+
+    @keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+    .sectie {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 28px 30px; margin-bottom: 18px;
+      animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .sectie-titel { font-size: 17px; font-weight: 700; margin-bottom: 22px; line-height: 1.35; }
+
+    .vergelijk-rij { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+    .vergelijk-rij:last-child { margin-bottom: 0; }
+    .vergelijk-kop { display: flex; align-items: center; justify-content: space-between; font-size: 13px; }
+    .vergelijk-label { font-weight: 700; color: var(--muted); }
+    .vergelijk-pct { font-weight: 700; }
+    .balk-track { height: 28px; background: #eef1f5; border-radius: var(--r-pill); overflow: hidden; }
+    .balk { height: 100%; border-radius: var(--r-pill); width: 0%; transition: width 0.85s cubic-bezier(0.22,1,0.36,1); }
+    .balk.werkelijk    { background: var(--groen); }
+    .balk.voorspelling { background: var(--primary); }
+    .vergelijk-pct.werkelijk    { color: var(--groen-dark); }
+    .vergelijk-pct.voorspelling { color: var(--primary-dark); }
+
+    .leeg-kaart, .laden-tekst {
+      background: var(--card-bg); border: 1px dashed var(--border); border-radius: var(--r-card);
+      padding: 48px 32px; text-align: center; color: var(--muted); font-size: 15px;
+    }
+
+    .btn-resultaten {
+      display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0;
+      border: none; border-radius: var(--r-pill); cursor: pointer; text-decoration: none;
+      font-family: inherit; font-size: 15px; font-weight: 700; color: white;
+      background: var(--groen); box-shadow: 0 10px 15px -3px rgba(16,163,127,.30);
+      padding: 13px 24px; white-space: nowrap;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
+    }
+    .btn-resultaten:hover { background: var(--groen-dark); transform: translateY(-2px); box-shadow: 0 14px 20px -3px rgba(16,163,127,.34); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-mark">KvM</div>
+        <div>
+          <div class="logo-name">Klaar voor Middelbaar</div>
+          <div class="logo-role">Voorspel de klas · Resultaten</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <a class="terug-link" href="/Voorspel%20de%20Klas/docent.html">← Terug naar dashboard</a>
+
+    <div class="page-titel">Resultaten om klassikaal te bespreken</div>
+    <div class="page-sub">Deze pagina ververst live, je hoeft niet te herladen.</div>
+
+    <div class="stats-rij" id="statsRij"></div>
+    <div id="inhoud"><div class="laden-tekst">Resultaten worden geladen…</div></div>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:28px">
+      <a class="btn-resultaten" href="/les5">
+        ← Terug naar Les 5
+      </a>
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const STELLINGEN = [
+      'Ben je weleens gestrest voor een toets?',
+      'Vind je het spannend om nieuwe mensen te ontmoeten op de middelbare school?',
+      'Haal je weleens een cijfer waar je niet blij mee bent?',
+      'Vind je het lastig om hulp te vragen als je iets niet snapt?',
+      'Slaap je weleens slecht van de zenuwen voor een belangrijke dag?',
+      'Denk je dat je weleens zult verdwalen op je nieuwe school?',
+      'Vind je het spannend om in het begin alleen te lunchen?',
+      'Vergeet je weleens je huiswerk?'
+    ];
+
+    function escapeHtml(t) {
+      const d = document.createElement('div');
+      d.textContent = String(t ?? '');
+      return d.innerHTML;
+    }
+
+    function renderStats(reacties) {
+      document.getElementById('statsRij').innerHTML = `
+        <div class="stat-kaart"><div class="stat-label">Aantal reacties</div><div class="stat-getal">${reacties.length}</div></div>
+      `;
+    }
+
+    function renderInhoud(reacties) {
+      const inhoud = document.getElementById('inhoud');
+
+      if (reacties.length === 0) {
+        inhoud.innerHTML = `<div class="leeg-kaart">Nog geen reacties binnengekomen, dus nog geen resultaten om te bespreken.</div>`;
+        return;
+      }
+
+      inhoud.innerHTML = STELLINGEN.map((stelling, i) => {
+        const key = 'stelling' + (i + 1);
+        const metAntwoord = reacties.filter(r => r.antwoorden && r.antwoorden[key]);
+        if (metAntwoord.length === 0) return '';
+
+        const aantalJa = metAntwoord.filter(r => r.antwoorden[key].antwoord === 'ja').length;
+        const werkelijkPct = Math.round((aantalJa / metAntwoord.length) * 100);
+        const gemVoorspelling = Math.round(
+          metAntwoord.reduce((s, r) => s + (r.antwoorden[key].voorspelling || 0), 0) / metAntwoord.length
+        );
+
+        return `
+          <div class="sectie">
+            <div class="sectie-titel">${escapeHtml(stelling)}</div>
+            <div class="vergelijk-rij">
+              <div class="vergelijk-kop">
+                <span class="vergelijk-label">Werkelijk: Ja</span>
+                <span class="vergelijk-pct werkelijk">${werkelijkPct}%</span>
+              </div>
+              <div class="balk-track"><div class="balk werkelijk" style="width:${werkelijkPct}%"></div></div>
+            </div>
+            <div class="vergelijk-rij">
+              <div class="vergelijk-kop">
+                <span class="vergelijk-label">Gemiddelde voorspelling</span>
+                <span class="vergelijk-pct voorspelling">${gemVoorspelling}%</span>
+              </div>
+              <div class="balk-track"><div class="balk voorspelling" style="width:${gemVoorspelling}%"></div></div>
+            </div>
+          </div>`;
+      }).join('') || `<div class="leeg-kaart">Nog geen reacties binnengekomen, dus nog geen resultaten om te bespreken.</div>`;
+
+      renderStats(reacties);
+    }
+
+    let reacties = [];
+    let linkId = null;
+
+    async function laadReacties() {
+      const { data, error } = await db.from('voorspel_reacties').select('*').eq('link_id', linkId);
+      if (!error && data) {
+        reacties = data;
+        renderStats(reacties);
+        renderInhoud(reacties);
+      }
+    }
+
+    async function haalEigenLink(docentId) {
+      const { data, error } = await db.from('voorspel_links').select('id').eq('docent_id', docentId).maybeSingle();
+      if (error || !data) return null;
+      return data.id;
+    }
+
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (!session) { window.location.href = '/Inlogpagina/'; return; }
+
+      linkId = await haalEigenLink(session.user.id);
+      if (!linkId) {
+        document.getElementById('inhoud').innerHTML = `<div class="leeg-kaart">Je hebt nog geen leerlinglink aangemaakt. Open eerst het <a href="/Voorspel%20de%20Klas/docent.html">dashboard</a> om er een te genereren.</div>`;
+        return;
+      }
+
+      db.channel('docent-voorspel-resultaten')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'voorspel_reacties', filter: `link_id=eq.${linkId}` }, () => laadReacties())
+        .subscribe();
+
+      laadReacties();
+    })();
+  </script>
+</body>
+</html>

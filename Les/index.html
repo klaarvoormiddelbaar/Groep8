@@ -749,6 +749,11 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;flex-shrink:0"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 Missie Middelbaar
               </a>` : ''}
+              ${L.n === 5 ? `
+              <a id="btn-voorspel" class="hero-btn" href="/les5/docent/voorspel" target="_blank" rel="noopener">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;flex-shrink:0"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Voorspel de klas
+              </a>` : ''}
               ${L.n !== 8 && L.n !== 4 && L.n !== 7 && L.n !== 3 ? `
               <a id="btn-poll" class="hero-btn hero-btn-live" href="/les${L.n}/docent/poll" target="_blank" rel="noopener">
                 <span class="live-dot"></span> Start live poll
@@ -1021,6 +1026,10 @@
       {
         id:   'btn-missie',
         text: 'Open hier het docentendashboard van Missie Middelbaar. Daar deel je de leerlinglink en volg je de groepjes live tijdens de les.'
+      },
+      {
+        id:   'btn-voorspel',
+        text: 'Open hier het docentendashboard van Voorspel de klas. Daar deel je de leerlinglink en bekijk je de resultaten om klassikaal te bespreken.'
       },
       {
         id:   'btn-poll',
