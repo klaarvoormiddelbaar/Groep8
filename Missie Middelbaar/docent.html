@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Missie Middelbaar — Docentendashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --paars:        #7c3aed;
+      --paars-dark:   #6d28d9;
+      --paars-soft:   rgba(124,58,237,0.10);
+      --oranje:       #f59e0b;
+      --oranje-dark:  #d97706;
+      --oranje-soft:  rgba(245,158,11,0.12);
+      --groen:        #10a37f;
+      --groen-dark:   #0c8268;
+      --groen-soft:   rgba(16,163,127,0.10);
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --r-card:       28px;
+      --r-pill:       9999px;
+      --max-w:        1080px;
+    }
+
+    html { scroll-behavior: smooth; }
+    html, body { min-height: 100vh; }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 108% -5%, rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -8%  10%, rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%  60%, rgba(255,255,255,0.55) 0%, transparent 55%);
+      background-attachment: fixed;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(242,246,253,0.92);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-mark {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700; letter-spacing: -0.3px;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+    }
+    .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
+    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .live-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(16,163,127,0.10); border: 1px solid rgba(16,163,127,0.25);
+      color: var(--groen-dark); font-size: 13px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 7px 16px; white-space: nowrap;
+    }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--groen); animation: pulse 1.6s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.45; transform:scale(0.8); } }
+
+    /* ── MAIN ── */
+    .main { max-width: var(--max-w); margin: 0 auto; padding: 40px 32px 96px; }
+
+    .page-titel { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+    .page-sub   { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
+
+    /* ── LEERLINGLINK KAART ── */
+    .link-kaart {
+      background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
+      border-radius: var(--r-card); padding: 32px 36px; color: white;
+      position: relative; overflow: hidden; margin-bottom: 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+    }
+    .link-kaart::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
+      background-size: 26px 26px; border-radius: inherit; pointer-events: none;
+    }
+    .link-kaart::after {
+      content: ''; position: absolute; top: -140px; right: -80px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .link-tekst { position: relative; min-width: 220px; }
+    .link-titel { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .link-url-rij {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 12px; padding: 10px 16px;
+    }
+    .link-url {
+      font-family: 'JetBrains Mono', monospace; font-weight: 600;
+      font-size: 15px; color: white; word-break: break-all;
+    }
+    .link-sub { position: relative; font-size: 14px; color: rgba(255,255,255,0.82); margin-top: 10px; }
+
+    .btn-kopieer {
+      position: relative; flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: white; color: var(--primary-dark);
+      border: none; border-radius: var(--r-pill); cursor: pointer;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      padding: 14px 26px;
+      box-shadow: 0 10px 20px rgba(10,30,70,0.25);
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
+    }
+    .btn-kopieer:hover { transform: translateY(-2px); box-shadow: 0 14px 26px rgba(10,30,70,0.30); }
+    .btn-kopieer.gekopieerd { background: var(--groen); color: white; }
+
+    /* ── FILTERS ── */
+    .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
+    .filter-pil {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--card-bg); border: 1.5px solid var(--border);
+      color: var(--muted); font-family: inherit; font-size: 14px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 9px 18px; cursor: pointer;
+      transition: border-color .15s, color .15s, background .15s;
+    }
+    .filter-pil .telling {
+      background: rgba(0,0,0,0.06); border-radius: var(--r-pill);
+      padding: 1px 8px; font-size: 12px;
+    }
+    .filter-pil:hover { border-color: var(--primary); color: var(--primary-dark); }
+    .filter-pil.actief { background: var(--dark); border-color: var(--dark); color: white; }
+    .filter-pil.actief .telling { background: rgba(255,255,255,0.18); }
+
+    /* ── GROEPJES GRID ── */
+    .groepjes-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 18px;
+    }
+
+    .groep-kaart {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-left: 5px solid var(--kleur-accent, var(--primary));
+      border-radius: 20px; box-shadow: var(--shadow-card);
+      padding: 20px 22px; cursor: pointer;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: transform .18s, box-shadow .18s;
+      animation: fadeUp .35s cubic-bezier(.22,1,.36,1) both;
+    }
+    .groep-kaart:hover { transform: translateY(-4px); box-shadow: 0 28px 38px -8px rgba(0,0,0,.16); }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+    .groep-kop { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .groep-namen { font-size: 17px; font-weight: 700; line-height: 1.3; }
+    .status-badge {
+      flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; white-space: nowrap;
+      border-radius: var(--r-pill); padding: 5px 12px;
+      background: var(--kleur-soft, var(--primary-soft)); color: var(--kleur-dark, var(--primary-dark));
+    }
+
+    .groep-missie { font-size: 13.5px; color: var(--muted); }
+    .groep-missie strong { color: var(--dark); }
+
+    .voortgang-balk-track { height: 8px; border-radius: var(--r-pill); background: #eef1f5; overflow: hidden; }
+    .voortgang-balk-vulling {
+      height: 100%; border-radius: var(--r-pill);
+      background: var(--kleur-accent, var(--primary));
+      transition: width .4s cubic-bezier(.22,1,.36,1);
+    }
+
+    .groep-voet { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: var(--muted); }
+    .groep-voortgang-tekst { font-weight: 700; color: var(--dark); }
+
+    /* ── LEGE STAAT ── */
+    .lege-staat {
+      background: var(--card-bg); border: 1px dashed var(--border); border-radius: var(--r-card);
+      padding: 56px 32px; text-align: center; color: var(--muted);
+    }
+    .lege-staat img { height: 44px; margin-bottom: 14px; }
+    .lege-staat-titel { font-size: 17px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+
+    /* ── DETAIL DRAWER ── */
+    .drawer-overlay {
+      position: fixed; inset: 0; background: rgba(15,20,30,0.42);
+      opacity: 0; pointer-events: none; transition: opacity .22s;
+      z-index: 300; display: flex; justify-content: flex-end;
+    }
+    .drawer-overlay.zichtbaar { opacity: 1; pointer-events: auto; }
+
+    .drawer {
+      width: min(420px, 100vw); height: 100%; background: var(--page-bg);
+      box-shadow: -20px 0 40px rgba(0,0,0,0.18);
+      transform: translateX(100%); transition: transform .28s cubic-bezier(.22,1,.36,1);
+      overflow-y: auto; padding: 28px 26px 48px;
+    }
+    .drawer-overlay.zichtbaar .drawer { transform: translateX(0); }
+
+    .drawer-sluit {
+      float: right; width: 34px; height: 34px; border-radius: 50%; border: none;
+      background: rgba(0,0,0,0.06); color: var(--muted); font-size: 16px; cursor: pointer;
+    }
+    .drawer-sluit:hover { background: rgba(0,0,0,0.1); color: var(--dark); }
+
+    .drawer-titel { font-size: 20px; font-weight: 700; clear: both; padding-top: 6px; margin-bottom: 4px; }
+    .drawer-badge-rij { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 20px; }
+    .naam-pil {
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,.2);
+      color: var(--primary-dark); font-size: 13px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 5px 12px;
+    }
+
+    .missie-blok {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+      padding: 18px 20px; margin-bottom: 14px;
+    }
+    .missie-blok-kop { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .missie-blok-titel { font-size: 14px; font-weight: 700; }
+    .missie-blok-status {
+      font-size: 11.5px; font-weight: 700; border-radius: var(--r-pill); padding: 3px 10px;
+    }
+    .antwoord-regel { font-size: 13.5px; color: var(--dark); margin-bottom: 8px; line-height: 1.5; }
+    .antwoord-regel .label { display: block; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin-bottom: 2px; }
+    .chip-rij { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+    .chip { background: #f0f2f5; border-radius: var(--r-pill); padding: 3px 10px; font-size: 12.5px; font-weight: 700; color: var(--dark); }
+    .placeholder-tekst { font-size: 13px; color: var(--muted); font-style: italic; }
+
+    @media (max-width: 640px) {
+      .main { padding: 28px 18px 80px; }
+      .link-kaart { padding: 26px 22px; }
+      .header-inner { padding: 0 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-mark">KvM</div>
+        <div>
+          <div class="logo-name">Klaar voor Middelbaar</div>
+          <div class="logo-role">Missie Middelbaar · Docentweergave</div>
+        </div>
+      </div>
+      <div class="live-pill"><span class="live-dot"></span> Live</div>
+    </div>
+  </header>
+
+  <main class="main">
+
+    <div class="page-titel">Missie Middelbaar — Docentendashboard</div>
+    <div class="page-sub">Volg de groepjes live tijdens de les. Geen sessiecode nodig, iedereen gebruikt dezelfde link.</div>
+
+    <div class="link-kaart">
+      <div class="link-tekst">
+        <div class="link-titel">Kopieer leerlinglink</div>
+        <div class="link-url-rij">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <span class="link-url" id="link-url">…</span>
+        </div>
+        <div class="link-sub">Deel deze link met je leerlingen.</div>
+      </div>
+      <button class="btn-kopieer" id="btn-kopieer" onclick="kopieerLink()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span id="btn-kopieer-tekst">Kopieer leerlinglink</span>
+      </button>
+    </div>
+
+    <div class="filters" id="filters"></div>
+
+    <div id="grid-wrapper"></div>
+  </main>
+
+  <div class="drawer-overlay" id="drawer-overlay" onclick="if(event.target===this) sluitDetail()">
+    <div class="drawer" id="drawer"></div>
+  </div>
+
+  <script>
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const MISSIE_INFO = {
+      1: { titel: 'Ik begrijp de uitleg niet', tool: 'Math with Menno',    kleur: 'blauw'  },
+      2: { titel: 'Ik wil extra oefenen',       tool: 'Online oefenwebsites', kleur: 'paars'  },
+      3: { titel: 'Ik wil een leercoach',       tool: 'Jay I',             kleur: 'oranje' },
+    };
+
+    const KLEUR_VAR = {
+      blauw:  { accent: 'var(--primary)',    dark: 'var(--primary-dark)', soft: 'var(--primary-soft)' },
+      paars:  { accent: 'var(--paars)',      dark: 'var(--paars-dark)',   soft: 'var(--paars-soft)'   },
+      oranje: { accent: 'var(--oranje)',     dark: 'var(--oranje-dark)',  soft: 'var(--oranje-soft)'  },
+      groen:  { accent: 'var(--groen)',      dark: 'var(--groen-dark)',  soft: 'var(--groen-soft)'  },
+    };
+
+    let groepjes = [];
+    let huidigFilter = 'alle';
+    let actieveGroepId = null;
+
+    // ── Leerlinglink ─────────────────────────────────────────────────────────
+    const leerlingLink = `${window.location.origin}/les3/missie`;
+    document.getElementById('link-url').textContent = leerlingLink.replace(/^https?:\/\//, '');
+
+    function kopieerLink() {
+      navigator.clipboard.writeText(leerlingLink).then(() => {
+        const btn = document.getElementById('btn-kopieer');
+        const tekst = document.getElementById('btn-kopieer-tekst');
+        const vorige = tekst.textContent;
+        btn.classList.add('gekopieerd');
+        tekst.textContent = 'Gekopieerd!';
+        setTimeout(() => { btn.classList.remove('gekopieerd'); tekst.textContent = vorige; }, 1800);
+      });
+    }
+
+    // ── Status & voortgang afgeleid uit echte voortgangsvelden ──────────────
+    // (missie_1/2/3_klaar en missie_huidig komen live uit Supabase; een fijnmaziger
+    // percentage/status per tussenstap vraagt om extra logging vanuit de missie-pagina's zelf)
+    function statusVoorGroep(g) {
+      if (g.missie_3_klaar) return { fase: 'klaar', label: 'Alle missies afgerond', missieNr: null, kleur: 'groen' };
+      if (g.missie_2_klaar) return { fase: 'missie3', label: 'Bezig met Missie 3', missieNr: 3, kleur: MISSIE_INFO[3].kleur };
+      if (g.missie_1_klaar) return { fase: 'missie2', label: 'Bezig met Missie 2', missieNr: 2, kleur: MISSIE_INFO[2].kleur };
+      return { fase: 'missie1', label: 'Bezig met Missie 1', missieNr: 1, kleur: MISSIE_INFO[1].kleur };
+    }
+
+    function voortgangVoorGroep(g) {
+      if (g.missie_3_klaar) return 100;
+      if (g.missie_2_klaar) return 66;
+      if (g.missie_1_klaar) return 33;
+      return 0;
+    }
+
+    function relatieveTijd(iso) {
+      if (!iso) return 'Nog geen activiteit';
+      const sec = Math.round((Date.now() - new Date(iso).getTime()) / 1000);
+      if (sec < 30) return 'Zojuist actief';
+      if (sec < 60) return `${sec} sec geleden`;
+      const min = Math.round(sec / 60);
+      if (min < 60) return `${min} min geleden`;
+      const uur = Math.round(min / 60);
+      return `${uur} uur geleden`;
+    }
+
+    function escapeHtml(t) {
+      const d = document.createElement('div');
+      d.textContent = String(t ?? '');
+      return d.innerHTML;
+    }
+
+    // ── Filters ──────────────────────────────────────────────────────────────
+    const FILTER_DEFS = [
+      { key: 'alle',    label: 'Alle groepjes' },
+      { key: 'missie1', label: 'Missie 1' },
+      { key: 'missie2', label: 'Missie 2' },
+      { key: 'missie3', label: 'Missie 3' },
+      { key: 'klaar',   label: 'Klaar' },
+    ];
+
+    function tellingVoorFilter(key) {
+      if (key === 'alle') return groepjes.length;
+      return groepjes.filter(g => statusVoorGroep(g).fase === key).length;
+    }
+
+    function renderFilters() {
+      const wrap = document.getElementById('filters');
+      wrap.innerHTML = FILTER_DEFS.map(f => `
+        <button class="filter-pil ${huidigFilter === f.key ? 'actief' : ''}" onclick="zetFilter('${f.key}')">
+          ${f.label} <span class="telling">${tellingVoorFilter(f.key)}</span>
+        </button>`).join('');
+    }
+
+    function zetFilter(key) {
+      huidigFilter = key;
+      render();
+    }
+
+    // ── Groepjes grid ────────────────────────────────────────────────────────
+    function render() {
+      renderFilters();
+      const wrap = document.getElementById('grid-wrapper');
+      const lijst = huidigFilter === 'alle' ? groepjes : groepjes.filter(g => statusVoorGroep(g).fase === huidigFilter);
+
+      if (groepjes.length === 0) {
+        wrap.innerHTML = `
+          <div class="lege-staat">
+            <img src="/Afbeeldingen/emojis nieuw/raket.png" alt="">
+            <div class="lege-staat-titel">Nog geen groepjes gestart</div>
+            <div>Deel de leerlinglink hierboven om te beginnen.</div>
+          </div>`;
+        return;
+      }
+
+      if (lijst.length === 0) {
+        wrap.innerHTML = `
+          <div class="lege-staat">
+            <img src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt="">
+            <div class="lege-staat-titel">Geen groepjes in dit filter</div>
+            <div>Kies een ander filter om andere groepjes te zien.</div>
+          </div>`;
+        return;
+      }
+
+      wrap.innerHTML = `<div class="groepjes-grid">${lijst.map(kaartHtml).join('')}</div>`;
+    }
+
+    function kaartHtml(g) {
+      const status = statusVoorGroep(g);
+      const kleur = KLEUR_VAR[status.kleur];
+      const voortgang = voortgangVoorGroep(g);
+      const namen = (g.namen || []).join(' & ') || 'Naamloos groepje';
+      const missieLabel = status.missieNr
+        ? `<strong>Missie ${status.missieNr}</strong> · ${escapeHtml(MISSIE_INFO[status.missieNr].titel)}`
+        : 'Alle drie de missies afgerond';
+
+      return `
+        <div class="groep-kaart" style="--kleur-accent:${kleur.accent};--kleur-dark:${kleur.dark};--kleur-soft:${kleur.soft}" onclick="toonDetail('${g.id}')">
+          <div class="groep-kop">
+            <div class="groep-namen">${escapeHtml(namen)}</div>
+            <div class="status-badge">${escapeHtml(status.label)}</div>
+          </div>
+          <div class="groep-missie">${missieLabel}</div>
+          <div class="voortgang-balk-track"><div class="voortgang-balk-vulling" style="width:${voortgang}%"></div></div>
+          <div class="groep-voet">
+            <span>${relatieveTijd(g.bijgewerkt_op)}</span>
+            <span class="groep-voortgang-tekst">${voortgang}%</span>
+          </div>
+        </div>`;
+    }
+
+    // ── Detailweergave per groepje ───────────────────────────────────────────
+    function toonDetail(id) {
+      actieveGroepId = id;
+      renderDetail();
+      document.getElementById('drawer-overlay').classList.add('zichtbaar');
+    }
+
+    function sluitDetail() {
+      document.getElementById('drawer-overlay').classList.remove('zichtbaar');
+      actieveGroepId = null;
+    }
+
+    function missieBlokStatus(klaar, bezig) {
+      if (klaar) return { tekst: 'Afgerond', bg: 'var(--groen-soft)', kleur: 'var(--groen-dark)' };
+      if (bezig) return { tekst: 'Bezig', bg: 'var(--primary-soft)', kleur: 'var(--primary-dark)' };
+      return { tekst: 'Vergrendeld', bg: '#f0f2f5', kleur: 'var(--muted)' };
+    }
+
+    function renderMissie1(a, klaar, bezig) {
+      const s = missieBlokStatus(klaar, bezig);
+      let inhoud = `<div class="placeholder-tekst">Nog geen antwoorden, dit groepje is nog niet bij Missie 1 bezig geweest.</div>`;
+      if (a) {
+        inhoud = `
+          <div class="antwoord-regel"><span class="label">Waardering uitlegvideo</span>${'★'.repeat(a.v1_sterren || 0)}${'☆'.repeat(5 - (a.v1_sterren || 0))}</div>
+          <div class="antwoord-regel"><span class="label">Vakken voor uitlegvideo's</span>
+            <div class="chip-rij">${(a.v2_vakken || []).map(v => `<span class="chip">${escapeHtml(v)}</span>`).join('') || '<span class="placeholder-tekst">Geen keuze</span>'}</div>
+          </div>
+          <div class="antwoord-regel"><span class="label">Grootste voordeel (open antwoord)</span>${escapeHtml(a.v3_voordeel) || '<span class="placeholder-tekst">Niet ingevuld</span>'}</div>
+          <div class="antwoord-regel"><span class="label">Oefenvragen wiskunde</span>${a.wiskunde_fouten ? `${a.wiskunde_fouten.totaal} fout(en) in totaal` : 'Geen data'}</div>`;
+      }
+      return `<div class="missie-blok">
+        <div class="missie-blok-kop"><div class="missie-blok-titel">Missie 1 · Math with Menno</div><div class="missie-blok-status" style="background:${s.bg};color:${s.kleur}">${s.tekst}</div></div>
+        ${inhoud}
+      </div>`;
+    }
+
+    function renderMissie2(a, klaar, bezig) {
+      const s = missieBlokStatus(klaar, bezig);
+      let inhoud = `<div class="placeholder-tekst">Nog geen antwoorden, dit groepje is nog niet bij Missie 2 bezig geweest.</div>`;
+      if (a) {
+        inhoud = `
+          <div class="antwoord-regel"><span class="label">Bekeken oefenwebsites</span>
+            <div class="chip-rij">${(a.bekeken_sites || []).map(v => `<span class="chip">${escapeHtml(v)}</span>`).join('') || '<span class="placeholder-tekst">Geen</span>'}</div>
+          </div>
+          <div class="antwoord-regel"><span class="label">Fijnste website (open antwoord)</span>${escapeHtml(a.v2_fijnst) || '<span class="placeholder-tekst">Niet ingevuld</span>'}</div>
+          <div class="antwoord-regel"><span class="label">Minst fijne website (open antwoord)</span>${escapeHtml(a.v3_minst_fijn) || '<span class="placeholder-tekst">Niet ingevuld</span>'}</div>
+          <div class="antwoord-regel"><span class="label">Belangrijkste criteria</span>
+            <div class="chip-rij">${(a.v4_criteria || []).map(v => `<span class="chip">${escapeHtml(v)}</span>`).join('') || '<span class="placeholder-tekst">Geen</span>'}</div>
+          </div>
+          <div class="antwoord-regel"><span class="label">Andere oefenwebsites (open antwoord)</span>${escapeHtml(a.v6_andere_sites) || '<span class="placeholder-tekst">Niet ingevuld</span>'}</div>`;
+      }
+      return `<div class="missie-blok">
+        <div class="missie-blok-kop"><div class="missie-blok-titel">Missie 2 · Online oefenwebsites</div><div class="missie-blok-status" style="background:${s.bg};color:${s.kleur}">${s.tekst}</div></div>
+        ${inhoud}
+      </div>`;
+    }
+
+    function renderMissie3(a, klaar, bezig) {
+      const s = missieBlokStatus(klaar, bezig);
+      const inhoud = `<div class="placeholder-tekst">Jay I (de leercoach-chat) slaat momenteel geen antwoorden op in Supabase. Zodra dat is toegevoegd verschijnen de gespreksresultaten hier automatisch.</div>`;
+      return `<div class="missie-blok">
+        <div class="missie-blok-kop"><div class="missie-blok-titel">Missie 3 · Jay I</div><div class="missie-blok-status" style="background:${s.bg};color:${s.kleur}">${s.tekst}</div></div>
+        ${inhoud}
+      </div>`;
+    }
+
+    function renderDetail() {
+      const g = groepjes.find(x => x.id === actieveGroepId);
+      const drawer = document.getElementById('drawer');
+      if (!g) { drawer.innerHTML = ''; return; }
+
+      const a = g.antwoorden || {};
+      const voortgang = voortgangVoorGroep(g);
+
+      drawer.innerHTML = `
+        <button class="drawer-sluit" onclick="sluitDetail()" aria-label="Sluiten">✕</button>
+        <div class="drawer-titel">Groepsdetail</div>
+        <div class="drawer-badge-rij">
+          ${(g.namen || []).map(n => `<span class="naam-pil">${escapeHtml(n)}</span>`).join('') || '<span class="placeholder-tekst">Geen namen bekend</span>'}
+        </div>
+        <div class="voortgang-balk-track" style="margin-bottom:20px"><div class="voortgang-balk-vulling" style="width:${voortgang}%;background:var(--primary)"></div></div>
+        ${renderMissie1(a.missie1, g.missie_1_klaar, !g.missie_1_klaar)}
+        ${renderMissie2(a.missie2, g.missie_2_klaar, g.missie_1_klaar && !g.missie_2_klaar)}
+        ${renderMissie3(a.missie3, g.missie_3_klaar, g.missie_2_klaar && !g.missie_3_klaar)}
+      `;
+    }
+
+    // ── Live data uit Supabase ───────────────────────────────────────────────
+    // Let op: dit haalt alle rijen uit missie_groepjes op (geen sessiecode/klasfilter).
+    // Prima voor één klas tegelijk; bij meerdere gelijktijdige klassen lopen groepjes
+    // hier door elkaar, dat vraagt later een sessie- of klas-scoping op deze tabel.
+    async function laadGroepjes() {
+      const { data, error } = await db.from('missie_groepjes').select('*');
+      if (!error && data) {
+        groepjes = data;
+        render();
+      }
+    }
+
+    function upsertGroepje(rij) {
+      const idx = groepjes.findIndex(g => g.id === rij.id);
+      if (idx === -1) groepjes.push(rij);
+      else groepjes[idx] = rij;
+    }
+
+    function verwijderGroepje(id) {
+      groepjes = groepjes.filter(g => g.id !== id);
+    }
+
+    db.channel('docent-missie-monitor')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'missie_groepjes' }, payload => {
+        upsertGroepje(payload.new);
+        render();
+        if (actieveGroepId === payload.new.id) renderDetail();
+      })
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'missie_groepjes' }, payload => {
+        upsertGroepje(payload.new);
+        render();
+        if (actieveGroepId === payload.new.id) renderDetail();
+      })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'missie_groepjes' }, payload => {
+        verwijderGroepje(payload.old.id);
+        render();
+        if (actieveGroepId === payload.old.id) sluitDetail();
+      })
+      .subscribe();
+
+    render();
+    laadGroepjes();
+    setInterval(render, 30000); // relatieve tijdteksten ("3 min geleden") actueel houden
+  </script>
+</body>
+</html>
