@@ -70,6 +70,7 @@ REWRITES = {
     "/les6/poll":         "/Live poll/join.html",
     "/les7/poll":         "/Live poll/join.html",
     "/les8/poll":         "/Live poll/join.html",
+    "/les3/missie":       "/Missie Middelbaar/index.html",
     "/Inlogpagina":        "/Inlogpagina/index.html",
     "/Inlogpagina/":       "/Inlogpagina/index.html",
     "/proef/":             "/Proeflicentie/dashboard.html",

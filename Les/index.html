@@ -745,10 +745,10 @@
                 ? `<button id="btn-les" class="hero-btn" onclick="scrollToPresentation()" type="button">▶ Starten met de les</button>`
                 : `<button class="hero-btn" type="button" disabled title="De presentatie voor deze les is nog niet toegevoegd">▶ Starten met de les <span style="opacity:0.7;font-weight:400">(binnenkort)</span></button>`}
               ${L.n === 3 ? `
-              <button id="btn-missie" class="hero-btn" type="button" disabled>
+              <a id="btn-missie" class="hero-btn" href="/les3/missie" target="_blank" rel="noopener">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;flex-shrink:0"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
                 Missie Middelbaar
-              </button>` : ''}
+              </a>` : ''}
               ${L.n !== 8 && L.n !== 4 && L.n !== 7 && L.n !== 3 ? `
               <a id="btn-poll" class="hero-btn hero-btn-live" href="/les${L.n}/docent/poll" target="_blank" rel="noopener">
                 <span class="live-dot"></span> Start live poll

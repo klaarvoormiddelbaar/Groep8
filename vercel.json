@@ -45,6 +45,7 @@
     { "source": "/les6/poll", "destination": "/Live poll/join.html" },
     { "source": "/les7/poll", "destination": "/Live poll/join.html" },
     { "source": "/les8/poll", "destination": "/Live poll/join.html" },
+    { "source": "/les3/missie", "destination": "/Missie Middelbaar/index.html" },
     { "source": "/les1/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-1" },
     { "source": "/les2/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-2" },
     { "source": "/les3/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-3" },
