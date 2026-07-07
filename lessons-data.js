@@ -90,19 +90,19 @@ const LESSONS = [
     sub: 'Zelfverzekerd naar een toets toewerken',
     duur: '50–60 min',
     url: '/les5',
-    tip: 'De digitale les bevat een interactieve drag-and-drop opdracht. Plan vooraf toegang tot tablets of computers voor de hele klas.',
+    tip: 'Bij Voorspel de klas voelen leerlingen zich vaak minder alleen als blijkt dat veel klasgenoten hetzelfde ervaren. Neem de tijd om de resultaten klassikaal te bespreken.',
     doelen: [
-      'Leerlingen begrijpen het verschil tussen formeel en informeel taalgebruik.',
-      'Leerlingen kunnen een formele e-mail of brief schrijven.',
-      'Leerlingen weten wanneer welke communicatiestijl gepast is.'
+      'Leerlingen herkennen dat stress voor een toets heel normaal is.',
+      'Leerlingen leren praktische manieren om met toetsstress om te gaan.',
+      'Leerlingen ontdekken dat ze niet de enigen zijn die zich weleens onzeker voelen.'
     ],
     tl: [
-      { t: '0–10 min',  n: 'Voorbeelden vergelijken', d: 'Vergelijk een informeel appbericht met een formele e-mail aan een docent.' },
-      { t: '10–28 min', n: 'Uitleg',                  d: 'Bespreek kenmerken van formeel taalgebruik via de digitale les.' },
-      { t: '28–45 min', n: 'Schrijfopdracht',         d: 'Leerlingen herschrijven een informele boodschap als formele e-mail.' },
-      { t: '45–55 min', n: 'Peerfeedback',            d: 'Wissel e-mails uit en geef kort feedback op elkaars werk.' }
+      { t: '0–10 min',  n: 'Start en leerdoelen',   d: 'Open de les en bespreek kort waar deze les over gaat: omgaan met toetsen en stress.' },
+      { t: '10–25 min', n: 'Uitleg',                d: 'Bespreek de presentatie over stress, herkenning en handige tips om ermee om te gaan.' },
+      { t: '25–45 min', n: 'Voorspel de klas',      d: 'Leerlingen beantwoorden individueel en anoniem de stellingen en voorspellen hoeveel procent van de klas hetzelfde denkt.' },
+      { t: '45–55 min', n: 'Klassikaal bespreken',  d: 'Bekijk de resultaten in het docentenportaal en bespreek samen wat opvalt aan de voorspellingen versus de werkelijkheid.' }
     ],
-    mat: ['Devices voor de digitale les', 'Werkblad e-mailschrijven (bijlage 6)', 'Voorbeeldmails (bijlage 7)']
+    mat: ['Devices voor Voorspel de klas', 'Digibord voor de presentatie en de klassikale bespreking']
   },
   {
     n: 6, g1: '#0c4a6e', g2: '#0284c7',
