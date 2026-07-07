@@ -1271,7 +1271,11 @@
       window.addEventListener('resize', reposition);
       window.addEventListener('scroll', reposition, { passive: true });
 
-      window.addEventListener('load', function () {
+      function metVoltooidePagina(cb) {
+        if (document.readyState === 'complete') cb();
+        else window.addEventListener('load', cb);
+      }
+      metVoltooidePagina(function () {
         setTimeout(tutMaybeStart, 600);
       });
     })();
