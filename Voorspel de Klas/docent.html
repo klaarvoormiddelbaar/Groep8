@@ -21,6 +21,7 @@
       --groen:        #10a37f;
       --groen-dark:   #0c8268;
       --groen-soft:   rgba(16,163,127,0.10);
+      --rood:         #e53e3e;
       --dark:         #191c1d;
       --muted:        #6d747a;
       --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
@@ -130,7 +131,7 @@
     .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--groen); animation: pulse 1.6s infinite; }
     @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.45; transform:scale(0.8); } }
 
-    .btn-resultaten {
+    .btn-resultaten, .btn-ghost {
       display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0;
       border: none; border-radius: var(--r-pill); cursor: pointer; text-decoration: none;
       font-family: inherit; font-size: 15px; font-weight: 700; color: white;
@@ -139,12 +140,103 @@
       transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
     }
     .btn-resultaten:hover { background: var(--groen-dark); transform: translateY(-2px); box-shadow: 0 14px 20px -3px rgba(16,163,127,.34); }
+    .btn-groot {
+      width: 100%; height: 56px; font-size: 17px;
+    }
+    .btn-ghost {
+      background: #f0f2f5; color: var(--muted); box-shadow: none;
+    }
+    .btn-ghost:hover { background: #e7eaef; color: var(--dark); transform: none; }
+    .knoppen-rij { display: flex; justify-content: flex-end; gap: 12px; margin-top: 28px; }
+
+    .sectie {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 32px 34px; margin-bottom: 20px;
+      animation: fadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+    .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .progress-label { font-size: 12.5px; font-weight: 700; color: var(--muted); white-space: nowrap; letter-spacing: .03em; }
+    .progress-track { flex: 1; height: 8px; background: #eef1f5; border-radius: var(--r-pill); overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); border-radius: var(--r-pill); transition: width .4s cubic-bezier(.22,1,.36,1); }
+
+    .stelling-groot { font-size: 28px; font-weight: 700; color: var(--dark); line-height: 1.3; margin-bottom: 24px; }
+
+    .live-teller {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,.20);
+      color: var(--primary-dark); font-size: 14px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 8px 18px; margin-bottom: 26px;
+    }
+
+    /* Resultaat-balken */
+    .resultaat-rij { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+    .resultaat-kop { display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
+    .resultaat-label { font-weight: 700; color: var(--muted); }
+    .resultaat-pct { font-weight: 700; }
+    .balk-track { height: 30px; background: #eef1f5; border-radius: var(--r-pill); overflow: hidden; }
+    .balk { height: 100%; border-radius: var(--r-pill); width: 0%; transition: width 0.85s cubic-bezier(0.22,1,0.36,1); }
+    .balk.ja  { background: var(--groen); }
+    .balk.nee { background: var(--rood); }
+    .resultaat-pct.ja  { color: var(--groen-dark); }
+    .resultaat-pct.nee { color: var(--rood); }
+
+    /* Gespreksstarter */
+    .gespreksstarter { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .gespreksstarter-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .gespreksvraag-rij { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .gespreksvraag-tekst { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.4; }
+    .mc-help-wrap { position: relative; flex-shrink: 0; }
+    .mc-help-btn {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: #fafbfc; color: var(--muted);
+      font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .mc-help-btn:hover { border-color: var(--primary); color: var(--primary-dark); background: var(--primary-soft); }
+    .mc-tooltip {
+      display: none; position: absolute; top: calc(100% + 8px); right: 0; width: 280px;
+      background: #fff; border: 1px solid var(--border); border-radius: 16px;
+      padding: 14px 16px; box-shadow: var(--shadow-card);
+      font-size: 13.5px; line-height: 1.6; color: var(--dark); z-index: 200;
+    }
+    .mc-tooltip.zichtbaar { display: block; animation: fadeUp .2s ease both; }
+    .mc-tooltip-titel { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; font-size: 13px; }
+
+    /* Podium / ranglijst */
+    .podium { display: flex; gap: 14px; margin-bottom: 20px; }
+    .podium-plek {
+      flex: 1; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px;
+      box-shadow: var(--shadow-card); padding: 22px 16px; text-align: center;
+    }
+    .podium-1 { border-color: rgba(245,158,11,.4); background: rgba(245,158,11,.06); }
+    .podium-2 { border-color: rgba(156,163,175,.4); }
+    .podium-3 { border-color: rgba(180,83,9,.3); background: rgba(180,83,9,.04); }
+    .podium-rang { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+    .podium-naam { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .podium-score { font-size: 12.5px; color: var(--muted); }
+    .rest-lijst { display: flex; flex-direction: column; gap: 8px; }
+    .rest-rij {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fafbfc; border: 1px solid var(--border); border-radius: 14px;
+      padding: 12px 18px; font-size: 14px;
+    }
+    .rest-rij span:first-child { font-weight: 700; }
+    .rest-rij span:last-child { color: var(--muted); }
+
+    .leeg-kaart, .laden-tekst {
+      background: var(--card-bg); border: 1px dashed var(--border); border-radius: var(--r-card);
+      padding: 48px 32px; text-align: center; color: var(--muted); font-size: 15px;
+    }
 
     @media (max-width: 640px) {
       .main { padding: 28px 18px 80px; }
-      .link-kaart { padding: 26px 22px; }
+      .link-kaart, .sectie { padding: 24px 22px; }
       .header-inner { padding: 0 18px; }
       .stat-kaart { flex-direction: column; align-items: flex-start; }
+      .podium { flex-direction: column; }
     }
   </style>
 </head>
@@ -162,39 +254,8 @@
     </div>
   </header>
 
-  <main class="main">
-
-    <div class="page-titel">Voorspel de klas — Docentendashboard</div>
-    <div class="page-sub">Deel de link met je klas. Geen sessiecode nodig, iedereen gebruikt jouw vaste link.</div>
-
-    <div class="link-kaart">
-      <div class="link-tekst">
-        <div class="link-titel">Kopieer leerlinglink</div>
-        <div class="link-url-rij">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
-          <span class="link-url" id="link-url">…</span>
-        </div>
-        <div class="link-sub">Deel deze link met je leerlingen.</div>
-      </div>
-      <button class="btn-kopieer" id="btn-kopieer" onclick="kopieerLink()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        <span id="btn-kopieer-tekst">Kopieer leerlinglink</span>
-      </button>
-    </div>
-
-    <div class="stat-kaart">
-      <div>
-        <div class="stat-label">Ingevulde reacties</div>
-        <div class="stat-getal" id="aantalReacties">0</div>
-      </div>
-      <div class="live-pill"><span class="live-dot"></span> Live</div>
-    </div>
-
-    <div style="display:flex;justify-content:flex-end">
-      <a class="btn-resultaten" href="/Voorspel%20de%20Klas/docent-resultaten.html">
-        Naar resultaten <span style="transition:transform .2s">→</span>
-      </a>
-    </div>
+  <main class="main" id="app">
+    <div class="laden-tekst">Even laden…</div>
   </main>
 
   <script>
@@ -202,26 +263,40 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let leerlingLink = '';
+    const STELLINGEN = [
+      { stelling: 'Ik ben weleens gestrest voor een toets.', gvVraag: 'Hoe kun je ervoor zorgen dat je minder gestrest bent voor een toets?', gvAntwoord: 'Op tijd beginnen met leren, een planning maken en op tijd naar bed gaan voor de toets.' },
+      { stelling: 'Ik vind het spannend om nieuwe mensen te ontmoeten op de middelbare school.', gvVraag: 'Wat kun je doen om makkelijker nieuwe mensen te leren kennen?', gvAntwoord: 'Iemand die alleen zit een compliment geven of een vraag stellen, samen aan een opdracht werken, of je aansluiten bij een club of sport.' },
+      { stelling: 'Ik haal weleens een cijfer waar ik niet blij mee ben.', gvVraag: 'Wat kun je doen als je een cijfer haalt dat tegenvalt?', gvAntwoord: 'Vragen wat er misging, de toets nabespreken met de docent, en de volgende keer anders leren.' },
+      { stelling: 'Ik vind het lastig om hulp te vragen als ik iets niet snap.', gvVraag: 'Waarom is het juist slim om hulp te vragen als je iets niet snapt?', gvAntwoord: 'Hoe eerder je het vraagt, hoe sneller je het snapt. De meeste docenten en klasgenoten helpen je graag.' },
+      { stelling: 'Ik slaap weleens slecht van de zenuwen voor een belangrijke dag.', gvVraag: 'Wat kun je doen als je slecht slaapt van de zenuwen?', gvAntwoord: "Op tijd naar bed gaan, rustig ademhalen, en je spullen 's avonds al klaarleggen zodat je niet hoeft te stressen." },
+      { stelling: 'Ik vind het spannend om in het begin alleen te lunchen.', gvVraag: 'Wat kun je doen als je in het begin nog niemand hebt om mee te lunchen?', gvAntwoord: 'Aan iemand vragen of je erbij mag zitten, of zelf iemand uitnodigen die ook alleen zit.' }
+    ];
+    const TUSSENSTAND_NA_INDEX = 2; // na de 3e stelling (0-based index 2)
+
+    function escapeHtml(t) {
+      const d = document.createElement('div');
+      d.textContent = String(t ?? '');
+      return d.innerHTML;
+    }
+
+    let huidigeGebruiker = null;
     let linkId = null;
+    let leerlingLink = '';
+    let sessie = null;
+    let deelnemersCount = 0;
+    let antwoordenCount = 0;
+    let antwoordenKanaal = null;
 
     function kopieerLink() {
       navigator.clipboard.writeText(leerlingLink).then(() => {
         const btn = document.getElementById('btn-kopieer');
         const tekst = document.getElementById('btn-kopieer-tekst');
+        if (!btn || !tekst) return;
         const vorige = tekst.textContent;
         btn.classList.add('gekopieerd');
         tekst.textContent = 'Gekopieerd!';
         setTimeout(() => { btn.classList.remove('gekopieerd'); tekst.textContent = vorige; }, 1800);
       });
-    }
-
-    async function laadAantalReacties() {
-      const { count } = await db
-        .from('voorspel_reacties')
-        .select('id', { count: 'exact', head: true })
-        .eq('link_id', linkId);
-      document.getElementById('aantalReacties').textContent = count ?? 0;
     }
 
     async function haalOfMaakLink() {
@@ -243,7 +318,287 @@
       return nieuw;
     }
 
-    let huidigeGebruiker = null;
+    async function haalOfMaakSessie() {
+      const { data: bestaande, error: leesFout } = await db
+        .from('voorspel_sessies')
+        .select('*')
+        .eq('link_id', linkId)
+        .neq('status', 'afgelopen')
+        .order('aangemaakt_op', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (leesFout) { alert('Kon geen sessie ophalen: ' + leesFout.message); return null; }
+      if (bestaande) return bestaande;
+
+      const { data: nieuwe, error: maakFout } = await db
+        .from('voorspel_sessies')
+        .insert({ link_id: linkId })
+        .select('*')
+        .single();
+      if (maakFout) { alert('Kon geen sessie starten: ' + maakFout.message); return null; }
+      return nieuwe;
+    }
+
+    async function laadDeelnemersCount() {
+      const { count } = await db.from('voorspel_deelnemers').select('id', { count: 'exact', head: true }).eq('sessie_id', sessie.id);
+      deelnemersCount = count || 0;
+    }
+
+    async function laadAntwoordenCount(idx) {
+      const { count } = await db.from('voorspel_antwoorden').select('id', { count: 'exact', head: true }).eq('sessie_id', sessie.id).eq('stelling_index', idx);
+      antwoordenCount = count || 0;
+      const el = document.getElementById('antwoordenGetal');
+      if (el) el.textContent = antwoordenCount;
+    }
+
+    function abonneerOpSessie() {
+      db.channel('docent-voorspel-sessie-' + sessie.id)
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'voorspel_sessies', filter: `id=eq.${sessie.id}` }, payload => {
+          sessie = payload.new;
+          render();
+        })
+        .subscribe();
+    }
+
+    function abonneerOpDeelnemers() {
+      db.channel('docent-voorspel-deelnemers-' + sessie.id)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'voorspel_deelnemers', filter: `sessie_id=eq.${sessie.id}` }, () => {
+          deelnemersCount++;
+          const el = document.getElementById('deelnemersGetal');
+          if (el) el.textContent = deelnemersCount;
+        })
+        .subscribe();
+    }
+
+    function abonneerOpAntwoorden(idx) {
+      if (antwoordenKanaal) { db.removeChannel(antwoordenKanaal); antwoordenKanaal = null; }
+      antwoordenKanaal = db.channel('docent-voorspel-antwoorden-' + sessie.id + '-' + idx)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'voorspel_antwoorden', filter: `sessie_id=eq.${sessie.id}` }, payload => {
+          if (payload.new.stelling_index !== idx) return;
+          antwoordenCount++;
+          const el = document.getElementById('antwoordenGetal');
+          if (el) el.textContent = antwoordenCount;
+        })
+        .subscribe();
+    }
+
+    // ── Acties ───────────────────────────────────────────────────────────────
+    async function startSessie() {
+      await db.from('voorspel_sessies').update({ status: 'actief', huidige_stelling_index: 0, onthuld: false, huidig_resultaat: null }).eq('id', sessie.id);
+    }
+
+    async function onthulResultaat() {
+      const idx = sessie.huidige_stelling_index;
+      const { data: antwoorden } = await db.from('voorspel_antwoorden').select('*').eq('sessie_id', sessie.id).eq('stelling_index', idx);
+      const lijst = antwoorden || [];
+      const aantalJa = lijst.filter(a => a.antwoord === 'ja').length;
+      const aantalNee = lijst.length - aantalJa;
+      const klasPct = lijst.length > 0 ? Math.round((aantalJa / lijst.length) * 100) : 0;
+
+      if (lijst.length > 0) {
+        const deelnemerIds = lijst.map(a => a.deelnemer_id);
+        const { data: deelnemersData } = await db.from('voorspel_deelnemers').select('id, score').in('id', deelnemerIds);
+        const scoreMap = new Map((deelnemersData || []).map(d => [d.id, d.score || 0]));
+        await Promise.all(lijst.map(a => {
+          const afwijking = Math.abs(klasPct - a.voorspelling);
+          const huidigeScore = scoreMap.get(a.deelnemer_id) || 0;
+          return db.from('voorspel_deelnemers').update({ score: huidigeScore + afwijking }).eq('id', a.deelnemer_id);
+        }));
+      }
+
+      await db.from('voorspel_sessies').update({
+        onthuld: true,
+        huidig_resultaat: { aantal_ja: aantalJa, aantal_nee: aantalNee, klas_pct: klasPct }
+      }).eq('id', sessie.id);
+    }
+
+    async function volgende() {
+      const idx = sessie.huidige_stelling_index;
+      if (idx === TUSSENSTAND_NA_INDEX) {
+        await db.from('voorspel_sessies').update({ status: 'tussenstand' }).eq('id', sessie.id);
+      } else if (idx === STELLINGEN.length - 1) {
+        await db.from('voorspel_sessies').update({ status: 'eindstand' }).eq('id', sessie.id);
+      } else {
+        await db.from('voorspel_sessies').update({ huidige_stelling_index: idx + 1, onthuld: false, huidig_resultaat: null }).eq('id', sessie.id);
+      }
+    }
+
+    async function verderNaTussenstand() {
+      await db.from('voorspel_sessies').update({ status: 'actief', huidige_stelling_index: TUSSENSTAND_NA_INDEX + 1, onthuld: false, huidig_resultaat: null }).eq('id', sessie.id);
+    }
+
+    async function beeindigSessie() {
+      await db.from('voorspel_sessies').update({ status: 'afgelopen' }).eq('id', sessie.id);
+      const btn = document.getElementById('btnAfronden');
+      if (btn) { btn.disabled = true; btn.textContent = 'Sessie afgerond ✓'; }
+    }
+
+    function toggleUitleg(btn) {
+      const tooltip = btn.nextElementSibling;
+      const wasOpen = tooltip.classList.contains('zichtbaar');
+      document.querySelectorAll('.mc-tooltip').forEach(t => t.classList.remove('zichtbaar'));
+      if (!wasOpen) tooltip.classList.add('zichtbaar');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.mc-help-btn')) {
+        document.querySelectorAll('.mc-tooltip').forEach(t => t.classList.remove('zichtbaar'));
+      }
+    });
+
+    // ── Weergaves ────────────────────────────────────────────────────────────
+    function linkKaartHtml() {
+      return `
+        <div class="link-kaart">
+          <div class="link-tekst">
+            <div class="link-titel">Kopieer leerlinglink</div>
+            <div class="link-url-rij">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <span class="link-url">${escapeHtml(leerlingLink.replace(/^https?:\/\//, ''))}</span>
+            </div>
+            <div class="link-sub">Deel deze link met je leerlingen.</div>
+          </div>
+          <button class="btn-kopieer" id="btn-kopieer" onclick="kopieerLink()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="btn-kopieer-tekst">Kopieer leerlinglink</span>
+          </button>
+        </div>`;
+    }
+
+    async function toonWachtkamer() {
+      await laadDeelnemersCount();
+      document.getElementById('app').innerHTML = `
+        <div class="page-titel">Voorspel de klas — Docentendashboard</div>
+        <div class="page-sub">Deel de link met je klas. Geen sessiecode nodig, iedereen gebruikt jouw vaste link.</div>
+        ${linkKaartHtml()}
+        <div class="stat-kaart">
+          <div>
+            <div class="stat-label">Leerlingen doen mee</div>
+            <div class="stat-getal" id="deelnemersGetal">${deelnemersCount}</div>
+          </div>
+          <div class="live-pill"><span class="live-dot"></span> Live</div>
+        </div>
+        <div class="knoppen-rij">
+          <button class="btn-resultaten" onclick="startSessie()">Start →</button>
+        </div>`;
+    }
+
+    async function toonStelling() {
+      const idx = sessie.huidige_stelling_index;
+      const s = STELLINGEN[idx];
+      const pct = Math.round((idx / STELLINGEN.length) * 100);
+      await laadAntwoordenCount(idx);
+      abonneerOpAntwoorden(idx);
+      document.getElementById('app').innerHTML = `
+        <div class="sectie">
+          <div class="progress-row">
+            <span class="progress-label">Stelling ${idx + 1} van ${STELLINGEN.length}</span>
+            <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+          </div>
+          <div class="stelling-groot">${escapeHtml(s.stelling)}</div>
+          <div class="live-teller"><span id="antwoordenGetal">${antwoordenCount}</span>&nbsp;van&nbsp;${deelnemersCount}&nbsp;hebben geantwoord</div>
+          <div class="knoppen-rij" style="margin-top:8px">
+            <button class="btn-resultaten" onclick="onthulResultaat()">Naar resultaat →</button>
+          </div>
+        </div>`;
+    }
+
+    function toonOnthuld() {
+      const idx = sessie.huidige_stelling_index;
+      const s = STELLINGEN[idx];
+      const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0 };
+      const isLaatste = idx === STELLINGEN.length - 1;
+      const isTussenstandMoment = idx === TUSSENSTAND_NA_INDEX;
+      const label = isLaatste ? 'Naar eindstand →' : (isTussenstandMoment ? 'Naar tussenstand →' : 'Volgende stelling →');
+
+      document.getElementById('app').innerHTML = `
+        <div class="sectie">
+          <div class="progress-row">
+            <span class="progress-label">Stelling ${idx + 1} van ${STELLINGEN.length}</span>
+            <div class="progress-track"><div class="progress-fill" style="width:${Math.round(((idx + 1) / STELLINGEN.length) * 100)}%"></div></div>
+          </div>
+          <div class="stelling-groot">${escapeHtml(s.stelling)}</div>
+
+          <div class="resultaat-rij">
+            <div class="resultaat-kop"><span class="resultaat-label">Ja</span><span class="resultaat-pct ja">${r.klas_pct}% (${r.aantal_ja})</span></div>
+            <div class="balk-track"><div class="balk ja" style="width:${r.klas_pct}%"></div></div>
+          </div>
+          <div class="resultaat-rij">
+            <div class="resultaat-kop"><span class="resultaat-label">Nee</span><span class="resultaat-pct nee">${100 - r.klas_pct}% (${r.aantal_nee})</span></div>
+            <div class="balk-track"><div class="balk nee" style="width:${100 - r.klas_pct}%"></div></div>
+          </div>
+
+          <div class="gespreksstarter">
+            <div class="gespreksstarter-label">Gespreksstarter</div>
+            <div class="gespreksvraag-rij">
+              <div class="gespreksvraag-tekst">${escapeHtml(s.gvVraag)}</div>
+              <div class="mc-help-wrap">
+                <button class="mc-help-btn" onclick="toggleUitleg(this)" aria-label="Antwoord tonen">?</button>
+                <div class="mc-tooltip">
+                  <div class="mc-tooltip-titel">Bijvoorbeeld</div>
+                  ${escapeHtml(s.gvAntwoord)}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="knoppen-rij">
+            <button class="btn-resultaten" onclick="volgende()">${label}</button>
+          </div>
+        </div>`;
+    }
+
+    function renderRanglijst(stand) {
+      if (stand.length === 0) return `<div class="leeg-kaart">Nog geen deelnemers.</div>`;
+      const top3 = stand.slice(0, 3);
+      const rest = stand.slice(3);
+      return `
+        <div class="podium">
+          ${top3.map((d, i) => `
+            <div class="podium-plek podium-${i + 1}">
+              <div class="podium-rang">${i + 1}e plek</div>
+              <div class="podium-naam">Speler ${d.spelernummer}</div>
+              <div class="podium-score">${Math.round(d.score)} punten verschil</div>
+            </div>`).join('')}
+        </div>
+        ${rest.length > 0 ? `<div class="rest-lijst">${rest.map((d, i) => `
+          <div class="rest-rij"><span>${i + 4}. Speler ${d.spelernummer}</span><span>${Math.round(d.score)} punten verschil</span></div>`).join('')}</div>` : ''}`;
+    }
+
+    async function toonTussenstand() {
+      const { data } = await db.from('voorspel_deelnemers').select('id, spelernummer, score').eq('sessie_id', sessie.id).order('score', { ascending: true });
+      document.getElementById('app').innerHTML = `
+        <div class="sectie">
+          <div class="page-titel" style="font-size:22px">Tussenstand</div>
+          <div class="page-sub">Wie zat er tot nu toe het dichtst bij de klas? Laagste puntenverschil wint.</div>
+          ${renderRanglijst(data || [])}
+          <div class="knoppen-rij">
+            <button class="btn-resultaten" onclick="verderNaTussenstand()">Verder met stelling ${TUSSENSTAND_NA_INDEX + 2} →</button>
+          </div>
+        </div>`;
+    }
+
+    async function toonEindstand() {
+      const { data } = await db.from('voorspel_deelnemers').select('id, spelernummer, score').eq('sessie_id', sessie.id).order('score', { ascending: true });
+      document.getElementById('app').innerHTML = `
+        <div class="sectie">
+          <div class="page-titel" style="font-size:22px">Eindstand</div>
+          <div class="page-sub">Wie zat er over alle stellingen het dichtst bij de klas?</div>
+          ${renderRanglijst(data || [])}
+          <div class="knoppen-rij">
+            <button class="btn-ghost" id="btnAfronden" onclick="beeindigSessie()">Sessie afronden</button>
+            <a class="btn-resultaten" href="/les5">← Terug naar Les 5</a>
+          </div>
+        </div>`;
+    }
+
+    function render() {
+      if (!sessie) return;
+      if (sessie.status === 'wachtkamer')  return toonWachtkamer();
+      if (sessie.status === 'actief')      return sessie.onthuld ? toonOnthuld() : toonStelling();
+      if (sessie.status === 'tussenstand') return toonTussenstand();
+      if (sessie.status === 'eindstand')   return toonEindstand();
+    }
 
     (async () => {
       const { data: { session } } = await db.auth.getSession();
@@ -253,16 +608,14 @@
       const link = await haalOfMaakLink();
       if (!link) return;
       linkId = link.id;
-
       leerlingLink = `https://groep8.klaarvoormiddelbaar.nl/voorspel/${link.volgnummer}`;
-      document.getElementById('link-url').textContent = leerlingLink.replace(/^https?:\/\//, '');
 
-      laadAantalReacties();
+      sessie = await haalOfMaakSessie();
+      if (!sessie) return;
 
-      db.channel('docent-voorspel-monitor')
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'voorspel_reacties', filter: `link_id=eq.${linkId}` }, () => laadAantalReacties())
-        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'voorspel_reacties', filter: `link_id=eq.${linkId}` }, () => laadAantalReacties())
-        .subscribe();
+      abonneerOpSessie();
+      abonneerOpDeelnemers();
+      render();
     })();
   </script>
 </body>

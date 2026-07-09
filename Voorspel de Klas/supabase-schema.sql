@@ -1,6 +1,8 @@
--- Schema voor Voorspel de klas (Les 5). Dit hele bestand kan in één keer geplakt worden.
+-- Schema voor Voorspel de klas (Les 5) — live klassikale sessie.
+-- Dit hele bestand kan in één keer geplakt worden.
 -- Plak dit in de SQL Editor: https://supabase.com/dashboard/project/cqcncausbclwvoomqdpy/sql
 
+-- ── Leerlinglink per leerkracht (ongewijzigd, blijft bestaan als je dit al eerder draaide) ──
 CREATE SEQUENCE IF NOT EXISTS voorspel_links_volgnummer_seq START 1491;
 
 CREATE TABLE IF NOT EXISTS voorspel_links (
@@ -12,18 +14,16 @@ CREATE TABLE IF NOT EXISTS voorspel_links (
 
 ALTER TABLE voorspel_links ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Docent kan eigen link aanmaken" ON voorspel_links;
 CREATE POLICY "Docent kan eigen link aanmaken" ON voorspel_links
   FOR INSERT TO authenticated
   WITH CHECK (docent_id = auth.uid());
 
+DROP POLICY IF EXISTS "Docent kan eigen link lezen" ON voorspel_links;
 CREATE POLICY "Docent kan eigen link lezen" ON voorspel_links
   FOR SELECT TO authenticated
   USING (docent_id = auth.uid());
 
--- Leerlingen krijgen GEEN directe SELECT-toegang tot voorspel_links (anders kan
--- iedereen met de publieke anon-key de hele tabel met alle volgnummers en
--- docent_id's uitlezen). In plaats daarvan mogen ze alleen één volgnummer
--- vertalen naar het bijbehorende link-id, via deze functie.
 CREATE OR REPLACE FUNCTION resolve_voorspel_link(p_volgnummer integer)
 RETURNS uuid
 LANGUAGE sql
@@ -35,31 +35,104 @@ $$;
 
 GRANT EXECUTE ON FUNCTION resolve_voorspel_link(integer) TO anon;
 
--- Eén rij per leerling, volledig anoniem (geen naam-kolom).
-CREATE TABLE IF NOT EXISTS voorspel_reacties (
+-- ── Oude async-tabel vervangen door de live-sessie tabellen hieronder ──
+DROP TABLE IF EXISTS voorspel_reacties;
+
+-- ── Eén rij per "ronde" die de docent start ──
+CREATE TABLE IF NOT EXISTS voorspel_sessies (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   link_id uuid NOT NULL REFERENCES voorspel_links(id) ON DELETE CASCADE,
-  antwoorden jsonb NOT NULL DEFAULT '{}'::jsonb,
+  status text NOT NULL DEFAULT 'wachtkamer',
+  huidige_stelling_index integer NOT NULL DEFAULT 0,
+  onthuld boolean NOT NULL DEFAULT false,
+  huidig_resultaat jsonb,
   aangemaakt_op timestamptz NOT NULL DEFAULT now()
 );
 
-ALTER TABLE voorspel_reacties ENABLE ROW LEVEL SECURITY;
+ALTER TABLE voorspel_sessies ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Leerling kan reactie insturen" ON voorspel_reacties
-  FOR INSERT TO anon, authenticated
-  WITH CHECK (true);
-
--- Leerling mag alle reacties van dezelfde link lezen, nodig om direct na het
--- insturen het actuele klas-percentage te kunnen tonen (zelfde bewuste
--- afweging als bij missie_groepjes: de echte klas-scoping voor de leerkracht
--- zit op de authenticated-rol hieronder, niet op deze anon-policy).
-CREATE POLICY "Leerling kan reacties van de link lezen" ON voorspel_reacties
+CREATE POLICY "Leerling kan sessie van de link lezen" ON voorspel_sessies
   FOR SELECT TO anon
   USING (true);
 
-CREATE POLICY "Docent kan eigen klas reacties lezen" ON voorspel_reacties
+CREATE POLICY "Docent kan eigen sessie aanmaken" ON voorspel_sessies
+  FOR INSERT TO authenticated
+  WITH CHECK (link_id IN (SELECT id FROM voorspel_links WHERE docent_id = auth.uid()));
+
+CREATE POLICY "Docent kan eigen sessie lezen" ON voorspel_sessies
   FOR SELECT TO authenticated
   USING (link_id IN (SELECT id FROM voorspel_links WHERE docent_id = auth.uid()));
 
--- Realtime aanzetten voor voorspel_reacties doe je zelf nog handmatig via
--- Database > Replication, zelfde stap als bij missie_groepjes.
+CREATE POLICY "Docent kan eigen sessie bijwerken" ON voorspel_sessies
+  FOR UPDATE TO authenticated
+  USING (link_id IN (SELECT id FROM voorspel_links WHERE docent_id = auth.uid()))
+  WITH CHECK (link_id IN (SELECT id FROM voorspel_links WHERE docent_id = auth.uid()));
+
+-- ── Eén rij per leerling die meedoet aan een sessie (anoniem, "Speler N") ──
+CREATE TABLE IF NOT EXISTS voorspel_deelnemers (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  sessie_id uuid NOT NULL REFERENCES voorspel_sessies(id) ON DELETE CASCADE,
+  spelernummer integer NOT NULL,
+  score numeric NOT NULL DEFAULT 0,
+  aangemaakt_op timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE voorspel_deelnemers ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Leerling kan meedoen" ON voorspel_deelnemers
+  FOR INSERT TO anon
+  WITH CHECK (true);
+
+CREATE POLICY "Leerling kan deelnemers van de sessie lezen" ON voorspel_deelnemers
+  FOR SELECT TO anon
+  USING (true);
+
+CREATE POLICY "Docent kan eigen sessie deelnemers lezen" ON voorspel_deelnemers
+  FOR SELECT TO authenticated
+  USING (sessie_id IN (
+    SELECT s.id FROM voorspel_sessies s
+    JOIN voorspel_links l ON l.id = s.link_id
+    WHERE l.docent_id = auth.uid()
+  ));
+
+CREATE POLICY "Docent kan score bijwerken" ON voorspel_deelnemers
+  FOR UPDATE TO authenticated
+  USING (sessie_id IN (
+    SELECT s.id FROM voorspel_sessies s
+    JOIN voorspel_links l ON l.id = s.link_id
+    WHERE l.docent_id = auth.uid()
+  ))
+  WITH CHECK (sessie_id IN (
+    SELECT s.id FROM voorspel_sessies s
+    JOIN voorspel_links l ON l.id = s.link_id
+    WHERE l.docent_id = auth.uid()
+  ));
+
+-- ── Eén rij per leerling per stelling ──
+CREATE TABLE IF NOT EXISTS voorspel_antwoorden (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  sessie_id uuid NOT NULL REFERENCES voorspel_sessies(id) ON DELETE CASCADE,
+  deelnemer_id uuid NOT NULL REFERENCES voorspel_deelnemers(id) ON DELETE CASCADE,
+  stelling_index integer NOT NULL,
+  antwoord text NOT NULL,
+  voorspelling integer NOT NULL,
+  aangemaakt_op timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE voorspel_antwoorden ENABLE ROW LEVEL SECURITY;
+
+-- Leerlingen lezen elkaars antwoorden nooit, alleen zelf insturen.
+CREATE POLICY "Leerling kan antwoord insturen" ON voorspel_antwoorden
+  FOR INSERT TO anon
+  WITH CHECK (true);
+
+CREATE POLICY "Docent kan eigen sessie antwoorden lezen" ON voorspel_antwoorden
+  FOR SELECT TO authenticated
+  USING (sessie_id IN (
+    SELECT s.id FROM voorspel_sessies s
+    JOIN voorspel_links l ON l.id = s.link_id
+    WHERE l.docent_id = auth.uid()
+  ));
+
+-- Realtime aanzetten voor voorspel_sessies, voorspel_deelnemers en
+-- voorspel_antwoorden doe je zelf nog handmatig via Database > Replication.

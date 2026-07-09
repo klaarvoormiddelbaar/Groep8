@@ -90,7 +90,7 @@ const LESSONS = [
     sub: 'Zelfverzekerd naar een toets toewerken',
     duur: '50–60 min',
     url: '/les5',
-    tip: 'Bij Voorspel de klas voelen leerlingen zich vaak minder alleen als blijkt dat veel klasgenoten hetzelfde ervaren. Neem de tijd om de resultaten klassikaal te bespreken.',
+    tip: 'Bij Voorspel de klas voelen leerlingen zich vaak minder alleen als blijkt dat veel klasgenoten hetzelfde ervaren. Neem na elke onthulling even de tijd om het kort te bespreken voordat je verdergaat.',
     doelen: [
       'Leerlingen herkennen dat stress voor een toets heel normaal is.',
       'Leerlingen leren praktische manieren om met toetsstress om te gaan.',
@@ -99,10 +99,9 @@ const LESSONS = [
     tl: [
       { t: '0–10 min',  n: 'Start en leerdoelen',   d: 'Open de les en bespreek kort waar deze les over gaat: omgaan met toetsen en stress.' },
       { t: '10–25 min', n: 'Uitleg',                d: 'Bespreek de presentatie over stress, herkenning en handige tips om ermee om te gaan.' },
-      { t: '25–45 min', n: 'Voorspel de klas',      d: 'Leerlingen beantwoorden individueel en anoniem de stellingen en voorspellen hoeveel procent van de klas hetzelfde denkt.' },
-      { t: '45–55 min', n: 'Klassikaal bespreken',  d: 'Bekijk de resultaten in het docentenportaal en bespreek samen wat opvalt aan de voorspellingen versus de werkelijkheid.' }
+      { t: '25–55 min', n: 'Voorspel de klas',      d: 'Open het docentendashboard en start de live sessie. Leerlingen antwoorden anoniem op hun eigen device, jij stuurt de klas via het digibord stelling voor stelling door en bespreekt na elke onthulling het resultaat.' }
     ],
-    mat: ['Devices voor Voorspel de klas', 'Digibord voor de presentatie en de klassikale bespreking']
+    mat: ['Devices voor Voorspel de klas', 'Digibord om de sessie klassikaal te volgen']
   },
   {
     n: 6, g1: '#0c4a6e', g2: '#0284c7',

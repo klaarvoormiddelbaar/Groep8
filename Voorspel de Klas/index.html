@@ -19,6 +19,7 @@
       --primary-soft: rgba(78,142,243,0.10);
       --groen:        #10a37f;
       --groen-dark:   #0c8268;
+      --groen-soft:   rgba(16,163,127,0.10);
       --rood:         #e53e3e;
       --rood-soft:    rgba(229,62,62,0.10);
       --dark:         #191c1d;
@@ -78,6 +79,12 @@
       padding: 40px 28px; text-align: center; color: var(--muted);
     }
     .status-kaart-titel { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .speler-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,.20);
+      border-radius: var(--r-pill); padding: 6px 16px;
+      font-size: 14px; font-weight: 700; color: var(--primary-dark); margin-bottom: 14px;
+    }
 
     .card {
       width: 100%; background: var(--card-bg); border: 1px solid var(--border);
@@ -144,19 +151,41 @@
       transition: opacity .18s, transform .15s;
     }
     .btn-volgende:hover { opacity: .92; transform: translateY(-2px); }
+    .btn-volgende:disabled { opacity: .5; cursor: default; }
 
-    /* ── REVEAL ── */
-    .reveal-kaart {
-      width: 100%; background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 20px; box-shadow: var(--shadow-card);
-      padding: 22px 24px; display: flex; flex-direction: column; gap: 10px;
-      animation: fadeUp .35s cubic-bezier(.22,1,.36,1) both;
+    /* ── RESULTAAT (onthuld) ── */
+    .resultaat-rij { width: 100%; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+    .resultaat-kop { display: flex; align-items: center; justify-content: space-between; font-size: 13.5px; }
+    .resultaat-label { font-weight: 700; color: var(--muted); }
+    .resultaat-pct { font-weight: 700; }
+    .balk-track { height: 26px; background: #eef1f5; border-radius: var(--r-pill); overflow: hidden; }
+    .balk { height: 100%; border-radius: var(--r-pill); width: 0%; transition: width 0.85s cubic-bezier(0.22,1,0.36,1); }
+    .balk.ja  { background: var(--groen); }
+    .balk.nee { background: var(--rood); }
+    .resultaat-pct.ja  { color: var(--groen-dark); }
+    .resultaat-pct.nee { color: var(--rood); }
+
+    /* ── RANGLIJST ── */
+    .podium { display: flex; gap: 10px; width: 100%; margin-bottom: 16px; }
+    .podium-plek {
+      flex: 1; background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px;
+      box-shadow: var(--shadow-card); padding: 18px 10px; text-align: center;
     }
-    .reveal-stelling { font-size: 15.5px; font-weight: 700; color: var(--dark); margin-bottom: 4px; line-height: 1.35; }
-    .reveal-rij { display: flex; align-items: center; justify-content: space-between; font-size: 14px; }
-    .reveal-label { color: var(--muted); font-weight: 400; }
-    .reveal-waarde { font-weight: 700; color: var(--dark); }
-    .reveal-waarde.reveal-werkelijk { color: var(--primary-dark); }
+    .podium-1 { border-color: rgba(245,158,11,.4); background: rgba(245,158,11,.06); }
+    .podium-2 { border-color: rgba(156,163,175,.4); }
+    .podium-3 { border-color: rgba(180,83,9,.3); background: rgba(180,83,9,.04); }
+    .podium-rang { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+    .podium-naam { font-size: 14.5px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .podium-score { font-size: 11.5px; color: var(--muted); }
+    .rest-lijst { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+    .rest-rij {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fafbfc; border: 1px solid var(--border); border-radius: 14px;
+      padding: 12px 18px; font-size: 13.5px;
+    }
+    .rest-rij.eigen { border-color: var(--primary); background: var(--primary-soft); }
+    .rest-rij span:first-child { font-weight: 700; }
+    .rest-rij span:last-child { color: var(--muted); }
   </style>
 </head>
 <body>
@@ -199,15 +228,8 @@
       { stelling: 'Ik haal weleens een cijfer waar ik niet blij mee ben.', vraag: 'Hoeveel procent van de klas denk je dat weleens zo\'n cijfer haalt?' },
       { stelling: 'Ik vind het lastig om hulp te vragen als ik iets niet snap.', vraag: 'Hoeveel procent van de klas denk je dat dit ook lastig vindt?' },
       { stelling: 'Ik slaap weleens slecht van de zenuwen voor een belangrijke dag.', vraag: 'Hoeveel procent van de klas denk je dat hier weleens slecht van slaapt?' },
-      { stelling: 'Ik denk dat ik weleens zal verdwalen op mijn nieuwe school.', vraag: 'Hoeveel procent van de klas denk je dat dit ook denkt?' },
-      { stelling: 'Ik vind het spannend om in het begin alleen te lunchen.', vraag: 'Hoeveel procent van de klas denk je dat dit ook spannend vindt?' },
-      { stelling: 'Ik vergeet weleens mijn huiswerk.', vraag: 'Hoeveel procent van de klas denk je dat dit weleens doet?' }
+      { stelling: 'Ik vind het spannend om in het begin alleen te lunchen.', vraag: 'Hoeveel procent van de klas denk je dat dit ook spannend vindt?' }
     ];
-
-    let linkId = null;
-    let huidigeStelling = 0;
-    let gekozenAntwoord = null;
-    const antwoorden = [];
 
     function escapeHtml(t) {
       const d = document.createElement('div');
@@ -215,17 +237,87 @@
       return d.innerHTML;
     }
 
-    function renderStelling() {
-      const stelling = STELLINGEN[huidigeStelling];
-      const pct = Math.round((huidigeStelling / STELLINGEN.length) * 100);
+    let linkId = null;
+    let sessie = null;
+    let deelnemer = null;
+    let gekozenAntwoord = null;
+    let sessieKanaal = null;
+
+    // ── Sessie vinden / wachten ──────────────────────────────────────────────
+    async function vindHuidigeSessie() {
+      const { data } = await db.from('voorspel_sessies').select('*')
+        .eq('link_id', linkId).neq('status', 'afgelopen')
+        .order('aangemaakt_op', { ascending: false }).limit(1).maybeSingle();
+      return data || null;
+    }
+
+    function wachtOpNieuweSessie() {
+      db.channel('leerling-voorspel-wacht-' + linkId)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'voorspel_sessies', filter: `link_id=eq.${linkId}` }, async payload => {
+          sessie = payload.new;
+          await vindOfMaakDeelnemer();
+          abonneerOpSessie();
+          render();
+        })
+        .subscribe();
+    }
+
+    async function vindOfMaakDeelnemer() {
+      const opgeslagenSessieId = sessionStorage.getItem('voorspel_sessie_id');
+      const opgeslagenDeelnemerId = sessionStorage.getItem('voorspel_deelnemer_id');
+      if (opgeslagenSessieId === sessie.id && opgeslagenDeelnemerId) {
+        const { data } = await db.from('voorspel_deelnemers').select('id, spelernummer, score').eq('id', opgeslagenDeelnemerId).maybeSingle();
+        if (data) { deelnemer = data; return; }
+      }
+      const { count } = await db.from('voorspel_deelnemers').select('id', { count: 'exact', head: true }).eq('sessie_id', sessie.id);
+      const spelernummer = (count || 0) + 1;
+      const { data: nieuw, error } = await db.from('voorspel_deelnemers').insert({ sessie_id: sessie.id, spelernummer }).select('id, spelernummer, score').single();
+      if (error || !nieuw) return;
+      deelnemer = nieuw;
+      sessionStorage.setItem('voorspel_sessie_id', sessie.id);
+      sessionStorage.setItem('voorspel_deelnemer_id', deelnemer.id);
+    }
+
+    function abonneerOpSessie() {
+      if (sessieKanaal) { db.removeChannel(sessieKanaal); sessieKanaal = null; }
+      sessieKanaal = db.channel('leerling-voorspel-sessie-' + sessie.id)
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'voorspel_sessies', filter: `id=eq.${sessie.id}` }, payload => {
+          sessie = payload.new;
+          render();
+        })
+        .subscribe();
+    }
+
+    // ── Weergaves ────────────────────────────────────────────────────────────
+    function toonWachtOpSessie() {
+      document.getElementById('spelInhoud').innerHTML = `
+        <div class="status-kaart">
+          <div class="status-kaart-titel">Wacht op je leerkracht</div>
+          <div>Je leerkracht moet de sessie nog openen. Deze pagina ververst vanzelf.</div>
+        </div>`;
+    }
+
+    function toonWachtkamer() {
+      document.getElementById('spelInhoud').innerHTML = `
+        <div class="status-kaart">
+          <div class="speler-badge">Speler ${deelnemer.spelernummer}</div>
+          <div class="status-kaart-titel">Je doet mee!</div>
+          <div>Wacht tot je leerkracht de eerste stelling start.</div>
+        </div>`;
+    }
+
+    function toonStelling() {
+      const idx = sessie.huidige_stelling_index;
+      const s = STELLINGEN[idx];
+      const pct = Math.round((idx / STELLINGEN.length) * 100);
       gekozenAntwoord = null;
       document.getElementById('spelInhoud').innerHTML = `
         <div class="card">
           <div class="progress-row">
-            <span class="progress-label">Stelling ${huidigeStelling + 1} van ${STELLINGEN.length}</span>
+            <span class="progress-label">Stelling ${idx + 1} van ${STELLINGEN.length}</span>
             <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
           </div>
-          <div class="stelling-tekst">${escapeHtml(stelling.stelling)}</div>
+          <div class="stelling-tekst">${escapeHtml(s.stelling)}</div>
           <div class="ja-nee-rij" id="jaNeeRij">
             <button class="btn-antwoord btn-ja" onclick="kiesAntwoord('ja')">
               <img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="">
@@ -245,15 +337,15 @@
       document.querySelectorAll('#jaNeeRij .btn-antwoord').forEach(b => {
         b.classList.toggle('gekozen', b.classList.contains('btn-' + antwoord));
       });
-      const laatsteStelling = huidigeStelling === STELLINGEN.length - 1;
+      const idx = sessie.huidige_stelling_index;
       const stap = document.getElementById('percentageStap');
       stap.innerHTML = `
-        <p class="percentage-vraag">${escapeHtml(STELLINGEN[huidigeStelling].vraag)}</p>
+        <p class="percentage-vraag">${escapeHtml(STELLINGEN[idx].vraag)}</p>
         <div class="slider-rij">
           <input type="range" min="0" max="100" value="50" id="percentageSlider" oninput="updatePercentageLabel()">
           <div class="percentage-label" id="percentageLabel">50%</div>
         </div>
-        <button class="btn-volgende" onclick="volgendeStelling()">${laatsteStelling ? 'Afronden' : 'Volgende'} →</button>`;
+        <button class="btn-volgende" id="btnVerstuur" onclick="verstuurAntwoord()">Antwoord versturen →</button>`;
       stap.classList.add('zichtbaar');
     }
 
@@ -261,60 +353,93 @@
       document.getElementById('percentageLabel').textContent = document.getElementById('percentageSlider').value + '%';
     }
 
-    async function volgendeStelling() {
+    async function verstuurAntwoord() {
+      const idx = sessie.huidige_stelling_index;
       const voorspelling = parseInt(document.getElementById('percentageSlider').value, 10);
-      antwoorden.push({ stelling: STELLINGEN[huidigeStelling].stelling, antwoord: gekozenAntwoord, voorspelling });
-      huidigeStelling++;
-      if (huidigeStelling < STELLINGEN.length) {
-        renderStelling();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        await verstuurEnToonReveal();
+      const btn = document.getElementById('btnVerstuur');
+      btn.disabled = true;
+      try {
+        await db.from('voorspel_antwoorden').insert({
+          sessie_id: sessie.id, deelnemer_id: deelnemer.id,
+          stelling_index: idx, antwoord: gekozenAntwoord, voorspelling
+        });
+        sessionStorage.setItem('voorspel_beantwoord_' + sessie.id + '_' + idx, '1');
+        toonWachtOpKlas();
+      } catch (e) {
+        btn.disabled = false;
       }
     }
 
-    async function verstuurEnToonReveal() {
+    function toonWachtOpKlas() {
       document.getElementById('spelInhoud').innerHTML = `
         <div class="status-kaart">
-          <div class="status-kaart-titel">Bezig met opslaan…</div>
-          <div>Een ogenblik geduld.</div>
+          <div class="status-kaart-titel">Antwoord verstuurd!</div>
+          <div>Wacht tot de rest van de klas ook heeft geantwoord.</div>
         </div>`;
+    }
 
-      const antwoordenObject = {};
-      antwoorden.forEach((a, i) => {
-        antwoordenObject['stelling' + (i + 1)] = { antwoord: a.antwoord, voorspelling: a.voorspelling };
-      });
+    function toonOnthuld() {
+      const idx = sessie.huidige_stelling_index;
+      const s = STELLINGEN[idx];
+      const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0 };
+      document.getElementById('spelInhoud').innerHTML = `
+        <div class="card">
+          <div class="stelling-tekst">${escapeHtml(s.stelling)}</div>
+          <div>
+            <div class="resultaat-rij">
+              <div class="resultaat-kop"><span class="resultaat-label">Ja</span><span class="resultaat-pct ja">${r.klas_pct}%</span></div>
+              <div class="balk-track"><div class="balk ja" style="width:${r.klas_pct}%"></div></div>
+            </div>
+            <div class="resultaat-rij">
+              <div class="resultaat-kop"><span class="resultaat-label">Nee</span><span class="resultaat-pct nee">${100 - r.klas_pct}%</span></div>
+              <div class="balk-track"><div class="balk nee" style="width:${100 - r.klas_pct}%"></div></div>
+            </div>
+          </div>
+          <div class="hero-sub" style="text-align:center">Bespreek dit met de klas voordat jullie verdergaan.</div>
+        </div>`;
+    }
 
-      try {
-        await db.from('voorspel_reacties').insert({ link_id: linkId, antwoorden: antwoordenObject });
-      } catch (e) {}
+    function renderRanglijst(stand) {
+      if (stand.length === 0) return `<div class="status-kaart">Nog geen deelnemers.</div>`;
+      const top3 = stand.slice(0, 3);
+      const rest = stand.slice(3);
+      return `
+        <div class="podium">
+          ${top3.map((d, i) => `
+            <div class="podium-plek podium-${i + 1}">
+              <div class="podium-rang">${i + 1}e plek</div>
+              <div class="podium-naam">Speler ${d.spelernummer}${deelnemer && d.id === deelnemer.id ? ' (jij)' : ''}</div>
+              <div class="podium-score">${Math.round(d.score)} punten verschil</div>
+            </div>`).join('')}
+        </div>
+        ${rest.length > 0 ? `<div class="rest-lijst">${rest.map((d, i) => `
+          <div class="rest-rij${deelnemer && d.id === deelnemer.id ? ' eigen' : ''}"><span>${i + 4}. Speler ${d.spelernummer}${deelnemer && d.id === deelnemer.id ? ' (jij)' : ''}</span><span>${Math.round(d.score)} punten verschil</span></div>`).join('')}</div>` : ''}`;
+    }
 
-      let alleReacties = [];
-      try {
-        const { data } = await db.from('voorspel_reacties').select('antwoorden').eq('link_id', linkId);
-        alleReacties = data || [];
-      } catch (e) {}
-
-      const kaarten = antwoorden.map((a, i) => {
-        const key = 'stelling' + (i + 1);
-        const metAntwoord = alleReacties.filter(r => r.antwoorden && r.antwoorden[key]);
-        const aantalJa = metAntwoord.filter(r => r.antwoorden[key].antwoord === 'ja').length;
-        const klasPct = metAntwoord.length > 0 ? Math.round((aantalJa / metAntwoord.length) * 100) : 0;
-        return `
-          <div class="reveal-kaart">
-            <div class="reveal-stelling">${escapeHtml(a.stelling)}</div>
-            <div class="reveal-rij"><span class="reveal-label">Jouw antwoord</span><span class="reveal-waarde">${a.antwoord === 'ja' ? 'Ja' : 'Nee'}</span></div>
-            <div class="reveal-rij"><span class="reveal-label">Jouw voorspelling</span><span class="reveal-waarde">${a.voorspelling}% Ja</span></div>
-            <div class="reveal-rij"><span class="reveal-label">Klas tot nu toe</span><span class="reveal-waarde reveal-werkelijk">${klasPct}% Ja</span></div>
-          </div>`;
-      }).join('');
-
+    async function toonRanglijst(isEind) {
+      const { data } = await db.from('voorspel_deelnemers').select('id, spelernummer, score').eq('sessie_id', sessie.id).order('score', { ascending: true });
+      const stand = data || [];
+      const eigenPositie = deelnemer ? stand.findIndex(d => d.id === deelnemer.id) + 1 : 0;
       document.getElementById('spelInhoud').innerHTML = `
         <div class="hero" style="margin-bottom:4px">
-          <div class="hero-title" style="font-size:24px">Bedankt voor je antwoorden!</div>
-          <p class="hero-sub">Zo verhoudt jouw voorspelling zich tot de klas tot nu toe.</p>
+          <div class="hero-title" style="font-size:24px">${isEind ? 'Eindstand' : 'Tussenstand'}</div>
+          <p class="hero-sub">${eigenPositie > 0 ? `Jij staat op plek ${eigenPositie} van ${stand.length}.` : ''}</p>
         </div>
-        <div style="display:flex;flex-direction:column;gap:14px;width:100%">${kaarten}</div>`;
+        ${renderRanglijst(stand)}
+        ${!isEind ? `<div class="status-kaart"><div>Wacht tot je leerkracht verdergaat.</div></div>` : ''}`;
+    }
+
+    function render() {
+      if (!sessie) return;
+      if (sessie.status === 'wachtkamer') return toonWachtkamer();
+      if (sessie.status === 'actief') {
+        if (sessie.onthuld) return toonOnthuld();
+        const idx = sessie.huidige_stelling_index;
+        const alBeantwoord = sessionStorage.getItem('voorspel_beantwoord_' + sessie.id + '_' + idx);
+        return alBeantwoord ? toonWachtOpKlas() : toonStelling();
+      }
+      if (sessie.status === 'tussenstand') return toonRanglijst(false);
+      if (sessie.status === 'eindstand') return toonRanglijst(true);
     }
 
     (function () {
@@ -328,14 +453,23 @@
       }
 
       db.rpc('resolve_voorspel_link', { p_volgnummer: Number(volgnummer) })
-        .then(({ data, error }) => {
+        .then(async ({ data, error }) => {
           document.getElementById('ladenKaart').style.display = 'none';
           if (error || !data) {
             document.getElementById('ongeldigeLinkKaart').style.display = 'block';
             return;
           }
           linkId = data;
-          renderStelling();
+
+          sessie = await vindHuidigeSessie();
+          if (!sessie) {
+            toonWachtOpSessie();
+            wachtOpNieuweSessie();
+            return;
+          }
+          await vindOfMaakDeelnemer();
+          abonneerOpSessie();
+          render();
         });
     })();
   </script>
