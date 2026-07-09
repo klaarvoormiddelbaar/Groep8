@@ -171,8 +171,9 @@
       display: inline-flex; align-items: center; gap: 7px;
       background: var(--primary-soft); border: 1px solid rgba(78,142,243,.20);
       border-radius: var(--r-pill); padding: 8px 18px;
-      font-size: 14px; font-weight: 700; color: var(--primary-dark);
+      font-size: 14px; font-weight: 500; color: var(--primary-dark);
     }
+    .eigen-gok-badge strong { font-weight: 800; }
 
     /* ── RANGLIJST ── */
     .podium { display: flex; gap: 10px; width: 100%; margin-bottom: 16px; }
@@ -391,7 +392,7 @@
     function toonOnthuld() {
       const idx = sessie.huidige_stelling_index;
       const s = STELLINGEN[idx];
-      const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0, gem_voorspelling: 0 };
+      const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0 };
       const eigenGokRaw = sessionStorage.getItem('voorspel_gok_' + sessie.id + '_' + idx);
       const eigenGok = eigenGokRaw !== null ? parseInt(eigenGokRaw, 10) : null;
       const verschil = eigenGok !== null ? Math.abs(r.klas_pct - eigenGok) : null;
@@ -408,12 +409,17 @@
               <div class="resultaat-kop"><span class="resultaat-label">Nee</span><span class="resultaat-pct nee">${100 - r.klas_pct}%</span></div>
               <div class="balk-track"><div class="balk nee" style="width:${100 - r.klas_pct}%"></div></div>
             </div>
+            ${eigenGok !== null ? `
             <div class="resultaat-rij resultaat-scheiding">
-              <div class="resultaat-kop"><span class="resultaat-label">Gemiddelde voorspelling van de klas</span><span class="resultaat-pct voorspelling">${r.gem_voorspelling}%</span></div>
-              <div class="balk-track"><div class="balk voorspelling" style="width:${r.gem_voorspelling}%"></div></div>
+              <div class="resultaat-kop"><span class="resultaat-label">Ja (klas)</span><span class="resultaat-pct ja">${r.klas_pct}%</span></div>
+              <div class="balk-track"><div class="balk ja" style="width:${r.klas_pct}%"></div></div>
             </div>
+            <div class="resultaat-rij">
+              <div class="resultaat-kop"><span class="resultaat-label">Jouw voorspelling</span><span class="resultaat-pct voorspelling">${eigenGok}%</span></div>
+              <div class="balk-track"><div class="balk voorspelling" style="width:${eigenGok}%"></div></div>
+            </div>` : ''}
           </div>
-          ${verschil !== null ? `<div style="text-align:center"><span class="eigen-gok-badge">Jij zat er ${verschil}% naast</span></div>` : ''}
+          ${verschil !== null ? `<div style="text-align:center"><span class="eigen-gok-badge">Je zit er <strong>${verschil}%</strong> naast</span></div>` : ''}
           <div class="hero-sub" style="text-align:center">Bespreek dit met de klas voordat jullie verdergaan.</div>
         </div>`;
     }

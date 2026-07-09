@@ -179,11 +179,8 @@
     .balk { height: 100%; border-radius: var(--r-pill); width: 0%; transition: width 0.85s cubic-bezier(0.22,1,0.36,1); }
     .balk.ja  { background: var(--groen); }
     .balk.nee { background: var(--rood); }
-    .balk.voorspelling { background: var(--primary); }
     .resultaat-pct.ja  { color: var(--groen-dark); }
     .resultaat-pct.nee { color: var(--rood); }
-    .resultaat-pct.voorspelling { color: var(--primary-dark); }
-    .resultaat-scheiding { margin: 6px 0 4px; padding-top: 14px; border-top: 1px dashed var(--border); }
 
     /* Gespreksstarter */
     .gespreksstarter { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
@@ -398,7 +395,6 @@
       const aantalJa = lijst.filter(a => a.antwoord === 'ja').length;
       const aantalNee = lijst.length - aantalJa;
       const klasPct = lijst.length > 0 ? Math.round((aantalJa / lijst.length) * 100) : 0;
-      const gemVoorspelling = lijst.length > 0 ? Math.round(lijst.reduce((s, a) => s + a.voorspelling, 0) / lijst.length) : 0;
 
       if (lijst.length > 0) {
         const deelnemerIds = lijst.map(a => a.deelnemer_id);
@@ -413,7 +409,7 @@
 
       await db.from('voorspel_sessies').update({
         onthuld: true,
-        huidig_resultaat: { aantal_ja: aantalJa, aantal_nee: aantalNee, klas_pct: klasPct, gem_voorspelling: gemVoorspelling }
+        huidig_resultaat: { aantal_ja: aantalJa, aantal_nee: aantalNee, klas_pct: klasPct }
       }).eq('id', sessie.id);
     }
 
@@ -510,7 +506,7 @@
     function toonOnthuld() {
       const idx = sessie.huidige_stelling_index;
       const s = STELLINGEN[idx];
-      const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0, gem_voorspelling: 0 };
+      const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0 };
       const isLaatste = idx === STELLINGEN.length - 1;
       const isTussenstandMoment = idx === TUSSENSTAND_NA_INDEX;
       const label = isLaatste ? 'Naar eindstand →' : (isTussenstandMoment ? 'Naar tussenstand →' : 'Volgende stelling →');
@@ -531,11 +527,6 @@
             <div class="resultaat-kop"><span class="resultaat-label">Nee</span><span class="resultaat-pct nee">${100 - r.klas_pct}% (${r.aantal_nee})</span></div>
             <div class="balk-track"><div class="balk nee" style="width:${100 - r.klas_pct}%"></div></div>
           </div>
-          <div class="resultaat-rij resultaat-scheiding">
-            <div class="resultaat-kop"><span class="resultaat-label">Gemiddelde voorspelling van de klas</span><span class="resultaat-pct voorspelling">${r.gem_voorspelling}%</span></div>
-            <div class="balk-track"><div class="balk voorspelling" style="width:${r.gem_voorspelling}%"></div></div>
-          </div>
-
           <div class="gespreksstarter">
             <div class="gespreksstarter-label">Gespreksstarter</div>
             <div class="gespreksvraag-rij">
