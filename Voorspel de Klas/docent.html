@@ -341,7 +341,20 @@
         .insert({ link_id: linkId })
         .select('*')
         .single();
-      if (maakFout) { alert('Kon geen sessie starten: ' + maakFout.message); return null; }
+      if (maakFout) {
+        // Er bestond ondertussen al een niet-afgelopen sessie (race of database-constraint): die gebruiken we gewoon.
+        const { data: tochBestaande } = await db
+          .from('voorspel_sessies')
+          .select('*')
+          .eq('link_id', linkId)
+          .neq('status', 'afgelopen')
+          .order('aangemaakt_op', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (tochBestaande) return tochBestaande;
+        alert('Kon geen sessie starten: ' + maakFout.message);
+        return null;
+      }
       return nieuwe;
     }
 

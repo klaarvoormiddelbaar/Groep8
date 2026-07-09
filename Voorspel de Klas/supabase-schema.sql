@@ -49,6 +49,11 @@ CREATE TABLE IF NOT EXISTS voorspel_sessies (
   aangemaakt_op timestamptz NOT NULL DEFAULT now()
 );
 
+-- Voorkomt dat er per ongeluk twee tegelijk-actieve sessies voor dezelfde
+-- link ontstaan (zou leerlingen en docent uit elkaar laten lopen).
+CREATE UNIQUE INDEX IF NOT EXISTS voorspel_sessies_een_open_per_link
+  ON voorspel_sessies (link_id) WHERE status <> 'afgelopen';
+
 ALTER TABLE voorspel_sessies ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Leerling kan sessie van de link lezen" ON voorspel_sessies
