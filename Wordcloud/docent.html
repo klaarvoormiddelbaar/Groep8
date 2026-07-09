@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Woordenwolk — Docentendashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --page-bg:      #f2f6fd;
+      --card-bg:      #ffffff;
+      --border:       #eceeee;
+      --primary:      #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --groen:        #10a37f;
+      --groen-dark:   #0c8268;
+      --groen-soft:   rgba(16,163,127,0.10);
+      --rood:         #e53e3e;
+      --dark:         #191c1d;
+      --muted:        #6d747a;
+      --shadow-card:  0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --r-card:       28px;
+      --r-pill:       9999px;
+      --max-w:        720px;
+    }
+
+    html, body { min-height: 100vh; }
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(ellipse at 108% -5%, rgba(114,168,249,0.22) 0%, transparent 50%),
+        radial-gradient(ellipse at -8%  10%, rgba(156,196,238,0.18) 0%, transparent 46%),
+        radial-gradient(ellipse at 50%  60%, rgba(255,255,255,0.55) 0%, transparent 55%);
+      background-attachment: fixed;
+    }
+
+    .header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(242,246,253,0.92);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 0 32px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo-mark {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700; letter-spacing: -0.3px;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+    }
+    .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
+    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+
+    .main { max-width: var(--max-w); margin: 0 auto; padding: 40px 32px 96px; }
+
+    .page-titel { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+    .page-sub   { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
+
+    .link-kaart {
+      background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
+      border-radius: var(--r-card); padding: 32px 36px; color: white;
+      position: relative; overflow: hidden; margin-bottom: 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+    }
+    .link-kaart::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
+      background-size: 26px 26px; border-radius: inherit; pointer-events: none;
+    }
+    .link-kaart::after {
+      content: ''; position: absolute; top: -140px; right: -80px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .link-tekst { position: relative; min-width: 220px; }
+    .link-titel { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .link-url-rij {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 12px; padding: 10px 16px;
+    }
+    .link-url {
+      font-family: 'JetBrains Mono', monospace; font-weight: 600;
+      font-size: 15px; color: white; word-break: break-all;
+    }
+    .link-sub { position: relative; font-size: 14px; color: rgba(255,255,255,0.82); margin-top: 10px; }
+
+    .btn-kopieer {
+      position: relative; flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: white; color: var(--primary-dark);
+      border: none; border-radius: var(--r-pill); cursor: pointer;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      padding: 14px 26px;
+      box-shadow: 0 10px 20px rgba(10,30,70,0.25);
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
+    }
+    .btn-kopieer:hover { transform: translateY(-2px); box-shadow: 0 14px 26px rgba(10,30,70,0.30); }
+    .btn-kopieer.gekopieerd { background: var(--groen); color: white; }
+
+    .btn-resultaten, .btn-ghost {
+      display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0;
+      border: none; border-radius: var(--r-pill); cursor: pointer; text-decoration: none;
+      font-family: inherit; font-size: 15px; font-weight: 700; color: white;
+      background: var(--groen); box-shadow: 0 10px 15px -3px rgba(16,163,127,.30);
+      padding: 13px 24px; white-space: nowrap;
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
+    }
+    .btn-resultaten:hover { background: var(--groen-dark); transform: translateY(-2px); box-shadow: 0 14px 20px -3px rgba(16,163,127,.34); }
+    .btn-ghost { background: #f0f2f5; color: var(--muted); box-shadow: none; }
+    .btn-ghost:hover { background: #e7eaef; color: var(--dark); transform: none; }
+    .knoppen-rij { display: flex; justify-content: flex-end; gap: 12px; margin-top: 28px; }
+
+    .sectie {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 32px 34px; margin-bottom: 20px;
+      animation: fadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
+
+    .progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .progress-label { font-size: 12.5px; font-weight: 700; color: var(--muted); white-space: nowrap; letter-spacing: .03em; }
+    .progress-track { flex: 1; height: 8px; background: #eef1f5; border-radius: var(--r-pill); overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--primary); border-radius: var(--r-pill); transition: width .4s cubic-bezier(.22,1,.36,1); }
+
+    .fase-vraag { font-size: 24px; font-weight: 700; color: var(--dark); line-height: 1.3; margin-bottom: 22px; }
+
+    .live-teller {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,.20);
+      color: var(--primary-dark); font-size: 14px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 8px 18px; margin-bottom: 22px;
+    }
+
+    /* ── Woordenwolk ── */
+    .cloud-container {
+      min-height: 240px; border-radius: 20px; background: #fafbfc; border: 1px solid var(--border);
+      padding: 28px 24px; margin-bottom: 20px;
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+      gap: 8px 4px;
+    }
+    .cloud-leeg { color: var(--muted); font-size: 15px; text-align: center; line-height: 1.7; }
+    .cloud-word {
+      display: inline-block; font-weight: 700; line-height: 1.1; cursor: default;
+      transition: font-size 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease;
+      animation: woordKomt 0.55s cubic-bezier(0.22,1,0.36,1) both;
+      padding: 2px 3px;
+    }
+    @keyframes woordKomt { from { opacity: 0; scale: 0.35; filter: blur(3px); } to { opacity: 1; scale: 1; filter: blur(0); } }
+
+    .moderatie-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .moderatie-lijst { display: flex; flex-wrap: wrap; gap: 8px; }
+    .moderatie-leeg { color: var(--muted); font-size: 14px; }
+    .moderatie-pill {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
+      color: var(--primary-dark); font-size: 13px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 6px 8px 6px 14px;
+    }
+    .moderatie-pill button {
+      background: none; border: none; cursor: pointer; color: var(--primary-dark);
+      font-size: 13px; font-weight: 700; padding: 2px 4px; border-radius: 50%; line-height: 1;
+      transition: background 0.15s, color 0.15s;
+    }
+    .moderatie-pill button:hover { background: #fee2e2; color: #b91c1c; }
+
+    .laden-tekst { text-align: center; color: var(--muted); padding: 80px 0; font-size: 15px; }
+
+    .afgerond-hero {
+      background: linear-gradient(135deg, #134e4a 0%, #0f766e 55%, #14b8a6 100%);
+      border-radius: var(--r-card); padding: 40px 40px; color: white; margin-bottom: 24px;
+    }
+    .afgerond-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,0.78); margin-bottom: 8px; }
+    .afgerond-titel { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
+    .afgerond-sub { font-size: 15px; color: rgba(255,255,255,0.88); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-mark">KvM</div>
+        <div>
+          <div class="logo-name">Klaar voor Middelbaar</div>
+          <div class="logo-role">Woordenwolk · Docentweergave</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" id="app">
+    <div class="laden-tekst">Even laden…</div>
+  </main>
+
+  <script>
+    const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const FASES = [
+      { naam: 'Voorbereiding',   vraag: "Waar moet je op letten bij de voorbereiding op een toets?" },
+      { naam: 'Het maken',       vraag: "Waar moet je op letten bij het maken van een toets?" },
+      { naam: 'Terugkijken',     vraag: "Waar moet je op letten bij het terugkijken op je toets?" }
+    ];
+
+    function escapeHtml(t) {
+      const d = document.createElement('div');
+      d.textContent = String(t ?? '');
+      return d.innerHTML;
+    }
+
+    let huidigeGebruiker = null;
+    let linkId = null;
+    let leerlingLink = '';
+    let sessie = null;
+    let woorden = [];
+    let woordFreqs = new Map();
+    let renderer = null;
+    let woordenKanaal = null;
+
+    function kopieerLink() {
+      navigator.clipboard.writeText(leerlingLink).then(() => {
+        const btn = document.getElementById('btn-kopieer');
+        const tekst = document.getElementById('btn-kopieer-tekst');
+        if (!btn || !tekst) return;
+        const vorige = tekst.textContent;
+        btn.classList.add('gekopieerd');
+        tekst.textContent = 'Gekopieerd!';
+        setTimeout(() => { btn.classList.remove('gekopieerd'); tekst.textContent = vorige; }, 1800);
+      });
+    }
+
+    // ── Link & sessie ────────────────────────────────────────────────────────
+    async function haalOfMaakLink() {
+      const { data: bestaand, error: leesFout } = await db
+        .from('woordwolk_links')
+        .select('id, volgnummer')
+        .eq('docent_id', huidigeGebruiker.id)
+        .maybeSingle();
+
+      if (leesFout) { alert('Kon je leerlinglink niet ophalen: ' + leesFout.message); return null; }
+      if (bestaand) return bestaand;
+
+      const { data: nieuw, error: maakFout } = await db
+        .from('woordwolk_links')
+        .insert({ docent_id: huidigeGebruiker.id })
+        .select('id, volgnummer')
+        .single();
+      if (maakFout) { alert('Kon geen leerlinglink aanmaken: ' + maakFout.message); return null; }
+      return nieuw;
+    }
+
+    async function haalOfMaakSessie() {
+      const { data: bestaande, error: leesFout } = await db
+        .from('woordwolk_sessies')
+        .select('*')
+        .eq('link_id', linkId)
+        .neq('status', 'afgelopen')
+        .order('aangemaakt_op', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (leesFout) { alert('Kon geen sessie ophalen: ' + leesFout.message); return null; }
+      if (bestaande) return bestaande;
+
+      const { data: nieuwe, error: maakFout } = await db
+        .from('woordwolk_sessies')
+        .insert({ link_id: linkId })
+        .select('*')
+        .single();
+      if (maakFout) {
+        // Er bestond ondertussen al een niet-afgelopen sessie (race of database-constraint): die gebruiken we gewoon.
+        const { data: tochBestaande } = await db
+          .from('woordwolk_sessies')
+          .select('*')
+          .eq('link_id', linkId)
+          .neq('status', 'afgelopen')
+          .order('aangemaakt_op', { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (tochBestaande) return tochBestaande;
+        alert('Kon geen sessie starten: ' + maakFout.message);
+        return null;
+      }
+      return nieuwe;
+    }
+
+    // ── Realtime ─────────────────────────────────────────────────────────────
+    function abonneerOpSessie() {
+      db.channel('docent-woordwolk-sessie-' + sessie.id)
+        .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'woordwolk_sessies', filter: `id=eq.${sessie.id}` }, payload => {
+          sessie = payload.new;
+          render();
+        })
+        .subscribe();
+    }
+
+    function abonneerOpWoorden(faseIdx) {
+      if (woordenKanaal) { db.removeChannel(woordenKanaal); woordenKanaal = null; }
+      woordenKanaal = db.channel('docent-woordwolk-woorden-' + sessie.id + '-' + faseIdx)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'woordwolk_woorden', filter: `sessie_id=eq.${sessie.id}` }, payload => {
+          if (Number(payload.new.fase_index) !== Number(faseIdx)) return;
+          laadWoorden(faseIdx);
+        })
+        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'woordwolk_woorden', filter: `sessie_id=eq.${sessie.id}` }, () => {
+          laadWoorden(faseIdx);
+        })
+        .subscribe(status => {
+          if (status === 'SUBSCRIBED') laadWoorden(faseIdx);
+        });
+    }
+
+    async function laadWoorden(faseIdx) {
+      const { data, error } = await db.from('woordwolk_woorden').select('*').eq('sessie_id', sessie.id).eq('fase_index', faseIdx).order('aangemaakt_op', { ascending: true });
+      if (error) { console.error('laadWoorden fout:', error); return; }
+      woorden = data || [];
+      verwerkWoorden();
+    }
+
+    function verwerkWoorden() {
+      woordFreqs = new Map();
+      for (const w of woorden) {
+        const norm = w.woord.toLowerCase().trim();
+        woordFreqs.set(norm, (woordFreqs.get(norm) || 0) + 1);
+      }
+      if (renderer) renderer.update(woordFreqs);
+      ververTeller();
+      ververModeratie();
+    }
+
+    function ververTeller() {
+      const el = document.getElementById('woordenGetal');
+      if (el) el.textContent = woorden.length;
+    }
+
+    function ververModeratie() {
+      const lijst = document.getElementById('moderatieLijst');
+      if (!lijst) return;
+      if (woordFreqs.size === 0) {
+        lijst.innerHTML = '<div class="moderatie-leeg">Nog geen woorden ingestuurd.</div>';
+        return;
+      }
+      lijst.innerHTML = [...woordFreqs.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .map(([w, f]) => `
+          <span class="moderatie-pill">${escapeHtml(w)}${f > 1 ? ` ×${f}` : ''}
+            <button onclick="verwijderWoord('${escapeHtml(w).replace(/'/g, "\\'")}')" title="Verwijder dit woord voor iedereen">✕</button>
+          </span>`).join('');
+    }
+
+    async function verwijderWoord(woord) {
+      if (!confirm(`Woord "${woord}" verwijderen voor de hele klas?`)) return;
+      const { error } = await db.from('woordwolk_woorden').delete().eq('sessie_id', sessie.id).eq('fase_index', sessie.huidige_fase_index).ilike('woord', woord);
+      if (error) { alert('Kon het woord niet verwijderen: ' + error.message); return; }
+      await laadWoorden(sessie.huidige_fase_index);
+    }
+
+    // ── Woordenwolk-renderer ─────────────────────────────────────────────────
+    const WOLK_KLEUREN = ['#72a8f9','#10a37f','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899'];
+    function strHash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0; return h; }
+
+    class WoordenwolkRenderer {
+      constructor(container) { this.container = container; this.els = new Map(); }
+      _grootte(freq, maxFreq) {
+        if (maxFreq <= 1) return 34;
+        const t = Math.log(1 + freq) / Math.log(1 + maxFreq);
+        return Math.round(16 + t * 48);
+      }
+      _kleur(w) { return WOLK_KLEUREN[Math.abs(strHash(w)) % WOLK_KLEUREN.length]; }
+      _rotatie(w) { return ((Math.abs(strHash(w)) % 30) - 15); }
+      _marge(w) { const h = strHash(w); return `${(Math.abs(h * 17) % 24) - 12}px ${(Math.abs(h * 7) % 18) + 4}px`; }
+      update(freqs) {
+        if (freqs.size === 0) { this._leeg(); return; }
+        const leegEl = this.container.querySelector('.cloud-leeg');
+        if (leegEl) leegEl.remove();
+        const maxF = Math.max(...freqs.values());
+        for (const [w, el] of this.els) {
+          if (!freqs.has(w)) { el.style.opacity = '0'; el.style.scale = '0.3'; setTimeout(() => el.parentNode && el.remove(), 400); this.els.delete(w); }
+        }
+        for (const [w, f] of freqs) {
+          const px = this._grootte(f, maxF);
+          if (this.els.has(w)) {
+            const el = this.els.get(w);
+            el.style.fontSize = px + 'px';
+            el.title = `${f}× ingediend`;
+          } else {
+            const el = document.createElement('span');
+            el.className = 'cloud-word';
+            el.textContent = w;
+            el.style.fontSize = px + 'px';
+            el.style.color = this._kleur(w);
+            el.style.rotate = this._rotatie(w) + 'deg';
+            el.style.margin = this._marge(w);
+            el.title = `${f}× ingediend`;
+            this.container.appendChild(el);
+            this.els.set(w, el);
+          }
+        }
+        [...this.els.entries()].sort((a, b) => (freqs.get(b[0]) || 0) - (freqs.get(a[0]) || 0)).forEach(([, el]) => this.container.appendChild(el));
+      }
+      _leeg() {
+        if (!this.container.querySelector('.cloud-leeg')) {
+          this.container.innerHTML = '<div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Laat de klas meedoen!</div>';
+          this.els.clear();
+        }
+      }
+    }
+
+    // ── Views ────────────────────────────────────────────────────────────────
+    function render() {
+      if (!sessie) return;
+      if (sessie.status === 'wachtkamer') return toonWachtkamer();
+      if (sessie.status === 'actief')     return toonFase();
+      if (sessie.status === 'afgelopen')  return toonAfgerond();
+    }
+
+    function linkKaartHtml() {
+      return `
+        <div class="link-kaart">
+          <div class="link-tekst">
+            <div class="link-titel">Kopieer leerlinglink</div>
+            <div class="link-url-rij">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <span class="link-url">${escapeHtml(leerlingLink.replace(/^https?:\/\//, ''))}</span>
+            </div>
+            <div class="link-sub">Deel deze link met je leerlingen.</div>
+          </div>
+          <button class="btn-kopieer" id="btn-kopieer" onclick="kopieerLink()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="btn-kopieer-tekst">Kopieer leerlinglink</span>
+          </button>
+        </div>`;
+    }
+
+    function toonWachtkamer() {
+      document.getElementById('app').innerHTML = `
+        <div class="page-titel">Woordenwolk — Docentendashboard</div>
+        <div class="page-sub">Deel de link met je klas. Geen sessiecode nodig, iedereen gebruikt jouw vaste link.</div>
+        ${linkKaartHtml()}
+        <div class="knoppen-rij">
+          <button class="btn-resultaten" onclick="startSessie()">Start →</button>
+        </div>`;
+    }
+
+    async function startSessie() {
+      await db.from('woordwolk_sessies').update({ status: 'actief', huidige_fase_index: 0 }).eq('id', sessie.id);
+    }
+
+    function toonFase() {
+      const idx = sessie.huidige_fase_index;
+      const f = FASES[idx];
+      const pct = Math.round(((idx + 1) / FASES.length) * 100);
+      const isLaatste = idx === FASES.length - 1;
+
+      document.getElementById('app').innerHTML = `
+        <div class="sectie">
+          <div class="progress-row">
+            <span class="progress-label">Fase ${idx + 1} van ${FASES.length} — ${escapeHtml(f.naam)}</span>
+            <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+          </div>
+          <div class="fase-vraag">${escapeHtml(f.vraag)}</div>
+          <div class="live-teller"><span id="woordenGetal">0</span>&nbsp;woorden ingestuurd</div>
+          <div class="cloud-container" id="cloudContainer">
+            <div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Laat de klas meedoen!</div>
+          </div>
+          <div class="moderatie-label">Ingestuurde woorden (klik op ✕ om te verwijderen)</div>
+          <div class="moderatie-lijst" id="moderatieLijst">
+            <div class="moderatie-leeg">Nog geen woorden ingestuurd.</div>
+          </div>
+          <div class="knoppen-rij">
+            <button class="btn-resultaten" onclick="volgendeFase()">${isLaatste ? 'Afronden →' : 'Volgende fase →'}</button>
+          </div>
+        </div>`;
+
+      renderer = new WoordenwolkRenderer(document.getElementById('cloudContainer'));
+      woorden = [];
+      woordFreqs = new Map();
+      abonneerOpWoorden(idx);
+    }
+
+    async function volgendeFase() {
+      const idx = sessie.huidige_fase_index;
+      if (idx === FASES.length - 1) {
+        await db.from('woordwolk_sessies').update({ status: 'afgelopen' }).eq('id', sessie.id);
+      } else {
+        await db.from('woordwolk_sessies').update({ huidige_fase_index: idx + 1 }).eq('id', sessie.id);
+      }
+    }
+
+    function toonAfgerond() {
+      document.getElementById('app').innerHTML = `
+        <div class="afgerond-hero">
+          <div class="afgerond-eyebrow">Activiteit afgerond</div>
+          <div class="afgerond-titel">Goed gedaan!</div>
+          <div class="afgerond-sub">Alle 3 fases zijn doorlopen. Bespreek de belangrijkste tips na met de klas.</div>
+        </div>
+        <div class="knoppen-rij">
+          <a class="btn-ghost" href="/les5" style="text-decoration:none">← Terug naar Les 5</a>
+        </div>`;
+    }
+
+    // ── Opstarten ────────────────────────────────────────────────────────────
+    (async () => {
+      const { data: { session } } = await db.auth.getSession();
+      if (!session) { window.location.href = '/Inlogpagina/'; return; }
+      huidigeGebruiker = session.user;
+
+      const link = await haalOfMaakLink();
+      if (!link) return;
+      linkId = link.id;
+      leerlingLink = `https://groep8.klaarvoormiddelbaar.nl/woordwolk/${link.volgnummer}`;
+
+      sessie = await haalOfMaakSessie();
+      if (!sessie) return;
+
+      abonneerOpSessie();
+      render();
+    })();
+  </script>
+</body>
+</html>

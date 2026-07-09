@@ -48,6 +48,7 @@
     { "source": "/les3/missie", "destination": "/Missie Middelbaar/index.html" },
     { "source": "/les3/docent/missie", "destination": "/Missie Middelbaar/docent.html" },
     { "source": "/les5/docent/voorspel", "destination": "/Voorspel de Klas/docent.html" },
+    { "source": "/les5/docent/woordwolk", "destination": "/Wordcloud/docent.html" },
     { "source": "/les1/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-1" },
     { "source": "/les2/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-2" },
     { "source": "/les3/docent/quiz", "destination": "/KvM Quiz/docent-sessie.html?les=les-3" },
@@ -69,6 +70,7 @@
     { "source": "/feedback/:code", "destination": "/Tips en Tops/tips-en-tops.html" },
     { "source": "/formeel/:nummer", "destination": "/Formele Mail Oefenen/formele-mail-oefenen.html" },
     { "source": "/missie/:nummer", "destination": "/Missie Middelbaar/index.html" },
-    { "source": "/voorspel/:nummer", "destination": "/Voorspel de Klas/index.html" }
+    { "source": "/voorspel/:nummer", "destination": "/Voorspel de Klas/index.html" },
+    { "source": "/woordwolk/:nummer", "destination": "/Wordcloud/index.html" }
   ]
 }
