@@ -164,6 +164,19 @@
     }
     @keyframes woordKomt { from { opacity: 0; scale: 0.35; filter: blur(3px); } to { opacity: 1; scale: 1; filter: blur(0); } }
 
+    .deelnemers-kaart { background: #fafbfc; border: 1px solid var(--border); border-radius: 20px; padding: 20px 22px; margin-bottom: 24px; }
+    .deelnemers-titel { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .deelnemers-namen { display: flex; flex-wrap: wrap; gap: 8px; }
+    .deelnemers-leeg { color: var(--muted); font-size: 14px; }
+    .deelnemer-pill {
+      display: inline-block;
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
+      color: var(--primary-dark); font-size: 13px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 6px 14px;
+      filter: blur(4px); transition: filter 0.15s;
+    }
+    .deelnemer-pill:hover { filter: blur(0); }
+
     .moderatie-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
     .moderatie-lijst { display: flex; flex-wrap: wrap; gap: 8px; }
     .moderatie-leeg { color: var(--muted); font-size: 14px; }
@@ -179,6 +192,8 @@
       transition: background 0.15s, color 0.15s;
     }
     .moderatie-pill button:hover { background: #fee2e2; color: #b91c1c; }
+    .moderatie-naam { filter: blur(4px); transition: filter 0.15s; }
+    .moderatie-pill:hover .moderatie-naam { filter: blur(0); }
 
     .laden-tekst { text-align: center; color: var(--muted); padding: 80px 0; font-size: 15px; }
 
@@ -234,6 +249,8 @@
     let woordFreqs = new Map();
     let renderer = null;
     let woordenKanaal = null;
+    let deelnemers = [];
+    let deelnemersKanaal = null;
 
     function kopieerLink() {
       navigator.clipboard.writeText(leerlingLink).then(() => {
@@ -312,6 +329,35 @@
         .subscribe();
     }
 
+    function abonneerOpDeelnemers() {
+      db.channel('docent-woordwolk-deelnemers-' + sessie.id)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'woordwolk_deelnemers', filter: `sessie_id=eq.${sessie.id}` }, payload => {
+          deelnemers.push(payload.new);
+          ververDeelnemers();
+        })
+        .subscribe(status => {
+          if (status === 'SUBSCRIBED') laadDeelnemers();
+        });
+    }
+
+    async function laadDeelnemers() {
+      const { data, error } = await db.from('woordwolk_deelnemers').select('*').eq('sessie_id', sessie.id).order('aangemaakt_op', { ascending: true });
+      if (error) { console.error('laadDeelnemers fout:', error); return; }
+      deelnemers = data || [];
+      ververDeelnemers();
+    }
+
+    function ververDeelnemers() {
+      const el = document.getElementById('deelnemersLijst');
+      if (!el) return;
+      if (deelnemers.length === 0) {
+        el.innerHTML = '<div class="deelnemers-leeg">Nog niemand ingelogd met een naam.</div>';
+        return;
+      }
+      el.innerHTML = `<div class="deelnemers-titel">${deelnemers.length} leerling${deelnemers.length !== 1 ? 'en' : ''} doen mee</div>
+        <div class="deelnemers-namen">${deelnemers.map(d => `<span class="deelnemer-pill">${escapeHtml(d.naam)}</span>`).join('')}</div>`;
+    }
+
     function abonneerOpWoorden(faseIdx) {
       if (woordenKanaal) { db.removeChannel(woordenKanaal); woordenKanaal = null; }
       woordenKanaal = db.channel('docent-woordwolk-woorden-' + sessie.id + '-' + faseIdx)
@@ -360,7 +406,7 @@
       lijst.innerHTML = [...woorden]
         .sort((a, b) => new Date(b.aangemaakt_op) - new Date(a.aangemaakt_op))
         .map(w => `
-          <span class="moderatie-pill">${escapeHtml(w.leerling_naam || 'Onbekend')}: ${escapeHtml(w.woord)}
+          <span class="moderatie-pill"><span class="moderatie-naam">${escapeHtml(w.leerling_naam || 'Onbekend')}</span>: ${escapeHtml(w.woord)}
             <button onclick="verwijderWoord('${w.id}')" title="Verwijder deze inzending">✕</button>
           </span>`).join('');
     }
@@ -454,9 +500,13 @@
         <div class="page-titel">Woordenwolk — Docentendashboard</div>
         <div class="page-sub">Deel de link met je klas. Geen sessiecode nodig, iedereen gebruikt jouw vaste link.</div>
         ${linkKaartHtml()}
+        <div class="deelnemers-kaart" id="deelnemersLijst">
+          <div class="deelnemers-leeg">Nog niemand ingelogd met een naam.</div>
+        </div>
         <div class="knoppen-rij">
           <button class="btn-resultaten" onclick="startSessie()">Start →</button>
         </div>`;
+      ververDeelnemers();
     }
 
     async function startSessie() {
@@ -477,6 +527,9 @@
           </div>
           <div class="fase-vraag">${escapeHtml(f.vraag)}</div>
           <div class="live-teller"><span id="woordenGetal">0</span>&nbsp;woorden ingestuurd</div>
+          <div class="deelnemers-kaart" id="deelnemersLijst">
+            <div class="deelnemers-leeg">Nog niemand ingelogd met een naam.</div>
+          </div>
           <div class="cloud-container" id="cloudContainer">
             <div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Laat de klas meedoen!</div>
           </div>
@@ -493,6 +546,7 @@
       woorden = [];
       woordFreqs = new Map();
       abonneerOpWoorden(idx);
+      ververDeelnemers();
     }
 
     async function volgendeFase() {
@@ -531,6 +585,7 @@
       if (!sessie) return;
 
       abonneerOpSessie();
+      abonneerOpDeelnemers();
       render();
     })();
   </script>

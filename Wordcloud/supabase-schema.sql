@@ -71,6 +71,30 @@ CREATE POLICY "Docent kan eigen sessie bijwerken" ON woordwolk_sessies
   USING (link_id IN (SELECT id FROM woordwolk_links WHERE docent_id = auth.uid()))
   WITH CHECK (link_id IN (SELECT id FROM woordwolk_links WHERE docent_id = auth.uid()));
 
+-- ── Deelnemers (voornaam, zodat de docent live kan zien wie er meedoet) ──
+CREATE TABLE IF NOT EXISTS woordwolk_deelnemers (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  sessie_id uuid NOT NULL REFERENCES woordwolk_sessies(id) ON DELETE CASCADE,
+  naam text NOT NULL,
+  aangemaakt_op timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE woordwolk_deelnemers ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Leerling kan meedoen" ON woordwolk_deelnemers;
+CREATE POLICY "Leerling kan meedoen" ON woordwolk_deelnemers
+  FOR INSERT TO anon
+  WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Docent kan eigen deelnemers lezen" ON woordwolk_deelnemers;
+CREATE POLICY "Docent kan eigen deelnemers lezen" ON woordwolk_deelnemers
+  FOR SELECT TO authenticated
+  USING (sessie_id IN (
+    SELECT s.id FROM woordwolk_sessies s
+    JOIN woordwolk_links l ON l.id = s.link_id
+    WHERE l.docent_id = auth.uid()
+  ));
+
 -- ── Woorden per fase (met voornaam van de leerling, zichtbaar voor moderatie) ──
 CREATE TABLE IF NOT EXISTS woordwolk_woorden (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -113,4 +137,8 @@ EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 DO $$ BEGIN
   ALTER PUBLICATION supabase_realtime ADD TABLE woordwolk_woorden;
+EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+
+DO $$ BEGIN
+  ALTER PUBLICATION supabase_realtime ADD TABLE woordwolk_deelnemers;
 EXCEPTION WHEN duplicate_object THEN NULL; END $$;

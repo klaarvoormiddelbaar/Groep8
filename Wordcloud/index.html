@@ -330,10 +330,18 @@
       });
     }
 
+    async function registreerDeelnemerIndienNodig() {
+      const vlag = 'woordwolk_geregistreerd_' + sessie.id;
+      if (sessionStorage.getItem(vlag)) return;
+      const { error } = await db.from('woordwolk_deelnemers').insert({ sessie_id: sessie.id, naam: leerlingNaam });
+      if (!error) sessionStorage.setItem(vlag, '1');
+    }
+
     // ── Views ────────────────────────────────────────────────────────────────
     function render() {
       if (!sessie) return;
       if (!leerlingNaam) return toonNaamInvoer();
+      registreerDeelnemerIndienNodig();
       if (sessie.status === 'wachtkamer') return toonWachtkamer();
       if (sessie.status === 'actief')     return toonFase();
       if (sessie.status === 'afgelopen')  return toonAfgerond();
