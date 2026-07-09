@@ -530,7 +530,7 @@
       document.getElementById('app').innerHTML = `
         <div class="sectie">
           <div class="progress-row">
-            <span class="progress-label">Fase ${idx + 1} van ${FASES.length} — ${escapeHtml(f.naam)}</span>
+            <span class="progress-label">Fase ${idx + 1} van ${FASES.length} — <u>${escapeHtml(f.naam)}</u></span>
             <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
           </div>
           <div class="fase-vraag">${escapeHtml(f.vraag)}</div>
