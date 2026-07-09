@@ -238,9 +238,9 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const FASES = [
-      { naam: 'Voorbereiding',   vraag: "Waar moet je op letten bij de voorbereiding op een toets?" },
-      { naam: 'Het maken',       vraag: "Waar moet je op letten bij het maken van een toets?" },
-      { naam: 'Terugkijken',     vraag: "Waar moet je op letten bij het terugkijken op je toets?" }
+      { naam: 'Voorbereiding',   vraag: "Waar moet je op letten bij de <u>voorbereiding</u> op een toets?" },
+      { naam: 'Het maken',       vraag: "Waar moet je op letten bij het <u>maken</u> van een toets?" },
+      { naam: 'Terugkijken',     vraag: "Waar moet je op letten bij het <u>terugkijken</u> op je toets?" }
     ];
 
     function escapeHtml(t) {
@@ -533,7 +533,7 @@
             <span class="progress-label">Fase ${idx + 1} van ${FASES.length} — <u>${escapeHtml(f.naam)}</u></span>
             <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
           </div>
-          <div class="fase-vraag">${escapeHtml(f.vraag)}</div>
+          <div class="fase-vraag">${f.vraag}</div>
           <div class="live-teller"><span id="woordenGetal">0</span>&nbsp;woorden ingestuurd</div>
           <div class="cloud-container" id="cloudContainer">
             <div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Laat de klas meedoen!</div>
