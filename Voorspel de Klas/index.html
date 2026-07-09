@@ -193,14 +193,14 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const STELLINGEN = [
-      'Ben je weleens gestrest voor een toets?',
-      'Vind je het spannend om nieuwe mensen te ontmoeten op de middelbare school?',
-      'Haal je weleens een cijfer waar je niet blij mee bent?',
-      'Vind je het lastig om hulp te vragen als je iets niet snapt?',
-      'Slaap je weleens slecht van de zenuwen voor een belangrijke dag?',
-      'Denk je dat je weleens zult verdwalen op je nieuwe school?',
-      'Vind je het spannend om in het begin alleen te lunchen?',
-      'Vergeet je weleens je huiswerk?'
+      { stelling: 'Ik ben weleens gestrest voor een toets.', vraag: 'Hoeveel procent van de klas denk je dat weleens gestrest is voor een toets?' },
+      { stelling: 'Ik vind het spannend om nieuwe mensen te ontmoeten op de middelbare school.', vraag: 'Hoeveel procent van de klas denk je dat dit ook spannend vindt?' },
+      { stelling: 'Ik haal weleens een cijfer waar ik niet blij mee ben.', vraag: 'Hoeveel procent van de klas denk je dat weleens zo\'n cijfer haalt?' },
+      { stelling: 'Ik vind het lastig om hulp te vragen als ik iets niet snap.', vraag: 'Hoeveel procent van de klas denk je dat dit ook lastig vindt?' },
+      { stelling: 'Ik slaap weleens slecht van de zenuwen voor een belangrijke dag.', vraag: 'Hoeveel procent van de klas denk je dat hier weleens slecht van slaapt?' },
+      { stelling: 'Ik denk dat ik weleens zal verdwalen op mijn nieuwe school.', vraag: 'Hoeveel procent van de klas denk je dat dit ook denkt?' },
+      { stelling: 'Ik vind het spannend om in het begin alleen te lunchen.', vraag: 'Hoeveel procent van de klas denk je dat dit ook spannend vindt?' },
+      { stelling: 'Ik vergeet weleens mijn huiswerk.', vraag: 'Hoeveel procent van de klas denk je dat dit weleens doet?' }
     ];
 
     let linkId = null;
@@ -224,14 +224,14 @@
             <span class="progress-label">Stelling ${huidigeStelling + 1} van ${STELLINGEN.length}</span>
             <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
           </div>
-          <div class="stelling-tekst">${escapeHtml(stelling)}</div>
+          <div class="stelling-tekst">${escapeHtml(stelling.stelling)}</div>
           <div class="ja-nee-rij" id="jaNeeRij">
             <button class="btn-antwoord btn-ja" onclick="kiesAntwoord('ja')">
               <img src="/Afbeeldingen/EMOJI PACK IOS/check-mark-button_2705.png" alt="">
               Ja
             </button>
             <button class="btn-antwoord btn-nee" onclick="kiesAntwoord('nee')">
-              <img src="/Afbeeldingen/EMOJI PACK IOS/cross-mark-button_274e.png" alt="">
+              <img src="/Afbeeldingen/EMOJI PACK IOS/no-entry_26d4.png" alt="">
               Nee
             </button>
           </div>
@@ -247,7 +247,7 @@
       const laatsteStelling = huidigeStelling === STELLINGEN.length - 1;
       const stap = document.getElementById('percentageStap');
       stap.innerHTML = `
-        <p class="percentage-vraag">Hoeveel procent van de klas denk je dat hetzelfde antwoordt?</p>
+        <p class="percentage-vraag">${escapeHtml(STELLINGEN[huidigeStelling].vraag)}</p>
         <div class="slider-rij">
           <input type="range" min="0" max="100" value="50" id="percentageSlider" oninput="updatePercentageLabel()">
           <div class="percentage-label" id="percentageLabel">50%</div>
@@ -262,7 +262,7 @@
 
     async function volgendeStelling() {
       const voorspelling = parseInt(document.getElementById('percentageSlider').value, 10);
-      antwoorden.push({ stelling: STELLINGEN[huidigeStelling], antwoord: gekozenAntwoord, voorspelling });
+      antwoorden.push({ stelling: STELLINGEN[huidigeStelling].stelling, antwoord: gekozenAntwoord, voorspelling });
       huidigeStelling++;
       if (huidigeStelling < STELLINGEN.length) {
         renderStelling();
