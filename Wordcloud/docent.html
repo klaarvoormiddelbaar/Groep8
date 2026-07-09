@@ -173,9 +173,7 @@
       background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
       color: var(--primary-dark); font-size: 13px; font-weight: 700;
       border-radius: var(--r-pill); padding: 6px 14px;
-      filter: blur(4px); transition: filter 0.15s;
     }
-    .deelnemer-pill:hover { filter: blur(0); }
 
     .moderatie-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
     .moderatie-lijst { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -192,8 +190,8 @@
       transition: background 0.15s, color 0.15s;
     }
     .moderatie-pill button:hover { background: #fee2e2; color: #b91c1c; }
-    .moderatie-naam { filter: blur(4px); transition: filter 0.15s; }
-    .moderatie-pill:hover .moderatie-naam { filter: blur(0); }
+    .moderatie-naam { display: none; }
+    .moderatie-pill:hover .moderatie-naam { display: inline; }
 
     .laden-tekst { text-align: center; color: var(--muted); padding: 80px 0; font-size: 15px; }
 
@@ -406,7 +404,7 @@
       lijst.innerHTML = [...woorden]
         .sort((a, b) => new Date(b.aangemaakt_op) - new Date(a.aangemaakt_op))
         .map(w => `
-          <span class="moderatie-pill"><span class="moderatie-naam">${escapeHtml(w.leerling_naam || 'Onbekend')}</span>: ${escapeHtml(w.woord)}
+          <span class="moderatie-pill"><span class="moderatie-naam">${escapeHtml(w.leerling_naam || 'Onbekend')}: </span>${escapeHtml(w.woord)}
             <button onclick="verwijderWoord('${w.id}')" title="Verwijder deze inzending">✕</button>
           </span>`).join('');
     }
@@ -527,9 +525,6 @@
           </div>
           <div class="fase-vraag">${escapeHtml(f.vraag)}</div>
           <div class="live-teller"><span id="woordenGetal">0</span>&nbsp;woorden ingestuurd</div>
-          <div class="deelnemers-kaart" id="deelnemersLijst">
-            <div class="deelnemers-leeg">Nog niemand ingelogd met een naam.</div>
-          </div>
           <div class="cloud-container" id="cloudContainer">
             <div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Laat de klas meedoen!</div>
           </div>
@@ -546,7 +541,6 @@
       woorden = [];
       woordFreqs = new Map();
       abonneerOpWoorden(idx);
-      ververDeelnemers();
     }
 
     async function volgendeFase() {
