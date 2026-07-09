@@ -396,6 +396,10 @@
           deelnemersCount++;
           const el = document.getElementById('deelnemersGetal');
           if (el) el.textContent = deelnemersCount;
+          const elStelling = document.getElementById('deelnemersGetalStelling');
+          if (elStelling) elStelling.textContent = deelnemersCount;
+          const debugEl = document.getElementById('debugInfo');
+          if (debugEl) debugEl.textContent = debugTekst();
         })
         .subscribe();
     }
@@ -531,7 +535,7 @@
             <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
           </div>
           <div class="stelling-groot">${escapeHtml(s.stelling)}</div>
-          <div class="live-teller"><span id="antwoordenGetal">${antwoordenCount}</span>&nbsp;van&nbsp;${deelnemersCount}&nbsp;hebben geantwoord</div>
+          <div class="live-teller"><span id="antwoordenGetal">${antwoordenCount}</span>&nbsp;van&nbsp;<span id="deelnemersGetalStelling">${deelnemersCount}</span>&nbsp;hebben geantwoord</div>
           <div id="debugInfo" style="margin-top:10px;font-size:11px;color:#9aa3ad;font-family:monospace">${debugTekst()}</div>
           <div class="knoppen-rij" style="margin-top:8px">
             <button class="btn-resultaten" onclick="onthulResultaat()">Naar resultaat →</button>
