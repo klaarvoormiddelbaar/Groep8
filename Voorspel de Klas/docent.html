@@ -291,6 +291,7 @@
     let deelnemersCount = 0;
     let antwoordenCount = 0;
     let antwoordenKanaal = null;
+    let antwoordenFout = null;
 
     function kopieerLink() {
       navigator.clipboard.writeText(leerlingLink).then(() => {
@@ -365,10 +366,18 @@
 
     async function laadAntwoordenCount(idx) {
       const { count, error } = await db.from('voorspel_antwoorden').select('id', { count: 'exact', head: true }).eq('sessie_id', sessie.id).eq('stelling_index', idx);
+      antwoordenFout = error ? error.message : null;
       if (error) console.error('laadAntwoordenCount fout:', error);
       antwoordenCount = count || 0;
       const el = document.getElementById('antwoordenGetal');
       if (el) el.textContent = antwoordenCount;
+      const debugEl = document.getElementById('debugInfo');
+      if (debugEl) debugEl.textContent = debugTekst();
+    }
+
+    function debugTekst() {
+      const idx = sessie.huidige_stelling_index;
+      return 'debug — sessie: ' + sessie.id.slice(0, 8) + ' · stelling_index: ' + idx + ' · deelnemersCount: ' + deelnemersCount + ' · antwoordenCount: ' + antwoordenCount + (antwoordenFout ? ' · FOUT: ' + antwoordenFout : '');
     }
 
     function abonneerOpSessie() {
@@ -517,6 +526,7 @@
           </div>
           <div class="stelling-groot">${escapeHtml(s.stelling)}</div>
           <div class="live-teller"><span id="antwoordenGetal">${antwoordenCount}</span>&nbsp;van&nbsp;${deelnemersCount}&nbsp;hebben geantwoord</div>
+          <div id="debugInfo" style="margin-top:10px;font-size:11px;color:#9aa3ad;font-family:monospace">${debugTekst()}</div>
           <div class="knoppen-rij" style="margin-top:8px">
             <button class="btn-resultaten" onclick="onthulResultaat()">Naar resultaat →</button>
           </div>
