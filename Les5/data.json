@@ -50,6 +50,12 @@
       "d": "Vat de belangrijkste inzichten van de les samen, blik kort vooruit op de volgende les en geef ruimte voor vragen of een korte uitloop."
     }
   ],
+  "benodigdheden": [
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    }
+  ],
   "mat": [
     "Devices voor Voorspel de klas",
     "Digibord om de sessie klassikaal te volgen"
