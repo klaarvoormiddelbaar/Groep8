@@ -370,15 +370,17 @@
       const btn = document.getElementById('btnVerstuur');
       btn.disabled = true;
       try {
-        await db.from('voorspel_antwoorden').insert({
+        const { error } = await db.from('voorspel_antwoorden').insert({
           sessie_id: sessie.id, deelnemer_id: deelnemer.id,
           stelling_index: idx, antwoord: gekozenAntwoord, voorspelling
         });
+        if (error) { throw error; }
         sessionStorage.setItem('voorspel_beantwoord_' + sessie.id + '_' + idx, '1');
         sessionStorage.setItem('voorspel_gok_' + sessie.id + '_' + idx, String(voorspelling));
         toonWachtOpKlas();
       } catch (e) {
         btn.disabled = false;
+        alert('Versturen is niet gelukt, probeer het nog eens.');
       }
     }
 
