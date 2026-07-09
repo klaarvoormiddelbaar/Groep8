@@ -516,6 +516,7 @@
       const idx = sessie.huidige_stelling_index;
       const s = STELLINGEN[idx];
       const pct = Math.round((idx / STELLINGEN.length) * 100);
+      await laadDeelnemersCount();
       await laadAntwoordenCount(idx);
       abonneerOpAntwoorden(idx);
       document.getElementById('app').innerHTML = `
