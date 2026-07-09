@@ -351,7 +351,8 @@
     }
 
     async function laadAntwoordenCount(idx) {
-      const { count } = await db.from('voorspel_antwoorden').select('id', { count: 'exact', head: true }).eq('sessie_id', sessie.id).eq('stelling_index', idx);
+      const { count, error } = await db.from('voorspel_antwoorden').select('id', { count: 'exact', head: true }).eq('sessie_id', sessie.id).eq('stelling_index', idx);
+      if (error) console.error('laadAntwoordenCount fout:', error);
       antwoordenCount = count || 0;
       const el = document.getElementById('antwoordenGetal');
       if (el) el.textContent = antwoordenCount;
