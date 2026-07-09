@@ -6,28 +6,48 @@
   "title": "Omgaan met toetsen en stress",
   "sub": "Zelfverzekerd naar een toets toewerken",
   "duur": "50–60 min",
-  "tip": "Bij Voorspel de klas voelen leerlingen zich vaak minder alleen als blijkt dat veel klasgenoten hetzelfde ervaren. Neem na elke onthulling even de tijd om het kort te bespreken voordat je verdergaat.",
+  "tip": "Benadruk dat de antwoorden bij Voorspel de Klas volledig anoniem zijn. Moedig leerlingen aan om eerlijk antwoord te geven en hun zorgen of ervaringen rondom stress te delen. Dit levert vaak waardevolle gesprekken en herkenning in de klas op.",
   "canva": "https://www.canva.com/design/DAHMQFuvVQE/4XFKX28axd-Cp8S7BLt2fw/view?embed",
   "doelen": [
-    "Leerlingen herkennen dat stress voor een toets heel normaal is.",
-    "Leerlingen leren praktische manieren om met toetsstress om te gaan.",
-    "Leerlingen ontdekken dat ze niet de enigen zijn die zich weleens onzeker voelen."
+    "De leerlingen weten hoe zij zich goed kunnen voorbereiden op een toets, hoe zij een toets slim maken en hoe zij na afloop op een toets kunnen reflecteren.",
+    "De leerlingen weten hoe zij op een gezonde manier met stress kunnen omgaan.",
+    "De leerlingen gaan met elkaar in gesprek over stress en wisselen ervaringen en tips met elkaar uit."
   ],
   "tl": [
     {
-      "t": "0–10 min",
-      "n": "Start en leerdoelen",
-      "d": "Open de les en bespreek kort waar deze les over gaat: omgaan met toetsen en stress."
+      "t": "0–2 min",
+      "n": "Start, terugblik en leerdoelen",
+      "d": "Open de les, blik kort terug op les 4 en bespreek de leerdoelen van vandaag."
     },
     {
-      "t": "10–25 min",
-      "n": "Uitleg",
-      "d": "Bespreek de presentatie over stress, herkenning en handige tips om ermee om te gaan."
+      "t": "2–10 min",
+      "n": "Woordwolk over toetsen",
+      "d": "Open de woordwolk in het docentenportaal. De leerlingen benoemen tips voor het voorbereiden, maken en terugkijken op een toets. Bespreek de resultaten vervolgens klassikaal."
     },
     {
-      "t": "25–55 min",
+      "t": "10–15 min",
+      "n": "Bespreek de tips uit de presentatie",
+      "d": "Bespreek kort de tips uit de presentatie die nog niet in de woordwolk zijn genoemd."
+    },
+    {
+      "t": "15–25 min",
+      "n": "KvM Toets maken",
+      "d": "Laat de leerlingen de KvM Toets maken. Bekijk als leerkracht vooraf de volledige toets goed door, met extra aandacht voor pagina 2."
+    },
+    {
+      "t": "25–35 min",
       "n": "Voorspel de klas",
-      "d": "Open het docentendashboard en start de live sessie. Leerlingen antwoorden anoniem op hun eigen device, jij stuurt de klas via het digibord stelling voor stelling door en bespreekt na elke onthulling het resultaat."
+      "d": "Open Voorspel de Klas in het docentenportaal. Leerlingen beantwoorden anoniem stellingen over stress en voorspellen hoe de klas zal antwoorden. De resultaten vormen de basis voor open klassengesprekken over stress en hoe je hiermee om kunt gaan."
+    },
+    {
+      "t": "35–45 min",
+      "n": "Quiz",
+      "d": "Open de quiz in het docentenportaal en speel deze klassikaal."
+    },
+    {
+      "t": "45–50 min",
+      "n": "Afsluiting & vooruitblik",
+      "d": "Vat de belangrijkste inzichten van de les samen, blik kort vooruit op de volgende les en geef ruimte voor vragen of een korte uitloop."
     }
   ],
   "mat": [
