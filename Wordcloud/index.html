@@ -417,6 +417,10 @@
           e.preventDefault();
           const woord = input.value.trim().toLowerCase();
           if (!woord) return;
+          if (mijnWoordenVoorFase(idx).includes(woord)) {
+            alert('Dat woord heb je al ingestuurd voor deze fase. Probeer een ander woord.');
+            return;
+          }
           knop.disabled = true;
           input.disabled = true;
           const { error } = await db.from('woordwolk_woorden').insert({ sessie_id: sessie.id, fase_index: idx, woord, leerling_naam: leerlingNaam });
