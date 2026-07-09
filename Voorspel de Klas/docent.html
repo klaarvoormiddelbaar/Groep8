@@ -292,6 +292,7 @@
     let antwoordenCount = 0;
     let antwoordenKanaal = null;
     let antwoordenFout = null;
+    let kanaalStatus = 'nog niet verbonden';
 
     function kopieerLink() {
       navigator.clipboard.writeText(leerlingLink).then(() => {
@@ -377,7 +378,7 @@
 
     function debugTekst() {
       const idx = sessie.huidige_stelling_index;
-      return 'debug — sessie: ' + sessie.id.slice(0, 8) + ' · stelling_index: ' + idx + ' · deelnemersCount: ' + deelnemersCount + ' · antwoordenCount: ' + antwoordenCount + (antwoordenFout ? ' · FOUT: ' + antwoordenFout : '');
+      return 'debug — sessie: ' + sessie.id.slice(0, 8) + ' · stelling_index: ' + idx + ' · deelnemersCount: ' + deelnemersCount + ' · antwoordenCount: ' + antwoordenCount + ' · kanaal: ' + kanaalStatus + (antwoordenFout ? ' · FOUT: ' + antwoordenFout : '');
     }
 
     function abonneerOpSessie() {
@@ -407,6 +408,10 @@
           laadAntwoordenCount(idx);
         })
         .subscribe(status => {
+          kanaalStatus = status;
+          console.log('antwoorden-kanaal status:', status);
+          const debugEl = document.getElementById('debugInfo');
+          if (debugEl) debugEl.textContent = debugTekst();
           if (status === 'SUBSCRIBED') laadAntwoordenCount(idx);
         });
     }
