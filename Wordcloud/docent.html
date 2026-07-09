@@ -353,22 +353,22 @@
     function ververModeratie() {
       const lijst = document.getElementById('moderatieLijst');
       if (!lijst) return;
-      if (woordFreqs.size === 0) {
+      if (woorden.length === 0) {
         lijst.innerHTML = '<div class="moderatie-leeg">Nog geen woorden ingestuurd.</div>';
         return;
       }
-      lijst.innerHTML = [...woordFreqs.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .map(([w, f]) => `
-          <span class="moderatie-pill">${escapeHtml(w)}${f > 1 ? ` ×${f}` : ''}
-            <button onclick="verwijderWoord('${escapeHtml(w).replace(/'/g, "\\'")}')" title="Verwijder dit woord voor iedereen">✕</button>
+      lijst.innerHTML = [...woorden]
+        .sort((a, b) => new Date(b.aangemaakt_op) - new Date(a.aangemaakt_op))
+        .map(w => `
+          <span class="moderatie-pill">${escapeHtml(w.leerling_naam || 'Onbekend')}: ${escapeHtml(w.woord)}
+            <button onclick="verwijderWoord('${w.id}')" title="Verwijder deze inzending">✕</button>
           </span>`).join('');
     }
 
-    async function verwijderWoord(woord) {
-      if (!confirm(`Woord "${woord}" verwijderen voor de hele klas?`)) return;
-      const { error } = await db.from('woordwolk_woorden').delete().eq('sessie_id', sessie.id).eq('fase_index', sessie.huidige_fase_index).ilike('woord', woord);
-      if (error) { alert('Kon het woord niet verwijderen: ' + error.message); return; }
+    async function verwijderWoord(id) {
+      if (!confirm('Deze inzending verwijderen voor de hele klas?')) return;
+      const { error } = await db.from('woordwolk_woorden').delete().eq('id', id);
+      if (error) { alert('Kon de inzending niet verwijderen: ' + error.message); return; }
       await laadWoorden(sessie.huidige_fase_index);
     }
 

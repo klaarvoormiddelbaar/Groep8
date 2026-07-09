@@ -71,14 +71,18 @@ CREATE POLICY "Docent kan eigen sessie bijwerken" ON woordwolk_sessies
   USING (link_id IN (SELECT id FROM woordwolk_links WHERE docent_id = auth.uid()))
   WITH CHECK (link_id IN (SELECT id FROM woordwolk_links WHERE docent_id = auth.uid()));
 
--- ── Woorden per fase (anoniem, geen leerlingnaam) ──
+-- ── Woorden per fase (met voornaam van de leerling, zichtbaar voor moderatie) ──
 CREATE TABLE IF NOT EXISTS woordwolk_woorden (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   sessie_id uuid NOT NULL REFERENCES woordwolk_sessies(id) ON DELETE CASCADE,
   fase_index integer NOT NULL,
+  leerling_naam text NOT NULL DEFAULT '',
   woord text NOT NULL,
   aangemaakt_op timestamptz NOT NULL DEFAULT now()
 );
+
+-- Idempotent: voegt de kolom ook toe als de tabel al bestond zonder leerling_naam.
+ALTER TABLE woordwolk_woorden ADD COLUMN IF NOT EXISTS leerling_naam text NOT NULL DEFAULT '';
 
 ALTER TABLE woordwolk_woorden ENABLE ROW LEVEL SECURITY;
 
@@ -87,7 +91,7 @@ CREATE POLICY "Leerling kan woord insturen" ON woordwolk_woorden
   FOR INSERT TO anon
   WITH CHECK (true);
 
--- Woorden zijn bedoeld om live gezamenlijk te zien (geen namen eraan gekoppeld), dus open leesbaar.
+-- Woorden en namen zijn bedoeld om live gezamenlijk te zien, dus open leesbaar.
 DROP POLICY IF EXISTS "Woorden zijn zichtbaar voor klas en docent" ON woordwolk_woorden;
 CREATE POLICY "Woorden zijn zichtbaar voor klas en docent" ON woordwolk_woorden
   FOR SELECT TO anon, authenticated

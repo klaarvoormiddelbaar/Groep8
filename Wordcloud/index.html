@@ -187,6 +187,7 @@
 
     let linkId = null;
     let sessie = null;
+    let leerlingNaam = '';
     let woorden = [];
     let woordFreqs = new Map();
     let renderer = null;
@@ -298,9 +299,41 @@
       }
     }
 
+    // ── Naam van de leerling ─────────────────────────────────────────────────
+    function haalOpgeslagenNaam() {
+      return sessionStorage.getItem('woordwolk_naam_' + linkId) || '';
+    }
+
+    function toonNaamInvoer() {
+      document.getElementById('spelInhoud').innerHTML = `
+        <div class="card">
+          <div class="fase-vraag">Wat is je voornaam?</div>
+          <form id="naamForm" autocomplete="off">
+            <div class="inzend-input-wrap">
+              <input class="inzend-input" id="naamInput" type="text" maxlength="24"
+                placeholder="Bijv. Emma" autocomplete="off">
+            </div>
+            <button class="btn-verstuur" id="btnNaamVerder" type="submit" style="margin-top:12px" disabled>Verder →</button>
+          </form>
+        </div>`;
+      const form = document.getElementById('naamForm');
+      const input = document.getElementById('naamInput');
+      const knop = document.getElementById('btnNaamVerder');
+      input.addEventListener('input', () => { knop.disabled = input.value.trim().length === 0; });
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const naam = input.value.trim();
+        if (!naam) return;
+        leerlingNaam = naam;
+        sessionStorage.setItem('woordwolk_naam_' + linkId, naam);
+        render();
+      });
+    }
+
     // ── Views ────────────────────────────────────────────────────────────────
     function render() {
       if (!sessie) return;
+      if (!leerlingNaam) return toonNaamInvoer();
       if (sessie.status === 'wachtkamer') return toonWachtkamer();
       if (sessie.status === 'actief')     return toonFase();
       if (sessie.status === 'afgelopen')  return toonAfgerond();
@@ -378,7 +411,7 @@
           if (!woord) return;
           knop.disabled = true;
           input.disabled = true;
-          const { error } = await db.from('woordwolk_woorden').insert({ sessie_id: sessie.id, fase_index: idx, woord });
+          const { error } = await db.from('woordwolk_woorden').insert({ sessie_id: sessie.id, fase_index: idx, woord, leerling_naam: leerlingNaam });
           if (error) {
             knop.disabled = false;
             input.disabled = false;
@@ -419,6 +452,7 @@
             return;
           }
           linkId = data;
+          leerlingNaam = haalOpgeslagenNaam();
 
           sessie = await vindHuidigeSessie();
           if (!sessie) {
