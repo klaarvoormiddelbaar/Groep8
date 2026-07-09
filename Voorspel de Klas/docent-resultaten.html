@@ -107,6 +107,44 @@
     .vergelijk-pct.werkelijk    { color: var(--groen-dark); }
     .vergelijk-pct.voorspelling { color: var(--primary-dark); }
 
+    .gespreksstarter {
+      margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border);
+    }
+    .gespreksstarter-label {
+      font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
+    }
+    .gespreksvraag-rij {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .gespreksvraag-tekst { font-size: 14.5px; font-weight: 700; color: var(--dark); line-height: 1.4; }
+    .mc-help-wrap { position: relative; flex-shrink: 0; }
+    .mc-help-btn {
+      width: 26px; height: 26px; border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: #fafbfc;
+      color: var(--muted);
+      font-family: inherit; font-size: 13px; font-weight: 700;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .15s, background .15s, color .15s;
+    }
+    .mc-help-btn:hover { border-color: var(--primary); color: var(--primary-dark); background: var(--primary-soft); }
+    .mc-tooltip {
+      display: none;
+      position: absolute; top: calc(100% + 8px); right: 0;
+      width: 260px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: var(--shadow-card);
+      font-size: 13px; line-height: 1.6; color: var(--dark);
+      z-index: 200;
+    }
+    .mc-tooltip.zichtbaar { display: block; animation: fadeUp .2s ease both; }
+    .mc-tooltip-titel { font-weight: 700; color: var(--primary-dark); margin-bottom: 6px; font-size: 13px; }
+
     .leeg-kaart, .laden-tekst {
       background: var(--card-bg); border: 1px dashed var(--border); border-radius: var(--r-card);
       padding: 48px 32px; text-align: center; color: var(--muted); font-size: 15px;
@@ -169,6 +207,17 @@
       'Ik vergeet weleens mijn huiswerk.'
     ];
 
+    const GESPREKSVRAGEN = [
+      { vraag: 'Hoe kun je ervoor zorgen dat je minder gestrest bent voor een toets?', antwoord: 'Op tijd beginnen met leren, een planning maken en op tijd naar bed gaan voor de toets.' },
+      { vraag: 'Wat kun je doen om makkelijker nieuwe mensen te leren kennen?', antwoord: 'Iemand die alleen zit een compliment geven of een vraag stellen, samen aan een opdracht werken, of je aansluiten bij een club of sport.' },
+      { vraag: 'Wat kun je doen als je een cijfer haalt dat tegenvalt?', antwoord: 'Vragen wat er misging, de toets nabespreken met de docent, en de volgende keer anders leren.' },
+      { vraag: 'Waarom is het juist slim om hulp te vragen als je iets niet snapt?', antwoord: 'Hoe eerder je het vraagt, hoe sneller je het snapt. De meeste docenten en klasgenoten helpen je graag.' },
+      { vraag: 'Wat kun je doen als je slecht slaapt van de zenuwen?', antwoord: "Op tijd naar bed gaan, rustig ademhalen, en je spullen 's avonds al klaarleggen zodat je niet hoeft te stressen." },
+      { vraag: 'Wat kun je doen om niet te verdwalen op je nieuwe school?', antwoord: 'Van tevoren de plattegrond bekijken of een dagje meelopen. Bijna iedereen verdwaalt weleens in het begin, dat is heel normaal.' },
+      { vraag: 'Wat kun je doen als je in het begin nog niemand hebt om mee te lunchen?', antwoord: 'Aan iemand vragen of je erbij mag zitten, of zelf iemand uitnodigen die ook alleen zit.' },
+      { vraag: 'Hoe kun je voorkomen dat je je huiswerk vergeet?', antwoord: 'Een agenda of planner gebruiken, en meteen na school even checken wat je moet doen.' }
+    ];
+
     function escapeHtml(t) {
       const d = document.createElement('div');
       d.textContent = String(t ?? '');
@@ -217,11 +266,42 @@
               </div>
               <div class="balk-track"><div class="balk voorspelling" style="width:${gemVoorspelling}%"></div></div>
             </div>
+            ${renderGespreksstarter(GESPREKSVRAGEN[i])}
           </div>`;
       }).join('') || `<div class="leeg-kaart">Nog geen reacties binnengekomen, dus nog geen resultaten om te bespreken.</div>`;
 
       renderStats(reacties);
     }
+
+    function renderGespreksstarter(gv) {
+      if (!gv) return '';
+      return `
+        <div class="gespreksstarter">
+          <div class="gespreksstarter-label">Gespreksstarter</div>
+          <div class="gespreksvraag-rij">
+            <div class="gespreksvraag-tekst">${escapeHtml(gv.vraag)}</div>
+            <div class="mc-help-wrap">
+              <button class="mc-help-btn" onclick="toggleUitleg(this)" aria-label="Antwoord tonen">?</button>
+              <div class="mc-tooltip">
+                <div class="mc-tooltip-titel">Bijvoorbeeld</div>
+                ${escapeHtml(gv.antwoord)}
+              </div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    function toggleUitleg(btn) {
+      const tooltip = btn.nextElementSibling;
+      const wasOpen = tooltip.classList.contains('zichtbaar');
+      document.querySelectorAll('.mc-tooltip').forEach(t => t.classList.remove('zichtbaar'));
+      if (!wasOpen) tooltip.classList.add('zichtbaar');
+    }
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.mc-help-btn')) {
+        document.querySelectorAll('.mc-tooltip').forEach(t => t.classList.remove('zichtbaar'));
+      }
+    });
 
     let reacties = [];
     let linkId = null;
