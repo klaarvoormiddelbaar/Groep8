@@ -359,7 +359,7 @@
       const el = document.getElementById('deelnemersLijst');
       if (!el) return;
       if (deelnemers.length === 0) {
-        el.innerHTML = '<div class="deelnemers-leeg">Nog niemand ingelogd met een naam.</div>';
+        el.innerHTML = '<div class="deelnemers-leeg">Wachten op de eerste deelnemer!</div>';
         return;
       }
       el.innerHTML = `<div class="deelnemers-titel">${deelnemers.length} leerling${deelnemers.length !== 1 ? 'en' : ''} doen mee</div>
@@ -509,7 +509,7 @@
         <div class="page-sub">Deel de link met je klas. Geen sessiecode nodig, iedereen gebruikt jouw vaste link.</div>
         ${linkKaartHtml()}
         <div class="deelnemers-kaart" id="deelnemersLijst">
-          <div class="deelnemers-leeg">Nog niemand ingelogd met een naam.</div>
+          <div class="deelnemers-leeg">Wachten op de eerste deelnemer!</div>
         </div>
         <div class="knoppen-rij">
           <button class="btn-resultaten" onclick="startSessie()">Start →</button>
