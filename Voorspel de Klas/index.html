@@ -170,8 +170,8 @@
     .eigen-gok-badge {
       display: inline-flex; align-items: center; gap: 7px;
       background: var(--primary-soft); border: 1px solid rgba(78,142,243,.20);
-      border-radius: var(--r-pill); padding: 8px 18px;
-      font-size: 14px; font-weight: 500; color: var(--primary-dark);
+      border-radius: var(--r-pill); padding: 12px 24px;
+      font-size: 18px; font-weight: 500; color: var(--primary-dark);
     }
     .eigen-gok-badge strong { font-weight: 800; }
 
@@ -184,6 +184,7 @@
     .podium-1 { border-color: rgba(245,158,11,.4); background: rgba(245,158,11,.06); }
     .podium-2 { border-color: rgba(156,163,175,.4); }
     .podium-3 { border-color: rgba(180,83,9,.3); background: rgba(180,83,9,.04); }
+    .podium-medal { font-size: 28px; margin-bottom: 6px; }
     .podium-rang { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
     .podium-naam { font-size: 14.5px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
     .podium-score { font-size: 11.5px; color: var(--muted); }
@@ -411,10 +412,6 @@
             </div>
             ${eigenGok !== null ? `
             <div class="resultaat-rij resultaat-scheiding">
-              <div class="resultaat-kop"><span class="resultaat-label">Ja (klas)</span><span class="resultaat-pct ja">${r.klas_pct}%</span></div>
-              <div class="balk-track"><div class="balk ja" style="width:${r.klas_pct}%"></div></div>
-            </div>
-            <div class="resultaat-rij">
               <div class="resultaat-kop"><span class="resultaat-label">Jouw voorspelling</span><span class="resultaat-pct voorspelling">${eigenGok}%</span></div>
               <div class="balk-track"><div class="balk voorspelling" style="width:${eigenGok}%"></div></div>
             </div>` : ''}
@@ -428,10 +425,12 @@
       if (stand.length === 0) return `<div class="status-kaart">Nog geen deelnemers.</div>`;
       const top3 = stand.slice(0, 3);
       const rest = stand.slice(3);
+      const medals = ['🥇', '🥈', '🥉'];
       return `
         <div class="podium">
           ${top3.map((d, i) => `
             <div class="podium-plek podium-${i + 1}">
+              <div class="podium-medal">${medals[i]}</div>
               <div class="podium-rang">${i + 1}e plek</div>
               <div class="podium-naam">Speler ${d.spelernummer}${deelnemer && d.id === deelnemer.id ? ' (jij)' : ''}</div>
               <div class="podium-score">${Math.round(d.score)} punten verschil</div>

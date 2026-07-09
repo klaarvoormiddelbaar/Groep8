@@ -214,6 +214,7 @@
     .podium-1 { border-color: rgba(245,158,11,.4); background: rgba(245,158,11,.06); }
     .podium-2 { border-color: rgba(156,163,175,.4); }
     .podium-3 { border-color: rgba(180,83,9,.3); background: rgba(180,83,9,.04); }
+    .podium-medal { font-size: 34px; margin-bottom: 6px; }
     .podium-rang { font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
     .podium-naam { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
     .podium-score { font-size: 12.5px; color: var(--muted); }
@@ -551,10 +552,12 @@
       if (stand.length === 0) return `<div class="leeg-kaart">Nog geen deelnemers.</div>`;
       const top3 = stand.slice(0, 3);
       const rest = stand.slice(3);
+      const medals = ['🥇', '🥈', '🥉'];
       return `
         <div class="podium">
           ${top3.map((d, i) => `
             <div class="podium-plek podium-${i + 1}">
+              <div class="podium-medal">${medals[i]}</div>
               <div class="podium-rang">${i + 1}e plek</div>
               <div class="podium-naam">Speler ${d.spelernummer}</div>
               <div class="podium-score">${Math.round(d.score)} punten verschil</div>
