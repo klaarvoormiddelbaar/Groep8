@@ -232,6 +232,20 @@
       padding: 48px 32px; text-align: center; color: var(--muted); font-size: 15px;
     }
 
+    /* Open, anonieme vraag */
+    .anoniem-label {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--groen-soft); border: 1px solid rgba(16,163,127,.22);
+      color: var(--groen-dark); font-size: 12.5px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 7px 16px; margin-bottom: 18px;
+    }
+    .open-antwoorden-lijst { display: flex; flex-direction: column; gap: 10px; margin-bottom: 8px; }
+    .open-antwoord-item {
+      background: #fafbfc; border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px 18px; font-size: 15px; line-height: 1.5; color: var(--dark);
+      animation: fadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
     @media (max-width: 640px) {
       .main { padding: 28px 18px 80px; }
       .link-kaart, .sectie { padding: 24px 22px; }
@@ -273,6 +287,7 @@
       { stelling: 'Ik maak me soms druk om dingen die achteraf helemaal niet nodig waren.', gvVraag: 'Wat kun je doen als je merkt dat je je ergens te druk om maakt?', gvAntwoord: 'Jezelf afvragen: is dit over een week nog belangrijk? En erover praten met iemand die je vertrouwt.' }
     ];
     const TUSSENSTAND_NA_INDEX = 2; // na de 3e stelling (0-based index 2)
+    const OPEN_VRAAG = 'Is er nog iets over stress dat je anoniem zou willen delen, zodat we het samen als klas kunnen bespreken?';
 
     function escapeHtml(t) {
       const d = document.createElement('div');
@@ -287,6 +302,8 @@
     let deelnemersCount = 0;
     let antwoordenCount = 0;
     let antwoordenKanaal = null;
+    let openAntwoorden = [];
+    let openAntwoordenKanaal = null;
 
     function kopieerLink() {
       navigator.clipboard.writeText(leerlingLink).then(() => {
@@ -400,6 +417,22 @@
         });
     }
 
+    async function laadOpenAntwoorden() {
+      const { data, error } = await db.from('voorspel_open_antwoorden').select('id, tekst').eq('sessie_id', sessie.id).order('aangemaakt_op', { ascending: true });
+      if (error) { console.error('laadOpenAntwoorden fout:', error); return; }
+      openAntwoorden = data || [];
+    }
+
+    function abonneerOpOpenAntwoorden() {
+      if (openAntwoordenKanaal) { db.removeChannel(openAntwoordenKanaal); openAntwoordenKanaal = null; }
+      openAntwoordenKanaal = db.channel('docent-voorspel-open-antwoorden-' + sessie.id)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'voorspel_open_antwoorden', filter: `sessie_id=eq.${sessie.id}` }, payload => {
+          openAntwoorden.push({ id: payload.new.id, tekst: payload.new.tekst });
+          if (sessie.status === 'open_vraag') render();
+        })
+        .subscribe();
+    }
+
     // ── Acties ───────────────────────────────────────────────────────────────
     async function startSessie() {
       await db.from('voorspel_sessies').update({ status: 'actief', huidige_stelling_index: 0, onthuld: false, huidig_resultaat: null }).eq('id', sessie.id);
@@ -436,7 +469,7 @@
       if (idx === TUSSENSTAND_NA_INDEX) {
         await db.from('voorspel_sessies').update({ status: 'tussenstand' }).eq('id', sessie.id);
       } else if (idx === STELLINGEN.length - 1) {
-        await db.from('voorspel_sessies').update({ status: 'eindstand' }).eq('id', sessie.id);
+        await db.from('voorspel_sessies').update({ status: 'open_vraag' }).eq('id', sessie.id);
       } else {
         await db.from('voorspel_sessies').update({ huidige_stelling_index: idx + 1, onthuld: false, huidig_resultaat: null }).eq('id', sessie.id);
       }
@@ -444,6 +477,10 @@
 
     async function verderNaTussenstand() {
       await db.from('voorspel_sessies').update({ status: 'actief', huidige_stelling_index: TUSSENSTAND_NA_INDEX + 1, onthuld: false, huidig_resultaat: null }).eq('id', sessie.id);
+    }
+
+    async function naarEindstand() {
+      await db.from('voorspel_sessies').update({ status: 'eindstand' }).eq('id', sessie.id);
     }
 
     async function beeindigSessie() {
@@ -528,7 +565,7 @@
       const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0, gem_voorspelling: 0 };
       const isLaatste = idx === STELLINGEN.length - 1;
       const isTussenstandMoment = idx === TUSSENSTAND_NA_INDEX;
-      const label = isLaatste ? 'Naar eindstand →' : (isTussenstandMoment ? 'Naar tussenstand →' : 'Volgende stelling →');
+      const label = isLaatste ? 'Naar open vraag →' : (isTussenstandMoment ? 'Naar tussenstand →' : 'Volgende stelling →');
 
       document.getElementById('app').innerHTML = `
         <div class="sectie">
@@ -562,6 +599,23 @@
 
           <div class="knoppen-rij">
             <button class="btn-resultaten" onclick="volgende()">${label}</button>
+          </div>
+        </div>`;
+    }
+
+    async function toonOpenVraag() {
+      await laadOpenAntwoorden();
+      abonneerOpOpenAntwoorden();
+      document.getElementById('app').innerHTML = `
+        <div class="sectie">
+          <div class="anoniem-label">🔒 Volledig anoniem — geen naam of speler zichtbaar</div>
+          <div class="stelling-groot">${escapeHtml(OPEN_VRAAG)}</div>
+          <div class="live-teller">${openAntwoorden.length} reactie${openAntwoorden.length !== 1 ? 's' : ''} binnen</div>
+          ${openAntwoorden.length === 0
+            ? `<div class="leeg-kaart">Nog geen reacties binnen.</div>`
+            : `<div class="open-antwoorden-lijst">${openAntwoorden.map(a => `<div class="open-antwoord-item">${escapeHtml(a.tekst)}</div>`).join('')}</div>`}
+          <div class="knoppen-rij">
+            <button class="btn-resultaten" onclick="naarEindstand()">Naar eindstand →</button>
           </div>
         </div>`;
     }
@@ -617,6 +671,7 @@
       if (sessie.status === 'wachtkamer')  return toonWachtkamer();
       if (sessie.status === 'actief')      return sessie.onthuld ? toonOnthuld() : toonStelling();
       if (sessie.status === 'tussenstand') return toonTussenstand();
+      if (sessie.status === 'open_vraag')  return toonOpenVraag();
       if (sessie.status === 'eindstand')   return toonEindstand();
     }
 

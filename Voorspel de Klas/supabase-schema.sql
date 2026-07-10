@@ -139,5 +139,30 @@ CREATE POLICY "Docent kan eigen sessie antwoorden lezen" ON voorspel_antwoorden
     WHERE l.docent_id = auth.uid()
   ));
 
--- Realtime aanzetten voor voorspel_sessies, voorspel_deelnemers en
--- voorspel_antwoorden doe je zelf nog handmatig via Database > Replication.
+-- ── Open, volledig anonieme afsluitende vraag ──
+-- Bewust GEEN deelnemer_id: er is dus geen enkele koppeling naar een
+-- speler op te slaan of te tonen, ook niet voor de docent.
+CREATE TABLE IF NOT EXISTS voorspel_open_antwoorden (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  sessie_id uuid NOT NULL REFERENCES voorspel_sessies(id) ON DELETE CASCADE,
+  tekst text NOT NULL,
+  aangemaakt_op timestamptz NOT NULL DEFAULT now()
+);
+
+ALTER TABLE voorspel_open_antwoorden ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Leerling kan open antwoord insturen" ON voorspel_open_antwoorden
+  FOR INSERT TO anon
+  WITH CHECK (true);
+
+CREATE POLICY "Docent kan eigen sessie open antwoorden lezen" ON voorspel_open_antwoorden
+  FOR SELECT TO authenticated
+  USING (sessie_id IN (
+    SELECT s.id FROM voorspel_sessies s
+    JOIN voorspel_links l ON l.id = s.link_id
+    WHERE l.docent_id = auth.uid()
+  ));
+
+-- Realtime aanzetten voor voorspel_sessies, voorspel_deelnemers,
+-- voorspel_antwoorden en voorspel_open_antwoorden doe je zelf nog
+-- handmatig via Database > Replication.

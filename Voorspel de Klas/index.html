@@ -197,6 +197,34 @@
     .rest-rij.eigen { border-color: var(--primary); background: var(--primary-soft); }
     .rest-rij span:first-child { font-weight: 700; }
     .rest-rij span:last-child { color: var(--muted); }
+
+    /* ── OPEN, ANONIEME VRAAG ── */
+    .anoniem-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--groen-soft); border: 1px solid rgba(16,163,127,.22);
+      color: var(--groen-dark); font-size: 12.5px; font-weight: 700;
+      border-radius: var(--r-pill); padding: 7px 14px;
+    }
+    .open-textarea-wrap { position: relative; }
+    .open-textarea {
+      width: 100%; font-family: inherit; font-size: 16px; font-weight: 500; color: var(--dark);
+      background: #f7f8f9; border: 2px solid var(--border); border-radius: 18px;
+      padding: 16px 18px 34px; resize: none; min-height: 120px;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+    .open-textarea::placeholder { color: rgba(109,116,122,0.5); font-weight: 400; }
+    .open-textarea:focus { outline: none; background: white; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(78,142,243,0.16); }
+    .open-teller {
+      position: absolute; right: 16px; bottom: 12px;
+      font-size: 12.5px; font-weight: 700; color: var(--muted); pointer-events: none; user-select: none;
+    }
+    .open-teller.open-teller-laag { color: var(--rood); }
+    .btn-overslaan {
+      width: 100%; height: 48px; border: none; border-radius: var(--r-pill);
+      background: transparent; color: var(--muted);
+      font-family: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer;
+    }
+    .btn-overslaan:hover { color: var(--dark); }
   </style>
 </head>
 <body>
@@ -241,6 +269,8 @@
       { stelling: 'Ik weet hoe ik met stress voor een toets kan omgaan.', vraag: 'Hoeveel procent van de klas denk je dat weet hoe ze met stress voor een toets kunnen omgaan?' },
       { stelling: 'Ik maak me soms druk om dingen die achteraf helemaal niet nodig waren.', vraag: 'Hoeveel procent van de klas denk je dat zich soms druk maakt om dingen die achteraf niet nodig waren?' }
     ];
+    const OPEN_VRAAG = 'Is er nog iets over stress dat je anoniem zou willen delen, zodat we het samen als klas kunnen bespreken?';
+    const OPEN_VRAAG_MAX = 300;
 
     function escapeHtml(t) {
       const d = document.createElement('div');
@@ -392,6 +422,64 @@
         </div>`;
     }
 
+    function toonOpenVraag() {
+      document.getElementById('spelInhoud').innerHTML = `
+        <div class="card">
+          <div class="anoniem-badge">🔒 Volledig anoniem</div>
+          <div class="stelling-tekst">${escapeHtml(OPEN_VRAAG)}</div>
+          <p class="hero-sub">Niemand, ook je docent niet, kan zien wie dit geschreven heeft.</p>
+          <div class="open-textarea-wrap">
+            <textarea class="open-textarea" id="openInput" maxlength="${OPEN_VRAAG_MAX}" placeholder="Typ hier je antwoord…"></textarea>
+            <span class="open-teller" id="openTeller">${OPEN_VRAAG_MAX}</span>
+          </div>
+          <button class="btn-volgende" id="btnOpenVerstuur" onclick="verstuurOpenAntwoord()" disabled>Versturen →</button>
+          <button class="btn-overslaan" onclick="sluitOpenVraagAf()">Niets te delen, ga verder</button>
+        </div>`;
+      const input = document.getElementById('openInput');
+      const teller = document.getElementById('openTeller');
+      const knop = document.getElementById('btnOpenVerstuur');
+      input.addEventListener('input', () => {
+        const resterend = OPEN_VRAAG_MAX - input.value.length;
+        teller.textContent = resterend;
+        teller.classList.toggle('open-teller-laag', resterend <= 15);
+        knop.disabled = input.value.trim().length === 0;
+      });
+    }
+
+    function markeerOpenVraagAfgerond() {
+      sessionStorage.setItem('voorspel_open_beantwoord_' + sessie.id, '1');
+    }
+
+    async function verstuurOpenAntwoord() {
+      const input = document.getElementById('openInput');
+      const tekst = input.value.trim();
+      if (!tekst) return;
+      const knop = document.getElementById('btnOpenVerstuur');
+      knop.disabled = true;
+      try {
+        const { error } = await db.from('voorspel_open_antwoorden').insert({ sessie_id: sessie.id, tekst });
+        if (error) throw error;
+        markeerOpenVraagAfgerond();
+        toonOpenVraagVerstuurd();
+      } catch (e) {
+        knop.disabled = false;
+        alert('Versturen is niet gelukt, probeer het nog eens.');
+      }
+    }
+
+    function sluitOpenVraagAf() {
+      markeerOpenVraagAfgerond();
+      toonOpenVraagVerstuurd();
+    }
+
+    function toonOpenVraagVerstuurd() {
+      document.getElementById('spelInhoud').innerHTML = `
+        <div class="status-kaart">
+          <div class="status-kaart-titel">Bedankt!</div>
+          <div>Wacht tot je leerkracht verdergaat naar de eindstand.</div>
+        </div>`;
+    }
+
     function toonOnthuld() {
       const idx = sessie.huidige_stelling_index;
       const s = STELLINGEN[idx];
@@ -465,6 +553,10 @@
         return alBeantwoord ? toonWachtOpKlas() : toonStelling();
       }
       if (sessie.status === 'tussenstand') return toonRanglijst(false);
+      if (sessie.status === 'open_vraag') {
+        const alBeantwoord = sessionStorage.getItem('voorspel_open_beantwoord_' + sessie.id);
+        return alBeantwoord ? toonOpenVraagVerstuurd() : toonOpenVraag();
+      }
       if (sessie.status === 'eindstand') return toonRanglijst(true);
     }
 
