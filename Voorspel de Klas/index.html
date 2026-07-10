@@ -234,12 +234,12 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const STELLINGEN = [
-      { stelling: 'Ik ben weleens gestrest voor een toets.', vraag: 'Hoeveel procent van de klas denk je dat weleens gestrest is voor een toets?' },
-      { stelling: 'Ik vind het spannend om nieuwe mensen te ontmoeten op de middelbare school.', vraag: 'Hoeveel procent van de klas denk je dat dit ook spannend vindt?' },
-      { stelling: 'Ik haal weleens een cijfer waar ik niet blij mee ben.', vraag: 'Hoeveel procent van de klas denk je dat weleens zo\'n cijfer haalt?' },
-      { stelling: 'Ik vind het lastig om hulp te vragen als ik iets niet snap.', vraag: 'Hoeveel procent van de klas denk je dat dit ook lastig vindt?' },
-      { stelling: 'Ik slaap weleens slecht van de zenuwen voor een belangrijke dag.', vraag: 'Hoeveel procent van de klas denk je dat hier weleens slecht van slaapt?' },
-      { stelling: 'Ik vind het spannend om in het begin alleen te lunchen.', vraag: 'Hoeveel procent van de klas denk je dat dit ook spannend vindt?' }
+      { stelling: 'Ik weet wat stress is.', vraag: 'Hoeveel procent van de klas denk je dat weet wat stress is?' },
+      { stelling: 'Ik heb weleens stress.', vraag: 'Hoeveel procent van de klas denk je dat weleens stress heeft?' },
+      { stelling: 'Ik weet wat mij helpt als ik stress heb.', vraag: 'Hoeveel procent van de klas denk je dat weet wat hen helpt als ze stress hebben?' },
+      { stelling: 'Ik durf aan iemand te vertellen dat ik stress heb.', vraag: 'Hoeveel procent van de klas denk je dat durft te vertellen dat ze stress hebben?' },
+      { stelling: 'Ik weet hoe ik met stress voor een toets kan omgaan.', vraag: 'Hoeveel procent van de klas denk je dat weet hoe ze met stress voor een toets kunnen omgaan?' },
+      { stelling: 'Ik maak me soms druk om dingen die achteraf helemaal niet nodig waren.', vraag: 'Hoeveel procent van de klas denk je dat zich soms druk maakt om dingen die achteraf niet nodig waren?' }
     ];
 
     function escapeHtml(t) {

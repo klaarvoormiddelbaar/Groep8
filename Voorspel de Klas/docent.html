@@ -265,12 +265,12 @@
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const STELLINGEN = [
-      { stelling: 'Ik ben weleens gestrest voor een toets.', gvVraag: 'Hoe kun je ervoor zorgen dat je minder gestrest bent voor een toets?', gvAntwoord: 'Op tijd beginnen met leren, een planning maken en op tijd naar bed gaan voor de toets.' },
-      { stelling: 'Ik vind het spannend om nieuwe mensen te ontmoeten op de middelbare school.', gvVraag: 'Wat kun je doen om makkelijker nieuwe mensen te leren kennen?', gvAntwoord: 'Iemand die alleen zit een compliment geven of een vraag stellen, samen aan een opdracht werken, of je aansluiten bij een club of sport.' },
-      { stelling: 'Ik haal weleens een cijfer waar ik niet blij mee ben.', gvVraag: 'Wat kun je doen als je een cijfer haalt dat tegenvalt?', gvAntwoord: 'Vragen wat er misging, de toets nabespreken met de docent, en de volgende keer anders leren.' },
-      { stelling: 'Ik vind het lastig om hulp te vragen als ik iets niet snap.', gvVraag: 'Waarom is het juist slim om hulp te vragen als je iets niet snapt?', gvAntwoord: 'Hoe eerder je het vraagt, hoe sneller je het snapt. De meeste docenten en klasgenoten helpen je graag.' },
-      { stelling: 'Ik slaap weleens slecht van de zenuwen voor een belangrijke dag.', gvVraag: 'Wat kun je doen als je slecht slaapt van de zenuwen?', gvAntwoord: "Op tijd naar bed gaan, rustig ademhalen, en je spullen 's avonds al klaarleggen zodat je niet hoeft te stressen." },
-      { stelling: 'Ik vind het spannend om in het begin alleen te lunchen.', gvVraag: 'Wat kun je doen als je in het begin nog niemand hebt om mee te lunchen?', gvAntwoord: 'Aan iemand vragen of je erbij mag zitten, of zelf iemand uitnodigen die ook alleen zit.' }
+      { stelling: 'Ik weet wat stress is.', gvVraag: 'Wat is stress eigenlijk?', gvAntwoord: 'Stress is een reactie van je lichaam op spanning of druk, bijvoorbeeld doordat je gespannen bent voor een toets. Je hartslag kan sneller worden en je kunt je gejaagd voelen.' },
+      { stelling: 'Ik heb weleens stress.', gvVraag: 'In welke situaties voel jij weleens stress?', gvAntwoord: 'Bijvoorbeeld voor een toets, een spreekbeurt, of als je veel dingen tegelijk moet doen.' },
+      { stelling: 'Ik weet wat mij helpt als ik stress heb.', gvVraag: 'Wat helpt jou als je stress hebt?', gvAntwoord: 'Bijvoorbeeld rustig ademhalen, even naar buiten gaan, met iemand praten of naar muziek luisteren.' },
+      { stelling: 'Ik durf aan iemand te vertellen dat ik stress heb.', gvVraag: 'Waarom is het slim om te vertellen dat je stress hebt?', gvAntwoord: 'Iemand kan met je meedenken of je helpen, en het lucht vaak al op als je het gewoon zegt.' },
+      { stelling: 'Ik weet hoe ik met stress voor een toets kan omgaan.', gvVraag: 'Wat kun je doen om beter met toetsstress om te gaan?', gvAntwoord: 'Op tijd beginnen met leren, een planning maken en rustig ademhalen vlak voor de toets.' },
+      { stelling: 'Ik maak me soms druk om dingen die achteraf helemaal niet nodig waren.', gvVraag: 'Wat kun je doen als je merkt dat je je ergens te druk om maakt?', gvAntwoord: 'Jezelf afvragen: is dit over een week nog belangrijk? En erover praten met iemand die je vertrouwt.' }
     ];
     const TUSSENSTAND_NA_INDEX = 2; // na de 3e stelling (0-based index 2)
 
