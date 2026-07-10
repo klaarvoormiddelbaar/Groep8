@@ -157,7 +157,6 @@
     .eind-afsluiting { font-size:16px; color: var(--muted); }
   
     .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
-    .ei-fout-kruis { filter: hue-rotate(232deg) saturate(600%); }
   </style>
 </head>
 <body>
@@ -291,7 +290,7 @@
           } else if (gekozenOptieIndex === goed_index) {
             toonVraagStatus('goed', `<img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""> Goed! Je verdiende ${gekozenPunten} punten. Succes met de volgende vraag!`);
           } else {
-            toonVraagStatus('fout', `<img class="ei ei-fout-kruis" src="/Afbeeldingen/EMOJI PACK IOS/cross-mark-button_274e.png" alt=""> Helaas, dat klopte niet. Het juiste antwoord was: ${letters[goed_index]}. Succes met de volgende vraag!`);
+            toonVraagStatus('fout', `<img class="ei" src="/Afbeeldingen/emojis nieuw/kruisje.png" alt=""> Helaas, dat klopte niet. Het juiste antwoord was: ${letters[goed_index]}. Succes met de volgende vraag!`);
           }
         })
         .subscribe();
