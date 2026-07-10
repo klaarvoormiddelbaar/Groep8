@@ -22,7 +22,7 @@ const LESSONS = [
   },
   {
     n: 2, g1: '#065f46', g2: '#10a37f',
-    emoji: 'school.png', title: 'Rustige schoolweek inplannen',
+    emoji: 'lijst.png', title: 'Rustige schoolweek inplannen',
     sub: "Kennismaken met het 'KvM Planning Stappenplan'",
     duur: '50–60 min',
     url: '/les2',
@@ -42,7 +42,7 @@ const LESSONS = [
   },
   {
     n: 3, g1: '#92400e', g2: '#f59e0b',
-    emoji: 'notitieboek.png', title: 'Hulpmiddelen tijdens het leren',
+    emoji: 'boeken.png', title: 'Hulpmiddelen tijdens het leren',
     sub: 'Handige digitale tools voor op school',
     duur: '50–60 min',
     url: '/les3',
@@ -86,7 +86,7 @@ const LESSONS = [
   },
   {
     n: 5, g1: '#7f1d1d', g2: '#e05545',
-    emoji: 'envelop.png', title: 'Omgaan met toetsen en stress',
+    emoji: 'rugzak.png', title: 'Omgaan met toetsen en stress',
     sub: 'Zelfverzekerd naar een toets toewerken',
     duur: '50–60 min',
     url: '/les5',
@@ -109,7 +109,7 @@ const LESSONS = [
   },
   {
     n: 6, g1: '#0c4a6e', g2: '#0284c7',
-    emoji: 'brein.png', title: 'Drukke schoolweek inplannen',
+    emoji: 'notitieboek.png', title: 'Drukke schoolweek inplannen',
     sub: "Een volle week inplannen met het 'KvM Planning Stappenplan'",
     duur: '50–60 min',
     url: '/les6',
