@@ -109,7 +109,7 @@ const LESSONS = [
   },
   {
     n: 6, g1: '#0c4a6e', g2: '#0284c7',
-    emoji: 'notitieboek.png', title: 'Drukke schoolweek inplannen',
+    emoji: 'notitieboek-groen.png', title: 'Drukke schoolweek inplannen',
     sub: "Een volle week inplannen met het 'KvM Planning Stappenplan'",
     duur: '50–60 min',
     url: '/les6',
