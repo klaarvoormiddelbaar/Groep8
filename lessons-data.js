@@ -90,7 +90,7 @@ const LESSONS = [
     sub: 'Zelfverzekerd naar een toets toewerken',
     duur: '50–60 min',
     url: '/les5',
-    tip: 'Benadruk dat de antwoorden bij Voorspel de Klas volledig anoniem zijn. Moedig leerlingen aan om eerlijk antwoord te geven en hun zorgen of ervaringen rondom stress te delen. Dit levert vaak waardevolle gesprekken en herkenning in de klas op.',
+    tip: 'Benadruk dat de antwoorden bij KlasKompas volledig anoniem zijn. Moedig leerlingen aan om eerlijk antwoord te geven en hun zorgen of ervaringen rondom stress te delen. Dit levert vaak waardevolle gesprekken en herkenning in de klas op.',
     doelen: [
       'De leerlingen weten hoe zij zich goed kunnen voorbereiden op een toets, hoe zij een toets slim maken en hoe zij na afloop op een toets kunnen reflecteren.',
       'De leerlingen weten hoe zij op een gezonde manier met stress kunnen omgaan.',
@@ -101,11 +101,11 @@ const LESSONS = [
       { t: '2–10 min',  n: 'Woordwolk over toetsen',         d: 'Open de woordwolk in het docentenportaal. De leerlingen benoemen tips voor het voorbereiden, maken en terugkijken op een toets. Bespreek de resultaten vervolgens klassikaal.' },
       { t: '10–15 min', n: 'Bespreek de tips uit de presentatie', d: 'Bespreek kort de tips uit de presentatie die nog niet in de woordwolk zijn genoemd.' },
       { t: '15–25 min', n: 'KvM Toets maken',                d: 'Laat de leerlingen de KvM Toets maken. Bekijk als leerkracht vooraf de volledige toets goed door, met extra aandacht voor pagina 2.' },
-      { t: '25–35 min', n: 'Voorspel de klas',               d: 'Open Voorspel de Klas in het docentenportaal. Leerlingen beantwoorden anoniem stellingen over stress en voorspellen hoe de klas zal antwoorden. De resultaten vormen de basis voor open klassengesprekken over stress en hoe je hiermee om kunt gaan.' },
+      { t: '25–35 min', n: 'KlasKompas',                     d: 'Open KlasKompas in het docentenportaal. Leerlingen beantwoorden anoniem stellingen over stress en voorspellen hoe de klas zal antwoorden. De resultaten vormen de basis voor open klassengesprekken over stress en hoe je hiermee om kunt gaan.' },
       { t: '35–45 min', n: 'Quiz',                           d: 'Open de quiz in het docentenportaal en speel deze klassikaal.' },
       { t: '45–50 min', n: 'Afsluiting & vooruitblik',       d: 'Vat de belangrijkste inzichten van de les samen, blik kort vooruit op de volgende les en geef ruimte voor vragen of een korte uitloop.' }
     ],
-    mat: ['Devices voor Voorspel de klas', 'Digibord om de sessie klassikaal te volgen']
+    mat: ['Devices voor KlasKompas', 'Digibord om de sessie klassikaal te volgen']
   },
   {
     n: 6, g1: '#0c4a6e', g2: '#0284c7',

@@ -6,7 +6,7 @@
   "title": "Omgaan met toetsen en stress",
   "sub": "Zelfverzekerd naar een toets toewerken",
   "duur": "50–60 min",
-  "tip": "Benadruk dat de antwoorden bij Voorspel de Klas volledig anoniem zijn. Moedig leerlingen aan om eerlijk antwoord te geven en hun zorgen of ervaringen rondom stress te delen. Dit levert vaak waardevolle gesprekken en herkenning in de klas op.",
+  "tip": "Benadruk dat de antwoorden bij KlasKompas volledig anoniem zijn. Moedig leerlingen aan om eerlijk antwoord te geven en hun zorgen of ervaringen rondom stress te delen. Dit levert vaak waardevolle gesprekken en herkenning in de klas op.",
   "canva": "https://www.canva.com/design/DAHMQFuvVQE/4XFKX28axd-Cp8S7BLt2fw/view?embed",
   "doelen": [
     "De leerlingen weten hoe zij zich goed kunnen voorbereiden op een toets, hoe zij een toets slim maken en hoe zij na afloop op een toets kunnen reflecteren.",
@@ -22,7 +22,7 @@
     {
       "t": "2–10 min",
       "n": "Woordwolk over toetsen",
-      "d": "Open de woordwolk in het docentenportaal. De leerlingen benoemen tips voor het voorbereiden, maken en terugkijken op een toets. Bespreek de resultaten vervolgens klassikaal."
+      "d": "Wanneer dit in de presentatie wordt aangegeven, open je de Woordwolk. De leerlingen vullen samen tips in voor het voorbereiden, maken en terugkijken op een toets."
     },
     {
       "t": "10–15 min",
@@ -36,8 +36,8 @@
     },
     {
       "t": "25–35 min",
-      "n": "Voorspel de klas",
-      "d": "Open Voorspel de Klas in het docentenportaal. Leerlingen beantwoorden anoniem stellingen over stress en voorspellen hoe de klas zal antwoorden. De resultaten vormen de basis voor open klassengesprekken over stress en hoe je hiermee om kunt gaan."
+      "n": "KlasKompas",
+      "d": "Open KlasKompas in het docentenportaal. Leerlingen beantwoorden anoniem stellingen over stress en voorspellen hoe de klas zal antwoorden. De resultaten vormen de basis voor open klassengesprekken over stress en hoe je hiermee om kunt gaan."
     },
     {
       "t": "35–45 min",
@@ -57,7 +57,7 @@
     }
   ],
   "mat": [
-    "Devices voor Voorspel de klas",
+    "Devices voor KlasKompas",
     "Digibord om de sessie klassikaal te volgen"
   ]
 }
