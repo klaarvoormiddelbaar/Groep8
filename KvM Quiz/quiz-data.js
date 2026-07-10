@@ -90,6 +90,87 @@ const QUIZZES = {
       goed_index: 1,
       tijdslimiet_seconden: 20
     }
+  ],
+  'les-5': [
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat kun je het beste doen als je tijdens een toets het antwoord op een vraag niet weet?',
+      opties: [
+        'Gelijk gokken wat het antwoord is en er daarna niet meer naar kijken.',
+        'Lang bij de vraag blijven totdat je het zeker weet.',
+        'Rustig blijven en later terugkomen bij de vraag.',
+        'De toets inleveren zonder die vraag in te vullen.'
+      ],
+      goed_index: 2,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Waarom is terugkijken op een toets belangrijk?',
+      opties: [
+        'Dat is helemaal niet zo belangrijk.',
+        'Dan krijg je bijna altijd een hoger cijfer van je docent.',
+        'Dan hoef je nooit meer te leren.',
+        'Dan leer je van je fouten.'
+      ],
+      goed_index: 3,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Een beetje stress...',
+      opties: [
+        'Is altijd slecht.',
+        'Kan soms juist helpen om goed te presteren.',
+        'Hebben alleen volwassenen.',
+        'Daar kun je niets tegen doen.'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Zet de stappen in de juiste volgorde. Wat doe je als eerste wanneer je een toets krijgt? 1) Eerst alle vragen rustig doorlezen. 2) Beginnen met het beantwoorden van de vragen. 3) Je antwoorden controleren. 4) De toets inleveren.',
+      opties: [
+        '2 → 3 → 1 → 4',
+        '2 → 1 → 3 → 4',
+        '1 → 2 → 3 → 4',
+        '1 → 3 → 2 → 4'
+      ],
+      goed_index: 2,
+      tijdslimiet_seconden: 25
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat helpt NIET tegen stress?',
+      opties: [
+        'Op tijd beginnen.',
+        'Goed slapen.',
+        'Alles op het laatste moment doen.',
+        'Korte pauzes nemen.'
+      ],
+      goed_index: 2,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Welke twee gedachten helpen tijdens een toets? Stelling 1: Ik pak één vraag tegelijk aan. Stelling 2: Iedereen haalt vast een hoger cijfer dan ik. Stelling 3: Ik controleer mijn antwoorden als ik tijd over heb. Stelling 4: Dit gaat me gewoon niet lukken.',
+      opties: [
+        'Stelling 1 en 2',
+        'Stelling 1 en 3',
+        'Stelling 2 en 4',
+        'Stelling 3 en 4'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 25
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Schattingsvraag: hoeveel toetsweken hebben leerlingen in de bovenbouw gemiddeld per jaar?',
+      opties: ['Geen', '3 tot 4', '5 tot 6', '7 tot 8'],
+      goed_index: 1,
+      tijdslimiet_seconden: 20
+    }
   ]
 };
 
