@@ -56,18 +56,22 @@ CREATE UNIQUE INDEX IF NOT EXISTS voorspel_sessies_een_open_per_link
 
 ALTER TABLE voorspel_sessies ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Leerling kan sessie van de link lezen" ON voorspel_sessies;
 CREATE POLICY "Leerling kan sessie van de link lezen" ON voorspel_sessies
   FOR SELECT TO anon
   USING (true);
 
+DROP POLICY IF EXISTS "Docent kan eigen sessie aanmaken" ON voorspel_sessies;
 CREATE POLICY "Docent kan eigen sessie aanmaken" ON voorspel_sessies
   FOR INSERT TO authenticated
   WITH CHECK (link_id IN (SELECT id FROM voorspel_links WHERE docent_id = auth.uid()));
 
+DROP POLICY IF EXISTS "Docent kan eigen sessie lezen" ON voorspel_sessies;
 CREATE POLICY "Docent kan eigen sessie lezen" ON voorspel_sessies
   FOR SELECT TO authenticated
   USING (link_id IN (SELECT id FROM voorspel_links WHERE docent_id = auth.uid()));
 
+DROP POLICY IF EXISTS "Docent kan eigen sessie bijwerken" ON voorspel_sessies;
 CREATE POLICY "Docent kan eigen sessie bijwerken" ON voorspel_sessies
   FOR UPDATE TO authenticated
   USING (link_id IN (SELECT id FROM voorspel_links WHERE docent_id = auth.uid()))
@@ -84,14 +88,17 @@ CREATE TABLE IF NOT EXISTS voorspel_deelnemers (
 
 ALTER TABLE voorspel_deelnemers ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Leerling kan meedoen" ON voorspel_deelnemers;
 CREATE POLICY "Leerling kan meedoen" ON voorspel_deelnemers
   FOR INSERT TO anon
   WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Leerling kan deelnemers van de sessie lezen" ON voorspel_deelnemers;
 CREATE POLICY "Leerling kan deelnemers van de sessie lezen" ON voorspel_deelnemers
   FOR SELECT TO anon
   USING (true);
 
+DROP POLICY IF EXISTS "Docent kan eigen sessie deelnemers lezen" ON voorspel_deelnemers;
 CREATE POLICY "Docent kan eigen sessie deelnemers lezen" ON voorspel_deelnemers
   FOR SELECT TO authenticated
   USING (sessie_id IN (
@@ -100,6 +107,7 @@ CREATE POLICY "Docent kan eigen sessie deelnemers lezen" ON voorspel_deelnemers
     WHERE l.docent_id = auth.uid()
   ));
 
+DROP POLICY IF EXISTS "Docent kan score bijwerken" ON voorspel_deelnemers;
 CREATE POLICY "Docent kan score bijwerken" ON voorspel_deelnemers
   FOR UPDATE TO authenticated
   USING (sessie_id IN (
@@ -127,10 +135,12 @@ CREATE TABLE IF NOT EXISTS voorspel_antwoorden (
 ALTER TABLE voorspel_antwoorden ENABLE ROW LEVEL SECURITY;
 
 -- Leerlingen lezen elkaars antwoorden nooit, alleen zelf insturen.
+DROP POLICY IF EXISTS "Leerling kan antwoord insturen" ON voorspel_antwoorden;
 CREATE POLICY "Leerling kan antwoord insturen" ON voorspel_antwoorden
   FOR INSERT TO anon
   WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Docent kan eigen sessie antwoorden lezen" ON voorspel_antwoorden;
 CREATE POLICY "Docent kan eigen sessie antwoorden lezen" ON voorspel_antwoorden
   FOR SELECT TO authenticated
   USING (sessie_id IN (
@@ -151,10 +161,12 @@ CREATE TABLE IF NOT EXISTS voorspel_open_antwoorden (
 
 ALTER TABLE voorspel_open_antwoorden ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Leerling kan open antwoord insturen" ON voorspel_open_antwoorden;
 CREATE POLICY "Leerling kan open antwoord insturen" ON voorspel_open_antwoorden
   FOR INSERT TO anon
   WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Docent kan eigen sessie open antwoorden lezen" ON voorspel_open_antwoorden;
 CREATE POLICY "Docent kan eigen sessie open antwoorden lezen" ON voorspel_open_antwoorden
   FOR SELECT TO authenticated
   USING (sessie_id IN (
