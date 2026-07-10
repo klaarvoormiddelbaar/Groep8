@@ -54,6 +54,10 @@
     {
       "naam": "Laptop",
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    },
+    {
+      "naam": "KvM Toets",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 5 - KvM Toets.png"
     }
   ],
   "mat": [
