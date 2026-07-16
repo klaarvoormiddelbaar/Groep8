@@ -39,5 +39,11 @@
     "Quiz-kaarten (bijlage 2)",
     "Smartboard of beamer",
     "Optioneel: video over een dag op de middelbare"
+  ],
+  "benodigdheden": [
+    {
+      "naam": "Wisbordje",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png"
+    }
   ]
 }

@@ -53,6 +53,10 @@
     {
       "naam": "Werkboek",
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+    },
+    {
+      "naam": "Wisbordje",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png"
     }
   ],
   "mat": [
