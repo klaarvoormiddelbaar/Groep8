@@ -91,6 +91,90 @@ const QUIZZES = {
       tijdslimiet_seconden: 20
     }
   ],
+  'les-3': [
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat is een goed hulpmiddel als je de uitleg in je boek niet begrijpt?',
+      opties: [
+        'Meteen stoppen met leren',
+        'Een uitlegvideo bekijken',
+        'Wachten tot de volgende toets',
+        'Het gewoon overslaan'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Waar ging de uitlegvideo in Missie 1 over?',
+      opties: [
+        'Rekenen met gelijksoortige termen',
+        'Het ontstaan van de Tweede Wereldoorlog',
+        'Een taalopdracht',
+        'Aardrijkskundige kaarten lezen'
+      ],
+      goed_index: 0,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'true_false',
+      vraag: 'Gelijksoortige termen, zoals 18b en 4b, mag je van elkaar aftrekken.',
+      opties: ['Waar', 'Niet waar'],
+      goed_index: 0,
+      toelichting: 'Termen met dezelfde letter zijn gelijksoortig: je trekt de getallen van elkaar af en laat de letter staan.',
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Hoe schrijf je 5x − 3y korter op?',
+      opties: ['2x', '2y', '2xy', 'Dat kan niet, want x en y zijn verschillende letters'],
+      goed_index: 3,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat doe je in Missie 2, "Ik wil extra oefenen"?',
+      opties: [
+        'Je onderzoekt vier oefenwebsites en vergelijkt ze',
+        'Je maakt een weekplanning voor thuis',
+        'Je bekijkt een film over de middelbare school',
+        'Je stelt vragen aan je mentor'
+      ],
+      goed_index: 0,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat is GEEN kenmerk waar je op kunt letten bij een goede oefenwebsite?',
+      opties: [
+        'Duidelijke uitleg',
+        'Direct feedback op je antwoorden',
+        'Zo duur mogelijk',
+        'Overzichtelijke website'
+      ],
+      goed_index: 2,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'In Missie 3 gebruik je Jay I als jouw...?',
+      opties: ['Persoonlijke leercoach', 'Weerbericht', 'Agenda-app', 'Videobewerker'],
+      goed_index: 0,
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat kan Jay I NIET voor je doen?',
+      opties: [
+        'Een samenvatting maken',
+        'Een tijdlijn genereren',
+        'Oefenvragen opstellen',
+        'Je toets automatisch inleveren'
+      ],
+      goed_index: 3,
+      tijdslimiet_seconden: 15
+    }
+  ],
   'les-5': [
     {
       type: 'multiple_choice',
