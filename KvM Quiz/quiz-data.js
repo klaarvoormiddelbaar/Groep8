@@ -134,7 +134,7 @@ const QUIZZES = {
       opties: [
         'Duidelijke uitleg',
         'Direct feedback op je antwoorden',
-        'Zo duur mogelijk',
+        'De website moet betaald zijn',
         'Overzichtelijke website'
       ],
       goed_index: 2,
