@@ -293,9 +293,9 @@
     const pathMatch = window.location.pathname.match(/\/les(\d+)\//);
     const lesId = pathMatch ? `les-${pathMatch[1]}` : (params.get('les') || 'les-1');
     const LES_TITELS = {
-      'les-1': 'Welkom bij KvM', 'les-2': 'De nieuwe school', 'les-3': 'Slim plannen',
-      'les-4': 'Nieuwe vrienden', 'les-5': 'Formeel & Informeel', 'les-6': 'Gevoel & Zelfvertrouwen',
-      'les-7': 'Sociale situaties', 'les-8': 'Klaar voor de start!'
+      'les-1': 'Klaar voor lancering!', 'les-2': 'Rustige schoolweek inplannen', 'les-3': 'Hulpmiddelen tijdens het leren',
+      'les-4': 'Executieve functies', 'les-5': 'Omgaan met toetsen en stress', 'les-6': 'Drukke schoolweek inplannen',
+      'les-7': 'Schriftelijke vaardigheden', 'les-8': 'Klaar voor de start!'
     };
     const lesTitel = LES_TITELS[lesId] || 'Onbekende les';
     const docentNaam = params.get('naam') || 'Docent';
