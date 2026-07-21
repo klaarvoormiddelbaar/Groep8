@@ -94,53 +94,38 @@ const QUIZZES = {
   'les-3': [
     {
       type: 'multiple_choice',
-      vraag: 'Wat is een goed hulpmiddel als je de uitleg in je boek niet begrijpt?',
+      vraag: 'Welke tip heb je NIET gekregen tijdens de kennisclip over slim leren?',
       opties: [
-        'Meteen stoppen met leren',
-        'Een uitlegvideo bekijken',
-        'Wachten tot de volgende toets',
-        'Het gewoon overslaan'
+        'Stel jezelf vragen',
+        'Begin op tijd met leren',
+        'Neem korte pauzes tijdens het leren',
+        'Je hebt al deze tips gekregen'
       ],
-      goed_index: 1,
-      tijdslimiet_seconden: 15
-    },
-    {
-      type: 'multiple_choice',
-      vraag: 'Waar ging de uitlegvideo in Missie 1 over?',
-      opties: [
-        'Rekenen met gelijksoortige termen',
-        'Het ontstaan van de Tweede Wereldoorlog',
-        'Een taalopdracht',
-        'Aardrijkskundige kaarten lezen'
-      ],
-      goed_index: 0,
-      tijdslimiet_seconden: 20
-    },
-    {
-      type: 'true_false',
-      vraag: 'Gelijksoortige termen, zoals 18b en 4b, mag je van elkaar aftrekken.',
-      opties: ['Waar', 'Niet waar'],
-      goed_index: 0,
-      toelichting: 'Termen met dezelfde letter zijn gelijksoortig: je trekt de getallen van elkaar af en laat de letter staan.',
-      tijdslimiet_seconden: 15
-    },
-    {
-      type: 'multiple_choice',
-      vraag: 'Hoe schrijf je 5x − 3y korter op?',
-      opties: ['2x', '2y', '2xy', 'Dat kan niet, want x en y zijn verschillende letters'],
       goed_index: 3,
       tijdslimiet_seconden: 20
     },
     {
       type: 'multiple_choice',
+      vraag: 'Hoe heet de wiskundedocent in de uitlegvideo van Missie 1?',
+      opties: [
+        'Math with Menno',
+        'Rekenen met Rick',
+        'Wiskunde met Wilbert',
+        "Menno's Math class"
+      ],
+      goed_index: 0,
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
       vraag: 'Wat doe je in Missie 2, "Ik wil extra oefenen"?',
       opties: [
-        'Je onderzoekt vier oefenwebsites en vergelijkt ze',
         'Je maakt een weekplanning voor thuis',
+        'Je onderzoekt vier oefenwebsites en vergelijkt ze',
         'Je bekijkt een film over de middelbare school',
         'Je stelt vragen aan je mentor'
       ],
-      goed_index: 0,
+      goed_index: 1,
       tijdslimiet_seconden: 20
     },
     {
@@ -157,22 +142,29 @@ const QUIZZES = {
     },
     {
       type: 'multiple_choice',
-      vraag: 'In Missie 3 gebruik je Jay I als jouw...?',
-      opties: ['Persoonlijke leercoach', 'Weerbericht', 'Agenda-app', 'Videobewerker'],
-      goed_index: 0,
+      vraag: 'Hoe heet de leercoach uit Missie 3?',
+      opties: ['My bae Jay', 'Jay de leercoach', 'Jay I', 'Jay AI'],
+      goed_index: 2,
       tijdslimiet_seconden: 15
     },
     {
       type: 'multiple_choice',
-      vraag: 'Wat kan Jay I NIET voor je doen?',
+      vraag: 'AI geeft een heel overtuigend antwoord, maar dit antwoord blijkt niet te kloppen. Hoe noem je dat?',
+      opties: ['Een hallucinatie', 'Een update', 'Een storing', 'Een algoritme'],
+      goed_index: 0,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Je hebt drie situaties. Welk hulpmiddel past het beste bij elke situatie, in de juiste volgorde? 1) Je hebt nog één hele specifieke laatste vraag. 2) Je begrijpt de uitleg nog niet. 3) Je wilt extra oefenen zodat je het beter onthoudt.',
       opties: [
-        'Een samenvatting maken',
-        'Een tijdlijn genereren',
-        'Oefenvragen opstellen',
-        'Je toets automatisch inleveren'
+        'Jay I → Uitlegvideo → Oefenwebsite',
+        'Uitlegvideo → Jay I → Oefenwebsite',
+        'Oefenwebsite → Uitlegvideo → Jay I',
+        'Jay I → Oefenwebsite → Uitlegvideo'
       ],
-      goed_index: 3,
-      tijdslimiet_seconden: 15
+      goed_index: 0,
+      tijdslimiet_seconden: 30
     }
   ],
   'les-5': [
