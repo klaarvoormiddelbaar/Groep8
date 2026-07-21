@@ -91,6 +91,93 @@ const QUIZZES = {
       tijdslimiet_seconden: 20
     }
   ],
+  'les-2': [
+    {
+      type: 'multiple_choice',
+      vraag: 'Wat is het verschil tussen een agenda en een planning?',
+      opties: [
+        'In een agenda schrijf je wanneer je gaat leren, in een planning wanneer iets af moet zijn',
+        'In een agenda schrijf je op wat je moet doen en wanneer het af moet zijn. In een planning schrijf je wanneer je eraan gaat werken',
+        'Een agenda en een planning zijn precies hetzelfde',
+        'In een agenda schrijf je alleen toetsen en in een planning alleen huiswerk'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Je wilt donderdag leren voor je Engelse toets. Waar schrijf je dat op?',
+      opties: [
+        'In je agenda',
+        'In je planning',
+        'In je KvM Plagenda',
+        'B en C zijn allebei goed'
+      ],
+      goed_index: 3,
+      toelichting: 'Zowel B als C zijn goed: in een planning schrijf je op wanneer je aan een taak gaat werken, en de KvM Plagenda is een agenda én planning in één, dus daarin kan dat ook. In een agenda schrijf je juist op wat je moet doen en wanneer het af moet zijn.',
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Welke stap hoort NIET bij het KvM Planning Stappenplan?',
+      opties: [
+        'Je planning maken',
+        'Je taken indelen',
+        'Je taken opsplitsen',
+        'Je planning uit je hoofd leren'
+      ],
+      goed_index: 3,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Welke volgorde hoort bij het KvM Planning Stappenplan?',
+      opties: [
+        'Taken opsplitsen → Taken indelen → Planning maken → Bepalen wat belangrijk is',
+        'Planning maken → Bepalen wat belangrijk is → Taken indelen → Taken opsplitsen',
+        'Taken indelen → Taken opsplitsen → Bepalen wat belangrijk is → Planning maken',
+        'Bepalen wat belangrijk is → Planning maken → Taken indelen → Taken opsplitsen'
+      ],
+      goed_index: 2,
+      tijdslimiet_seconden: 25
+    },
+    {
+      type: 'multiple_choice',
+      vraag: "Noa wil leren voor een toets. Ze heeft al haar taken opgeschreven. Ze verdeelt daarna 'Hoofdstuk 3 leren' in woordjes leren, samenvatting lezen en oefenvragen maken. Met welke stap is ze bezig?",
+      opties: [
+        'Je taken indelen',
+        'Je taken opsplitsen',
+        'Bepalen wat belangrijk is',
+        'Je planning maken'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 25
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Je hebt vier taken, maar weinig tijd. Welke stap helpt je bepalen waarmee je begint?',
+      opties: [
+        'Taken indelen',
+        'Taken opsplitsen',
+        'Bepalen wat belangrijk is',
+        'Je planning maken'
+      ],
+      goed_index: 2,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Waar moet je op letten als je een planning maakt?',
+      opties: [
+        'Dat je je taken goed verspreidt',
+        'Dat je ook af en toe tijd inplant om te ontspannen',
+        'Dat je meerdere keren voor toetsen leert',
+        'Al deze antwoorden zijn belangrijk'
+      ],
+      goed_index: 3,
+      tijdslimiet_seconden: 20
+    }
+  ],
   'les-3': [
     {
       type: 'multiple_choice',
