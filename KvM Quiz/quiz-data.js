@@ -176,6 +176,18 @@ const QUIZZES = {
       ],
       goed_index: 3,
       tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: '2 leugens, 1 waarheid. Wat is de waarheid?',
+      opties: [
+        'Ook mensen die al met pensioen zijn, plannen nog steeds dingen in hun leven',
+        'Je planning maken kan het beste digitaal, bijvoorbeeld in een app',
+        'Een goede planning zorgt ervoor dat je voor meer dan 80% van je toetsen een voldoende haalt'
+      ],
+      goed_index: 0,
+      toelichting: "A klopt: plannen stopt niet als je klaar bent met school of werk — ook boodschappen doen is bijvoorbeeld een vorm van plannen. B klopt niet: er is geen 'beste' manier om te plannen, digitaal of op papier mag je zelf kiezen. C klopt niet: dat is een te stellige garantie die niemand kan waarmaken.",
+      tijdslimiet_seconden: 25
     }
   ],
   'les-3': [
