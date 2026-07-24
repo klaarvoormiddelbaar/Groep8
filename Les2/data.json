@@ -7,7 +7,7 @@
   "titleSize": "40px",
   "sub": "Kennismaken met het 'KvM Planning Stappenplan'",
   "duur": "50–60 min",
-  "tip": "Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.",
+  "tip": "Geef de leerlingen ruim de tijd om hun planning te maken. Snelle werkers kunnen als ze klaar zijn de spellen achter in het werkboek maken. Bespreek daarna klassikaal dat er vaak meerdere goede planningen mogelijk zijn.",
   "canva": "https://www.canva.com/design/DAHMQLJMhxs/heRa7Td0l3PIJuFRrtgLpQ/view?embed",
   "doelen": [
     "De leerlingen weten het verschil tussen een agenda en een planning.",
@@ -16,24 +16,39 @@
   ],
   "tl": [
     {
-      "t": "0–5 min",
-      "n": "Terugblik",
-      "d": "Korte herhaling van les 1: wat onthielden leerlingen?"
+      "t": "0–2 min",
+      "n": "Start + leerdoelen",
+      "d": "Open de les, blik kort terug op les 1 en bespreek de leerdoelen van vandaag."
     },
     {
-      "t": "5–20 min",
-      "n": "Uitleg & video",
-      "d": "Toon en bespreek hoe een dag op de middelbare eruitziet."
+      "t": "2–10 min",
+      "n": "Kennismaken met plannen",
+      "d": "De leerlingen maken kennis met de 'KvM Plagenda'. In een kennisclip legt Jay het 'KvM Planning Stappenplan' uit hoe je in vier stappen een goede planning maakt."
     },
     {
-      "t": "20–40 min",
-      "n": "Quiz in tweetallen",
-      "d": "Leerlingen beantwoorden vragen over de middelbare in koppels."
+      "t": "10–15 min",
+      "n": "De slechte planning van Jay verbeteren",
+      "d": "De leerlingen krijgen een slechte planning te zien die Jay heeft gemaakt en geven op hun wisbordje aan wat er mis is."
     },
     {
-      "t": "40–55 min",
-      "n": "Vragenronde",
-      "d": "Plenair: wat willen leerlingen nog meer weten?"
+      "t": "15–40 min",
+      "n": "De middelbare schoolweek inplannen",
+      "d": "Leg de opdracht uit en laat de leerlingen vervolgens in tweetallen een schoolweek plannen met behulp van het 'KvM Planning Stappenplan'."
+    },
+    {
+      "t": "40–45 min",
+      "n": "Bespreken van de opdracht",
+      "d": "Bespreek de vier stappen van het KvM Planning Stappenplan. Benadruk dat iedereen op zijn eigen manier plant."
+    },
+    {
+      "t": "45–55 min",
+      "n": "Quiz",
+      "d": "Speel de quiz klassikaal. De winnaar wint een kleine prijs."
+    },
+    {
+      "t": "55–60 min",
+      "n": "Wat hebben we vandaag geleerd + volgende les",
+      "d": "Herhaal kort de belangrijkste inzichten uit de les en blik vooruit op de volgende les. Ruimte voor vragen en uitloop."
     }
   ],
   "mat": [
