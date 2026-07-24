@@ -3,15 +3,16 @@
   "g1": "#065f46",
   "g2": "#10a37f",
   "emoji": "lijst.png",
-  "title": "Rustige schoolweek inplannen",
+  "title": "Middelbare schoolweek inplannen",
+  "titleSize": "40px",
   "sub": "Kennismaken met het 'KvM Planning Stappenplan'",
   "duur": "50–60 min",
   "tip": "Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.",
   "canva": "https://www.canva.com/design/DAHMQLJMhxs/heRa7Td0l3PIJuFRrtgLpQ/view?embed",
   "doelen": [
-    "Leerlingen begrijpen de structuur van de middelbare school.",
-    "Leerlingen weten wat er anders is dan op de basisschool.",
-    "Leerlingen kennen begrippen als rooster, kluisje en mentor."
+    "De leerlingen weten het verschil tussen een agenda en een planning.",
+    "De leerlingen kunnen werken met de 'KvM Plagenda'.",
+    "De leerlingen leren als een pro plannen met het 'KvM Planning Stappenplan'."
   ],
   "tl": [
     {
@@ -44,6 +45,14 @@
     {
       "naam": "Wisbordje",
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png"
+    },
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    },
+    {
+      "naam": "Werkboek",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
     }
   ]
 }

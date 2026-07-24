@@ -738,7 +738,7 @@
               <div class="hero-badge" style="margin-bottom:0">Les ${L.n} van 8</div>
               <div class="hero-badge" style="margin-bottom:0"><img class="ei" src="/Afbeeldingen/emojis nieuw/klok.png" alt=""> ${L.duur}</div>
             </div>
-            <div class="hero-title"><img class="ei" src="/Afbeeldingen/emojis nieuw/${L.emoji}" alt="" style="height:1.3em;flex-shrink:0"> ${L.title}</div>
+            <div class="hero-title"${L.titleSize ? ` style="font-size:${L.titleSize}"` : ''}><img class="ei" src="/Afbeeldingen/emojis nieuw/${L.emoji}" alt="" style="height:1.3em;flex-shrink:0"> ${L.title}</div>
             <div class="hero-sub">${L.sub}</div>
             <div class="hero-btns">
               ${L.canva
@@ -758,7 +758,7 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-0.2em;flex-shrink:0"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 KlasKompas
               </a>` : ''}
-              ${L.n !== 8 && L.n !== 4 && L.n !== 7 && L.n !== 3 && L.n !== 5 ? `
+              ${L.n !== 8 && L.n !== 4 && L.n !== 7 && L.n !== 3 && L.n !== 5 && L.n !== 2 ? `
               <a id="btn-poll" class="hero-btn hero-btn-live" href="/les${L.n}/docent/poll" target="_blank" rel="noopener">
                 <span class="live-dot"></span> Start live poll
               </a>` : ''}

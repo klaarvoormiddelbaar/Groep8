@@ -22,7 +22,7 @@ const LESSONS = [
   },
   {
     n: 2, g1: '#065f46', g2: '#10a37f',
-    emoji: 'lijst.png', title: 'Rustige schoolweek inplannen',
+    emoji: 'lijst.png', title: 'Middelbare schoolweek inplannen',
     sub: "Kennismaken met het 'KvM Planning Stappenplan'",
     duur: '50–60 min',
     url: '/les2',
