@@ -12,6 +12,7 @@ import {
   hasRoomInDay,
   placeTaskInDay,
   totalFilledSlots,
+  canPlaceInAnyDay,
   renderWeekPlanning,
   renderWeekSummary
 } from './planner.js';
@@ -355,13 +356,18 @@ function update(deltaSeconds) {
   tickActiveEffects(activeEffects, deltaSeconds);
   const speedMultiplier = activeEffects.slowMotionMs > 0 ? GAME_CONFIG.slowMotionMultiplier : 1;
 
+  // Een grote taak mag alleen spawnen (en hieronder: gevangen worden) als er nu
+  // ergens in de week nog plek voor is. Zo kan de speler nooit vastlopen door pech
+  // in de taakvolgorde — alleen nog door eigen planningskeuzes.
+  const canFitLargeTask = canPlaceInAnyDay(weekPlanning, { slots: 2 });
+
   updateTasks(
     taskSpawner,
     deltaSeconds,
     playAreaHeight,
     levelSettings.taskSpawnInterval,
     levelSettings.taskFallSpeed,
-    levelSettings.largeTasksEnabled,
+    levelSettings.largeTasksEnabled && canFitLargeTask,
     speedMultiplier,
     loseLife // een gemiste taak kost 1 leven
   );
@@ -421,6 +427,7 @@ function update(deltaSeconds) {
   taskSpawner.tasks = taskSpawner.tasks.filter((task) => {
     if (!rectsOverlap(player, task)) return true;
     if (!hasRoomFor(cargo, task)) return true; // laadruimte vol: taak valt door, niet gevangen
+    if (task.slots === 2 && !canFitLargeTask) return true; // past nergens meer: niet vangen, geen straf
 
     addToCargo(cargo, task);
     caughtCount += 1;

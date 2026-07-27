@@ -19,6 +19,13 @@ export function hasRoomInDay(planning, dayIndex, task) {
   return usedSlotsInDay(planning, dayIndex) + task.slots <= planning.slotsPerDay;
 }
 
+// Voorkomt een oneerlijke impasse: een grote taak mag alleen ontstaan (spawnen) of
+// gevangen worden als er op dit moment ergens nog plek voor is. Zo kan een speler
+// nooit vastlopen door pech in de taakvolgorde — alleen nog door eigen planningskeuzes.
+export function canPlaceInAnyDay(planning, task) {
+  return planning.days.some((_day, dayIndex) => hasRoomInDay(planning, dayIndex, task));
+}
+
 export function placeTaskInDay(planning, dayIndex, task) {
   planning.days[dayIndex].tasks.push(task);
 }
