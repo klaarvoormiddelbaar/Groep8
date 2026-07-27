@@ -28,6 +28,13 @@ export const GAME_CONFIG = {
 
   startingSpawnInterval: 1500,
   minimumSpawnInterval: 500,
+  spawnIntervalDecreasePerLevel: 100,
+
+  // Level 1 heeft alleen kleine taken en weinig, langzame meteorieten (zie levels.js).
+  meteorStartingFallSpeed: 100,
+  meteorStartingSpawnInterval: 3500,
+  meteorSpawnIntervalDecreasePerLevel: 200,
+  meteorMinimumSpawnInterval: 1000,
 
   levelSummaryAutoContinueDelay: 6000,
 

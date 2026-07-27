@@ -46,19 +46,19 @@ export function spawnLargeTask(spawner, fallSpeed) {
   });
 }
 
-export function spawnRandomTask(spawner, fallSpeed) {
-  if (Math.random() < LARGE_TASK_CHANCE) {
+export function spawnRandomTask(spawner, fallSpeed, largeTasksEnabled) {
+  if (largeTasksEnabled && Math.random() < LARGE_TASK_CHANCE) {
     spawnLargeTask(spawner, fallSpeed);
   } else {
     spawnSmallTask(spawner, fallSpeed);
   }
 }
 
-export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, onMissed) {
+export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, largeTasksEnabled, onMissed) {
   spawner.spawnTimerMs += deltaSeconds * 1000;
   if (spawner.spawnTimerMs >= spawnIntervalMs) {
     spawner.spawnTimerMs = 0;
-    spawnRandomTask(spawner, fallSpeed);
+    spawnRandomTask(spawner, fallSpeed, largeTasksEnabled);
   }
 
   for (const task of spawner.tasks) {

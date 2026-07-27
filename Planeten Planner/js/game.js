@@ -1,7 +1,8 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 12: score toegevoegd.
+// Fase 13: moeilijkheidsopbouw per level toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
+import { getLevelSettings } from './levels.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
 import { createTaskSpawner, updateTasks, renderTasks } from './objects.js';
 import { createMeteorSpawner, updateMeteors, renderMeteors } from './meteors.js';
@@ -15,11 +16,6 @@ import {
   renderWeekSummary
 } from './planner.js';
 import { rectsOverlap, circleRectOverlap } from './collision.js';
-
-// Meteoorwaarden zijn in fase 5 nog vaste placeholders. Fase 13 (moeilijkheidsopbouw)
-// koppelt dit aan het level, net als de taak-valsnelheid/spawnfrequentie uit config.js.
-const METEOR_SPAWN_INTERVAL_MS = 3000;
-const METEOR_FALL_SPEED = 110;
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
 // objecten + raket) gebruikt de resterende hoogte erboven.
@@ -41,6 +37,7 @@ const meteorSpawner = createMeteorSpawner(canvas.width);
 let cargo = createCargo(GAME_CONFIG.cargoCapacity);
 let weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
 let currentLevel = 1;
+let levelSettings = getLevelSettings(currentLevel);
 
 let isShowingLevelSummary = false;
 let summaryTimerMs = 0;
@@ -60,6 +57,7 @@ function completeLevel() {
   score += GAME_CONFIG.scoreLevelComplete + lives * GAME_CONFIG.scoreBonusPerRemainingLife;
 
   currentLevel += 1;
+  levelSettings = getLevelSettings(currentLevel);
   weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
   cargo = createCargo(GAME_CONFIG.cargoCapacity);
   // Tijdelijke en level-power-ups (fase 14) worden hier straks ook gereset.
@@ -155,12 +153,13 @@ function update(deltaSeconds) {
     taskSpawner,
     deltaSeconds,
     playAreaHeight,
-    GAME_CONFIG.startingSpawnInterval,
-    GAME_CONFIG.startingFallSpeed,
+    levelSettings.taskSpawnInterval,
+    levelSettings.taskFallSpeed,
+    levelSettings.largeTasksEnabled,
     loseLife // een gemiste taak kost 1 leven
   );
 
-  updateMeteors(meteorSpawner, deltaSeconds, playAreaHeight, METEOR_SPAWN_INTERVAL_MS, METEOR_FALL_SPEED);
+  updateMeteors(meteorSpawner, deltaSeconds, playAreaHeight, levelSettings.meteorSpawnInterval, levelSettings.meteorFallSpeed);
 
   if (invulnerableMs > 0) {
     invulnerableMs = Math.max(0, invulnerableMs - deltaSeconds * 1000);
@@ -200,7 +199,7 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 12: level ${currentLevel}`, canvas.width / 2, 20);
+  ctx.fillText(`Fase 13: level ${currentLevel}`, canvas.width / 2, 20);
   ctx.fillText(`Score: ${score}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
