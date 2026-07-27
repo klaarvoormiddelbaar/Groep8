@@ -1,11 +1,12 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 7: laadruimte en wachtrij toegevoegd.
+// Fase 8: droppen op dag 1 t/m 5 toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
 import { createTaskSpawner, updateTasks, renderTasks } from './objects.js';
 import { createMeteorSpawner, updateMeteors, renderMeteors } from './meteors.js';
-import { createCargo, hasRoomFor, addToCargo, renderCargo } from './cargo.js';
+import { createCargo, hasRoomFor, addToCargo, peekNextTask, removeNextTask, renderCargo } from './cargo.js';
+import { createWeekPlanning, hasRoomInDay, placeTaskInDay, totalFilledSlots } from './planner.js';
 import { rectsOverlap, circleRectOverlap } from './collision.js';
 
 // Meteoorwaarden zijn in fase 5 nog vaste placeholders. Fase 13 (moeilijkheidsopbouw)
@@ -25,6 +26,44 @@ initPlayerInput();
 const taskSpawner = createTaskSpawner(canvas.width);
 const meteorSpawner = createMeteorSpawner(canvas.width);
 const cargo = createCargo(GAME_CONFIG.cargoCapacity);
+const weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
+
+let feedbackMessage = '';
+let feedbackTimerMs = 0;
+
+function showFeedback(message) {
+  feedbackMessage = message;
+  feedbackTimerMs = 1200;
+}
+
+function attemptPlanNextTask(dayIndex) {
+  if (isGameOver) return;
+
+  const nextTask = peekNextTask(cargo);
+  if (!nextTask) {
+    showFeedback('Geen taak om in te plannen.');
+    return;
+  }
+
+  if (!hasRoomInDay(weekPlanning, dayIndex, nextTask)) {
+    showFeedback(`${weekPlanning.days[dayIndex].name} zit vol.`);
+    return;
+  }
+
+  removeNextTask(cargo);
+  placeTaskInDay(weekPlanning, dayIndex, nextTask);
+  showFeedback(`${nextTask.label} ingepland op ${weekPlanning.days[dayIndex].name}.`);
+}
+
+const DAY_KEYS = ['1', '2', '3', '4', '5'];
+
+window.addEventListener('keydown', (event) => {
+  if (event.repeat) return;
+  const dayIndex = DAY_KEYS.indexOf(event.key);
+  if (dayIndex !== -1) {
+    attemptPlanNextTask(dayIndex);
+  }
+});
 
 let caughtCount = 0;
 let lives = GAME_CONFIG.startingLives;
@@ -62,6 +101,10 @@ function update(deltaSeconds) {
     invulnerableMs = Math.max(0, invulnerableMs - deltaSeconds * 1000);
   }
 
+  if (feedbackTimerMs > 0) {
+    feedbackTimerMs = Math.max(0, feedbackTimerMs - deltaSeconds * 1000);
+  }
+
   taskSpawner.tasks = taskSpawner.tasks.filter((task) => {
     if (!rectsOverlap(player, task)) return true;
     if (!hasRoomFor(cargo, task)) return true; // laadruimte vol: taak valt door, niet gevangen
@@ -91,8 +134,14 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Fase 7: laadruimte', canvas.width / 2, 20);
-  ctx.fillText(`Gevangen: ${caughtCount}`, canvas.width / 2, 40);
+  ctx.fillText('Fase 8: droppen op dag 1-5', canvas.width / 2, 20);
+  ctx.fillText(`Gevangen: ${caughtCount}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
+
+  if (feedbackTimerMs > 0) {
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = '13px sans-serif';
+    ctx.fillText(feedbackMessage, canvas.width / 2, 60);
+  }
 
   renderCargo(ctx, cargo, canvas.width);
 
