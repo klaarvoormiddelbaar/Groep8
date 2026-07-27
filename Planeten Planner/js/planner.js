@@ -28,7 +28,8 @@ export function totalFilledSlots(planning) {
 }
 
 // Tekent 5 dagkolommen met taaknamen. Grote taken vullen zichtbaar 2 gekoppelde plekken.
-export function renderWeekPlanning(ctx, planning, x, y, width, height) {
+// shake = { dayIndex, offsetX } laat één kolom kort zijwaarts schudden (volle dag-feedback).
+export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = { dayIndex: -1, offsetX: 0 }) {
   const dayWidth = width / planning.days.length;
   const headerHeight = 26;
   const slotHeight = (height - headerHeight) / planning.slotsPerDay;
@@ -36,7 +37,8 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height) {
   ctx.textAlign = 'center';
 
   planning.days.forEach((day, dayIndex) => {
-    const dayX = x + dayIndex * dayWidth;
+    const shakeX = dayIndex === shake.dayIndex ? shake.offsetX : 0;
+    const dayX = x + dayIndex * dayWidth + shakeX;
 
     ctx.fillStyle = '#111827';
     ctx.fillRect(dayX, y, dayWidth - 2, height);

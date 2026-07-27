@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 15: startscherm, pauze en game-over met herstart toegevoegd.
+// Fase 16: animaties en geluid toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { getLevelSettings } from './levels.js';
@@ -24,6 +24,7 @@ import {
   resetLevelScopedEffects
 } from './powerups.js';
 import { rectsOverlap, circleRectOverlap } from './collision.js';
+import { sounds, toggleMute, getIsMuted } from './audio.js';
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
 // objecten + raket) gebruikt de resterende hoogte erboven.
@@ -41,6 +42,7 @@ const START_BUTTON = { x: canvas.width / 2 - 100, y: 420, width: 200, height: 56
 const RESUME_BUTTON = { x: canvas.width / 2 - 100, y: 400, width: 200, height: 56 };
 const RESTART_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 + 50, width: 200, height: 56 };
 const PAUSE_ICON_BUTTON = { x: 12, y: 30, width: 60, height: 22 };
+const MUTE_ICON_BUTTON = { x: 12, y: 56, width: 84, height: 22 };
 
 const player = createPlayer(canvas.width, playAreaHeight);
 initPlayerInput();
@@ -74,6 +76,11 @@ let lives;
 let isGameOver;
 let invulnerableMs;
 
+let damageFlashMs;
+let shakeDayIndex;
+let shakeTimerMs;
+let scorePopups;
+
 // Zet alle spelstatus terug naar een verse start. Wordt gebruikt bij het eerste
 // Start-klik én bij 'Opnieuw spelen' na een game-over.
 function resetGame() {
@@ -105,7 +112,16 @@ function resetGame() {
   isGameOver = false;
   invulnerableMs = 0;
 
+  damageFlashMs = 0;
+  shakeDayIndex = -1;
+  shakeTimerMs = 0;
+  scorePopups = [];
+
   gameMode = 'playing';
+}
+
+function addScorePopup(x, y, text, color = '#facc15') {
+  scorePopups.push({ x, y, text, color, ms: 700 });
 }
 
 resetGame();
@@ -129,6 +145,7 @@ function completeLevel() {
 
   isShowingLevelSummary = true;
   summaryTimerMs = GAME_CONFIG.levelSummaryAutoContinueDelay;
+  sounds.levelComplete();
 }
 
 function endLevelSummary() {
@@ -152,13 +169,21 @@ function attemptPlanNextTask(dayIndex) {
 
   if (!hasRoomInDay(weekPlanning, dayIndex, nextTask)) {
     showFeedback(`${weekPlanning.days[dayIndex].name} zit vol.`);
+    shakeDayIndex = dayIndex;
+    shakeTimerMs = 300;
+    sounds.dayFull();
     return;
   }
 
   removeNextTask(cargo);
   placeTaskInDay(weekPlanning, dayIndex, nextTask);
   plannedCount += 1;
-  addScore(nextTask.slots === 2 ? GAME_CONFIG.scorePlanLargeTask : GAME_CONFIG.scorePlanSmallTask);
+  const planPoints = nextTask.slots === 2 ? GAME_CONFIG.scorePlanLargeTask : GAME_CONFIG.scorePlanSmallTask;
+  addScore(planPoints);
+  (nextTask.slots === 2 ? sounds.planLarge : sounds.planSmall)();
+
+  const dayColumnWidth = canvas.width / GAME_CONFIG.numberOfDays;
+  addScorePopup(dayColumnWidth * dayIndex + dayColumnWidth / 2, playAreaHeight - 6, `+${planPoints}`, '#38bdf8');
 
   if (totalFilledSlots(weekPlanning) >= GAME_CONFIG.totalWeekSlots) {
     completeLevel();
@@ -218,6 +243,10 @@ canvas.addEventListener('click', (event) => {
   }
   if (gameMode === 'playing' && hitTest(px, py, PAUSE_ICON_BUTTON)) {
     gameMode = 'paused';
+    return;
+  }
+  if (hitTest(px, py, MUTE_ICON_BUTTON)) {
+    toggleMute();
   }
 });
 
@@ -227,9 +256,12 @@ let isRunning = true;
 function loseLife() {
   if (isGameOver) return;
   lives = Math.max(0, lives - 1);
+  damageFlashMs = 150;
+  sounds.lifeLost();
   if (lives === 0) {
     isGameOver = true;
     gameMode = 'gameOver';
+    sounds.gameOver();
   }
 }
 
@@ -242,19 +274,23 @@ function applyPowerup(type) {
     case 'shield':
       activeEffects.hasShield = true;
       showFeedback('Schild actief!');
+      sounds.shield();
       break;
     case 'extraCargo':
       activeEffects.extraCargo = true;
       cargo.capacity = GAME_CONFIG.extraCargoCapacity;
       showFeedback('Extra laadruimte!');
+      sounds.powerupCaught();
       break;
     case 'magnet':
       activeEffects.magnetMs = GAME_CONFIG.magnetDuration;
       showFeedback('Magneet actief!');
+      sounds.powerupCaught();
       break;
     case 'slowMotion':
       activeEffects.slowMotionMs = GAME_CONFIG.slowMotionDuration;
       showFeedback('Tijdvertrager actief!');
+      sounds.powerupCaught();
       break;
     case 'extraLife':
       if (lives < GAME_CONFIG.maximumLives) {
@@ -263,10 +299,12 @@ function applyPowerup(type) {
       } else {
         showFeedback('Levens al vol.');
       }
+      sounds.powerupCaught();
       break;
     case 'doubleScore':
       activeEffects.doubleScore = true;
       showFeedback('Dubbele score!');
+      sounds.powerupCaught();
       break;
     default:
       break;
@@ -337,13 +375,31 @@ function update(deltaSeconds) {
     feedbackTimerMs = Math.max(0, feedbackTimerMs - deltaSeconds * 1000);
   }
 
+  if (damageFlashMs > 0) {
+    damageFlashMs = Math.max(0, damageFlashMs - deltaSeconds * 1000);
+  }
+
+  if (shakeTimerMs > 0) {
+    shakeTimerMs = Math.max(0, shakeTimerMs - deltaSeconds * 1000);
+    if (shakeTimerMs === 0) shakeDayIndex = -1;
+  }
+
+  for (const popup of scorePopups) {
+    popup.y -= 40 * deltaSeconds;
+    popup.ms -= deltaSeconds * 1000;
+  }
+  scorePopups = scorePopups.filter((popup) => popup.ms > 0);
+
   taskSpawner.tasks = taskSpawner.tasks.filter((task) => {
     if (!rectsOverlap(player, task)) return true;
     if (!hasRoomFor(cargo, task)) return true; // laadruimte vol: taak valt door, niet gevangen
 
     addToCargo(cargo, task);
     caughtCount += 1;
-    addScore(task.slots === 2 ? GAME_CONFIG.scoreCatchLargeTask : GAME_CONFIG.scoreCatchSmallTask);
+    const catchPoints = task.slots === 2 ? GAME_CONFIG.scoreCatchLargeTask : GAME_CONFIG.scoreCatchSmallTask;
+    addScore(catchPoints);
+    (task.slots === 2 ? sounds.catchLarge : sounds.catchSmall)();
+    addScorePopup(task.x + task.width / 2, task.y, `+${catchPoints}`);
     return false;
   });
 
@@ -363,9 +419,11 @@ function update(deltaSeconds) {
         // Een actief schild vangt de klap op vóórdat er een leven verloren gaat.
         activeEffects.hasShield = false;
         showFeedback('Schild opgevangen!');
+        sounds.shield();
         return false;
       }
 
+      sounds.meteorHit();
       loseLife(); // een meteoriet kost 1 leven
       if (!isGameOver) {
         invulnerableMs = GAME_CONFIG.invulnerabilityDuration;
@@ -434,7 +492,7 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 15: level ${currentLevel}`, canvas.width / 2, 20);
+  ctx.fillText(`Fase 16: level ${currentLevel}`, canvas.width / 2, 20);
   ctx.fillText(`Score: ${score}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
@@ -459,6 +517,28 @@ function renderHud() {
     ctx.textAlign = 'center';
     ctx.fillText('⏸ Pauze', PAUSE_ICON_BUTTON.x + PAUSE_ICON_BUTTON.width / 2, PAUSE_ICON_BUTTON.y + 15);
   }
+
+  ctx.fillStyle = '#334155';
+  ctx.fillRect(MUTE_ICON_BUTTON.x, MUTE_ICON_BUTTON.y, MUTE_ICON_BUTTON.width, MUTE_ICON_BUTTON.height);
+  ctx.fillStyle = '#e2e8f0';
+  ctx.font = '11px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(
+    getIsMuted() ? 'Geluid: uit' : 'Geluid: aan',
+    MUTE_ICON_BUTTON.x + MUTE_ICON_BUTTON.width / 2,
+    MUTE_ICON_BUTTON.y + 15
+  );
+}
+
+function renderScorePopups() {
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 13px sans-serif';
+  for (const popup of scorePopups) {
+    ctx.globalAlpha = Math.max(0, popup.ms / 700);
+    ctx.fillStyle = popup.color;
+    ctx.fillText(popup.text, popup.x, popup.y);
+  }
+  ctx.globalAlpha = 1;
 }
 
 function renderGameOverScreen() {
@@ -495,6 +575,7 @@ function render() {
   renderTasks(ctx, taskSpawner);
   renderMeteors(ctx, meteorSpawner);
   renderPowerups(ctx, powerupSpawner);
+  renderScorePopups();
   renderPlayer(ctx, player, invulnerableMs > 0);
   if (activeEffects.hasShield) {
     ctx.beginPath();
@@ -512,10 +593,19 @@ function render() {
   ctx.lineTo(canvas.width, playAreaHeight);
   ctx.stroke();
 
-  renderWeekPlanning(ctx, weekPlanning, 0, playAreaHeight, canvas.width, WEEKPLANNING_PANEL_HEIGHT);
+  const shakeOffsetX = shakeTimerMs > 0 ? Math.sin(shakeTimerMs / 20) * 6 : 0;
+  renderWeekPlanning(ctx, weekPlanning, 0, playAreaHeight, canvas.width, WEEKPLANNING_PANEL_HEIGHT, {
+    dayIndex: shakeDayIndex,
+    offsetX: shakeOffsetX
+  });
 
   if (isShowingLevelSummary && completedWeekSnapshot) {
     renderWeekSummary(ctx, completedWeekSnapshot, completedLevelNumber, canvas.width, canvas.height);
+  }
+
+  if (damageFlashMs > 0) {
+    ctx.fillStyle = `rgba(248, 113, 113, ${(damageFlashMs / 150) * 0.35})`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 
   if (gameMode === 'paused') {
