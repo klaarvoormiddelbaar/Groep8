@@ -1,12 +1,12 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 8: droppen op dag 1 t/m 5 toegevoegd.
+// Fase 9: visuele weekplanning (5 dagkolommen) toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
 import { createTaskSpawner, updateTasks, renderTasks } from './objects.js';
 import { createMeteorSpawner, updateMeteors, renderMeteors } from './meteors.js';
 import { createCargo, hasRoomFor, addToCargo, peekNextTask, removeNextTask, renderCargo } from './cargo.js';
-import { createWeekPlanning, hasRoomInDay, placeTaskInDay, totalFilledSlots } from './planner.js';
+import { createWeekPlanning, hasRoomInDay, placeTaskInDay, totalFilledSlots, renderWeekPlanning } from './planner.js';
 import { rectsOverlap, circleRectOverlap } from './collision.js';
 
 // Meteoorwaarden zijn in fase 5 nog vaste placeholders. Fase 13 (moeilijkheidsopbouw)
@@ -14,13 +14,19 @@ import { rectsOverlap, circleRectOverlap } from './collision.js';
 const METEOR_SPAWN_INTERVAL_MS = 3000;
 const METEOR_FALL_SPEED = 110;
 
+// Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
+// objecten + raket) gebruikt de resterende hoogte erboven.
+const WEEKPLANNING_PANEL_HEIGHT = 150;
+
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
 canvas.width = GAME_CONFIG.canvasWidth;
 canvas.height = GAME_CONFIG.canvasHeight;
 
-const player = createPlayer(canvas.width, canvas.height);
+const playAreaHeight = canvas.height - WEEKPLANNING_PANEL_HEIGHT;
+
+const player = createPlayer(canvas.width, playAreaHeight);
 initPlayerInput();
 
 const taskSpawner = createTaskSpawner(canvas.width);
@@ -89,13 +95,13 @@ function update(deltaSeconds) {
   updateTasks(
     taskSpawner,
     deltaSeconds,
-    canvas.height,
+    playAreaHeight,
     GAME_CONFIG.startingSpawnInterval,
     GAME_CONFIG.startingFallSpeed,
     loseLife // een gemiste taak kost 1 leven
   );
 
-  updateMeteors(meteorSpawner, deltaSeconds, canvas.height, METEOR_SPAWN_INTERVAL_MS, METEOR_FALL_SPEED);
+  updateMeteors(meteorSpawner, deltaSeconds, playAreaHeight, METEOR_SPAWN_INTERVAL_MS, METEOR_FALL_SPEED);
 
   if (invulnerableMs > 0) {
     invulnerableMs = Math.max(0, invulnerableMs - deltaSeconds * 1000);
@@ -134,7 +140,7 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Fase 8: droppen op dag 1-5', canvas.width / 2, 20);
+  ctx.fillText('Fase 9: weekplanning UI', canvas.width / 2, 20);
   ctx.fillText(`Gevangen: ${caughtCount}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
@@ -173,6 +179,15 @@ function render() {
   renderMeteors(ctx, meteorSpawner);
   renderPlayer(ctx, player, invulnerableMs > 0);
   renderHud();
+
+  ctx.strokeStyle = '#1e293b';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, playAreaHeight);
+  ctx.lineTo(canvas.width, playAreaHeight);
+  ctx.stroke();
+
+  renderWeekPlanning(ctx, weekPlanning, 0, playAreaHeight, canvas.width, WEEKPLANNING_PANEL_HEIGHT);
 
   if (isGameOver) {
     renderGameOver();
