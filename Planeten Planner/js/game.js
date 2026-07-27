@@ -1,12 +1,19 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 10: levelvoltooiing toegevoegd.
+// Fase 11: weekoverzicht-scherm na elk level toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
 import { createTaskSpawner, updateTasks, renderTasks } from './objects.js';
 import { createMeteorSpawner, updateMeteors, renderMeteors } from './meteors.js';
 import { createCargo, hasRoomFor, addToCargo, peekNextTask, removeNextTask, renderCargo } from './cargo.js';
-import { createWeekPlanning, hasRoomInDay, placeTaskInDay, totalFilledSlots, renderWeekPlanning } from './planner.js';
+import {
+  createWeekPlanning,
+  hasRoomInDay,
+  placeTaskInDay,
+  totalFilledSlots,
+  renderWeekPlanning,
+  renderWeekSummary
+} from './planner.js';
 import { rectsOverlap, circleRectOverlap } from './collision.js';
 
 // Meteoorwaarden zijn in fase 5 nog vaste placeholders. Fase 13 (moeilijkheidsopbouw)
@@ -35,15 +42,33 @@ let cargo = createCargo(GAME_CONFIG.cargoCapacity);
 let weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
 let currentLevel = 1;
 
+let isShowingLevelSummary = false;
+let summaryTimerMs = 0;
+let completedWeekSnapshot = null;
+let completedLevelNumber = 0;
+
 let feedbackMessage = '';
 let feedbackTimerMs = 0;
 
 function completeLevel() {
+  // Bewaar een referentie naar de voltooide planning vóórdat er een nieuwe,
+  // lege planning voor in de plaats komt — zo blijft het overzicht correct
+  // terwijl de speler alweer met een schone week kan beginnen.
+  completedWeekSnapshot = weekPlanning;
+  completedLevelNumber = currentLevel;
+
   currentLevel += 1;
   weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
   cargo = createCargo(GAME_CONFIG.cargoCapacity);
   // Tijdelijke en level-power-ups (fase 14) worden hier straks ook gereset.
-  showFeedback(`Week voltooid! Level ${currentLevel} gestart.`);
+
+  isShowingLevelSummary = true;
+  summaryTimerMs = GAME_CONFIG.levelSummaryAutoContinueDelay;
+}
+
+function endLevelSummary() {
+  isShowingLevelSummary = false;
+  summaryTimerMs = 0;
 }
 
 function showFeedback(message) {
@@ -52,7 +77,7 @@ function showFeedback(message) {
 }
 
 function attemptPlanNextTask(dayIndex) {
-  if (isGameOver) return;
+  if (isGameOver || isShowingLevelSummary) return;
 
   const nextTask = peekNextTask(cargo);
   if (!nextTask) {
@@ -79,6 +104,14 @@ const DAY_KEYS = ['1', '2', '3', '4', '5'];
 
 window.addEventListener('keydown', (event) => {
   if (event.repeat) return;
+
+  if (isShowingLevelSummary) {
+    if (event.key === ' ' || event.key === 'Enter') {
+      endLevelSummary();
+    }
+    return;
+  }
+
   const dayIndex = DAY_KEYS.indexOf(event.key);
   if (dayIndex !== -1) {
     attemptPlanNextTask(dayIndex);
@@ -103,6 +136,14 @@ function loseLife() {
 
 function update(deltaSeconds) {
   if (isGameOver) return;
+
+  if (isShowingLevelSummary) {
+    summaryTimerMs = Math.max(0, summaryTimerMs - deltaSeconds * 1000);
+    if (summaryTimerMs === 0) {
+      endLevelSummary();
+    }
+    return; // gameplay staat volledig stil tijdens het weekoverzicht
+  }
 
   updatePlayer(player, deltaSeconds, canvas.width);
 
@@ -154,7 +195,7 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 10: level ${currentLevel}`, canvas.width / 2, 20);
+  ctx.fillText(`Fase 11: level ${currentLevel}`, canvas.width / 2, 20);
   ctx.fillText(`Gevangen: ${caughtCount}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
@@ -202,6 +243,10 @@ function render() {
   ctx.stroke();
 
   renderWeekPlanning(ctx, weekPlanning, 0, playAreaHeight, canvas.width, WEEKPLANNING_PANEL_HEIGHT);
+
+  if (isShowingLevelSummary && completedWeekSnapshot) {
+    renderWeekSummary(ctx, completedWeekSnapshot, completedLevelNumber, canvas.width, canvas.height);
+  }
 
   if (isGameOver) {
     renderGameOver();

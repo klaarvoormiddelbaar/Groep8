@@ -72,3 +72,38 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height) {
     }
   });
 }
+
+// Weekoverzicht na een voltooid level: rustig, leesbaar, voelt als beloning.
+export function renderWeekSummary(ctx, planning, levelNumber, canvasWidth, canvasHeight) {
+  ctx.fillStyle = 'rgba(5, 7, 13, 0.92)';
+  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#facc15';
+  ctx.font = 'bold 22px sans-serif';
+  ctx.fillText(`WEEK ${levelNumber} VOLTOOID`, canvasWidth / 2, 50);
+
+  const columnWidth = canvasWidth / planning.days.length;
+  const startY = 90;
+
+  planning.days.forEach((day, dayIndex) => {
+    const colX = dayIndex * columnWidth + columnWidth / 2;
+
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = 'bold 13px sans-serif';
+    ctx.fillText(day.name, colX, startY);
+
+    ctx.font = '11px sans-serif';
+    ctx.fillStyle = '#e2e8f0';
+    let lineY = startY + 22;
+    for (const task of day.tasks) {
+      const label = task.slots === 2 ? `${task.label} (2 plekken)` : task.label;
+      ctx.fillText(label, colX, lineY, columnWidth - 10);
+      lineY += 20;
+    }
+  });
+
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '13px sans-serif';
+  ctx.fillText('Druk op spatie voor de volgende week...', canvasWidth / 2, canvasHeight - 30);
+}
