@@ -20,7 +20,8 @@ export function spawnMeteor(spawner, fallSpeed) {
   });
 }
 
-export function updateMeteors(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed) {
+// speedMultiplier schaalt de beweging van ALLE meteorieten deze frame, zie objects.js.
+export function updateMeteors(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, speedMultiplier) {
   spawner.spawnTimerMs += deltaSeconds * 1000;
   if (spawner.spawnTimerMs >= spawnIntervalMs) {
     spawner.spawnTimerMs = 0;
@@ -28,7 +29,7 @@ export function updateMeteors(spawner, deltaSeconds, canvasHeight, spawnInterval
   }
 
   for (const meteor of spawner.meteors) {
-    meteor.y += meteor.fallSpeed * deltaSeconds;
+    meteor.y += meteor.fallSpeed * speedMultiplier * deltaSeconds;
   }
 
   spawner.meteors = spawner.meteors.filter((meteor) => meteor.y - meteor.radius <= canvasHeight);

@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 13: moeilijkheidsopbouw per level toegevoegd.
+// Fase 14: power-ups toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { getLevelSettings } from './levels.js';
@@ -15,6 +15,14 @@ import {
   renderWeekPlanning,
   renderWeekSummary
 } from './planner.js';
+import {
+  createPowerupSpawner,
+  updatePowerups,
+  renderPowerups,
+  createActiveEffects,
+  tickActiveEffects,
+  resetLevelScopedEffects
+} from './powerups.js';
 import { rectsOverlap, circleRectOverlap } from './collision.js';
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
@@ -34,6 +42,8 @@ initPlayerInput();
 
 const taskSpawner = createTaskSpawner(canvas.width);
 const meteorSpawner = createMeteorSpawner(canvas.width);
+const powerupSpawner = createPowerupSpawner(canvas.width);
+const activeEffects = createActiveEffects();
 let cargo = createCargo(GAME_CONFIG.cargoCapacity);
 let weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
 let currentLevel = 1;
@@ -54,13 +64,13 @@ function completeLevel() {
   completedWeekSnapshot = weekPlanning;
   completedLevelNumber = currentLevel;
 
-  score += GAME_CONFIG.scoreLevelComplete + lives * GAME_CONFIG.scoreBonusPerRemainingLife;
+  addScore(GAME_CONFIG.scoreLevelComplete + lives * GAME_CONFIG.scoreBonusPerRemainingLife);
 
   currentLevel += 1;
   levelSettings = getLevelSettings(currentLevel);
   weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
-  cargo = createCargo(GAME_CONFIG.cargoCapacity);
-  // Tijdelijke en level-power-ups (fase 14) worden hier straks ook gereset.
+  cargo = createCargo(GAME_CONFIG.cargoCapacity); // reset ook extra laadruimte automatisch
+  resetLevelScopedEffects(activeEffects); // tijdelijke effecten eindigen, level-power-ups resetten
 
   isShowingLevelSummary = true;
   summaryTimerMs = GAME_CONFIG.levelSummaryAutoContinueDelay;
@@ -92,7 +102,7 @@ function attemptPlanNextTask(dayIndex) {
 
   removeNextTask(cargo);
   placeTaskInDay(weekPlanning, dayIndex, nextTask);
-  score += nextTask.slots === 2 ? GAME_CONFIG.scorePlanLargeTask : GAME_CONFIG.scorePlanSmallTask;
+  addScore(nextTask.slots === 2 ? GAME_CONFIG.scorePlanLargeTask : GAME_CONFIG.scorePlanSmallTask);
 
   if (totalFilledSlots(weekPlanning) >= GAME_CONFIG.totalWeekSlots) {
     completeLevel();
@@ -136,6 +146,46 @@ function loseLife() {
   }
 }
 
+function addScore(points) {
+  score += activeEffects.doubleScore ? points * 2 : points;
+}
+
+function applyPowerup(type) {
+  switch (type) {
+    case 'shield':
+      activeEffects.hasShield = true;
+      showFeedback('Schild actief!');
+      break;
+    case 'extraCargo':
+      activeEffects.extraCargo = true;
+      cargo.capacity = GAME_CONFIG.extraCargoCapacity;
+      showFeedback('Extra laadruimte!');
+      break;
+    case 'magnet':
+      activeEffects.magnetMs = GAME_CONFIG.magnetDuration;
+      showFeedback('Magneet actief!');
+      break;
+    case 'slowMotion':
+      activeEffects.slowMotionMs = GAME_CONFIG.slowMotionDuration;
+      showFeedback('Tijdvertrager actief!');
+      break;
+    case 'extraLife':
+      if (lives < GAME_CONFIG.maximumLives) {
+        lives += 1;
+        showFeedback('Extra leven!');
+      } else {
+        showFeedback('Levens al vol.');
+      }
+      break;
+    case 'doubleScore':
+      activeEffects.doubleScore = true;
+      showFeedback('Dubbele score!');
+      break;
+    default:
+      break;
+  }
+}
+
 function update(deltaSeconds) {
   if (isGameOver) return;
 
@@ -149,6 +199,9 @@ function update(deltaSeconds) {
 
   updatePlayer(player, deltaSeconds, canvas.width);
 
+  tickActiveEffects(activeEffects, deltaSeconds);
+  const speedMultiplier = activeEffects.slowMotionMs > 0 ? GAME_CONFIG.slowMotionMultiplier : 1;
+
   updateTasks(
     taskSpawner,
     deltaSeconds,
@@ -156,10 +209,38 @@ function update(deltaSeconds) {
     levelSettings.taskSpawnInterval,
     levelSettings.taskFallSpeed,
     levelSettings.largeTasksEnabled,
+    speedMultiplier,
     loseLife // een gemiste taak kost 1 leven
   );
 
-  updateMeteors(meteorSpawner, deltaSeconds, playAreaHeight, levelSettings.meteorSpawnInterval, levelSettings.meteorFallSpeed);
+  updateMeteors(
+    meteorSpawner,
+    deltaSeconds,
+    playAreaHeight,
+    levelSettings.meteorSpawnInterval,
+    levelSettings.meteorFallSpeed,
+    speedMultiplier
+  );
+
+  updatePowerups(powerupSpawner, deltaSeconds, playAreaHeight, GAME_CONFIG.powerupSpawnInterval, GAME_CONFIG.powerupFallSpeed);
+
+  // Magneet trekt alleen taken die dichtbij zijn naar de raket toe, geen meteorieten of power-ups.
+  if (activeEffects.magnetMs > 0) {
+    const playerCx = player.x + player.width / 2;
+    const playerCy = player.y + player.height / 2;
+    for (const task of taskSpawner.tasks) {
+      const taskCx = task.x + task.width / 2;
+      const taskCy = task.y + task.height / 2;
+      const dx = playerCx - taskCx;
+      const dy = playerCy - taskCy;
+      const distance = Math.hypot(dx, dy);
+      if (distance > 0 && distance <= GAME_CONFIG.magnetRange) {
+        const pull = Math.min(distance, GAME_CONFIG.magnetPullSpeed * deltaSeconds);
+        task.x += (dx / distance) * pull;
+        task.y += (dy / distance) * pull;
+      }
+    }
+  }
 
   if (invulnerableMs > 0) {
     invulnerableMs = Math.max(0, invulnerableMs - deltaSeconds * 1000);
@@ -175,7 +256,13 @@ function update(deltaSeconds) {
 
     addToCargo(cargo, task);
     caughtCount += 1;
-    score += task.slots === 2 ? GAME_CONFIG.scoreCatchLargeTask : GAME_CONFIG.scoreCatchSmallTask;
+    addScore(task.slots === 2 ? GAME_CONFIG.scoreCatchLargeTask : GAME_CONFIG.scoreCatchSmallTask);
+    return false;
+  });
+
+  powerupSpawner.items = powerupSpawner.items.filter((item) => {
+    if (!rectsOverlap(player, item)) return true;
+    applyPowerup(item.type);
     return false;
   });
 
@@ -183,23 +270,45 @@ function update(deltaSeconds) {
   // zodat één botsing nooit meerdere levens tegelijk kan kosten.
   if (invulnerableMs <= 0) {
     meteorSpawner.meteors = meteorSpawner.meteors.filter((meteor) => {
-      if (circleRectOverlap(meteor, player)) {
-        loseLife(); // een meteoriet kost 1 leven
-        if (!isGameOver) {
-          invulnerableMs = GAME_CONFIG.invulnerabilityDuration;
-        }
+      if (!circleRectOverlap(meteor, player)) return true;
+
+      if (activeEffects.hasShield) {
+        // Een actief schild vangt de klap op vóórdat er een leven verloren gaat.
+        activeEffects.hasShield = false;
+        showFeedback('Schild opgevangen!');
         return false;
       }
-      return true;
+
+      loseLife(); // een meteoriet kost 1 leven
+      if (!isGameOver) {
+        invulnerableMs = GAME_CONFIG.invulnerabilityDuration;
+      }
+      return false;
     });
   }
+}
+
+function renderActiveEffects() {
+  const badges = [];
+  if (activeEffects.hasShield) badges.push('🛡 Schild');
+  if (activeEffects.extraCargo) badges.push('📦 +Lading');
+  if (activeEffects.magnetMs > 0) badges.push(`🧲 ${Math.ceil(activeEffects.magnetMs / 1000)}s`);
+  if (activeEffects.slowMotionMs > 0) badges.push(`🐢 ${Math.ceil(activeEffects.slowMotionMs / 1000)}s`);
+  if (activeEffects.doubleScore) badges.push('x2 score');
+
+  if (badges.length === 0) return;
+
+  ctx.textAlign = 'center';
+  ctx.font = 'bold 12px sans-serif';
+  ctx.fillStyle = '#facc15';
+  ctx.fillText(badges.join('   '), canvas.width / 2, 80);
 }
 
 function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 13: level ${currentLevel}`, canvas.width / 2, 20);
+  ctx.fillText(`Fase 14: level ${currentLevel}`, canvas.width / 2, 20);
   ctx.fillText(`Score: ${score}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
@@ -208,6 +317,7 @@ function renderHud() {
     ctx.fillText(feedbackMessage, canvas.width / 2, 60);
   }
 
+  renderActiveEffects();
   renderCargo(ctx, cargo, canvas.width);
 
   ctx.textAlign = 'left';
@@ -237,7 +347,15 @@ function render() {
 
   renderTasks(ctx, taskSpawner);
   renderMeteors(ctx, meteorSpawner);
+  renderPowerups(ctx, powerupSpawner);
   renderPlayer(ctx, player, invulnerableMs > 0);
+  if (activeEffects.hasShield) {
+    ctx.beginPath();
+    ctx.strokeStyle = '#38bdf8';
+    ctx.lineWidth = 2;
+    ctx.arc(player.x + player.width / 2, player.y + player.height / 2, player.width / 2 + 8, 0, Math.PI * 2);
+    ctx.stroke();
+  }
   renderHud();
 
   ctx.strokeStyle = '#1e293b';

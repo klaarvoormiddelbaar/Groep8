@@ -54,7 +54,9 @@ export function spawnRandomTask(spawner, fallSpeed, largeTasksEnabled) {
   }
 }
 
-export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, largeTasksEnabled, onMissed) {
+// speedMultiplier schaalt de beweging van ALLE taken deze frame (ook al vallende),
+// zodat de tijdvertrager-power-up direct effect heeft en er na afloop niets 'nasleept'.
+export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, largeTasksEnabled, speedMultiplier, onMissed) {
   spawner.spawnTimerMs += deltaSeconds * 1000;
   if (spawner.spawnTimerMs >= spawnIntervalMs) {
     spawner.spawnTimerMs = 0;
@@ -62,7 +64,7 @@ export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs
   }
 
   for (const task of spawner.tasks) {
-    task.y += task.fallSpeed * deltaSeconds;
+    task.y += task.fallSpeed * speedMultiplier * deltaSeconds;
   }
 
   spawner.tasks = spawner.tasks.filter((task) => {

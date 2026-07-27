@@ -43,5 +43,10 @@ export const GAME_CONFIG = {
   scorePlanSmallTask: 15,
   scorePlanLargeTask: 30,
   scoreLevelComplete: 250,
-  scoreBonusPerRemainingLife: 50
+  scoreBonusPerRemainingLife: 50,
+
+  powerupSpawnInterval: 8000,
+  powerupFallSpeed: 90,
+  magnetRange: 160,
+  magnetPullSpeed: 260
 };
