@@ -29,5 +29,12 @@ export const GAME_CONFIG = {
   startingSpawnInterval: 1500,
   minimumSpawnInterval: 500,
 
-  levelSummaryAutoContinueDelay: 6000
+  levelSummaryAutoContinueDelay: 6000,
+
+  scoreCatchSmallTask: 10,
+  scoreCatchLargeTask: 20,
+  scorePlanSmallTask: 15,
+  scorePlanLargeTask: 30,
+  scoreLevelComplete: 250,
+  scoreBonusPerRemainingLife: 50
 };

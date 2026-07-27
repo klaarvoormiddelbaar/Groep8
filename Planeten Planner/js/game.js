@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 11: weekoverzicht-scherm na elk level toegevoegd.
+// Fase 12: score toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
@@ -57,6 +57,8 @@ function completeLevel() {
   completedWeekSnapshot = weekPlanning;
   completedLevelNumber = currentLevel;
 
+  score += GAME_CONFIG.scoreLevelComplete + lives * GAME_CONFIG.scoreBonusPerRemainingLife;
+
   currentLevel += 1;
   weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
   cargo = createCargo(GAME_CONFIG.cargoCapacity);
@@ -92,6 +94,7 @@ function attemptPlanNextTask(dayIndex) {
 
   removeNextTask(cargo);
   placeTaskInDay(weekPlanning, dayIndex, nextTask);
+  score += nextTask.slots === 2 ? GAME_CONFIG.scorePlanLargeTask : GAME_CONFIG.scorePlanSmallTask;
 
   if (totalFilledSlots(weekPlanning) >= GAME_CONFIG.totalWeekSlots) {
     completeLevel();
@@ -119,6 +122,7 @@ window.addEventListener('keydown', (event) => {
 });
 
 let caughtCount = 0;
+let score = 0;
 let lives = GAME_CONFIG.startingLives;
 let isGameOver = false;
 let invulnerableMs = 0;
@@ -172,6 +176,7 @@ function update(deltaSeconds) {
 
     addToCargo(cargo, task);
     caughtCount += 1;
+    score += task.slots === 2 ? GAME_CONFIG.scoreCatchLargeTask : GAME_CONFIG.scoreCatchSmallTask;
     return false;
   });
 
@@ -195,8 +200,8 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 11: level ${currentLevel}`, canvas.width / 2, 20);
-  ctx.fillText(`Gevangen: ${caughtCount}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
+  ctx.fillText(`Fase 12: level ${currentLevel}`, canvas.width / 2, 20);
+  ctx.fillText(`Score: ${score}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
     ctx.fillStyle = '#38bdf8';
@@ -223,7 +228,8 @@ function renderGameOver() {
 
   ctx.fillStyle = '#e2e8f0';
   ctx.font = '16px sans-serif';
-  ctx.fillText(`Gevangen taken: ${caughtCount}`, canvas.width / 2, canvas.height / 2 + 16);
+  ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 16);
+  ctx.fillText(`Gevangen taken: ${caughtCount}`, canvas.width / 2, canvas.height / 2 + 38);
 }
 
 function render() {
