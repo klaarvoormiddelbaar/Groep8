@@ -43,7 +43,11 @@ export function updatePlayer(player, deltaSeconds, canvasWidth) {
   player.x = Math.max(0, Math.min(canvasWidth - player.width, player.x));
 }
 
-export function renderPlayer(ctx, player) {
+export function renderPlayer(ctx, player, isInvulnerable = false) {
+  // Tijdens onkwetsbaarheid knippert de raket (om en om 100ms zichtbaar/onzichtbaar).
+  const isBlinkedOut = isInvulnerable && Math.floor(Date.now() / 100) % 2 === 0;
+  if (isBlinkedOut) return;
+
   ctx.fillStyle = '#38bdf8';
   ctx.fillRect(player.x, player.y, player.width, player.height);
 }

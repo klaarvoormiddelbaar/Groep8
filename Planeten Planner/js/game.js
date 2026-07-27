@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 5: meteorieten en levens toegevoegd.
+// Fase 6: tijdelijke onkwetsbaarheid na meteorietschade toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
@@ -27,6 +27,7 @@ const meteorSpawner = createMeteorSpawner(canvas.width);
 let caughtCount = 0;
 let lives = GAME_CONFIG.startingLives;
 let isGameOver = false;
+let invulnerableMs = 0;
 
 let lastTimestampMs = 0;
 let isRunning = true;
@@ -55,6 +56,10 @@ function update(deltaSeconds) {
 
   updateMeteors(meteorSpawner, deltaSeconds, canvas.height, METEOR_SPAWN_INTERVAL_MS, METEOR_FALL_SPEED);
 
+  if (invulnerableMs > 0) {
+    invulnerableMs = Math.max(0, invulnerableMs - deltaSeconds * 1000);
+  }
+
   taskSpawner.tasks = taskSpawner.tasks.filter((task) => {
     if (rectsOverlap(player, task)) {
       caughtCount += 1;
@@ -63,20 +68,27 @@ function update(deltaSeconds) {
     return true;
   });
 
-  meteorSpawner.meteors = meteorSpawner.meteors.filter((meteor) => {
-    if (circleRectOverlap(meteor, player)) {
-      loseLife(); // een meteoriet kost 1 leven
-      return false;
-    }
-    return true;
-  });
+  // Botsingsdetectie met meteorieten wordt tijdelijk genegeerd tijdens onkwetsbaarheid,
+  // zodat één botsing nooit meerdere levens tegelijk kan kosten.
+  if (invulnerableMs <= 0) {
+    meteorSpawner.meteors = meteorSpawner.meteors.filter((meteor) => {
+      if (circleRectOverlap(meteor, player)) {
+        loseLife(); // een meteoriet kost 1 leven
+        if (!isGameOver) {
+          invulnerableMs = GAME_CONFIG.invulnerabilityDuration;
+        }
+        return false;
+      }
+      return true;
+    });
+  }
 }
 
 function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Fase 5: meteorieten en levens', canvas.width / 2, 20);
+  ctx.fillText('Fase 6: onkwetsbaarheid', canvas.width / 2, 20);
   ctx.fillText(`Gevangen: ${caughtCount}`, canvas.width / 2, 40);
 
   ctx.textAlign = 'left';
@@ -105,7 +117,7 @@ function render() {
 
   renderTasks(ctx, taskSpawner);
   renderMeteors(ctx, meteorSpawner);
-  renderPlayer(ctx, player);
+  renderPlayer(ctx, player, invulnerableMs > 0);
   renderHud();
 
   if (isGameOver) {
