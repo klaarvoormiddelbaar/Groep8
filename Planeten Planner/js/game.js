@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 9: visuele weekplanning (5 dagkolommen) toegevoegd.
+// Fase 10: levelvoltooiing toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
@@ -31,11 +31,20 @@ initPlayerInput();
 
 const taskSpawner = createTaskSpawner(canvas.width);
 const meteorSpawner = createMeteorSpawner(canvas.width);
-const cargo = createCargo(GAME_CONFIG.cargoCapacity);
-const weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
+let cargo = createCargo(GAME_CONFIG.cargoCapacity);
+let weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
+let currentLevel = 1;
 
 let feedbackMessage = '';
 let feedbackTimerMs = 0;
+
+function completeLevel() {
+  currentLevel += 1;
+  weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
+  cargo = createCargo(GAME_CONFIG.cargoCapacity);
+  // Tijdelijke en level-power-ups (fase 14) worden hier straks ook gereset.
+  showFeedback(`Week voltooid! Level ${currentLevel} gestart.`);
+}
 
 function showFeedback(message) {
   feedbackMessage = message;
@@ -58,7 +67,12 @@ function attemptPlanNextTask(dayIndex) {
 
   removeNextTask(cargo);
   placeTaskInDay(weekPlanning, dayIndex, nextTask);
-  showFeedback(`${nextTask.label} ingepland op ${weekPlanning.days[dayIndex].name}.`);
+
+  if (totalFilledSlots(weekPlanning) >= GAME_CONFIG.totalWeekSlots) {
+    completeLevel();
+  } else {
+    showFeedback(`${nextTask.label} ingepland op ${weekPlanning.days[dayIndex].name}.`);
+  }
 }
 
 const DAY_KEYS = ['1', '2', '3', '4', '5'];
@@ -140,7 +154,7 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Fase 9: weekplanning UI', canvas.width / 2, 20);
+  ctx.fillText(`Fase 10: level ${currentLevel}`, canvas.width / 2, 20);
   ctx.fillText(`Gevangen: ${caughtCount}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
