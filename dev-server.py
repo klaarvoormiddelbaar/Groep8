@@ -76,6 +76,8 @@ REWRITES = {
     "/les5/docent/woordwolk": "/Wordcloud/docent.html",
     "/Inlogpagina":        "/Inlogpagina/index.html",
     "/Inlogpagina/":       "/Inlogpagina/index.html",
+    "/planeten-planner":   "/Planeten Planner/index.html",
+    "/planeten-planner/":  "/Planeten Planner/index.html",
     "/proef/":             "/Proeflicentie/dashboard.html",
     "/proef/inloggen":     "/Proeflicentie/inlogpagina.html",
     "/tips-en-tops/leerkracht":            "/Tips en Tops/leerkracht-deel-link.html",

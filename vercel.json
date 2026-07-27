@@ -71,6 +71,7 @@
     { "source": "/formeel/:nummer", "destination": "/Formele Mail Oefenen/formele-mail-oefenen.html" },
     { "source": "/missie/:nummer", "destination": "/Missie Middelbaar/index.html" },
     { "source": "/voorspel/:nummer", "destination": "/Voorspel de Klas/index.html" },
-    { "source": "/woordwolk/:nummer", "destination": "/Wordcloud/index.html" }
+    { "source": "/woordwolk/:nummer", "destination": "/Wordcloud/index.html" },
+    { "source": "/planeten-planner", "destination": "/Planeten Planner/index.html" }
   ]
 }
