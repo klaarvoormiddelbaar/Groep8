@@ -36,7 +36,7 @@ export function renderCargo(ctx, cargo, canvasWidth) {
   ctx.fillStyle = used >= cargo.capacity ? '#f87171' : '#94a3b8';
   ctx.fillText(`Laadruimte: ${used}/${cargo.capacity}`, canvasWidth - 12, 20);
 
-  const chipSize = 20;
+  const chipSize = 28;
   const gap = 4;
   let chipX = canvasWidth - 12 - chipSize;
 

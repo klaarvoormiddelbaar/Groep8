@@ -29,7 +29,7 @@ import { sounds, toggleMute, getIsMuted } from './audio.js';
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
 // objecten + raket) gebruikt de resterende hoogte erboven.
-const WEEKPLANNING_PANEL_HEIGHT = 150;
+const WEEKPLANNING_PANEL_HEIGHT = 130;
 
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
@@ -39,14 +39,14 @@ canvas.height = GAME_CONFIG.canvasHeight;
 
 const playAreaHeight = canvas.height - WEEKPLANNING_PANEL_HEIGHT;
 
-const START_BUTTON = { x: canvas.width / 2 - 100, y: 420, width: 200, height: 56 };
-const RESUME_BUTTON = { x: canvas.width / 2 - 100, y: 400, width: 200, height: 56 };
+const START_BUTTON = { x: canvas.width / 2 - 100, y: 320, width: 200, height: 56 };
+const RESUME_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 - 28, width: 200, height: 56 };
 const RESTART_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 + 50, width: 200, height: 56 };
 const PAUSE_ICON_BUTTON = { x: 12, y: 30, width: 60, height: 22 };
 const MUTE_ICON_BUTTON = { x: 12, y: 56, width: 84, height: 22 };
 
 // Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
-const STARS = Array.from({ length: 70 }, () => ({
+const STARS = Array.from({ length: 100 }, () => ({
   x: Math.random() * GAME_CONFIG.canvasWidth,
   y: Math.random() * playAreaHeightFor(GAME_CONFIG.canvasHeight),
   radius: Math.random() < 0.15 ? 1.6 : 0.9,
@@ -485,12 +485,12 @@ function renderStartScreen() {
   ctx.textAlign = 'center';
   ctx.fillStyle = '#facc15';
   ctx.font = 'bold 28px \'Inria Sans\', sans-serif';
-  ctx.fillText('Planeten Planner', canvas.width / 2, 220);
+  ctx.fillText('Planeten Planner', canvas.width / 2, 140);
 
   ctx.fillStyle = '#e2e8f0';
   ctx.font = '15px \'Inria Sans\', sans-serif';
   const lines = ['Beweeg met ← en →', 'Vang taken', 'Ontwijk meteorieten', 'Plan met 1 t/m 5'];
-  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, 280 + i * 26));
+  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, 190 + i * 22));
 
   drawButton(START_BUTTON, 'Start');
 }
@@ -635,7 +635,7 @@ function render() {
   ctx.lineTo(canvas.width, playAreaHeight);
   ctx.stroke();
 
-  const shakeOffsetX = shakeTimerMs > 0 ? Math.sin(shakeTimerMs / 20) * 6 : 0;
+  const shakeOffsetX = shakeTimerMs > 0 ? Math.sin(shakeTimerMs / 20) * 10 : 0;
   renderWeekPlanning(ctx, weekPlanning, 0, playAreaHeight, canvas.width, WEEKPLANNING_PANEL_HEIGHT, {
     dayIndex: shakeDayIndex,
     offsetX: shakeOffsetX

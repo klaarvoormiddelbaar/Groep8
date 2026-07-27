@@ -2,8 +2,10 @@
 // Alle instelbare spelwaarden staan hier, volgens GAME_DESIGN_Planeten_Planner.md §24.
 
 export const GAME_CONFIG = {
-  canvasWidth: 480,
-  canvasHeight: 720,
+  // 16:9 breedbeeld i.p.v. staand formaat. De bestaande CSS (max-width/max-height)
+  // schaalt dit vanzelf netjes naar beneden op kleine Chromebook-schermen.
+  canvasWidth: 960,
+  canvasHeight: 540,
 
   startingLives: 3,
   maximumLives: 3,
@@ -23,15 +25,17 @@ export const GAME_CONFIG = {
   slowMotionDuration: 8000,
   slowMotionMultiplier: 0.7,
 
-  startingFallSpeed: 120,
-  speedIncreasePerLevel: 12,
+  // Verlaagd t.o.v. het staande formaat: het speelveld is nu minder hoog, dus een
+  // lagere valsnelheid houdt dezelfde reactietijd (val-tijd) aan als voorheen.
+  startingFallSpeed: 86,
+  speedIncreasePerLevel: 9,
 
   startingSpawnInterval: 1500,
   minimumSpawnInterval: 500,
   spawnIntervalDecreasePerLevel: 100,
 
   // Level 1 heeft alleen kleine taken en weinig, langzame meteorieten (zie levels.js).
-  meteorStartingFallSpeed: 100,
+  meteorStartingFallSpeed: 72,
   meteorStartingSpawnInterval: 3500,
   meteorSpawnIntervalDecreasePerLevel: 200,
   meteorMinimumSpawnInterval: 1000,
@@ -46,7 +50,7 @@ export const GAME_CONFIG = {
   scoreBonusPerRemainingLife: 50,
 
   powerupSpawnInterval: 8000,
-  powerupFallSpeed: 90,
-  magnetRange: 160,
+  powerupFallSpeed: 65,
+  magnetRange: 320,
   magnetPullSpeed: 260
 };
