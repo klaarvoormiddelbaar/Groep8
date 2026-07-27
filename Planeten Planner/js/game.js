@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 16: animaties en geluid toegevoegd.
+// Fase 17: definitieve vormgeving toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { getLevelSettings } from './levels.js';
@@ -43,6 +43,30 @@ const RESUME_BUTTON = { x: canvas.width / 2 - 100, y: 400, width: 200, height: 5
 const RESTART_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 + 50, width: 200, height: 56 };
 const PAUSE_ICON_BUTTON = { x: 12, y: 30, width: 60, height: 22 };
 const MUTE_ICON_BUTTON = { x: 12, y: 56, width: 84, height: 22 };
+
+// Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
+const STARS = Array.from({ length: 70 }, () => ({
+  x: Math.random() * GAME_CONFIG.canvasWidth,
+  y: Math.random() * playAreaHeightFor(GAME_CONFIG.canvasHeight),
+  radius: Math.random() < 0.15 ? 1.6 : 0.9,
+  twinkleOffset: Math.random() * 1000
+}));
+
+function playAreaHeightFor(canvasHeight) {
+  return canvasHeight - WEEKPLANNING_PANEL_HEIGHT;
+}
+
+function renderStarfield() {
+  for (const star of STARS) {
+    const twinkle = 0.5 + 0.5 * Math.sin((Date.now() + star.twinkleOffset) / 500);
+    ctx.globalAlpha = 0.35 + twinkle * 0.5;
+    ctx.fillStyle = '#e2e8f0';
+    ctx.beginPath();
+    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
 
 const player = createPlayer(canvas.width, playAreaHeight);
 initPlayerInput();
@@ -434,11 +458,11 @@ function update(deltaSeconds) {
 }
 
 function drawButton(rect, label) {
-  ctx.fillStyle = '#38bdf8';
+  ctx.fillStyle = '#10a37f';
   ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
 
-  ctx.fillStyle = '#0b1220';
-  ctx.font = 'bold 18px sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 18px \'Inria Sans\', sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 6);
 }
@@ -449,11 +473,11 @@ function renderStartScreen() {
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#facc15';
-  ctx.font = 'bold 28px sans-serif';
+  ctx.font = 'bold 28px \'Inria Sans\', sans-serif';
   ctx.fillText('Planeten Planner', canvas.width / 2, 220);
 
   ctx.fillStyle = '#e2e8f0';
-  ctx.font = '15px sans-serif';
+  ctx.font = '15px \'Inria Sans\', sans-serif';
   const lines = ['Beweeg met ← en →', 'Vang taken', 'Ontwijk meteorieten', 'Plan met 1 t/m 5'];
   lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, 280 + i * 26));
 
@@ -466,7 +490,7 @@ function renderPauseOverlay() {
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#e2e8f0';
-  ctx.font = 'bold 26px sans-serif';
+  ctx.font = 'bold 26px \'Inria Sans\', sans-serif';
   ctx.fillText('Gepauzeerd', canvas.width / 2, canvas.height / 2 - 40);
 
   drawButton(RESUME_BUTTON, 'Verder');
@@ -483,21 +507,21 @@ function renderActiveEffects() {
   if (badges.length === 0) return;
 
   ctx.textAlign = 'center';
-  ctx.font = 'bold 12px sans-serif';
+  ctx.font = 'bold 12px \'Inria Sans\', sans-serif';
   ctx.fillStyle = '#facc15';
   ctx.fillText(badges.join('   '), canvas.width / 2, 80);
 }
 
 function renderHud() {
   ctx.fillStyle = '#94a3b8';
-  ctx.font = '14px sans-serif';
+  ctx.font = '14px \'Inria Sans\', sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 16: level ${currentLevel}`, canvas.width / 2, 20);
+  ctx.fillText(`Fase 17: level ${currentLevel}`, canvas.width / 2, 20);
   ctx.fillText(`Score: ${score}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
     ctx.fillStyle = '#38bdf8';
-    ctx.font = '13px sans-serif';
+    ctx.font = '13px \'Inria Sans\', sans-serif';
     ctx.fillText(feedbackMessage, canvas.width / 2, 60);
   }
 
@@ -505,15 +529,15 @@ function renderHud() {
   renderCargo(ctx, cargo, canvas.width);
 
   ctx.textAlign = 'left';
-  ctx.font = 'bold 16px sans-serif';
-  ctx.fillStyle = '#f87171';
+  ctx.font = 'bold 16px \'Inria Sans\', sans-serif';
+  ctx.fillStyle = '#ef4444';
   ctx.fillText(`Levens: ${'❤'.repeat(lives)}${'♡'.repeat(GAME_CONFIG.maximumLives - lives)}`, 12, 20);
 
   if (gameMode === 'playing') {
     ctx.fillStyle = '#334155';
     ctx.fillRect(PAUSE_ICON_BUTTON.x, PAUSE_ICON_BUTTON.y, PAUSE_ICON_BUTTON.width, PAUSE_ICON_BUTTON.height);
     ctx.fillStyle = '#e2e8f0';
-    ctx.font = '11px sans-serif';
+    ctx.font = '11px \'Inria Sans\', sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('⏸ Pauze', PAUSE_ICON_BUTTON.x + PAUSE_ICON_BUTTON.width / 2, PAUSE_ICON_BUTTON.y + 15);
   }
@@ -521,7 +545,7 @@ function renderHud() {
   ctx.fillStyle = '#334155';
   ctx.fillRect(MUTE_ICON_BUTTON.x, MUTE_ICON_BUTTON.y, MUTE_ICON_BUTTON.width, MUTE_ICON_BUTTON.height);
   ctx.fillStyle = '#e2e8f0';
-  ctx.font = '11px sans-serif';
+  ctx.font = '11px \'Inria Sans\', sans-serif';
   ctx.textAlign = 'center';
   ctx.fillText(
     getIsMuted() ? 'Geluid: uit' : 'Geluid: aan',
@@ -532,7 +556,7 @@ function renderHud() {
 
 function renderScorePopups() {
   ctx.textAlign = 'center';
-  ctx.font = 'bold 13px sans-serif';
+  ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
   for (const popup of scorePopups) {
     ctx.globalAlpha = Math.max(0, popup.ms / 700);
     ctx.fillStyle = popup.color;
@@ -546,12 +570,12 @@ function renderGameOverScreen() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#f87171';
-  ctx.font = 'bold 32px sans-serif';
+  ctx.fillStyle = '#ef4444';
+  ctx.font = 'bold 32px \'Inria Sans\', sans-serif';
   ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 110);
 
   ctx.fillStyle = '#e2e8f0';
-  ctx.font = '16px sans-serif';
+  ctx.font = '16px \'Inria Sans\', sans-serif';
   const lines = [
     `Score: ${score}`,
     `Hoogste level: ${currentLevel}`,
@@ -569,8 +593,15 @@ function render() {
     return;
   }
 
-  ctx.fillStyle = '#0b1220';
+  ctx.fillStyle = '#050a1a';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const spaceGradient = ctx.createLinearGradient(0, 0, 0, playAreaHeight);
+  spaceGradient.addColorStop(0, '#0c1a3d');
+  spaceGradient.addColorStop(1, '#050a1a');
+  ctx.fillStyle = spaceGradient;
+  ctx.fillRect(0, 0, canvas.width, playAreaHeight);
+  renderStarfield();
 
   renderTasks(ctx, taskSpawner);
   renderMeteors(ctx, meteorSpawner);
@@ -604,7 +635,7 @@ function render() {
   }
 
   if (damageFlashMs > 0) {
-    ctx.fillStyle = `rgba(248, 113, 113, ${(damageFlashMs / 150) * 0.35})`;
+    ctx.fillStyle = `rgba(239, 68, 68, ${(damageFlashMs / 150) * 0.35})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 

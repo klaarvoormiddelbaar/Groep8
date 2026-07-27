@@ -48,6 +48,51 @@ export function renderPlayer(ctx, player, isInvulnerable = false) {
   const isBlinkedOut = isInvulnerable && Math.floor(Date.now() / 100) % 2 === 0;
   if (isBlinkedOut) return;
 
-  ctx.fillStyle = '#38bdf8';
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  const { x, y, width, height } = player;
+  const cx = x + width / 2;
+  const noseY = y;
+  const tailY = y + height;
+
+  // Romp: spits neusje boven, brede staart onder (KvM-blauw).
+  ctx.beginPath();
+  ctx.moveTo(cx, noseY);
+  ctx.lineTo(x + width * 0.78, tailY);
+  ctx.lineTo(x + width * 0.22, tailY);
+  ctx.closePath();
+  ctx.fillStyle = '#72a8f9';
+  ctx.fill();
+  ctx.strokeStyle = '#1e4a8a';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Vinnen.
+  ctx.beginPath();
+  ctx.moveTo(x + width * 0.22, tailY);
+  ctx.lineTo(x, tailY + height * 0.35);
+  ctx.lineTo(x + width * 0.3, tailY - height * 0.15);
+  ctx.closePath();
+  ctx.moveTo(x + width * 0.78, tailY);
+  ctx.lineTo(x + width, tailY + height * 0.35);
+  ctx.lineTo(x + width * 0.7, tailY - height * 0.15);
+  ctx.closePath();
+  ctx.fillStyle = '#f59e0b';
+  ctx.fill();
+
+  // Raampje.
+  ctx.beginPath();
+  ctx.arc(cx, y + height * 0.42, width * 0.14, 0, Math.PI * 2);
+  ctx.fillStyle = '#e2e8f0';
+  ctx.fill();
+  ctx.strokeStyle = '#1e4a8a';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Stuwvlam.
+  ctx.beginPath();
+  ctx.moveTo(x + width * 0.35, tailY);
+  ctx.lineTo(cx, tailY + height * 0.6);
+  ctx.lineTo(x + width * 0.65, tailY);
+  ctx.closePath();
+  ctx.fillStyle = '#fbbf24';
+  ctx.fill();
 }

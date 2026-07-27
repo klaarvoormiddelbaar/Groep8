@@ -32,7 +32,7 @@ export function renderCargo(ctx, cargo, canvasWidth) {
   const used = usedSlots(cargo);
 
   ctx.textAlign = 'right';
-  ctx.font = 'bold 14px sans-serif';
+  ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
   ctx.fillStyle = used >= cargo.capacity ? '#f87171' : '#94a3b8';
   ctx.fillText(`Laadruimte: ${used}/${cargo.capacity}`, canvasWidth - 12, 20);
 

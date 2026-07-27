@@ -76,21 +76,34 @@ export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs
   });
 }
 
+// Afgeronde kaart, met een kleine 'oor' bovenaan zodat het als een opgaveblaadje oogt.
+function drawTaskCard(ctx, task, fillColor, borderColor) {
+  const { x, y, width, height } = task;
+  const radius = 6;
+
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.arcTo(x + width, y, x + width, y + height, radius);
+  ctx.arcTo(x + width, y + height, x, y + height, radius);
+  ctx.arcTo(x, y + height, x, y, radius);
+  ctx.arcTo(x, y, x + width, y, radius);
+  ctx.closePath();
+
+  ctx.fillStyle = fillColor;
+  ctx.fill();
+  ctx.strokeStyle = borderColor;
+  ctx.lineWidth = task.slots === 2 ? 3 : 2;
+  ctx.stroke();
+}
+
 export function renderTasks(ctx, spawner) {
   for (const task of spawner.tasks) {
     const isLarge = task.slots === 2;
 
-    ctx.fillStyle = isLarge ? '#fb923c' : '#facc15';
-    ctx.fillRect(task.x, task.y, task.width, task.height);
-
-    if (isLarge) {
-      ctx.strokeStyle = '#7c2d12';
-      ctx.lineWidth = 3;
-      ctx.strokeRect(task.x, task.y, task.width, task.height);
-    }
+    drawTaskCard(ctx, task, isLarge ? '#f59e0b' : '#fde68a', isLarge ? '#b45309' : '#ca8a04');
 
     ctx.fillStyle = '#1f2937';
-    ctx.font = isLarge ? 'bold 10px sans-serif' : '10px sans-serif';
+    ctx.font = isLarge ? 'bold 10px \'Inria Sans\', sans-serif' : '10px \'Inria Sans\', sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText(task.label, task.x + task.width / 2, task.y + task.height / 2 + 3, task.width - 6);
   }
