@@ -221,6 +221,10 @@ const DAY_KEYS = ['1', '2', '3', '4', '5'];
 window.addEventListener('keydown', (event) => {
   if (event.repeat) return;
 
+  if (event.key === ' ') {
+    event.preventDefault(); // voorkomt dat de spatiebalk de pagina laat scrollen
+  }
+
   if (event.key === 'Escape') {
     if (gameMode === 'playing') gameMode = 'paused';
     else if (gameMode === 'paused') gameMode = 'playing';
