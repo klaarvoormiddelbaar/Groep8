@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 17: definitieve vormgeving toegevoegd.
+// Fase 19: balanceren (feedback-duur verlengd voor leesbaarheid).
 
 import { GAME_CONFIG } from './config.js';
 import { getLevelSettings } from './levels.js';
@@ -179,7 +179,7 @@ function endLevelSummary() {
 
 function showFeedback(message) {
   feedbackMessage = message;
-  feedbackTimerMs = 1200;
+  feedbackTimerMs = 1600; // lang genoeg om ook langere meldingen ("... ingepland op Donderdag.") te lezen
 }
 
 function attemptPlanNextTask(dayIndex) {
@@ -520,7 +520,7 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px \'Inria Sans\', sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 17: level ${currentLevel}`, canvas.width / 2, 20);
+  ctx.fillText(`Fase 19: level ${currentLevel}`, canvas.width / 2, 20);
   ctx.fillText(`Score: ${score}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
