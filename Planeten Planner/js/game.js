@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 14: power-ups toegevoegd.
+// Fase 15: startscherm, pauze en game-over met herstart toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { getLevelSettings } from './levels.js';
@@ -37,6 +37,11 @@ canvas.height = GAME_CONFIG.canvasHeight;
 
 const playAreaHeight = canvas.height - WEEKPLANNING_PANEL_HEIGHT;
 
+const START_BUTTON = { x: canvas.width / 2 - 100, y: 420, width: 200, height: 56 };
+const RESUME_BUTTON = { x: canvas.width / 2 - 100, y: 400, width: 200, height: 56 };
+const RESTART_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 + 50, width: 200, height: 56 };
+const PAUSE_ICON_BUTTON = { x: 12, y: 30, width: 60, height: 22 };
+
 const player = createPlayer(canvas.width, playAreaHeight);
 initPlayerInput();
 
@@ -44,18 +49,67 @@ const taskSpawner = createTaskSpawner(canvas.width);
 const meteorSpawner = createMeteorSpawner(canvas.width);
 const powerupSpawner = createPowerupSpawner(canvas.width);
 const activeEffects = createActiveEffects();
-let cargo = createCargo(GAME_CONFIG.cargoCapacity);
-let weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
-let currentLevel = 1;
-let levelSettings = getLevelSettings(currentLevel);
 
-let isShowingLevelSummary = false;
-let summaryTimerMs = 0;
-let completedWeekSnapshot = null;
-let completedLevelNumber = 0;
+// 'start' | 'playing' | 'paused' | 'gameOver'
+let gameMode = 'start';
 
-let feedbackMessage = '';
-let feedbackTimerMs = 0;
+let cargo;
+let weekPlanning;
+let currentLevel;
+let levelSettings;
+
+let isShowingLevelSummary;
+let summaryTimerMs;
+let completedWeekSnapshot;
+let completedLevelNumber;
+let completedWeeksCount;
+
+let feedbackMessage;
+let feedbackTimerMs;
+
+let caughtCount;
+let plannedCount;
+let score;
+let lives;
+let isGameOver;
+let invulnerableMs;
+
+// Zet alle spelstatus terug naar een verse start. Wordt gebruikt bij het eerste
+// Start-klik én bij 'Opnieuw spelen' na een game-over.
+function resetGame() {
+  cargo = createCargo(GAME_CONFIG.cargoCapacity);
+  weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
+  currentLevel = 1;
+  levelSettings = getLevelSettings(currentLevel);
+
+  taskSpawner.tasks = [];
+  meteorSpawner.meteors = [];
+  powerupSpawner.items = [];
+  Object.assign(activeEffects, createActiveEffects());
+
+  player.x = canvas.width / 2 - player.width / 2;
+
+  isShowingLevelSummary = false;
+  summaryTimerMs = 0;
+  completedWeekSnapshot = null;
+  completedLevelNumber = 0;
+  completedWeeksCount = 0;
+
+  feedbackMessage = '';
+  feedbackTimerMs = 0;
+
+  caughtCount = 0;
+  plannedCount = 0;
+  score = 0;
+  lives = GAME_CONFIG.startingLives;
+  isGameOver = false;
+  invulnerableMs = 0;
+
+  gameMode = 'playing';
+}
+
+resetGame();
+gameMode = 'start'; // begin op het titelscherm, niet meteen spelend
 
 function completeLevel() {
   // Bewaar een referentie naar de voltooide planning vóórdat er een nieuwe,
@@ -63,6 +117,7 @@ function completeLevel() {
   // terwijl de speler alweer met een schone week kan beginnen.
   completedWeekSnapshot = weekPlanning;
   completedLevelNumber = currentLevel;
+  completedWeeksCount += 1;
 
   addScore(GAME_CONFIG.scoreLevelComplete + lives * GAME_CONFIG.scoreBonusPerRemainingLife);
 
@@ -102,6 +157,7 @@ function attemptPlanNextTask(dayIndex) {
 
   removeNextTask(cargo);
   placeTaskInDay(weekPlanning, dayIndex, nextTask);
+  plannedCount += 1;
   addScore(nextTask.slots === 2 ? GAME_CONFIG.scorePlanLargeTask : GAME_CONFIG.scorePlanSmallTask);
 
   if (totalFilledSlots(weekPlanning) >= GAME_CONFIG.totalWeekSlots) {
@@ -116,6 +172,14 @@ const DAY_KEYS = ['1', '2', '3', '4', '5'];
 window.addEventListener('keydown', (event) => {
   if (event.repeat) return;
 
+  if (event.key === 'Escape') {
+    if (gameMode === 'playing') gameMode = 'paused';
+    else if (gameMode === 'paused') gameMode = 'playing';
+    return;
+  }
+
+  if (gameMode !== 'playing') return;
+
   if (isShowingLevelSummary) {
     if (event.key === ' ' || event.key === 'Enter') {
       endLevelSummary();
@@ -129,11 +193,33 @@ window.addEventListener('keydown', (event) => {
   }
 });
 
-let caughtCount = 0;
-let score = 0;
-let lives = GAME_CONFIG.startingLives;
-let isGameOver = false;
-let invulnerableMs = 0;
+function hitTest(px, py, rect) {
+  return px >= rect.x && px <= rect.x + rect.width && py >= rect.y && py <= rect.y + rect.height;
+}
+
+canvas.addEventListener('click', (event) => {
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const px = (event.clientX - rect.left) * scaleX;
+  const py = (event.clientY - rect.top) * scaleY;
+
+  if (gameMode === 'start' && hitTest(px, py, START_BUTTON)) {
+    resetGame();
+    return;
+  }
+  if (gameMode === 'paused' && hitTest(px, py, RESUME_BUTTON)) {
+    gameMode = 'playing';
+    return;
+  }
+  if (gameMode === 'gameOver' && hitTest(px, py, RESTART_BUTTON)) {
+    resetGame();
+    return;
+  }
+  if (gameMode === 'playing' && hitTest(px, py, PAUSE_ICON_BUTTON)) {
+    gameMode = 'paused';
+  }
+});
 
 let lastTimestampMs = 0;
 let isRunning = true;
@@ -143,6 +229,7 @@ function loseLife() {
   lives = Math.max(0, lives - 1);
   if (lives === 0) {
     isGameOver = true;
+    gameMode = 'gameOver';
   }
 }
 
@@ -187,7 +274,7 @@ function applyPowerup(type) {
 }
 
 function update(deltaSeconds) {
-  if (isGameOver) return;
+  if (gameMode !== 'playing') return;
 
   if (isShowingLevelSummary) {
     summaryTimerMs = Math.max(0, summaryTimerMs - deltaSeconds * 1000);
@@ -288,6 +375,45 @@ function update(deltaSeconds) {
   }
 }
 
+function drawButton(rect, label) {
+  ctx.fillStyle = '#38bdf8';
+  ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+
+  ctx.fillStyle = '#0b1220';
+  ctx.font = 'bold 18px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 6);
+}
+
+function renderStartScreen() {
+  ctx.fillStyle = '#0b1220';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#facc15';
+  ctx.font = 'bold 28px sans-serif';
+  ctx.fillText('Planeten Planner', canvas.width / 2, 220);
+
+  ctx.fillStyle = '#e2e8f0';
+  ctx.font = '15px sans-serif';
+  const lines = ['Beweeg met ← en →', 'Vang taken', 'Ontwijk meteorieten', 'Plan met 1 t/m 5'];
+  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, 280 + i * 26));
+
+  drawButton(START_BUTTON, 'Start');
+}
+
+function renderPauseOverlay() {
+  ctx.fillStyle = 'rgba(5, 7, 13, 0.85)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#e2e8f0';
+  ctx.font = 'bold 26px sans-serif';
+  ctx.fillText('Gepauzeerd', canvas.width / 2, canvas.height / 2 - 40);
+
+  drawButton(RESUME_BUTTON, 'Verder');
+}
+
 function renderActiveEffects() {
   const badges = [];
   if (activeEffects.hasShield) badges.push('🛡 Schild');
@@ -308,7 +434,7 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 14: level ${currentLevel}`, canvas.width / 2, 20);
+  ctx.fillText(`Fase 15: level ${currentLevel}`, canvas.width / 2, 20);
   ctx.fillText(`Score: ${score}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
 
   if (feedbackTimerMs > 0) {
@@ -324,24 +450,45 @@ function renderHud() {
   ctx.font = 'bold 16px sans-serif';
   ctx.fillStyle = '#f87171';
   ctx.fillText(`Levens: ${'❤'.repeat(lives)}${'♡'.repeat(GAME_CONFIG.maximumLives - lives)}`, 12, 20);
+
+  if (gameMode === 'playing') {
+    ctx.fillStyle = '#334155';
+    ctx.fillRect(PAUSE_ICON_BUTTON.x, PAUSE_ICON_BUTTON.y, PAUSE_ICON_BUTTON.width, PAUSE_ICON_BUTTON.height);
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('⏸ Pauze', PAUSE_ICON_BUTTON.x + PAUSE_ICON_BUTTON.width / 2, PAUSE_ICON_BUTTON.y + 15);
+  }
 }
 
-function renderGameOver() {
-  ctx.fillStyle = 'rgba(5, 7, 13, 0.85)';
+function renderGameOverScreen() {
+  ctx.fillStyle = 'rgba(5, 7, 13, 0.9)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.textAlign = 'center';
   ctx.fillStyle = '#f87171';
   ctx.font = 'bold 32px sans-serif';
-  ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 16);
+  ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 110);
 
   ctx.fillStyle = '#e2e8f0';
   ctx.font = '16px sans-serif';
-  ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 16);
-  ctx.fillText(`Gevangen taken: ${caughtCount}`, canvas.width / 2, canvas.height / 2 + 38);
+  const lines = [
+    `Score: ${score}`,
+    `Hoogste level: ${currentLevel}`,
+    `Ingeplande taken: ${plannedCount}`,
+    `Voltooide weken: ${completedWeeksCount}`
+  ];
+  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, canvas.height / 2 - 60 + i * 24));
+
+  drawButton(RESTART_BUTTON, 'Opnieuw spelen');
 }
 
 function render() {
+  if (gameMode === 'start') {
+    renderStartScreen();
+    return;
+  }
+
   ctx.fillStyle = '#0b1220';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -371,8 +518,12 @@ function render() {
     renderWeekSummary(ctx, completedWeekSnapshot, completedLevelNumber, canvas.width, canvas.height);
   }
 
-  if (isGameOver) {
-    renderGameOver();
+  if (gameMode === 'paused') {
+    renderPauseOverlay();
+  }
+
+  if (gameMode === 'gameOver') {
+    renderGameOverScreen();
   }
 }
 
