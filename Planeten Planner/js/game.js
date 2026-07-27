@@ -1,5 +1,5 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 3: vallende kleine taken toegevoegd.
+// Fase 4: grote taken (2 taakplekken) toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
@@ -57,7 +57,7 @@ function render() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Fase 3: vallende taken', canvas.width / 2, 20);
+  ctx.fillText('Fase 4: grote taken', canvas.width / 2, 20);
   ctx.fillText(`Gevangen: ${caughtCount}  Gemist: ${missedCount}`, canvas.width / 2, 40);
 }
 
