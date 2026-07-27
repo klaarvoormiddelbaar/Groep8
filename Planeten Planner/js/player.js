@@ -1,7 +1,7 @@
 // Raket: horizontale beweging met pijltjestoetsen of A/D.
 
-const PLAYER_WIDTH = 112;
-const PLAYER_HEIGHT = 56;
+const PLAYER_WIDTH = 84;
+const PLAYER_HEIGHT = 42;
 const PLAYER_SPEED = 520; // pixels per seconde
 const PLAYER_MARGIN_BOTTOM = 40; // extra ruimte zodat de stuwvlam niet over het weekplanning-paneel valt
 

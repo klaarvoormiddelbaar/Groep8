@@ -4,8 +4,8 @@
 const SMALL_TASK_LABELS = ['Engels', 'Lezen', 'Geschiedenis', 'Biologie', 'Wiskunde', 'Huiswerk', 'Woordjes leren'];
 const LARGE_TASK_LABELS = ['Leren voor toets', 'Presentatie voorbereiden', 'Groot project', 'Werkstuk maken'];
 
-const SMALL_TASK_SIZE = 88;
-const LARGE_TASK_SIZE = 128;
+const SMALL_TASK_SIZE = 66;
+const LARGE_TASK_SIZE = 96;
 const LARGE_TASK_CHANCE = 0.25;
 
 function randomFrom(list) {
