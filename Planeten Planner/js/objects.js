@@ -16,6 +16,8 @@ export function createTaskSpawner(canvasWidth) {
   return {
     tasks: [],
     spawnTimerMs: 0,
+    // Hoog begingetal zodat de allereerste grote taak niet onnodig wordt tegengehouden.
+    timeSinceLastLargeMs: Infinity,
     canvasWidth
   };
 }
@@ -46,9 +48,13 @@ export function spawnLargeTask(spawner, fallSpeed) {
   });
 }
 
-export function spawnRandomTask(spawner, fallSpeed, largeTasksEnabled) {
-  if (largeTasksEnabled && Math.random() < LARGE_TASK_CHANCE) {
+// minGapBetweenLargeMs voorkomt dat 2 grote taken vlak na elkaar spawnen — hoe voller
+// de week, hoe groter die afkoelperiode (game.js koppelt dit aan het weekvulpercentage).
+export function spawnRandomTask(spawner, fallSpeed, largeTasksEnabled, minGapBetweenLargeMs) {
+  const canSpawnLarge = largeTasksEnabled && spawner.timeSinceLastLargeMs >= minGapBetweenLargeMs;
+  if (canSpawnLarge && Math.random() < LARGE_TASK_CHANCE) {
     spawnLargeTask(spawner, fallSpeed);
+    spawner.timeSinceLastLargeMs = 0;
   } else {
     spawnSmallTask(spawner, fallSpeed);
   }
@@ -56,11 +62,12 @@ export function spawnRandomTask(spawner, fallSpeed, largeTasksEnabled) {
 
 // speedMultiplier schaalt de beweging van ALLE taken deze frame (ook al vallende),
 // zodat de tijdvertrager-power-up direct effect heeft en er na afloop niets 'nasleept'.
-export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, largeTasksEnabled, speedMultiplier, onMissed) {
+export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, largeTasksEnabled, minGapBetweenLargeMs, speedMultiplier, onMissed) {
   spawner.spawnTimerMs += deltaSeconds * 1000;
+  spawner.timeSinceLastLargeMs += deltaSeconds * 1000;
   if (spawner.spawnTimerMs >= spawnIntervalMs) {
     spawner.spawnTimerMs = 0;
-    spawnRandomTask(spawner, fallSpeed, largeTasksEnabled);
+    spawnRandomTask(spawner, fallSpeed, largeTasksEnabled, minGapBetweenLargeMs);
   }
 
   for (const task of spawner.tasks) {

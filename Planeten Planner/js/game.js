@@ -115,6 +115,7 @@ function resetGame() {
   levelSettings = getLevelSettings(currentLevel);
 
   taskSpawner.tasks = [];
+  taskSpawner.timeSinceLastLargeMs = Infinity;
   meteorSpawner.meteors = [];
   powerupSpawner.items = [];
   Object.assign(activeEffects, createActiveEffects());
@@ -361,6 +362,11 @@ function update(deltaSeconds) {
   // in de taakvolgorde — alleen nog door eigen planningskeuzes.
   const canFitLargeTask = canPlaceInAnyDay(weekPlanning, { slots: 2 });
 
+  // Hoe voller de week, hoe langer de verplichte afkoelperiode tussen grote taken —
+  // richting het einde van een level dus geen 2 grote taken snel na elkaar.
+  const weekFillRatio = totalFilledSlots(weekPlanning) / GAME_CONFIG.totalWeekSlots;
+  const largeTaskMinGapMs = GAME_CONFIG.largeTaskMinGapMs + weekFillRatio * GAME_CONFIG.largeTaskEndgameExtraGapMs;
+
   updateTasks(
     taskSpawner,
     deltaSeconds,
@@ -368,6 +374,7 @@ function update(deltaSeconds) {
     levelSettings.taskSpawnInterval,
     levelSettings.taskFallSpeed,
     levelSettings.largeTasksEnabled && canFitLargeTask,
+    largeTaskMinGapMs,
     speedMultiplier,
     loseLife // een gemiste taak kost 1 leven
   );

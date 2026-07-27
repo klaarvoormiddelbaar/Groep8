@@ -52,5 +52,10 @@ export const GAME_CONFIG = {
   powerupSpawnInterval: 8000,
   powerupFallSpeed: 65,
   magnetRange: 320,
-  magnetPullSpeed: 260
+  magnetPullSpeed: 260,
+
+  // Minimale tijd tussen twee grote taken: basiswaarde + extra naarmate de week voller
+  // raakt, zodat je richting het einde van een level niet 2 grote taken snel na elkaar krijgt.
+  largeTaskMinGapMs: 3000,
+  largeTaskEndgameExtraGapMs: 5000
 };
