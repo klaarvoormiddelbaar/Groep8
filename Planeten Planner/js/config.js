@@ -1,0 +1,33 @@
+// Centrale configuratie voor Planeten Planner.
+// Alle instelbare spelwaarden staan hier, volgens GAME_DESIGN_Planeten_Planner.md §24.
+
+export const GAME_CONFIG = {
+  canvasWidth: 480,
+  canvasHeight: 720,
+
+  startingLives: 3,
+  maximumLives: 3,
+
+  cargoCapacity: 5,
+  extraCargoCapacity: 6,
+
+  numberOfDays: 5,
+  slotsPerDay: 3,
+  totalWeekSlots: 15,
+
+  smallTaskSize: 1,
+  largeTaskSize: 2,
+
+  invulnerabilityDuration: 1250,
+  magnetDuration: 10000,
+  slowMotionDuration: 8000,
+  slowMotionMultiplier: 0.7,
+
+  startingFallSpeed: 120,
+  speedIncreasePerLevel: 12,
+
+  startingSpawnInterval: 1500,
+  minimumSpawnInterval: 500,
+
+  levelSummaryAutoContinueDelay: 6000
+};
