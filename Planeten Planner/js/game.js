@@ -1,10 +1,11 @@
 // Planeten Planner — hoofd-gameloop.
-// Fase 6: tijdelijke onkwetsbaarheid na meteorietschade toegevoegd.
+// Fase 7: laadruimte en wachtrij toegevoegd.
 
 import { GAME_CONFIG } from './config.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
 import { createTaskSpawner, updateTasks, renderTasks } from './objects.js';
 import { createMeteorSpawner, updateMeteors, renderMeteors } from './meteors.js';
+import { createCargo, hasRoomFor, addToCargo, renderCargo } from './cargo.js';
 import { rectsOverlap, circleRectOverlap } from './collision.js';
 
 // Meteoorwaarden zijn in fase 5 nog vaste placeholders. Fase 13 (moeilijkheidsopbouw)
@@ -23,6 +24,7 @@ initPlayerInput();
 
 const taskSpawner = createTaskSpawner(canvas.width);
 const meteorSpawner = createMeteorSpawner(canvas.width);
+const cargo = createCargo(GAME_CONFIG.cargoCapacity);
 
 let caughtCount = 0;
 let lives = GAME_CONFIG.startingLives;
@@ -61,11 +63,12 @@ function update(deltaSeconds) {
   }
 
   taskSpawner.tasks = taskSpawner.tasks.filter((task) => {
-    if (rectsOverlap(player, task)) {
-      caughtCount += 1;
-      return false;
-    }
-    return true;
+    if (!rectsOverlap(player, task)) return true;
+    if (!hasRoomFor(cargo, task)) return true; // laadruimte vol: taak valt door, niet gevangen
+
+    addToCargo(cargo, task);
+    caughtCount += 1;
+    return false;
   });
 
   // Botsingsdetectie met meteorieten wordt tijdelijk genegeerd tijdens onkwetsbaarheid,
@@ -88,8 +91,10 @@ function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('Fase 6: onkwetsbaarheid', canvas.width / 2, 20);
+  ctx.fillText('Fase 7: laadruimte', canvas.width / 2, 20);
   ctx.fillText(`Gevangen: ${caughtCount}`, canvas.width / 2, 40);
+
+  renderCargo(ctx, cargo, canvas.width);
 
   ctx.textAlign = 'left';
   ctx.font = 'bold 16px sans-serif';
