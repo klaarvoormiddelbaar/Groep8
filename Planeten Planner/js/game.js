@@ -29,6 +29,7 @@ import { sounds, toggleMute, getIsMuted } from './audio.js';
 import { loadAssets, getImage } from './assets.js';
 import { THEME } from './theme.js';
 import { drawRoundedRect, drawPillButton, drawStatCard } from './canvasUtils.js';
+import { createTutorial, hasSeenTutorial } from './tutorial.js';
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
 // objecten + raket) gebruikt de resterende hoogte erboven. Iets hoger dan voorheen
@@ -77,6 +78,7 @@ const RESTART_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: GAME_OVER_CARD.y + GAME_
 // plaats van een trapje.
 const PAUSE_ICON_BUTTON = { x: 20, y: 66, width: 64, height: 24 };
 const MUTE_ICON_BUTTON = { x: 92, y: 66, width: 100, height: 24 };
+const HELP_ICON_BUTTON = { x: 200, y: 66, width: 36, height: 24 };
 const HUD_PANEL = { x: 8, y: 6, width: LOGICAL_WIDTH - 16, height: 102 };
 
 // Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
@@ -121,6 +123,40 @@ const taskSpawner = createTaskSpawner(LOGICAL_WIDTH);
 const meteorSpawner = createMeteorSpawner(LOGICAL_WIDTH);
 const powerupSpawner = createPowerupSpawner(LOGICAL_WIDTH);
 const activeEffects = createActiveEffects();
+
+// Rondleiding voor level 1: legt de basis uit (besturing, taken vangen, plannen,
+// het doel) aan de hand van 5 korte stappen die telkens naar een deel van het
+// scherm wijzen. Start automatisch de allereerste keer (zie resetGame), en is
+// daarna via het lampje-knopje in de HUD altijd opnieuw op te vragen.
+const TUTORIAL_STEPS = [
+  {
+    label: 'Jouw raket',
+    text: 'Dit is jouw raket. Beweeg hem met de pijltjestoetsen ← en → naar links en naar rechts.',
+    region: { x: player.x - 20, y: player.y - 20, width: player.width + 40, height: player.height + 40 }
+  },
+  {
+    label: 'Vallende taken',
+    text: 'Taken (huiswerk) vallen vanaf boven naar beneden. Vlieg eronder om ze te vangen.',
+    region: { x: 0, y: HUD_PANEL.y + HUD_PANEL.height + 10, width: LOGICAL_WIDTH, height: 130 }
+  },
+  {
+    label: 'Je laadruimte',
+    text: 'Gevangen taken komen hier terecht. Je hebt maar 5 plekken — plan op tijd, anders zit het vol!',
+    region: { x: LOGICAL_WIDTH - 200, y: HUD_PANEL.y, width: 190, height: HUD_PANEL.height }
+  },
+  {
+    label: 'Plan je week',
+    text: 'Druk op 1 t/m 5 om je eerstvolgende taak in te plannen op maandag t/m vrijdag.',
+    region: { x: 0, y: playAreaHeight, width: LOGICAL_WIDTH, height: WEEKPLANNING_PANEL_HEIGHT }
+  },
+  {
+    label: 'Jouw doel',
+    text: 'Vul alle 15 plekken van de week om het level te voltooien. Succes!',
+    region: { x: LOGICAL_WIDTH / 2 - 120, y: HUD_PANEL.y, width: 240, height: HUD_PANEL.height }
+  }
+];
+
+const tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, TUTORIAL_STEPS);
 
 // 'loading' | 'start' | 'playing' | 'paused' | 'gameOver'
 let gameMode = 'loading';
@@ -294,6 +330,7 @@ const DAY_KEYS = ['1', '2', '3', '4', '5'];
 
 window.addEventListener('keydown', (event) => {
   if (event.repeat) return;
+  if (tutorial.isOpen()) return; // geen pauze/plan-toetsen terwijl de rondleiding open staat
 
   if (event.key === ' ') {
     event.preventDefault(); // voorkomt dat de spatiebalk de pagina laat scrollen
@@ -325,6 +362,8 @@ function hitTest(px, py, rect) {
 }
 
 canvas.addEventListener('click', (event) => {
+  if (tutorial.isOpen()) return; // klikken op de HUD erachter terwijl de rondleiding openstaat, telt niet
+
   const rect = canvas.getBoundingClientRect();
   const scaleX = LOGICAL_WIDTH / rect.width;
   const scaleY = LOGICAL_HEIGHT / rect.height;
@@ -333,6 +372,7 @@ canvas.addEventListener('click', (event) => {
 
   if (gameMode === 'start' && hitTest(px, py, START_BUTTON)) {
     resetGame();
+    if (!hasSeenTutorial()) tutorial.open(); // legt level 1 uit, maar alleen de allereerste keer
     return;
   }
   if (gameMode === 'paused' && hitTest(px, py, RESUME_BUTTON)) {
@@ -341,6 +381,11 @@ canvas.addEventListener('click', (event) => {
   }
   if (gameMode === 'gameOver' && hitTest(px, py, RESTART_BUTTON)) {
     resetGame();
+    if (!hasSeenTutorial()) tutorial.open();
+    return;
+  }
+  if (gameMode === 'playing' && hitTest(px, py, HELP_ICON_BUTTON)) {
+    tutorial.open(); // op elk moment opnieuw op te vragen
     return;
   }
   if (gameMode === 'playing' && isShowingLevelSummary && weekSummaryButtonRect && hitTest(px, py, weekSummaryButtonRect)) {
@@ -422,6 +467,10 @@ function update(deltaSeconds) {
 
   if (isShowingLevelSummary) {
     return; // gameplay staat stil; wacht op de speler (knop of spatie)
+  }
+
+  if (tutorial.isOpen()) {
+    return; // gameplay staat stil zolang de rondleiding open staat, anders mis je taken tijdens het lezen
   }
 
   updatePlayer(player, deltaSeconds, LOGICAL_WIDTH);
@@ -834,6 +883,9 @@ function renderHud() {
     active: !getIsMuted(),
     icon: 'iconSpeaker'
   });
+
+  // Lampje: vraagt op elk moment de rondleiding (tutorial.js) opnieuw op.
+  drawGhostButton(HELP_ICON_BUTTON, '', { icon: 'iconLightbulb' });
 }
 
 function renderScorePopups() {

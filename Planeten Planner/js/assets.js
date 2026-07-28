@@ -34,7 +34,8 @@ const IMAGE_PATHS = {
   iconSpeaker: '/Afbeeldingen/Emoji%20Pack%20iOS/speaker-medium-volume_1f509.png',
   iconArrowLeft: '/Afbeeldingen/Emoji%20Pack%20iOS/left-arrow_2b05-fe0f.png',
   iconArrowRight: '/Afbeeldingen/Emoji%20Pack%20iOS/right-arrow_27a1-fe0f.png',
-  iconSparkles: '/Afbeeldingen/Emoji%20Pack%20iOS/sparkles_2728.png'
+  iconSparkles: '/Afbeeldingen/Emoji%20Pack%20iOS/sparkles_2728.png',
+  iconLightbulb: '/Afbeeldingen/Emoji%20Pack%20iOS/light-bulb_1f4a1.png'
 };
 
 const images = {};
