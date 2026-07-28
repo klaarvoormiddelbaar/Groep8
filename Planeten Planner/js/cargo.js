@@ -28,7 +28,10 @@ export function removeNextTask(cargo) {
   return cargo.queue.shift();
 }
 
-export function renderCargo(ctx, cargo, canvasWidth) {
+// smallImage/largeImage: dezelfde taakplaatjes als de vallende taken (objects.js),
+// zodat de wachtrij-iconen automatisch in stijl blijven. Zonder afbeeldingen valt
+// dit terug op de oude gekleurde blokjes.
+export function renderCargo(ctx, cargo, canvasWidth, smallImage = null, largeImage = null) {
   const used = usedSlots(cargo);
 
   ctx.textAlign = 'right';
@@ -43,9 +46,15 @@ export function renderCargo(ctx, cargo, canvasWidth) {
   for (let i = 0; i < cargo.queue.length; i++) {
     const task = cargo.queue[i];
     const isNext = i === 0;
+    const isLarge = task.slots === 2;
+    const image = isLarge ? largeImage : smallImage;
 
-    ctx.fillStyle = task.slots === 2 ? '#fb923c' : '#facc15';
-    ctx.fillRect(chipX, 30, chipSize, chipSize);
+    if (image) {
+      ctx.drawImage(image, chipX, 30, chipSize, chipSize);
+    } else {
+      ctx.fillStyle = isLarge ? '#fb923c' : '#facc15';
+      ctx.fillRect(chipX, 30, chipSize, chipSize);
+    }
 
     if (isNext) {
       ctx.strokeStyle = '#38bdf8';

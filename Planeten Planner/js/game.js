@@ -574,7 +574,7 @@ function renderHud() {
   }
 
   renderActiveEffects();
-  renderCargo(ctx, cargo, canvas.width);
+  renderCargo(ctx, cargo, canvas.width, getImage('taskSmall'), getImage('taskLarge'));
 
   ctx.textAlign = 'left';
   ctx.font = 'bold 16px \'Inria Sans\', sans-serif';
