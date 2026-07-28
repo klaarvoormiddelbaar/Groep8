@@ -49,12 +49,13 @@ export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeIm
   const padding = 10;
   const contentWidth = cargo.capacity * pipWidthUnit + (cargo.capacity - 1) * pipGap;
 
-  const headerFont = 'bold 12px \'Inria Sans\', sans-serif';
+  const isFullFont = 'bold 14px \'Inria Sans\', sans-serif';
+  const headerFont = isFull ? isFullFont : 'bold 12px \'Inria Sans\', sans-serif';
   // Vetgedrukt zodra de volgende taak groot is — een extra visuele waarschuwing
   // om vroeg genoeg 2 plekken vrij te houden.
   const isNextLarge = Boolean(next) && next.slots === 2;
   const nextFont = isNextLarge ? 'bold 11px \'Inria Sans\', sans-serif' : '11px \'Inria Sans\', sans-serif';
-  const headerLabel = isFull ? 'LAADRUIMTE VOL' : `LAADRUIMTE ${used}/${cargo.capacity}`;
+  const headerLabel = isFull ? '⚠ LAADRUIMTE VOL' : `LAADRUIMTE ${used}/${cargo.capacity}`;
   const nextLabel = next
     ? next.slots === 2
       ? 'Volgende: groot (2 plekken)'
@@ -67,16 +68,17 @@ export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeIm
   const nextWidth = ctx.measureText(nextLabel).width;
 
   const cardWidth = Math.max(contentWidth, headerWidth, nextWidth) + padding * 2;
-  const cardHeight = 80;
+  const cardHeight = isFull ? 84 : 80;
   const cardX = rightX - cardWidth;
 
-  // Rustige puls (geen hard knipperlicht) die de rand, gloed en tekst laat
-  // 'ademen' zolang de laadruimte vol is — trekt de blik zonder te schrikken.
+  // Duidelijke puls (geen hard knipperlicht, maar wel een stevig contrast) die de
+  // achtergrond, rand, gloed en tekst laat 'ademen' zolang de laadruimte vol is —
+  // de hele kaart verandert van kleur, niet alleen een dun randje.
   const pulse = isFull ? 0.5 + 0.5 * Math.sin(Date.now() / 220) : 0;
-  const pulseRed = `rgb(${Math.round(242 + 13 * pulse)}, ${Math.round(119 + 61 * pulse)}, ${Math.round(122 + 60 * pulse)})`;
+  const pulseRed = `rgb(${Math.round(230 + 25 * pulse)}, ${Math.round(70 + 90 * pulse)}, ${Math.round(75 + 90 * pulse)})`;
 
   if (isFull) {
-    const glowPadding = 3 + pulse * 5;
+    const glowPadding = 6 + pulse * 10;
     drawRoundedRect(
       ctx,
       cardX - glowPadding,
@@ -84,22 +86,22 @@ export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeIm
       cardWidth + glowPadding * 2,
       cardHeight + glowPadding * 2,
       THEME.radius.md + glowPadding,
-      { fill: `rgba(242, 119, 122, ${0.1 + pulse * 0.22})` }
+      { fill: `rgba(242, 80, 85, ${0.18 + pulse * 0.32})` }
     );
   }
 
   drawRoundedRect(ctx, cardX, topY, cardWidth, cardHeight, THEME.radius.md, {
-    fill: THEME.color.surface,
+    fill: isFull ? `rgba(242, 80, 85, ${0.22 + pulse * 0.2})` : THEME.color.surface,
     stroke: isFull ? pulseRed : THEME.color.border,
-    strokeWidth: isFull ? 1.5 + pulse : 1
+    strokeWidth: isFull ? 2 + pulse * 1.5 : 1
   });
 
   ctx.textAlign = 'right';
   ctx.font = headerFont;
-  ctx.fillStyle = isFull ? pulseRed : THEME.color.textMuted;
-  ctx.fillText(headerLabel, rightX - padding, topY + 18);
+  ctx.fillStyle = isFull ? '#fff5f5' : THEME.color.textMuted;
+  ctx.fillText(headerLabel, rightX - padding, topY + (isFull ? 20 : 18));
 
-  const pipY = topY + 24;
+  const pipY = topY + (isFull ? 28 : 24);
   let cursorRightX = rightX - padding;
 
   for (let i = 0; i < cargo.queue.length; i++) {
