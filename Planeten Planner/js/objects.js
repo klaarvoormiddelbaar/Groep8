@@ -1,6 +1,9 @@
 // Vallende schooltaken.
 // Fase 4: kleine taken (1 taakplek) en grote taken (2 taakplekken).
 
+import { THEME } from './theme.js';
+import { drawRoundedRect } from './canvasUtils.js';
+
 // Alleen deze 6 vakken, altijd als afkorting, zodat in één oogopslag te zien is
 // om welk vak het gaat: kleine taak = huiswerk, grote taak = een toets leren.
 const SUBJECT_ABBREVIATIONS = {
@@ -12,8 +15,6 @@ const SUBJECT_ABBREVIATIONS = {
   Aardrijkskunde: 'AK'
 };
 const SUBJECTS = Object.values(SUBJECT_ABBREVIATIONS);
-const SMALL_TASK_LABELS = SUBJECTS.map((abbr) => `${abbr} huiswerk`);
-const LARGE_TASK_LABELS = SUBJECTS.map((abbr) => `leren toets ${abbr}`);
 
 const SMALL_TASK_SIZE = 59; // 10% kleiner
 const LARGE_TASK_SIZE = 86; // 10% kleiner
@@ -35,26 +36,30 @@ export function createTaskSpawner(canvasWidth) {
 
 export function spawnSmallTask(spawner, fallSpeed) {
   const x = Math.random() * (spawner.canvasWidth - SMALL_TASK_SIZE);
+  const subject = randomFrom(SUBJECTS);
   spawner.tasks.push({
     x,
     y: -SMALL_TASK_SIZE,
     width: SMALL_TASK_SIZE,
     height: SMALL_TASK_SIZE,
     slots: 1,
-    label: randomFrom(SMALL_TASK_LABELS),
+    subject,
+    label: `${subject} huiswerk`,
     fallSpeed
   });
 }
 
 export function spawnLargeTask(spawner, fallSpeed) {
   const x = Math.random() * (spawner.canvasWidth - LARGE_TASK_SIZE);
+  const subject = randomFrom(SUBJECTS);
   spawner.tasks.push({
     x,
     y: -LARGE_TASK_SIZE,
     width: LARGE_TASK_SIZE,
     height: LARGE_TASK_SIZE,
     slots: 2,
-    label: randomFrom(LARGE_TASK_LABELS),
+    subject,
+    label: `leren toets ${subject}`,
     fallSpeed
   });
 }
@@ -95,6 +100,7 @@ export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs
 }
 
 // Afgeronde kaart, met een kleine 'oor' bovenaan zodat het als een opgaveblaadje oogt.
+// Alleen nog nodig als de echte afbeelding niet laadt.
 function drawTaskCard(ctx, task, fillColor, borderColor) {
   const { x, y, width, height } = task;
   const radius = 6;
@@ -114,6 +120,30 @@ function drawTaskCard(ctx, task, fillColor, borderColor) {
   ctx.stroke();
 }
 
+// Klein vak-pilletje onderaan de taak — dezelfde badge-taal als de dag-tags in de
+// weekplanning. Dit is de enige plek waar je tijdens het vallen kunt zien om welk
+// vak het gaat, want de afbeelding zelf toont geen tekst.
+function renderSubjectBadge(ctx, task, isLarge) {
+  const badgeHeight = 15;
+  const paddingX = 5;
+
+  ctx.font = 'bold 9px \'Inria Sans\', sans-serif';
+  const textWidth = ctx.measureText(task.subject).width;
+  const badgeWidth = textWidth + paddingX * 2;
+  const badgeX = task.x + task.width / 2 - badgeWidth / 2;
+  const badgeY = task.y + task.height - badgeHeight + 4; // licht overlappend met de onderkant
+
+  drawRoundedRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, badgeHeight / 2, {
+    fill: isLarge ? THEME.color.accentAmber : THEME.color.accentBlue,
+    stroke: 'rgba(7, 10, 20, 0.35)',
+    strokeWidth: 1
+  });
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = isLarge ? THEME.color.bgDeep : '#ffffff';
+  ctx.fillText(task.subject, task.x + task.width / 2, badgeY + badgeHeight / 2 + 3);
+}
+
 export function renderTasks(ctx, spawner, smallImage = null, largeImage = null) {
   for (const task of spawner.tasks) {
     const isLarge = task.slots === 2;
@@ -121,14 +151,10 @@ export function renderTasks(ctx, spawner, smallImage = null, largeImage = null) 
 
     if (image) {
       ctx.drawImage(image, task.x, task.y, task.width, task.height);
-      continue;
+    } else {
+      drawTaskCard(ctx, task, isLarge ? THEME.color.accentAmber : THEME.color.accentBlue, isLarge ? '#b45309' : '#2f5fc9');
     }
 
-    drawTaskCard(ctx, task, isLarge ? '#f59e0b' : '#fde68a', isLarge ? '#b45309' : '#ca8a04');
-
-    ctx.fillStyle = '#1f2937';
-    ctx.font = isLarge ? 'bold 10px \'Inria Sans\', sans-serif' : '10px \'Inria Sans\', sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(task.label, task.x + task.width / 2, task.y + task.height / 2 + 3, task.width - 6);
+    renderSubjectBadge(ctx, task, isLarge);
   }
 }
