@@ -124,10 +124,10 @@ function drawTaskCard(ctx, task, fillColor, borderColor) {
 // weekplanning. Dit is de enige plek waar je tijdens het vallen kunt zien om welk
 // vak het gaat, want de afbeelding zelf toont geen tekst.
 function renderSubjectBadge(ctx, task, isLarge) {
-  const badgeHeight = 15;
-  const paddingX = 5;
+  const badgeHeight = 19;
+  const paddingX = 6;
 
-  ctx.font = 'bold 9px \'Inria Sans\', sans-serif';
+  ctx.font = 'bold 12px \'Inria Sans\', sans-serif';
   const textWidth = ctx.measureText(task.subject).width;
   const badgeWidth = textWidth + paddingX * 2;
   const badgeX = task.x + task.width / 2 - badgeWidth / 2;
@@ -141,7 +141,7 @@ function renderSubjectBadge(ctx, task, isLarge) {
 
   ctx.textAlign = 'center';
   ctx.fillStyle = isLarge ? THEME.color.bgDeep : '#ffffff';
-  ctx.fillText(task.subject, task.x + task.width / 2, badgeY + badgeHeight / 2 + 3);
+  ctx.fillText(task.subject, task.x + task.width / 2, badgeY + badgeHeight / 2 + 4);
 }
 
 export function renderTasks(ctx, spawner, smallImage = null, largeImage = null) {
