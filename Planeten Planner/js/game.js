@@ -74,7 +74,7 @@ const RESTART_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: GAME_OVER_CARD.y + GAME_
 
 const PAUSE_ICON_BUTTON = { x: 108, y: 30, width: 64, height: 24 };
 const MUTE_ICON_BUTTON = { x: 108, y: 58, width: 100, height: 24 };
-const HUD_PANEL = { x: 8, y: 6, width: LOGICAL_WIDTH - 16, height: 92 };
+const HUD_PANEL = { x: 8, y: 6, width: LOGICAL_WIDTH - 16, height: 102 };
 
 // Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
 const STARS = Array.from({ length: 100 }, () => ({
@@ -679,7 +679,7 @@ function renderActiveEffects() {
   const totalWidth = widths.reduce((sum, width) => sum + width, 0) + gap * (badges.length - 1);
 
   let badgeX = LOGICAL_WIDTH / 2 - totalWidth / 2;
-  const badgeY = 70;
+  const badgeY = 80;
 
   badges.forEach((badge, i) => {
     const width = widths[i];
@@ -745,19 +745,37 @@ function renderHud() {
     shadow: THEME.shadow.chip
   });
 
-  ctx.fillStyle = THEME.color.textPrimary;
-  ctx.font = 'bold 15px \'Inria Sans\', sans-serif';
+  // Level-badge: een eigen pilletje i.p.v. kale tekst, zodat het als eerste
+  // leesbare ding in de HUD opvalt.
   ctx.textAlign = 'center';
-  ctx.fillText(`Level ${currentLevel}`, LOGICAL_WIDTH / 2, 24);
+  ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
+  const levelText = `Level ${currentLevel}`;
+  const levelPillWidth = ctx.measureText(levelText).width + 28;
+  const levelPillHeight = 26;
+  const levelPillX = LOGICAL_WIDTH / 2 - levelPillWidth / 2;
+  const levelPillY = 8;
+
+  drawRoundedRect(ctx, levelPillX, levelPillY, levelPillWidth, levelPillHeight, levelPillHeight / 2, {
+    fill: THEME.color.accentBlueSoft,
+    stroke: THEME.color.accentBlue,
+    strokeWidth: 1.5,
+    shadow: THEME.shadow.chip
+  });
+  ctx.fillStyle = THEME.color.accentBlue;
+  ctx.fillText(levelText, LOGICAL_WIDTH / 2, levelPillY + levelPillHeight / 2 + 5);
 
   ctx.fillStyle = THEME.color.textMuted;
   ctx.font = '13px \'Inria Sans\', sans-serif';
-  ctx.fillText(`Score ${score}  ·  Week ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, LOGICAL_WIDTH / 2, 44);
+  ctx.fillText(
+    `Score ${score}  ·  Taak ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`,
+    LOGICAL_WIDTH / 2,
+    levelPillY + levelPillHeight + 20
+  );
 
   if (feedbackTimerMs > 0) {
     ctx.fillStyle = THEME.color.accentBlue;
     ctx.font = '12px \'Inria Sans\', sans-serif';
-    ctx.fillText(feedbackMessage, LOGICAL_WIDTH / 2, 64);
+    ctx.fillText(feedbackMessage, LOGICAL_WIDTH / 2, levelPillY + levelPillHeight + 40);
   }
 
   renderActiveEffects();
