@@ -75,8 +75,8 @@ const RESTART_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: GAME_OVER_CARD.y + GAME_
 // Pauze + geluid staan nu als een net rijtje ONDER de levens (i.p.v. half ernaast,
 // half eronder) zodat de linkerkolom van de HUD een nette rechte blok vormt in
 // plaats van een trapje.
-const PAUSE_ICON_BUTTON = { x: 20, y: 58, width: 64, height: 24 };
-const MUTE_ICON_BUTTON = { x: 92, y: 58, width: 100, height: 24 };
+const PAUSE_ICON_BUTTON = { x: 20, y: 66, width: 64, height: 24 };
+const MUTE_ICON_BUTTON = { x: 92, y: 66, width: 100, height: 24 };
 const HUD_PANEL = { x: 8, y: 6, width: LOGICAL_WIDTH - 16, height: 102 };
 
 // Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
@@ -682,7 +682,7 @@ function renderActiveEffects() {
   const totalWidth = widths.reduce((sum, width) => sum + width, 0) + gap * (badges.length - 1);
 
   let badgeX = LOGICAL_WIDTH / 2 - totalWidth / 2;
-  const badgeY = 80;
+  const badgeY = 86;
 
   badges.forEach((badge, i) => {
     const width = widths[i];
@@ -709,14 +709,14 @@ function renderLives() {
   ctx.textAlign = 'left';
   ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
   ctx.fillStyle = THEME.color.textMuted;
-  ctx.fillText('LEVENS', 20, 24);
+  ctx.fillText('LEVENS', 20, 32);
 
   const lifeFullImage = getImage('lifeFull');
   const lifeEmptyImage = getImage('lifeEmpty');
   const iconSize = 20;
   const gap = 3;
   let iconX = 20;
-  const iconY = 32;
+  const iconY = 40;
 
   for (let i = 0; i < GAME_CONFIG.maximumLives; i++) {
     const isFilled = i < lives;
@@ -756,7 +756,7 @@ function renderHud() {
   const levelPillWidth = ctx.measureText(levelText).width + 28;
   const levelPillHeight = 26;
   const levelPillX = LOGICAL_WIDTH / 2 - levelPillWidth / 2;
-  const levelPillY = 8;
+  const levelPillY = 16;
 
   drawRoundedRect(ctx, levelPillX, levelPillY, levelPillWidth, levelPillHeight, levelPillHeight / 2, {
     fill: THEME.color.accentBlueSoft,
@@ -782,7 +782,7 @@ function renderHud() {
   }
 
   renderActiveEffects();
-  renderCargo(ctx, cargo, LOGICAL_WIDTH - 16, 10, getImage('taskSmall'), getImage('taskLarge'), getImage('iconWarning'));
+  renderCargo(ctx, cargo, LOGICAL_WIDTH - 16, 18, getImage('taskSmall'), getImage('taskLarge'), getImage('iconWarning'));
 
   renderLives();
 
