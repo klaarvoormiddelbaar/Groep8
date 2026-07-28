@@ -150,7 +150,7 @@ export function renderWeekSummary(
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
   const cardWidth = Math.min(canvasWidth - 60, 720);
-  const cardHeight = 380;
+  const cardHeight = 400;
   const cardX = (canvasWidth - cardWidth) / 2;
   const cardY = (canvasHeight - cardHeight) / 2;
 
@@ -191,8 +191,8 @@ export function renderWeekSummary(
   });
 
   const columnWidth = cardWidth / planning.days.length;
-  const planetSize = 24;
-  const dayBlockTop = statsY + statHeight + 36;
+  const planetSize = 32;
+  const dayBlockTop = statsY + statHeight + 34;
 
   planning.days.forEach((day, dayIndex) => {
     const colX = cardX + dayIndex * columnWidth + columnWidth / 2;
@@ -200,24 +200,43 @@ export function renderWeekSummary(
 
     if (planetImage) {
       ctx.drawImage(planetImage, colX - planetSize / 2, dayBlockTop, planetSize, planetSize);
+    } else {
+      ctx.beginPath();
+      ctx.fillStyle = THEME.color.accentBlueSoft;
+      ctx.arc(colX, dayBlockTop + planetSize / 2, planetSize / 2, 0, Math.PI * 2);
+      ctx.fill();
     }
 
-    const nameY = dayBlockTop + planetSize + 16;
+    const nameY = dayBlockTop + planetSize + 18;
     ctx.fillStyle = THEME.color.accentBlue;
     ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
     ctx.fillText(day.name, colX, nameY);
 
-    ctx.font = '12px \'Inria Sans\', sans-serif';
-    let lineY = nameY + 22;
+    // Taken als gekleurde chips (dezelfde blauw/amber taal als de weekplanning en de
+    // vallende taken) i.p.v. kale tekstregels — meteen te zien welke groot/klein zijn.
+    const chipWidth = columnWidth - 20;
+    const chipHeight = 20;
+    const chipGap = 5;
+    let chipY = nameY + 12;
+
     if (day.tasks.length === 0) {
+      ctx.font = '12px \'Inria Sans\', sans-serif';
       ctx.fillStyle = THEME.color.textMuted;
-      ctx.fillText('—', colX, lineY);
+      ctx.fillText('Geen taken', colX, chipY + 12);
     } else {
       for (const task of day.tasks) {
-        const label = task.slots === 2 ? `${task.label} (2 plekken)` : task.label;
+        const isLarge = task.slots === 2;
+        drawRoundedRect(ctx, colX - chipWidth / 2, chipY, chipWidth, chipHeight, THEME.radius.sm, {
+          fill: isLarge ? THEME.color.taskLargeFill : THEME.color.taskSmallFill,
+          stroke: isLarge ? THEME.color.taskLargeBorder : THEME.color.taskSmallBorder,
+          strokeWidth: isLarge ? 1.5 : 1
+        });
+
+        ctx.font = '10px \'Inria Sans\', sans-serif';
         ctx.fillStyle = THEME.color.textPrimary;
-        ctx.fillText(label, colX, lineY, columnWidth - 10);
-        lineY += 22;
+        ctx.fillText(task.label, colX, chipY + chipHeight / 2 + 3.5, chipWidth - 8);
+
+        chipY += chipHeight + chipGap;
       }
     }
   });
