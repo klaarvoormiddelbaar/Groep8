@@ -35,20 +35,37 @@ import { drawRoundedRect } from './canvasUtils.js';
 // zodat de dagpanelen ruimte hebben voor het planeetje + naam in de moderne stijl.
 const WEEKPLANNING_PANEL_HEIGHT = 145;
 
+// Alle spellogica en tekencode werkt in deze vaste 'logische' resolutie. Het echte
+// canvas-oppervlak (canvas.width/height) wordt hieronder groter gezet op basis van
+// devicePixelRatio, zodat het scherp blijft op Retina/HiDPI schermen — zonder de
+// devicePixelRatio-factor zou de browser het canvas wazig uitrekken naar zijn
+// weergavegrootte, wat vooral bij kleine, gedetailleerde afbeeldingen (planeten,
+// levens) opviel als een "onscherpe" look.
+const LOGICAL_WIDTH = GAME_CONFIG.canvasWidth;
+const LOGICAL_HEIGHT = GAME_CONFIG.canvasHeight;
+
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
 
-canvas.width = GAME_CONFIG.canvasWidth;
-canvas.height = GAME_CONFIG.canvasHeight;
+// Alleen de canvas-attributen (het intrinsieke, tekenbare oppervlak) worden vergroot.
+// De CSS (width/height: auto + max-width/max-height) bepaalt zelf de weergavegrootte
+// op basis van die intrinsieke afmetingen, en behoudt daarbij automatisch de
+// beeldverhouding — precies zoals bij een <img>. Zelf een CSS-breedte/hoogte zetten
+// zou die aspect-ratio-berekening juist doorbreken.
+const devicePixelRatioValue = Math.max(1, window.devicePixelRatio || 1);
+canvas.width = LOGICAL_WIDTH * devicePixelRatioValue;
+canvas.height = LOGICAL_HEIGHT * devicePixelRatioValue;
+ctx.scale(devicePixelRatioValue, devicePixelRatioValue);
+ctx.imageSmoothingQuality = 'high';
 
-const playAreaHeight = canvas.height - WEEKPLANNING_PANEL_HEIGHT;
+const playAreaHeight = LOGICAL_HEIGHT - WEEKPLANNING_PANEL_HEIGHT;
 
-const START_BUTTON = { x: canvas.width / 2 - 100, y: 320, width: 200, height: 56 };
-const RESUME_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 - 28, width: 200, height: 56 };
-const RESTART_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 + 50, width: 200, height: 56 };
+const START_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: 320, width: 200, height: 56 };
+const RESUME_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: LOGICAL_HEIGHT / 2 - 28, width: 200, height: 56 };
+const RESTART_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: LOGICAL_HEIGHT / 2 + 50, width: 200, height: 56 };
 const PAUSE_ICON_BUTTON = { x: 108, y: 30, width: 64, height: 24 };
 const MUTE_ICON_BUTTON = { x: 108, y: 58, width: 88, height: 24 };
-const HUD_PANEL = { x: 8, y: 6, width: canvas.width - 16, height: 92 };
+const HUD_PANEL = { x: 8, y: 6, width: LOGICAL_WIDTH - 16, height: 92 };
 
 // Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
 const STARS = Array.from({ length: 100 }, () => ({
@@ -85,12 +102,12 @@ function renderStarfield() {
   ctx.globalAlpha = 1;
 }
 
-const player = createPlayer(canvas.width, playAreaHeight);
+const player = createPlayer(LOGICAL_WIDTH, playAreaHeight);
 initPlayerInput();
 
-const taskSpawner = createTaskSpawner(canvas.width);
-const meteorSpawner = createMeteorSpawner(canvas.width);
-const powerupSpawner = createPowerupSpawner(canvas.width);
+const taskSpawner = createTaskSpawner(LOGICAL_WIDTH);
+const meteorSpawner = createMeteorSpawner(LOGICAL_WIDTH);
+const powerupSpawner = createPowerupSpawner(LOGICAL_WIDTH);
 const activeEffects = createActiveEffects();
 
 // 'loading' | 'start' | 'playing' | 'paused' | 'gameOver'
@@ -136,7 +153,7 @@ function resetGame() {
   powerupSpawner.items = [];
   Object.assign(activeEffects, createActiveEffects());
 
-  player.x = canvas.width / 2 - player.width / 2;
+  player.x = LOGICAL_WIDTH / 2 - player.width / 2;
 
   isShowingLevelSummary = false;
   summaryTimerMs = 0;
@@ -232,7 +249,7 @@ function attemptPlanNextTask(dayIndex) {
   addScore(planPoints);
   (nextTask.slots === 2 ? sounds.planLarge : sounds.planSmall)();
 
-  const dayColumnWidth = canvas.width / GAME_CONFIG.numberOfDays;
+  const dayColumnWidth = LOGICAL_WIDTH / GAME_CONFIG.numberOfDays;
   addScorePopup(dayColumnWidth * dayIndex + dayColumnWidth / 2, playAreaHeight - 6, `+${planPoints}`, '#38bdf8');
 
   if (totalFilledSlots(weekPlanning) >= GAME_CONFIG.totalWeekSlots) {
@@ -278,8 +295,8 @@ function hitTest(px, py, rect) {
 
 canvas.addEventListener('click', (event) => {
   const rect = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / rect.width;
-  const scaleY = canvas.height / rect.height;
+  const scaleX = LOGICAL_WIDTH / rect.width;
+  const scaleY = LOGICAL_HEIGHT / rect.height;
   const px = (event.clientX - rect.left) * scaleX;
   const py = (event.clientY - rect.top) * scaleY;
 
@@ -376,7 +393,7 @@ function update(deltaSeconds) {
     return; // gameplay staat volledig stil tijdens het weekoverzicht
   }
 
-  updatePlayer(player, deltaSeconds, canvas.width);
+  updatePlayer(player, deltaSeconds, LOGICAL_WIDTH);
 
   tickActiveEffects(activeEffects, deltaSeconds);
   const speedMultiplier = activeEffects.slowMotionMs > 0 ? GAME_CONFIG.slowMotionMultiplier : 1;
@@ -528,19 +545,19 @@ function drawGhostButton(rect, label, { active = false } = {}) {
 
 function renderLoadingScreen() {
   ctx.fillStyle = THEME.color.bgDeep;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 
   ctx.textAlign = 'center';
   ctx.fillStyle = THEME.color.textMuted;
   ctx.font = '16px \'Inria Sans\', sans-serif';
-  ctx.fillText('Laden...', canvas.width / 2, canvas.height / 2);
+  ctx.fillText('Laden...', LOGICAL_WIDTH / 2, LOGICAL_HEIGHT / 2);
 }
 
-const START_CARD = { width: 380, height: 300, x: canvas.width / 2 - 190, y: 100 };
+const START_CARD = { width: 380, height: 300, x: LOGICAL_WIDTH / 2 - 190, y: 100 };
 
 function renderStartScreen() {
   ctx.fillStyle = THEME.color.bgDeep;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 
   drawRoundedRect(ctx, START_CARD.x, START_CARD.y, START_CARD.width, START_CARD.height, THEME.radius.lg, {
     fill: THEME.color.surface,
@@ -551,21 +568,21 @@ function renderStartScreen() {
   ctx.textAlign = 'center';
   ctx.fillStyle = THEME.color.accentAmber;
   ctx.font = 'bold 26px \'Inria Sans\', sans-serif';
-  ctx.fillText('Planeten Planner', canvas.width / 2, START_CARD.y + 56);
+  ctx.fillText('Planeten Planner', LOGICAL_WIDTH / 2, START_CARD.y + 56);
 
   ctx.fillStyle = THEME.color.textMuted;
   ctx.font = '14px \'Inria Sans\', sans-serif';
   const lines = ['Beweeg met ← en →', 'Vang taken', 'Ontwijk meteorieten', 'Plan met 1 t/m 5'];
-  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, START_CARD.y + 100 + i * 22));
+  lines.forEach((line, i) => ctx.fillText(line, LOGICAL_WIDTH / 2, START_CARD.y + 100 + i * 22));
 
   drawButton(START_BUTTON, 'Start');
 }
 
-const PAUSE_CARD = { width: 320, height: 170, x: canvas.width / 2 - 160, y: canvas.height / 2 - 95 };
+const PAUSE_CARD = { width: 320, height: 170, x: LOGICAL_WIDTH / 2 - 160, y: LOGICAL_HEIGHT / 2 - 95 };
 
 function renderPauseOverlay() {
   ctx.fillStyle = 'rgba(7, 10, 20, 0.55)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 
   drawRoundedRect(ctx, PAUSE_CARD.x, PAUSE_CARD.y, PAUSE_CARD.width, PAUSE_CARD.height, THEME.radius.lg, {
     fill: THEME.color.surfaceStrong,
@@ -576,7 +593,7 @@ function renderPauseOverlay() {
   ctx.textAlign = 'center';
   ctx.fillStyle = THEME.color.textPrimary;
   ctx.font = 'bold 20px \'Inria Sans\', sans-serif';
-  ctx.fillText('Gepauzeerd', canvas.width / 2, PAUSE_CARD.y + 50);
+  ctx.fillText('Gepauzeerd', LOGICAL_WIDTH / 2, PAUSE_CARD.y + 50);
 
   drawButton(RESUME_BUTTON, 'Verder');
 }
@@ -594,7 +611,7 @@ function renderActiveEffects() {
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px \'Inria Sans\', sans-serif';
   ctx.fillStyle = THEME.color.accentAmber;
-  ctx.fillText(badges.join('   '), canvas.width / 2, 84);
+  ctx.fillText(badges.join('   '), LOGICAL_WIDTH / 2, 84);
 }
 
 function renderLives() {
@@ -636,20 +653,20 @@ function renderHud() {
   ctx.fillStyle = THEME.color.textPrimary;
   ctx.font = 'bold 15px \'Inria Sans\', sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Level ${currentLevel}`, canvas.width / 2, 24);
+  ctx.fillText(`Level ${currentLevel}`, LOGICAL_WIDTH / 2, 24);
 
   ctx.fillStyle = THEME.color.textMuted;
   ctx.font = '13px \'Inria Sans\', sans-serif';
-  ctx.fillText(`Score ${score}  ·  Week ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 44);
+  ctx.fillText(`Score ${score}  ·  Week ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, LOGICAL_WIDTH / 2, 44);
 
   if (feedbackTimerMs > 0) {
     ctx.fillStyle = THEME.color.accentBlue;
     ctx.font = '12px \'Inria Sans\', sans-serif';
-    ctx.fillText(feedbackMessage, canvas.width / 2, 64);
+    ctx.fillText(feedbackMessage, LOGICAL_WIDTH / 2, 64);
   }
 
   renderActiveEffects();
-  renderCargo(ctx, cargo, canvas.width - 8, getImage('taskSmall'), getImage('taskLarge'));
+  renderCargo(ctx, cargo, LOGICAL_WIDTH - 8, getImage('taskSmall'), getImage('taskLarge'));
 
   renderLives();
 
@@ -671,11 +688,11 @@ function renderScorePopups() {
   ctx.globalAlpha = 1;
 }
 
-const GAME_OVER_CARD = { width: 380, height: 300, x: canvas.width / 2 - 190, y: canvas.height / 2 - 160 };
+const GAME_OVER_CARD = { width: 380, height: 300, x: LOGICAL_WIDTH / 2 - 190, y: LOGICAL_HEIGHT / 2 - 160 };
 
 function renderGameOverScreen() {
   ctx.fillStyle = 'rgba(7, 10, 20, 0.6)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 
   drawRoundedRect(ctx, GAME_OVER_CARD.x, GAME_OVER_CARD.y, GAME_OVER_CARD.width, GAME_OVER_CARD.height, THEME.radius.lg, {
     fill: THEME.color.surfaceStrong,
@@ -686,7 +703,7 @@ function renderGameOverScreen() {
   ctx.textAlign = 'center';
   ctx.fillStyle = THEME.color.accentRed;
   ctx.font = 'bold 26px \'Inria Sans\', sans-serif';
-  ctx.fillText('Game over', canvas.width / 2, GAME_OVER_CARD.y + 55);
+  ctx.fillText('Game over', LOGICAL_WIDTH / 2, GAME_OVER_CARD.y + 55);
 
   ctx.fillStyle = THEME.color.textPrimary;
   ctx.font = '15px \'Inria Sans\', sans-serif';
@@ -696,7 +713,7 @@ function renderGameOverScreen() {
     `Ingeplande taken: ${plannedCount}`,
     `Voltooide weken: ${completedWeeksCount}`
   ];
-  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, GAME_OVER_CARD.y + 100 + i * 24));
+  lines.forEach((line, i) => ctx.fillText(line, LOGICAL_WIDTH / 2, GAME_OVER_CARD.y + 100 + i * 24));
 
   drawButton(RESTART_BUTTON, 'Opnieuw spelen');
 }
@@ -713,17 +730,17 @@ function render() {
   }
 
   ctx.fillStyle = '#050a1a';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
 
   const backgroundImage = getImage('background');
   if (backgroundImage) {
-    drawImageCover(backgroundImage, 0, 0, canvas.width, playAreaHeight);
+    drawImageCover(backgroundImage, 0, 0, LOGICAL_WIDTH, playAreaHeight);
   } else {
     const spaceGradient = ctx.createLinearGradient(0, 0, 0, playAreaHeight);
     spaceGradient.addColorStop(0, '#0c1a3d');
     spaceGradient.addColorStop(1, '#050a1a');
     ctx.fillStyle = spaceGradient;
-    ctx.fillRect(0, 0, canvas.width, playAreaHeight);
+    ctx.fillRect(0, 0, LOGICAL_WIDTH, playAreaHeight);
     renderStarfield();
   }
 
@@ -752,7 +769,7 @@ function render() {
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(0, playAreaHeight);
-  ctx.lineTo(canvas.width, playAreaHeight);
+  ctx.lineTo(LOGICAL_WIDTH, playAreaHeight);
   ctx.stroke();
 
   const shakeOffsetX = shakeTimerMs > 0 ? Math.sin(shakeTimerMs / 20) * 5 : 0;
@@ -768,19 +785,19 @@ function render() {
     weekPlanning,
     0,
     playAreaHeight,
-    canvas.width,
+    LOGICAL_WIDTH,
     WEEKPLANNING_PANEL_HEIGHT,
     { dayIndex: shakeDayIndex, offsetX: shakeOffsetX },
     planetImages
   );
 
   if (isShowingLevelSummary && completedWeekSnapshot) {
-    renderWeekSummary(ctx, completedWeekSnapshot, completedLevelNumber, canvas.width, canvas.height);
+    renderWeekSummary(ctx, completedWeekSnapshot, completedLevelNumber, LOGICAL_WIDTH, LOGICAL_HEIGHT);
   }
 
   if (damageFlashMs > 0) {
     ctx.fillStyle = `rgba(242, 119, 122, ${(damageFlashMs / 150) * 0.22})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
   }
 
   if (gameMode === 'paused') {
