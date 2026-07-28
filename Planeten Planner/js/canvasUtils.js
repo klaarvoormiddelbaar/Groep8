@@ -1,4 +1,6 @@
-// Kleine gedeelde canvas-hulpfuncties voor de moderne UI (afgeronde panelen).
+// Kleine gedeelde canvas-hulpfuncties voor de moderne UI (afgeronde panelen,
+// knoppen, schaduwen). Eén plek voor deze bouwstenen zodat elk scherm er
+// automatisch hetzelfde uitziet in plaats van per scherm opnieuw uitgevonden.
 
 import { THEME } from './theme.js';
 
@@ -20,11 +22,26 @@ export function pathRoundedRect(ctx, x, y, width, height, radius) {
   ctx.closePath();
 }
 
-export function drawRoundedRect(ctx, x, y, width, height, radius, { fill, stroke, strokeWidth = 1.5 } = {}) {
+// shadow: optioneel { color, blur, offsetY } (zie THEME.shadow) — laat de vorm
+// echt van de achtergrond af 'zweven' i.p.v. er plat bovenop te liggen. De
+// schaduw wordt alleen op de fill toegepast (niet op de stroke), anders wordt
+// de rand zelf wazig.
+export function drawRoundedRect(ctx, x, y, width, height, radius, { fill, stroke, strokeWidth = 1.5, shadow } = {}) {
   pathRoundedRect(ctx, x, y, width, height, radius);
   if (fill) {
-    ctx.fillStyle = fill;
-    ctx.fill();
+    if (shadow) {
+      ctx.save();
+      ctx.shadowColor = shadow.color;
+      ctx.shadowBlur = shadow.blur;
+      ctx.shadowOffsetY = shadow.offsetY ?? 0;
+      ctx.shadowOffsetX = shadow.offsetX ?? 0;
+      ctx.fillStyle = fill;
+      ctx.fill();
+      ctx.restore();
+    } else {
+      ctx.fillStyle = fill;
+      ctx.fill();
+    }
   }
   if (stroke) {
     ctx.strokeStyle = stroke;
@@ -34,13 +51,20 @@ export function drawRoundedRect(ctx, x, y, width, height, radius, { fill, stroke
 }
 
 // Gedeelde pil-knop: dezelfde stijl overal waar een klikbare actie nodig is
-// (start/verder/opnieuw spelen/volgende week), zodat dat niet per scherm opnieuw
-// wordt uitgevonden.
-export function drawPillButton(ctx, rect, label, { fill = THEME.color.accentGreen, textColor = THEME.color.bgDeep, font = 'bold 16px \'Inria Sans\', sans-serif' } = {}) {
+// (start/verder/opnieuw spelen/volgende week). Standaard het KvM-merkgroen met
+// witte tekst en een zachte groene gloed eronder — precies de 'Primary Submit'
+// knop uit de StyleGuide (§7.7), vertaald naar canvas.
+export function drawPillButton(
+  ctx,
+  rect,
+  label,
+  { fill = THEME.color.accentGreen, textColor = '#ffffff', font = 'bold 16px \'Inria Sans\', sans-serif', shadow = THEME.shadow.glowGreen } = {}
+) {
   drawRoundedRect(ctx, rect.x, rect.y, rect.width, rect.height, rect.height / 2, {
     fill,
-    stroke: 'rgba(255, 255, 255, 0.28)',
-    strokeWidth: 1
+    stroke: 'rgba(255, 255, 255, 0.3)',
+    strokeWidth: 1,
+    shadow
   });
 
   ctx.fillStyle = textColor;
@@ -55,7 +79,8 @@ export function drawStatCard(ctx, x, y, width, height, label, value, { accent = 
   drawRoundedRect(ctx, x, y, width, height, THEME.radius.sm, {
     fill: THEME.color.surfaceStrong,
     stroke: THEME.color.border,
-    strokeWidth: 1
+    strokeWidth: 1,
+    shadow: THEME.shadow.chip
   });
 
   ctx.textAlign = 'center';

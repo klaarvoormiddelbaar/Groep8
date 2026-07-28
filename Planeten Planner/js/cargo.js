@@ -38,7 +38,7 @@ export function removeNextTask(cargo) {
 // zegt of de volgende in te plannen taak klein of groot is. Bij een volle
 // laadruimte kleurt de hele kaart rood in plaats van alleen een los cijfertje.
 // smallImage/largeImage: dezelfde taakplaatjes als de vallende taken (objects.js).
-export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeImage = null) {
+export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeImage = null, warningIcon = null) {
   const used = usedSlots(cargo);
   const isFull = used >= cargo.capacity;
   const next = peekNextTask(cargo);
@@ -55,7 +55,8 @@ export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeIm
   // om vroeg genoeg 2 plekken vrij te houden.
   const isNextLarge = Boolean(next) && next.slots === 2;
   const nextFont = isNextLarge ? 'bold 11px \'Inria Sans\', sans-serif' : '11px \'Inria Sans\', sans-serif';
-  const headerLabel = isFull ? '⚠ LAADRUIMTE VOL' : `LAADRUIMTE ${used}/${cargo.capacity}`;
+  const headerText = isFull ? 'LAADRUIMTE VOL' : `LAADRUIMTE ${used}/${cargo.capacity}`;
+  const headerIconSize = 14;
   const nextLabel = next
     ? next.slots === 2
       ? 'Volgende: groot (2 plekken)'
@@ -63,7 +64,8 @@ export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeIm
     : 'Nog leeg';
 
   ctx.font = headerFont;
-  const headerWidth = ctx.measureText(headerLabel).width;
+  const headerTextWidth = ctx.measureText(headerText).width;
+  const headerWidth = isFull && warningIcon ? headerTextWidth + headerIconSize + 6 : headerTextWidth;
   ctx.font = nextFont;
   const nextWidth = ctx.measureText(nextLabel).width;
 
@@ -93,13 +95,20 @@ export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeIm
   drawRoundedRect(ctx, cardX, topY, cardWidth, cardHeight, THEME.radius.md, {
     fill: isFull ? `rgba(242, 80, 85, ${0.22 + pulse * 0.2})` : THEME.color.surface,
     stroke: isFull ? pulseRed : THEME.color.border,
-    strokeWidth: isFull ? 2 + pulse * 1.5 : 1
+    strokeWidth: isFull ? 2 + pulse * 1.5 : 1,
+    shadow: isFull ? undefined : THEME.shadow.chip
   });
 
+  const headerBaselineY = topY + (isFull ? 20 : 18);
   ctx.textAlign = 'right';
   ctx.font = headerFont;
   ctx.fillStyle = isFull ? '#fff5f5' : THEME.color.textMuted;
-  ctx.fillText(headerLabel, rightX - padding, topY + (isFull ? 20 : 18));
+  ctx.fillText(headerText, rightX - padding, headerBaselineY);
+
+  if (isFull && warningIcon) {
+    const iconX = rightX - padding - headerTextWidth - headerIconSize - 6;
+    ctx.drawImage(warningIcon, iconX, headerBaselineY - headerIconSize + 3, headerIconSize, headerIconSize);
+  }
 
   const pipY = topY + (isFull ? 28 : 24);
   let cursorRightX = rightX - padding;

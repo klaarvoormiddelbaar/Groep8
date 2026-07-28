@@ -73,7 +73,7 @@ const GAME_OVER_CARD = { width: 420, height: 380, x: LOGICAL_WIDTH / 2 - 210, y:
 const RESTART_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: GAME_OVER_CARD.y + GAME_OVER_CARD.height - 80, width: 200, height: 56 };
 
 const PAUSE_ICON_BUTTON = { x: 108, y: 30, width: 64, height: 24 };
-const MUTE_ICON_BUTTON = { x: 108, y: 58, width: 88, height: 24 };
+const MUTE_ICON_BUTTON = { x: 108, y: 58, width: 100, height: 24 };
 const HUD_PANEL = { x: 8, y: 6, width: LOGICAL_WIDTH - 16, height: 92 };
 
 // Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
@@ -534,17 +534,31 @@ function drawButton(rect, label) {
 }
 
 // Klein glazen "chip"-knopje voor pauze/geluid, zelfde afgeronde taal als de rest.
-function drawGhostButton(rect, label, { active = false } = {}) {
+// icon: optionele asset-sleutel (iOS-emoji-pack) i.p.v. Unicode-emoji in het label.
+function drawGhostButton(rect, label, { active = false, icon = null } = {}) {
   drawRoundedRect(ctx, rect.x, rect.y, rect.width, rect.height, rect.height / 2, {
     fill: active ? THEME.color.accentBlueSoft : THEME.color.surface,
     stroke: active ? THEME.color.accentBlue : THEME.color.border,
-    strokeWidth: 1.5
+    strokeWidth: 1.5,
+    shadow: THEME.shadow.chip
   });
 
   ctx.fillStyle = active ? THEME.color.accentBlue : THEME.color.textMuted;
   ctx.font = '11px \'Inria Sans\', sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 4);
+
+  const iconImage = icon ? getImage(icon) : null;
+  if (iconImage) {
+    const iconSize = 13;
+    const textWidth = ctx.measureText(label).width;
+    const groupWidth = iconSize + 5 + textWidth;
+    const startX = rect.x + rect.width / 2 - groupWidth / 2;
+    ctx.drawImage(iconImage, startX, rect.y + rect.height / 2 - iconSize / 2, iconSize, iconSize);
+    ctx.textAlign = 'left';
+    ctx.fillText(label, startX + iconSize + 5, rect.y + rect.height / 2 + 4);
+  } else {
+    ctx.textAlign = 'center';
+    ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 4);
+  }
 }
 
 function renderLoadingScreen() {
@@ -564,7 +578,8 @@ function renderStartScreen() {
   drawRoundedRect(ctx, START_CARD.x, START_CARD.y, START_CARD.width, START_CARD.height, THEME.radius.lg, {
     fill: THEME.color.surface,
     stroke: THEME.color.border,
-    strokeWidth: 1.5
+    strokeWidth: 1.5,
+    shadow: THEME.shadow.card
   });
 
   const centerX = LOGICAL_WIDTH / 2;
@@ -592,25 +607,24 @@ function renderStartScreen() {
   // van een emoji, zodat de speler de spullen herkent vóórdat hij ze in het spel
   // tegenkomt.
   const instructions = [
-    { emoji: '⬅➡', text: 'Beweeg de raket' },
-    { image: 'taskSmall', text: 'Vang taken die naar beneden vallen' },
-    { image: 'meteor', text: 'Ontwijk meteorieten' },
-    { image: 'planetMonday', text: 'Plan de volgende taak op een dag' }
+    { images: ['iconArrowLeft', 'iconArrowRight'], text: 'Beweeg de raket' },
+    { images: ['taskSmall'], text: 'Vang taken die naar beneden vallen' },
+    { images: ['meteor'], text: 'Ontwijk meteorieten' },
+    { images: ['planetMonday'], text: 'Plan de volgende taak op een dag' }
   ];
   const instructionsWidth = 300;
   const instructionsX = centerX - instructionsWidth / 2;
-  const iconSize = 22;
+  const iconSize = 20;
   let instructionY = rocketTop + rocketHeight + 84;
 
   for (const item of instructions) {
-    const iconImage = item.image ? getImage(item.image) : null;
-    if (iconImage) {
-      ctx.drawImage(iconImage, instructionsX, instructionY - iconSize + 5, iconSize, iconSize);
-    } else {
-      ctx.textAlign = 'left';
-      ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
-      ctx.fillStyle = THEME.color.accentBlue;
-      ctx.fillText(item.emoji, instructionsX, instructionY);
+    let iconX = instructionsX;
+    for (const key of item.images) {
+      const iconImage = getImage(key);
+      if (iconImage) {
+        ctx.drawImage(iconImage, iconX, instructionY - iconSize + 5, iconSize, iconSize);
+      }
+      iconX += iconSize - 4; // lichte overlap tussen ⬅ en ➡ zodat het als één pictogram leest
     }
 
     ctx.textAlign = 'left';
@@ -631,7 +645,8 @@ function renderPauseOverlay() {
   drawRoundedRect(ctx, PAUSE_CARD.x, PAUSE_CARD.y, PAUSE_CARD.width, PAUSE_CARD.height, THEME.radius.lg, {
     fill: THEME.color.surfaceStrong,
     stroke: THEME.color.border,
-    strokeWidth: 1.5
+    strokeWidth: 1.5,
+    shadow: THEME.shadow.card
   });
 
   ctx.textAlign = 'center';
@@ -642,20 +657,49 @@ function renderPauseOverlay() {
   drawButton(RESUME_BUTTON, 'Verder');
 }
 
+// Kleine pil-badges met een echt icoon (i.p.v. Unicode-emoji) + tekst, gecentreerd
+// op een rijtje — dezelfde pil-taal als de rest van de HUD.
 function renderActiveEffects() {
   const badges = [];
-  if (activeEffects.hasShield) badges.push('🛡 Schild');
-  if (activeEffects.extraCargo) badges.push('📦 +Lading');
-  if (activeEffects.magnetMs > 0) badges.push(`🧲 ${Math.ceil(activeEffects.magnetMs / 1000)}s`);
-  if (activeEffects.slowMotionMs > 0) badges.push(`🐢 ${Math.ceil(activeEffects.slowMotionMs / 1000)}s`);
-  if (activeEffects.doubleScore) badges.push('x2 score');
+  if (activeEffects.hasShield) badges.push({ icon: 'iconShield', text: 'Schild' });
+  if (activeEffects.extraCargo) badges.push({ icon: 'iconPackage', text: '+Lading' });
+  if (activeEffects.magnetMs > 0) badges.push({ icon: 'iconMagnet', text: `${Math.ceil(activeEffects.magnetMs / 1000)}s` });
+  if (activeEffects.slowMotionMs > 0) badges.push({ icon: 'iconSnail', text: `${Math.ceil(activeEffects.slowMotionMs / 1000)}s` });
+  if (activeEffects.doubleScore) badges.push({ icon: 'iconSparkles', text: 'x2 score' });
 
   if (badges.length === 0) return;
 
-  ctx.textAlign = 'center';
-  ctx.font = 'bold 12px \'Inria Sans\', sans-serif';
-  ctx.fillStyle = THEME.color.accentAmber;
-  ctx.fillText(badges.join('   '), LOGICAL_WIDTH / 2, 84);
+  const badgeHeight = 22;
+  const iconSize = 13;
+  const paddingX = 8;
+  const gap = 8;
+
+  ctx.font = 'bold 11px \'Inria Sans\', sans-serif';
+  const widths = badges.map((badge) => paddingX * 2 + iconSize + 5 + ctx.measureText(badge.text).width);
+  const totalWidth = widths.reduce((sum, width) => sum + width, 0) + gap * (badges.length - 1);
+
+  let badgeX = LOGICAL_WIDTH / 2 - totalWidth / 2;
+  const badgeY = 70;
+
+  badges.forEach((badge, i) => {
+    const width = widths[i];
+    drawRoundedRect(ctx, badgeX, badgeY, width, badgeHeight, badgeHeight / 2, {
+      fill: THEME.color.accentAmberSoft,
+      stroke: THEME.color.accentAmber,
+      strokeWidth: 1
+    });
+
+    const icon = getImage(badge.icon);
+    if (icon) {
+      ctx.drawImage(icon, badgeX + paddingX, badgeY + (badgeHeight - iconSize) / 2, iconSize, iconSize);
+    }
+
+    ctx.textAlign = 'left';
+    ctx.fillStyle = THEME.color.accentAmber;
+    ctx.fillText(badge.text, badgeX + paddingX + iconSize + 5, badgeY + badgeHeight / 2 + 4);
+
+    badgeX += width + gap;
+  });
 }
 
 function renderLives() {
@@ -678,9 +722,15 @@ function renderLives() {
     if (image) {
       ctx.drawImage(image, iconX, iconY, iconSize, iconSize);
     } else {
-      ctx.fillStyle = THEME.color.accentRed;
-      ctx.font = 'bold 16px \'Inria Sans\', sans-serif';
-      ctx.fillText(isFilled ? '❤' : '♡', iconX, iconY + 16);
+      // Val terug op een simpel getekend rondje i.p.v. een emoji-teken als de
+      // levens-afbeelding onverhoopt niet laadt.
+      ctx.beginPath();
+      ctx.arc(iconX + iconSize / 2, iconY + iconSize / 2, iconSize / 2 - 2, 0, Math.PI * 2);
+      ctx.fillStyle = isFilled ? THEME.color.accentRed : 'transparent';
+      ctx.fill();
+      ctx.strokeStyle = THEME.color.accentRed;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
     }
 
     iconX += iconSize + gap;
@@ -691,7 +741,8 @@ function renderHud() {
   drawRoundedRect(ctx, HUD_PANEL.x, HUD_PANEL.y, HUD_PANEL.width, HUD_PANEL.height, THEME.radius.md, {
     fill: THEME.color.surface,
     stroke: THEME.color.border,
-    strokeWidth: 1.5
+    strokeWidth: 1.5,
+    shadow: THEME.shadow.chip
   });
 
   ctx.fillStyle = THEME.color.textPrimary;
@@ -710,15 +761,18 @@ function renderHud() {
   }
 
   renderActiveEffects();
-  renderCargo(ctx, cargo, LOGICAL_WIDTH - 16, 10, getImage('taskSmall'), getImage('taskLarge'));
+  renderCargo(ctx, cargo, LOGICAL_WIDTH - 16, 10, getImage('taskSmall'), getImage('taskLarge'), getImage('iconWarning'));
 
   renderLives();
 
   if (gameMode === 'playing') {
-    drawGhostButton(PAUSE_ICON_BUTTON, '⏸ Pauze');
+    drawGhostButton(PAUSE_ICON_BUTTON, 'Pauze', { icon: 'iconPause' });
   }
 
-  drawGhostButton(MUTE_ICON_BUTTON, getIsMuted() ? 'Geluid: uit' : 'Geluid: aan', { active: !getIsMuted() });
+  drawGhostButton(MUTE_ICON_BUTTON, getIsMuted() ? 'Geluid: uit' : 'Geluid: aan', {
+    active: !getIsMuted(),
+    icon: 'iconSpeaker'
+  });
 }
 
 function renderScorePopups() {
@@ -739,7 +793,8 @@ function renderGameOverScreen() {
   drawRoundedRect(ctx, GAME_OVER_CARD.x, GAME_OVER_CARD.y, GAME_OVER_CARD.width, GAME_OVER_CARD.height, THEME.radius.lg, {
     fill: THEME.color.surfaceStrong,
     stroke: THEME.color.accentRedSoft,
-    strokeWidth: 1.5
+    strokeWidth: 1.5,
+    shadow: THEME.shadow.card
   });
 
   ctx.textAlign = 'center';
@@ -859,7 +914,8 @@ function render() {
       GAME_CONFIG.maximumLives,
       LOGICAL_WIDTH,
       LOGICAL_HEIGHT,
-      planetImages
+      planetImages,
+      getImage('iconCheck')
     );
   }
 

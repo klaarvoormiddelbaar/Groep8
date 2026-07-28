@@ -53,10 +53,13 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = {
     const isFull = usedSlotsInDay(planning, dayIndex) >= planning.slotsPerDay;
 
     // Glazen dagkaart: één afgerond paneel per dag, groene rand zodra hij vol zit.
+    // Zachte schaduw eronder zodat de kaart echt van de sterrenhemel af lijkt te
+    // zweven i.p.v. er plat bovenop geplakt te zijn.
     drawRoundedRect(ctx, dayX, y, dayWidth, height, THEME.radius.md, {
       fill: THEME.color.surface,
       stroke: isFull ? THEME.color.accentGreen : THEME.color.border,
-      strokeWidth: isFull ? 1.5 : 1
+      strokeWidth: isFull ? 1.5 : 1,
+      shadow: THEME.shadow.chip
     });
 
     // Dagnummer als los, klein label in de hoek — staat los van de planeet, geen
@@ -140,7 +143,8 @@ export function renderWeekSummary(
   maxLives,
   canvasWidth,
   canvasHeight,
-  planetImages = []
+  planetImages = [],
+  checkIcon = null
 ) {
   ctx.fillStyle = 'rgba(7, 10, 20, 0.72)';
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -153,13 +157,25 @@ export function renderWeekSummary(
   drawRoundedRect(ctx, cardX, cardY, cardWidth, cardHeight, THEME.radius.lg, {
     fill: THEME.color.surfaceStrong,
     stroke: THEME.color.accentGreenSoft,
-    strokeWidth: 1.5
+    strokeWidth: 1.5,
+    shadow: THEME.shadow.card
   });
 
   ctx.textAlign = 'center';
   ctx.fillStyle = THEME.color.accentGreen;
   ctx.font = 'bold 22px \'Inria Sans\', sans-serif';
-  ctx.fillText(`✓ Week ${levelNumber} voltooid`, canvasWidth / 2, cardY + 38);
+  const title = `Week ${levelNumber} voltooid`;
+  if (checkIcon) {
+    ctx.font = 'bold 22px \'Inria Sans\', sans-serif';
+    const titleWidth = ctx.measureText(title).width;
+    const iconSize = 20;
+    const groupStartX = canvasWidth / 2 - (titleWidth + iconSize + 8) / 2;
+    ctx.drawImage(checkIcon, groupStartX, cardY + 38 - iconSize + 5, iconSize, iconSize);
+    ctx.textAlign = 'left';
+    ctx.fillText(title, groupStartX + iconSize + 8, cardY + 38);
+  } else {
+    ctx.fillText(title, canvasWidth / 2, cardY + 38);
+  }
 
   // Twee statkaartjes: wat de speler er deze week bij kreeg.
   const statWidth = 160;
