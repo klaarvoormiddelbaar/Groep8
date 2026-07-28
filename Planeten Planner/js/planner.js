@@ -213,19 +213,24 @@ export function renderWeekSummary(
     ctx.fillText(day.name, colX, nameY);
 
     // Taken als gekleurde chips (dezelfde blauw/amber taal als de weekplanning en de
-    // vallende taken) i.p.v. kale tekstregels — meteen te zien welke groot/klein zijn.
+    // vallende taken) i.p.v. kale tekstregels. Net als in de echte weekplanning vult
+    // een grote taak zichtbaar 2 vakjes i.p.v. 1 even grote chip als een kleine taak.
     const chipWidth = columnWidth - 20;
-    const chipHeight = 20;
-    const chipGap = 5;
-    let chipY = nameY + 12;
+    const slotAreaTop = nameY + 12;
+    const slotUnit = 24;
+    const slotGap = 4;
 
     if (day.tasks.length === 0) {
       ctx.font = '12px \'Inria Sans\', sans-serif';
       ctx.fillStyle = THEME.color.textMuted;
-      ctx.fillText('Geen taken', colX, chipY + 12);
+      ctx.fillText('Geen taken', colX, slotAreaTop + 12);
     } else {
+      let slotOffset = 0;
       for (const task of day.tasks) {
         const isLarge = task.slots === 2;
+        const chipY = slotAreaTop + slotOffset * slotUnit;
+        const chipHeight = slotUnit * task.slots - slotGap;
+
         drawRoundedRect(ctx, colX - chipWidth / 2, chipY, chipWidth, chipHeight, THEME.radius.sm, {
           fill: isLarge ? THEME.color.taskLargeFill : THEME.color.taskSmallFill,
           stroke: isLarge ? THEME.color.taskLargeBorder : THEME.color.taskSmallBorder,
@@ -236,7 +241,7 @@ export function renderWeekSummary(
         ctx.fillStyle = THEME.color.textPrimary;
         ctx.fillText(task.label, colX, chipY + chipHeight / 2 + 3.5, chipWidth - 8);
 
-        chipY += chipHeight + chipGap;
+        slotOffset += task.slots;
       }
     }
   });

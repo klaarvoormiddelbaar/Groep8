@@ -72,8 +72,11 @@ const RESUME_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: PAUSE_CARD.y + PAUSE_CARD
 const GAME_OVER_CARD = { width: 420, height: 380, x: LOGICAL_WIDTH / 2 - 210, y: LOGICAL_HEIGHT / 2 - 190 };
 const RESTART_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: GAME_OVER_CARD.y + GAME_OVER_CARD.height - 80, width: 200, height: 56 };
 
-const PAUSE_ICON_BUTTON = { x: 108, y: 30, width: 64, height: 24 };
-const MUTE_ICON_BUTTON = { x: 108, y: 58, width: 100, height: 24 };
+// Pauze + geluid staan nu als een net rijtje ONDER de levens (i.p.v. half ernaast,
+// half eronder) zodat de linkerkolom van de HUD een nette rechte blok vormt in
+// plaats van een trapje.
+const PAUSE_ICON_BUTTON = { x: 20, y: 58, width: 64, height: 24 };
+const MUTE_ICON_BUTTON = { x: 92, y: 58, width: 100, height: 24 };
 const HUD_PANEL = { x: 8, y: 6, width: LOGICAL_WIDTH - 16, height: 102 };
 
 // Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
