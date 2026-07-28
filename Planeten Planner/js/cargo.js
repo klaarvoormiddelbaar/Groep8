@@ -50,7 +50,10 @@ export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeIm
   const contentWidth = cargo.capacity * pipWidthUnit + (cargo.capacity - 1) * pipGap;
 
   const headerFont = 'bold 12px \'Inria Sans\', sans-serif';
-  const nextFont = '11px \'Inria Sans\', sans-serif';
+  // Vetgedrukt zodra de volgende taak groot is — een extra visuele waarschuwing
+  // om vroeg genoeg 2 plekken vrij te houden.
+  const isNextLarge = Boolean(next) && next.slots === 2;
+  const nextFont = isNextLarge ? 'bold 11px \'Inria Sans\', sans-serif' : '11px \'Inria Sans\', sans-serif';
   const headerLabel = isFull ? 'LAADRUIMTE VOL' : `LAADRUIMTE ${used}/${cargo.capacity}`;
   const nextLabel = next
     ? next.slots === 2
