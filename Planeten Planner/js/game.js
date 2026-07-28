@@ -588,27 +588,37 @@ function renderStartScreen() {
 
   // Instructierijen: icoon + tekst, links uitgelijnd binnen een vast blok zodat
   // het als een korte handleiding leest in plaats van een blok gecentreerde tekst.
+  // Waar een echte asset bestaat (taak/meteoriet/planeet) tonen we die in plaats
+  // van een emoji, zodat de speler de spullen herkent vóórdat hij ze in het spel
+  // tegenkomt.
   const instructions = [
-    ['⬅➡', 'Beweeg de raket'],
-    ['📦', 'Vang taken die naar beneden vallen'],
-    ['☄️', 'Ontwijk meteorieten'],
-    ['1–5', 'Plan de volgende taak op een dag']
+    { emoji: '⬅➡', text: 'Beweeg de raket' },
+    { image: 'taskSmall', text: 'Vang taken die naar beneden vallen' },
+    { image: 'meteor', text: 'Ontwijk meteorieten' },
+    { image: 'planetMonday', text: 'Plan de volgende taak op een dag' }
   ];
   const instructionsWidth = 300;
   const instructionsX = centerX - instructionsWidth / 2;
+  const iconSize = 22;
   let instructionY = rocketTop + rocketHeight + 84;
 
-  for (const [icon, text] of instructions) {
-    ctx.textAlign = 'left';
-    ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
-    ctx.fillStyle = THEME.color.accentBlue;
-    ctx.fillText(icon, instructionsX, instructionY);
+  for (const item of instructions) {
+    const iconImage = item.image ? getImage(item.image) : null;
+    if (iconImage) {
+      ctx.drawImage(iconImage, instructionsX, instructionY - iconSize + 5, iconSize, iconSize);
+    } else {
+      ctx.textAlign = 'left';
+      ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
+      ctx.fillStyle = THEME.color.accentBlue;
+      ctx.fillText(item.emoji, instructionsX, instructionY);
+    }
 
+    ctx.textAlign = 'left';
     ctx.font = '13px \'Inria Sans\', sans-serif';
     ctx.fillStyle = THEME.color.textPrimary;
-    ctx.fillText(text, instructionsX + 46, instructionY);
+    ctx.fillText(item.text, instructionsX + 40, instructionY);
 
-    instructionY += 26;
+    instructionY += 28;
   }
 
   drawButton(START_BUTTON, 'Start');
@@ -848,7 +858,8 @@ function render() {
       lives,
       GAME_CONFIG.maximumLives,
       LOGICAL_WIDTH,
-      LOGICAL_HEIGHT
+      LOGICAL_HEIGHT,
+      planetImages
     );
   }
 

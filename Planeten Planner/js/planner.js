@@ -131,12 +131,22 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = {
 // Geen automatische timer meer — de speler klikt zelf op 'Volgende week' (of
 // drukt spatie); de aangeroepen functie geeft de knop-rect terug zodat het
 // klikbaar gemaakt kan worden in game.js.
-export function renderWeekSummary(ctx, planning, levelNumber, scoreGained, livesRemaining, maxLives, canvasWidth, canvasHeight) {
+export function renderWeekSummary(
+  ctx,
+  planning,
+  levelNumber,
+  scoreGained,
+  livesRemaining,
+  maxLives,
+  canvasWidth,
+  canvasHeight,
+  planetImages = []
+) {
   ctx.fillStyle = 'rgba(7, 10, 20, 0.72)';
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
   const cardWidth = Math.min(canvasWidth - 60, 720);
-  const cardHeight = 340;
+  const cardHeight = 380;
   const cardX = (canvasWidth - cardWidth) / 2;
   const cardY = (canvasHeight - cardHeight) / 2;
 
@@ -165,17 +175,24 @@ export function renderWeekSummary(ctx, planning, levelNumber, scoreGained, lives
   });
 
   const columnWidth = cardWidth / planning.days.length;
-  const startY = statsY + statHeight + 40;
+  const planetSize = 24;
+  const dayBlockTop = statsY + statHeight + 36;
 
   planning.days.forEach((day, dayIndex) => {
     const colX = cardX + dayIndex * columnWidth + columnWidth / 2;
+    const planetImage = planetImages[dayIndex];
 
+    if (planetImage) {
+      ctx.drawImage(planetImage, colX - planetSize / 2, dayBlockTop, planetSize, planetSize);
+    }
+
+    const nameY = dayBlockTop + planetSize + 16;
     ctx.fillStyle = THEME.color.accentBlue;
-    ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
-    ctx.fillText(day.name, colX, startY);
+    ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
+    ctx.fillText(day.name, colX, nameY);
 
     ctx.font = '12px \'Inria Sans\', sans-serif';
-    let lineY = startY + 24;
+    let lineY = nameY + 22;
     if (day.tasks.length === 0) {
       ctx.fillStyle = THEME.color.textMuted;
       ctx.fillText('—', colX, lineY);
