@@ -36,9 +36,10 @@ export function totalFilledSlots(planning) {
 
 // Tekent 5 dagkolommen met taaknamen. Grote taken vullen zichtbaar 2 gekoppelde plekken.
 // shake = { dayIndex, offsetX } laat één kolom kort zijwaarts schudden (volle dag-feedback).
-export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = { dayIndex: -1, offsetX: 0 }) {
+// planetImages = [ma, di, wo, do, vr] -> Image|null, elke dag zijn eigen planeetje.
+export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = { dayIndex: -1, offsetX: 0 }, planetImages = []) {
   const dayWidth = width / planning.days.length;
-  const headerHeight = 26;
+  const headerHeight = 30;
   const slotHeight = (height - headerHeight) / planning.slotsPerDay;
 
   ctx.textAlign = 'center';
@@ -56,13 +57,18 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = {
     ctx.fillStyle = isFull ? '#0f4d3c' : '#123a63';
     ctx.fillRect(dayX + 1, y, dayWidth - 3, headerHeight);
 
+    const planetImage = planetImages[dayIndex];
+    if (planetImage) {
+      ctx.drawImage(planetImage, dayX + 6, y + 4, 22, 22);
+    }
+
     ctx.fillStyle = isFull ? '#34d399' : '#72a8f9';
     ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
-    ctx.fillText(String(dayIndex + 1), dayX + dayWidth / 2, y + 14);
+    ctx.fillText(String(dayIndex + 1), dayX + dayWidth / 2, y + 15);
 
     ctx.fillStyle = '#cbd5e1';
     ctx.font = '9px \'Inria Sans\', sans-serif';
-    ctx.fillText(day.name, dayX + dayWidth / 2, y + headerHeight - 2);
+    ctx.fillText(day.name, dayX + dayWidth / 2, y + headerHeight - 4);
 
     let slotOffset = 0;
     for (const task of day.tasks) {

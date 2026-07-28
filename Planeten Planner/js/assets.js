@@ -13,7 +13,14 @@ const IMAGE_PATHS = {
   powerupSlowMotion: '/Planeten%20Planner/assets/images/powerup-slowmotion.png',
   powerupExtraLife: '/Planeten%20Planner/assets/images/powerup-life.png',
   powerupDoubleScore: '/Planeten%20Planner/assets/images/powerup-doublescore.png',
-  background: '/Planeten%20Planner/assets/images/background.png'
+  background: '/Planeten%20Planner/assets/images/background.png',
+  lifeFull: '/Planeten%20Planner/assets/images/life-full.png',
+  lifeEmpty: '/Planeten%20Planner/assets/images/life-empty.png',
+  planetMonday: '/Planeten%20Planner/assets/images/planet-monday.png',
+  planetTuesday: '/Planeten%20Planner/assets/images/planet-tuesday.png',
+  planetWednesday: '/Planeten%20Planner/assets/images/planet-wednesday.png',
+  planetThursday: '/Planeten%20Planner/assets/images/planet-thursday.png',
+  planetFriday: '/Planeten%20Planner/assets/images/planet-friday.png'
 };
 
 const images = {};

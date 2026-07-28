@@ -560,6 +560,33 @@ function renderActiveEffects() {
   ctx.fillText(badges.join('   '), canvas.width / 2, 80);
 }
 
+function renderLives() {
+  ctx.textAlign = 'left';
+  ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
+  ctx.fillStyle = '#ef4444';
+  ctx.fillText('Levens:', 12, 20);
+
+  const lifeFullImage = getImage('lifeFull');
+  const lifeEmptyImage = getImage('lifeEmpty');
+  const iconSize = 22;
+  const gap = 3;
+  let iconX = 12 + ctx.measureText('Levens:').width + 8;
+
+  for (let i = 0; i < GAME_CONFIG.maximumLives; i++) {
+    const isFilled = i < lives;
+    const image = isFilled ? lifeFullImage : lifeEmptyImage;
+
+    if (image) {
+      ctx.drawImage(image, iconX, 8, iconSize, iconSize);
+    } else {
+      ctx.font = 'bold 16px \'Inria Sans\', sans-serif';
+      ctx.fillText(isFilled ? '❤' : '♡', iconX, 20);
+    }
+
+    iconX += iconSize + gap;
+  }
+}
+
 function renderHud() {
   ctx.fillStyle = '#94a3b8';
   ctx.font = '14px \'Inria Sans\', sans-serif';
@@ -576,10 +603,7 @@ function renderHud() {
   renderActiveEffects();
   renderCargo(ctx, cargo, canvas.width, getImage('taskSmall'), getImage('taskLarge'));
 
-  ctx.textAlign = 'left';
-  ctx.font = 'bold 16px \'Inria Sans\', sans-serif';
-  ctx.fillStyle = '#ef4444';
-  ctx.fillText(`Levens: ${'❤'.repeat(lives)}${'♡'.repeat(GAME_CONFIG.maximumLives - lives)}`, 12, 20);
+  renderLives();
 
   if (gameMode === 'playing') {
     ctx.fillStyle = '#334155';
@@ -690,10 +714,23 @@ function render() {
   ctx.stroke();
 
   const shakeOffsetX = shakeTimerMs > 0 ? Math.sin(shakeTimerMs / 20) * 10 : 0;
-  renderWeekPlanning(ctx, weekPlanning, 0, playAreaHeight, canvas.width, WEEKPLANNING_PANEL_HEIGHT, {
-    dayIndex: shakeDayIndex,
-    offsetX: shakeOffsetX
-  });
+  const planetImages = [
+    getImage('planetMonday'),
+    getImage('planetTuesday'),
+    getImage('planetWednesday'),
+    getImage('planetThursday'),
+    getImage('planetFriday')
+  ];
+  renderWeekPlanning(
+    ctx,
+    weekPlanning,
+    0,
+    playAreaHeight,
+    canvas.width,
+    WEEKPLANNING_PANEL_HEIGHT,
+    { dayIndex: shakeDayIndex, offsetX: shakeOffsetX },
+    planetImages
+  );
 
   if (isShowingLevelSummary && completedWeekSnapshot) {
     renderWeekSummary(ctx, completedWeekSnapshot, completedLevelNumber, canvas.width, canvas.height);
