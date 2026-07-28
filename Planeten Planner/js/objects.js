@@ -103,9 +103,15 @@ function drawTaskCard(ctx, task, fillColor, borderColor) {
   ctx.stroke();
 }
 
-export function renderTasks(ctx, spawner) {
+export function renderTasks(ctx, spawner, smallImage = null, largeImage = null) {
   for (const task of spawner.tasks) {
     const isLarge = task.slots === 2;
+    const image = isLarge ? largeImage : smallImage;
+
+    if (image) {
+      ctx.drawImage(image, task.x, task.y, task.width, task.height);
+      continue;
+    }
 
     drawTaskCard(ctx, task, isLarge ? '#f59e0b' : '#fde68a', isLarge ? '#b45309' : '#ca8a04');
 

@@ -121,8 +121,16 @@ export function updatePowerups(spawner, deltaSeconds, canvasHeight, spawnInterva
   spawner.items = spawner.items.filter((item) => item.y <= canvasHeight);
 }
 
-export function renderPowerups(ctx, spawner) {
+// images: { shield, extraCargo, magnet, slowMotion, extraLife, doubleScore } -> Image|null
+export function renderPowerups(ctx, spawner, images = {}) {
   for (const item of spawner.items) {
+    const image = images[item.type];
+
+    if (image) {
+      ctx.drawImage(image, item.x, item.y, item.width, item.height);
+      continue;
+    }
+
     const style = POWERUP_STYLE[item.type];
     const cx = item.x + item.width / 2;
     const cy = item.y + item.height / 2;

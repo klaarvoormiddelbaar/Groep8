@@ -48,11 +48,20 @@ export function updateMeteors(spawner, deltaSeconds, canvasHeight, spawnInterval
   spawner.meteors = spawner.meteors.filter((meteor) => meteor.y - meteor.radius <= canvasHeight);
 }
 
-export function renderMeteors(ctx, spawner) {
+export function renderMeteors(ctx, spawner, image = null) {
   for (const meteor of spawner.meteors) {
-    const pointCount = meteor.rockShape.length;
     const spin = meteor.spinOffset + meteor.y / 90; // trage rotatie tijdens het vallen
 
+    if (image) {
+      ctx.save();
+      ctx.translate(meteor.x, meteor.y);
+      ctx.rotate(spin);
+      ctx.drawImage(image, -meteor.radius, -meteor.radius, meteor.radius * 2, meteor.radius * 2);
+      ctx.restore();
+      continue;
+    }
+
+    const pointCount = meteor.rockShape.length;
     ctx.beginPath();
     for (let i = 0; i <= pointCount; i++) {
       const offset = meteor.rockShape[i % pointCount];

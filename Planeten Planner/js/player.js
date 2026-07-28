@@ -1,9 +1,11 @@
 // Raket: horizontale beweging met pijltjestoetsen of A/D.
 
-const PLAYER_WIDTH = 84;
-const PLAYER_HEIGHT = 42;
+// Beeldverhouding van rocket.png (417x642, staand) i.p.v. de vorige brede
+// placeholder-driehoek — de hoogte volgt daaruit.
+const PLAYER_WIDTH = 72;
+const PLAYER_HEIGHT = Math.round(PLAYER_WIDTH * (642 / 417));
 const PLAYER_SPEED = 520; // pixels per seconde
-const PLAYER_MARGIN_BOTTOM = 40; // extra ruimte zodat de stuwvlam niet over het weekplanning-paneel valt
+const PLAYER_MARGIN_BOTTOM = 20;
 
 const MOVE_KEYS = new Set(['arrowleft', 'arrowright', 'a', 'd']);
 const pressedKeys = new Set();
@@ -43,10 +45,15 @@ export function updatePlayer(player, deltaSeconds, canvasWidth) {
   player.x = Math.max(0, Math.min(canvasWidth - player.width, player.x));
 }
 
-export function renderPlayer(ctx, player, isInvulnerable = false) {
+export function renderPlayer(ctx, player, isInvulnerable = false, image = null) {
   // Tijdens onkwetsbaarheid knippert de raket (om en om 100ms zichtbaar/onzichtbaar).
   const isBlinkedOut = isInvulnerable && Math.floor(Date.now() / 100) % 2 === 0;
   if (isBlinkedOut) return;
+
+  if (image) {
+    ctx.drawImage(image, player.x, player.y, player.width, player.height);
+    return;
+  }
 
   const { x, y, width, height } = player;
   const cx = x + width / 2;

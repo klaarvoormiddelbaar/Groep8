@@ -26,6 +26,7 @@ import {
 } from './powerups.js';
 import { rectsOverlap, circleRectOverlap } from './collision.js';
 import { sounds, toggleMute, getIsMuted } from './audio.js';
+import { loadAssets, getImage } from './assets.js';
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
 // objecten + raket) gebruikt de resterende hoogte erboven.
@@ -57,6 +58,17 @@ function playAreaHeightFor(canvasHeight) {
   return canvasHeight - WEEKPLANNING_PANEL_HEIGHT;
 }
 
+// Tekent een afbeelding zodat hij het doelvlak volledig vult ('cover'), gecentreerd
+// bijgesneden — net als CSS background-size: cover.
+function drawImageCover(image, dx, dy, dw, dh) {
+  const scale = Math.max(dw / image.width, dh / image.height);
+  const sw = dw / scale;
+  const sh = dh / scale;
+  const sx = (image.width - sw) / 2;
+  const sy = (image.height - sh) / 2;
+  ctx.drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh);
+}
+
 function renderStarfield() {
   for (const star of STARS) {
     const twinkle = 0.5 + 0.5 * Math.sin((Date.now() + star.twinkleOffset) / 500);
@@ -77,8 +89,8 @@ const meteorSpawner = createMeteorSpawner(canvas.width);
 const powerupSpawner = createPowerupSpawner(canvas.width);
 const activeEffects = createActiveEffects();
 
-// 'start' | 'playing' | 'paused' | 'gameOver'
-let gameMode = 'start';
+// 'loading' | 'start' | 'playing' | 'paused' | 'gameOver'
+let gameMode = 'loading';
 
 let cargo;
 let weekPlanning;
@@ -151,7 +163,15 @@ function addScorePopup(x, y, text, color = '#facc15') {
 }
 
 resetGame();
-gameMode = 'start'; // begin op het titelscherm, niet meteen spelend
+gameMode = 'loading'; // toon eerst een laadscherm terwijl de afbeeldingen ophalen
+
+loadAssets().then(() => {
+  // Alleen naar het titelscherm als er niet ondertussen al iets anders gebeurde
+  // (kan in theorie niet, maar voorkomt dat een trage lading een actieve sessie overschrijft).
+  if (gameMode === 'loading') {
+    gameMode = 'start';
+  }
+});
 
 function completeLevel() {
   // Bewaar een referentie naar de voltooide planning vóórdat er een nieuwe,
@@ -485,6 +505,16 @@ function drawButton(rect, label) {
   ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 6);
 }
 
+function renderLoadingScreen() {
+  ctx.fillStyle = '#0b1220';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '16px \'Inria Sans\', sans-serif';
+  ctx.fillText('Laden...', canvas.width / 2, canvas.height / 2);
+}
+
 function renderStartScreen() {
   ctx.fillStyle = '#0b1220';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -606,6 +636,11 @@ function renderGameOverScreen() {
 }
 
 function render() {
+  if (gameMode === 'loading') {
+    renderLoadingScreen();
+    return;
+  }
+
   if (gameMode === 'start') {
     renderStartScreen();
     return;
@@ -614,18 +649,30 @@ function render() {
   ctx.fillStyle = '#050a1a';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const spaceGradient = ctx.createLinearGradient(0, 0, 0, playAreaHeight);
-  spaceGradient.addColorStop(0, '#0c1a3d');
-  spaceGradient.addColorStop(1, '#050a1a');
-  ctx.fillStyle = spaceGradient;
-  ctx.fillRect(0, 0, canvas.width, playAreaHeight);
-  renderStarfield();
+  const backgroundImage = getImage('background');
+  if (backgroundImage) {
+    drawImageCover(backgroundImage, 0, 0, canvas.width, playAreaHeight);
+  } else {
+    const spaceGradient = ctx.createLinearGradient(0, 0, 0, playAreaHeight);
+    spaceGradient.addColorStop(0, '#0c1a3d');
+    spaceGradient.addColorStop(1, '#050a1a');
+    ctx.fillStyle = spaceGradient;
+    ctx.fillRect(0, 0, canvas.width, playAreaHeight);
+    renderStarfield();
+  }
 
-  renderTasks(ctx, taskSpawner);
-  renderMeteors(ctx, meteorSpawner);
-  renderPowerups(ctx, powerupSpawner);
+  renderTasks(ctx, taskSpawner, getImage('taskSmall'), getImage('taskLarge'));
+  renderMeteors(ctx, meteorSpawner, getImage('meteor'));
+  renderPowerups(ctx, powerupSpawner, {
+    shield: getImage('powerupShield'),
+    extraCargo: getImage('powerupExtraCargo'),
+    magnet: getImage('powerupMagnet'),
+    slowMotion: getImage('powerupSlowMotion'),
+    extraLife: getImage('powerupExtraLife'),
+    doubleScore: getImage('powerupDoubleScore')
+  });
   renderScorePopups();
-  renderPlayer(ctx, player, invulnerableMs > 0);
+  renderPlayer(ctx, player, invulnerableMs > 0, getImage('rocket'));
   if (activeEffects.hasShield) {
     ctx.beginPath();
     ctx.strokeStyle = '#38bdf8';
