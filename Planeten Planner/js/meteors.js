@@ -21,8 +21,32 @@ export function createMeteorSpawner(canvasWidth) {
   };
 }
 
-export function spawnMeteor(spawner, fallSpeed) {
-  const x = METEOR_RADIUS + Math.random() * (spawner.canvasWidth - METEOR_RADIUS * 2);
+// Kiest een x buiten alle 'veilige zones' rond huidige taken (eerlijke spawns: een
+// meteoriet mag nooit vlak naast een taak verschijnen). Als er na een paar pogingen
+// geen vrije plek is (zeldzaam, bijv. het speelveld zit vol taken), spawnt de
+// meteoriet toch — de doorlopende afstoot-check hieronder duwt 'm daarna alsnog
+// weg zodra dat weer kan.
+function pickSafeMeteorX(canvasWidth, radius, safeZones, safeZoneRadius) {
+  const minX = radius;
+  const maxX = canvasWidth - radius;
+  if (safeZoneRadius <= 0 || safeZones.length === 0) {
+    return minX + Math.random() * (maxX - minX);
+  }
+
+  for (let attempt = 0; attempt < 8; attempt++) {
+    const x = minX + Math.random() * (maxX - minX);
+    const conflict = safeZones.some((zone) => Math.abs(x - zone.x) < safeZoneRadius);
+    if (!conflict) return x;
+  }
+  return minX + Math.random() * (maxX - minX);
+}
+
+// safeZoneOptions: { zones: [{x, y}], radius, yProximity, repulsionSpeed } of null
+// (geen taken/meteorieten-mechanic actief). zones = middens van huidige taken.
+export function spawnMeteor(spawner, fallSpeed, safeZoneOptions = null) {
+  const zones = safeZoneOptions?.zones ?? [];
+  const radius = safeZoneOptions?.radius ?? 0;
+  const x = pickSafeMeteorX(spawner.canvasWidth, METEOR_RADIUS, zones, radius);
   spawner.meteors.push({
     x,
     y: -METEOR_RADIUS,
@@ -33,16 +57,37 @@ export function spawnMeteor(spawner, fallSpeed) {
   });
 }
 
+// enabled: of meteorieten deze level-mechanic vrijgespeeld is (levels.js). Als false
+// spawnen er geen nieuwe, maar vallen bestaande (die zouden er dan niet moeten zijn
+// dankzij de level-cleanup in game.js) gewoon door.
 // speedMultiplier schaalt de beweging van ALLE meteorieten deze frame, zie objects.js.
-export function updateMeteors(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, speedMultiplier) {
+export function updateMeteors(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, speedMultiplier, enabled, safeZoneOptions = null) {
   spawner.spawnTimerMs += deltaSeconds * 1000;
-  if (spawner.spawnTimerMs >= spawnIntervalMs) {
+  if (enabled && spawner.spawnTimerMs >= spawnIntervalMs) {
     spawner.spawnTimerMs = 0;
-    spawnMeteor(spawner, fallSpeed);
+    spawnMeteor(spawner, fallSpeed, safeZoneOptions);
   }
 
   for (const meteor of spawner.meteors) {
     meteor.y += meteor.fallSpeed * speedMultiplier * deltaSeconds;
+  }
+
+  // Eerlijke spawns, doorlopend: als een meteoriet en een taak (bijna) tegelijk op
+  // dezelfde plek terechtkomen, duwt de meteoriet zichzelf opzij totdat het conflict
+  // voorbij is — de taak wordt nooit onbereikbaar door pech in de meteoriet-spawns.
+  if (safeZoneOptions && safeZoneOptions.zones.length > 0) {
+    const { zones, radius, yProximity, repulsionSpeed } = safeZoneOptions;
+    for (const meteor of spawner.meteors) {
+      for (const zone of zones) {
+        if (Math.abs(meteor.y - zone.y) > yProximity) continue;
+        const dx = meteor.x - zone.x;
+        if (Math.abs(dx) >= radius) continue;
+
+        const direction = dx === 0 ? (Math.random() < 0.5 ? -1 : 1) : Math.sign(dx);
+        meteor.x += direction * repulsionSpeed * deltaSeconds;
+        meteor.x = Math.max(meteor.radius, Math.min(spawner.canvasWidth - meteor.radius, meteor.x));
+      }
+    }
   }
 
   spawner.meteors = spawner.meteors.filter((meteor) => meteor.y - meteor.radius <= canvasHeight);

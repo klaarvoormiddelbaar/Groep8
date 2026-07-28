@@ -152,6 +152,20 @@ let shakeDayIndex;
 let shakeTimerMs;
 let scorePopups;
 
+// Verwijdert alle vallende objecten en zet spawn-timers/-volgorde terug naar nul.
+// Gebruikt bij zowel een verse start als bij elke levelovergang: een nieuw level
+// is een volledig nieuwe week, er wordt niets uit het vorige level meegenomen.
+function clearAllSpawners() {
+  taskSpawner.tasks = [];
+  taskSpawner.spawnTimerMs = 0;
+  taskSpawner.timeSinceLastLargeMs = Infinity;
+  taskSpawner.lastSpawnX = null;
+  meteorSpawner.meteors = [];
+  meteorSpawner.spawnTimerMs = 0;
+  powerupSpawner.items = [];
+  powerupSpawner.spawnTimerMs = 0;
+}
+
 // Zet alle spelstatus terug naar een verse start. Wordt gebruikt bij het eerste
 // Start-klik én bij 'Opnieuw spelen' na een game-over.
 function resetGame() {
@@ -160,10 +174,7 @@ function resetGame() {
   currentLevel = 1;
   levelSettings = getLevelSettings(currentLevel);
 
-  taskSpawner.tasks = [];
-  taskSpawner.timeSinceLastLargeMs = Infinity;
-  meteorSpawner.meteors = [];
-  powerupSpawner.items = [];
+  clearAllSpawners();
   Object.assign(activeEffects, createActiveEffects());
 
   player.x = LOGICAL_WIDTH / 2 - player.width / 2;
@@ -224,6 +235,10 @@ function completeLevel() {
   weekPlanning = createWeekPlanning(GAME_CONFIG.numberOfDays, GAME_CONFIG.slotsPerDay);
   cargo = createCargo(GAME_CONFIG.cargoCapacity); // reset ook extra laadruimte automatisch
   resetLevelScopedEffects(activeEffects); // tijdelijke effecten eindigen, level-power-ups resetten
+
+  // Nieuw level = volledig nieuwe week: alles wat nog in de lucht hangt uit het
+  // vorige level verdwijnt direct, spawn-timers en -volgorde beginnen bij nul.
+  clearAllSpawners();
 
   // Geen automatische timer meer: het weekoverzicht blijft staan tot de speler
   // zelf op 'Volgende week' klikt of spatie drukt.
@@ -432,9 +447,22 @@ function update(deltaSeconds) {
     levelSettings.taskFallSpeed,
     levelSettings.largeTasksEnabled && canFitLargeTask,
     largeTaskMinGapMs,
+    levelSettings.largeTaskChance,
+    levelSettings.maxSpawnDistancePercent,
     speedMultiplier,
     loseLife // een gemiste taak kost 1 leven
   );
+
+  // Eerlijke spawns: een meteoriet mag nooit vlak naast een taak (ver)schijnen,
+  // anders wordt die taak feitelijk onbereikbaar. Middens van alle huidige taken
+  // vormen de 'veilige zones' die meteors.js bij spawn vermijdt en waar vandaan
+  // een meteoriet zichzelf wegduwt als hij er toch (bijna) tegelijk mee samenvalt.
+  const meteorSafeZoneOptions = {
+    zones: taskSpawner.tasks.map((task) => ({ x: task.x + task.width / 2, y: task.y + task.height / 2 })),
+    radius: GAME_CONFIG.meteorSafeZoneRadius,
+    yProximity: GAME_CONFIG.meteorSafeZoneYProximity,
+    repulsionSpeed: GAME_CONFIG.meteorRepulsionSpeed
+  };
 
   updateMeteors(
     meteorSpawner,
@@ -442,10 +470,19 @@ function update(deltaSeconds) {
     playAreaHeight,
     levelSettings.meteorSpawnInterval,
     levelSettings.meteorFallSpeed,
-    speedMultiplier
+    speedMultiplier,
+    levelSettings.meteorsEnabled,
+    meteorSafeZoneOptions
   );
 
-  updatePowerups(powerupSpawner, deltaSeconds, playAreaHeight, GAME_CONFIG.powerupSpawnInterval, GAME_CONFIG.powerupFallSpeed);
+  updatePowerups(
+    powerupSpawner,
+    deltaSeconds,
+    playAreaHeight,
+    levelSettings.powerupSpawnInterval,
+    GAME_CONFIG.powerupFallSpeed,
+    levelSettings.powerupsEnabled
+  );
 
   // Magneet trekt alleen taken die dichtbij zijn naar de raket toe, geen meteorieten of power-ups.
   if (activeEffects.magnetMs > 0) {

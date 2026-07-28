@@ -18,7 +18,6 @@ const SUBJECTS = Object.values(SUBJECT_ABBREVIATIONS);
 
 const SMALL_TASK_SIZE = 59; // 10% kleiner
 const LARGE_TASK_SIZE = 86; // 10% kleiner
-const LARGE_TASK_CHANCE = 0.25;
 
 function randomFrom(list) {
   return list[Math.floor(Math.random() * list.length)];
@@ -30,12 +29,31 @@ export function createTaskSpawner(canvasWidth) {
     spawnTimerMs: 0,
     // Hoog begingetal zodat de allereerste grote taak niet onnodig wordt tegengehouden.
     timeSinceLastLargeMs: Infinity,
+    // x van de laatst gespawnde taak — bepaalt hoever de volgende mag spawnen
+    // (zie pickSpawnX). null = nog geen taak gehad deze week, geen beperking.
+    lastSpawnX: null,
     canvasWidth
   };
 }
 
-export function spawnSmallTask(spawner, fallSpeed) {
-  const x = Math.random() * (spawner.canvasWidth - SMALL_TASK_SIZE);
+// Kiest een spawn-x die maximaal maxDistancePercent van de speelbreedte van de
+// vorige taak vandaan ligt, zodat spelers in de eerste levels niet constant van
+// links naar rechts hoeven te vliegen. maxDistancePercent >= 1 (of nog geen
+// vorige taak) betekent: geen beperking, de volledige breedte is beschikbaar.
+function pickSpawnX(spawner, size, maxDistancePercent) {
+  const maxX = spawner.canvasWidth - size;
+  if (spawner.lastSpawnX === null || maxDistancePercent >= 1) {
+    return Math.random() * maxX;
+  }
+
+  const maxDistance = spawner.canvasWidth * maxDistancePercent;
+  const low = Math.max(0, spawner.lastSpawnX - maxDistance);
+  const high = Math.min(maxX, spawner.lastSpawnX + maxDistance);
+  return low + Math.random() * (high - low);
+}
+
+export function spawnSmallTask(spawner, fallSpeed, maxSpawnDistancePercent = 1) {
+  const x = pickSpawnX(spawner, SMALL_TASK_SIZE, maxSpawnDistancePercent);
   const subject = randomFrom(SUBJECTS);
   spawner.tasks.push({
     x,
@@ -47,10 +65,11 @@ export function spawnSmallTask(spawner, fallSpeed) {
     label: `${subject} huiswerk`,
     fallSpeed
   });
+  spawner.lastSpawnX = x;
 }
 
-export function spawnLargeTask(spawner, fallSpeed) {
-  const x = Math.random() * (spawner.canvasWidth - LARGE_TASK_SIZE);
+export function spawnLargeTask(spawner, fallSpeed, maxSpawnDistancePercent = 1) {
+  const x = pickSpawnX(spawner, LARGE_TASK_SIZE, maxSpawnDistancePercent);
   const subject = randomFrom(SUBJECTS);
   spawner.tasks.push({
     x,
@@ -62,28 +81,42 @@ export function spawnLargeTask(spawner, fallSpeed) {
     label: `leren toets ${subject}`,
     fallSpeed
   });
+  spawner.lastSpawnX = x;
 }
 
 // minGapBetweenLargeMs voorkomt dat 2 grote taken vlak na elkaar spawnen — hoe voller
 // de week, hoe groter die afkoelperiode (game.js koppelt dit aan het weekvulpercentage).
-export function spawnRandomTask(spawner, fallSpeed, largeTasksEnabled, minGapBetweenLargeMs) {
+// largeTaskChance komt uit de moeilijkheidscurve (levels.js) en loopt op met het level.
+export function spawnRandomTask(spawner, fallSpeed, largeTasksEnabled, minGapBetweenLargeMs, largeTaskChance, maxSpawnDistancePercent) {
   const canSpawnLarge = largeTasksEnabled && spawner.timeSinceLastLargeMs >= minGapBetweenLargeMs;
-  if (canSpawnLarge && Math.random() < LARGE_TASK_CHANCE) {
-    spawnLargeTask(spawner, fallSpeed);
+  if (canSpawnLarge && Math.random() < largeTaskChance) {
+    spawnLargeTask(spawner, fallSpeed, maxSpawnDistancePercent);
     spawner.timeSinceLastLargeMs = 0;
   } else {
-    spawnSmallTask(spawner, fallSpeed);
+    spawnSmallTask(spawner, fallSpeed, maxSpawnDistancePercent);
   }
 }
 
 // speedMultiplier schaalt de beweging van ALLE taken deze frame (ook al vallende),
 // zodat de tijdvertrager-power-up direct effect heeft en er na afloop niets 'nasleept'.
-export function updateTasks(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, largeTasksEnabled, minGapBetweenLargeMs, speedMultiplier, onMissed) {
+export function updateTasks(
+  spawner,
+  deltaSeconds,
+  canvasHeight,
+  spawnIntervalMs,
+  fallSpeed,
+  largeTasksEnabled,
+  minGapBetweenLargeMs,
+  largeTaskChance,
+  maxSpawnDistancePercent,
+  speedMultiplier,
+  onMissed
+) {
   spawner.spawnTimerMs += deltaSeconds * 1000;
   spawner.timeSinceLastLargeMs += deltaSeconds * 1000;
   if (spawner.spawnTimerMs >= spawnIntervalMs) {
     spawner.spawnTimerMs = 0;
-    spawnRandomTask(spawner, fallSpeed, largeTasksEnabled, minGapBetweenLargeMs);
+    spawnRandomTask(spawner, fallSpeed, largeTasksEnabled, minGapBetweenLargeMs, largeTaskChance, maxSpawnDistancePercent);
   }
 
   for (const task of spawner.tasks) {

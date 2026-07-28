@@ -107,9 +107,10 @@ export function spawnRandomPowerup(spawner, fallSpeed) {
   });
 }
 
-export function updatePowerups(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed) {
+// enabled: of power-ups deze level-mechanic vrijgespeeld is (levels.js, vanaf level 4).
+export function updatePowerups(spawner, deltaSeconds, canvasHeight, spawnIntervalMs, fallSpeed, enabled) {
   spawner.spawnTimerMs += deltaSeconds * 1000;
-  if (spawner.spawnTimerMs >= spawnIntervalMs) {
+  if (enabled && spawner.spawnTimerMs >= spawnIntervalMs) {
     spawner.spawnTimerMs = 0;
     spawnRandomPowerup(spawner, fallSpeed);
   }

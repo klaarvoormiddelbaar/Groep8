@@ -284,42 +284,79 @@ Een level is voltooid zodra alle **15 taakplekken** zijn gevuld.
 
 ### Levelopbouw
 
-#### Level 1
+Elke mechanic wordt één voor één vrijgespeeld, zodat spelers rustig kunnen wennen:
 
-- alleen kleine taken;
-- lage valsnelheid;
-- weinig meteorieten;
-- ruime tijd tussen nieuwe objecten.
+| Level | Kleine taken | Grote taken | Meteorieten | Power-ups |
+|---|---|---|---|---|
+| 1 | ✔ | — | — | — |
+| 2 | ✔ | ✔ | — | — |
+| 3 | ✔ | ✔ | ✔ | — |
+| 4 | ✔ | ✔ | ✔ | ✔ |
+| 5+ | ✔ | ✔ | ✔ | ✔ |
 
-#### Level 2
+Vanaf level 5 zijn alle mechanics beschikbaar; vanaf daar wordt alleen nog de moeilijkheid opgevoerd.
 
-- grote taken worden toegevoegd;
-- iets meer meteorieten;
-- iets hogere valsnelheid.
+### Moeilijkheid
 
-#### Level 3
+Level 1 t/m 4 zijn qua snelheid/tempo **exact gelijk** — alleen welke mechanics
+actief zijn verandert. Pas vanaf level 5 loopt de moeilijkheid op, via één
+gedeelde vermenigvuldigingsfactor (+0,1 per level):
 
-- taken vallen sneller;
-- objecten verschijnen vaker.
+| Level | Factor |
+|---|---|
+| 1–4 | 1.0 |
+| 5 | 1.1 |
+| 6 | 1.2 |
+| 7 | 1.3 |
+| ... | ... |
 
-#### Level 4 en verder
+Deze factor schaalt gelijktijdig: valsnelheid van taken/meteorieten, spawntempo,
+de kans op grote taken (met een plafond) en hoe vaak meteorieten verschijnen.
+De kans op power-ups daalt met deze factor mee, maar veel lichter gedempt (de
+power-ups blijven relatief ruim beschikbaar).
 
-- geleidelijke verhoging van valsnelheid;
-- geleidelijke verhoging van spawnfrequentie;
-- geleidelijke verhoging van het aantal meteorieten.
+### Spawnafstand tussen taken
 
-De moeilijkheid moet rustig oplopen. Niet meerdere waarden tegelijk extreem verhogen.
+Om te voorkomen dat spelers in de eerste levels constant van links naar rechts
+moeten vliegen, mag een nieuwe taak maximaal een bepaald percentage van de
+speelbreedte van de vorige taak vandaan spawnen:
+
+| Level | Max. afstand (% speelbreedte) |
+|---|---|
+| 1–4 | 66% |
+| 5 | 72% |
+| 6 | 78% |
+| 7 | 84% |
+| 8+ | 100% (geen beperking) |
+
+### Eerlijke spawns
+
+Een taak mag nooit onmogelijk te pakken zijn door pech in de meteoriet-spawns:
+
+- rond elke vallende taak bestaat een 'veilige zone' waarin geen meteoriet mag
+  verschijnen;
+- als een meteoriet toch (bijna) tegelijk naast een taak terechtkomt, duwt de
+  meteoriet zichzelf opzij totdat het conflict voorbij is.
+
+De speler mag een taak missen door een eigen fout (verkeerde keuze, te langzaam,
+slecht gepland) — nooit doordat het spel een oneerlijke situatie veroorzaakt.
 
 ### Bij de start van een nieuw level
 
+Levelvoltooiing = volledig nieuwe week. Zodra een level voltooid is:
+
+- alle taken die nog in de lucht hangen worden direct verwijderd;
+- alle meteorieten worden verwijderd;
+- alle power-ups worden verwijderd;
+- spawn-timers en spawnvolgorde beginnen weer bij nul;
 - de weekplanning wordt geleegd;
 - de laadruimte wordt geleegd;
-- tijdelijke power-ups worden beëindigd;
-- level-power-ups worden gereset;
-- levens blijven behouden;
-- score blijft behouden;
-- het levelnummer stijgt;
-- valsnelheid en spawnfrequentie worden aangepast.
+- tijdelijke power-ups (magneet, tijdvertrager) worden beëindigd;
+- level-power-ups (extra laadruimte, dubbele score) worden gereset;
+- levens, score en behaalde voortgang blijven behouden;
+- het levelnummer stijgt en de moeilijkheid wordt aangepast.
+
+Er worden geen objecten uit het vorige level meegenomen naar het nieuwe level.
 
 ---
 

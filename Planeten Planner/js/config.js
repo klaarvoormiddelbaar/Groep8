@@ -27,18 +27,39 @@ export const GAME_CONFIG = {
 
   // Verlaagd t.o.v. het staande formaat: het speelveld is nu minder hoog, dus een
   // lagere valsnelheid houdt dezelfde reactietijd (val-tijd) aan als voorheen.
+  // Dit zijn de basiswaarden voor level 1 t/m difficultyFlatLevels; zie de
+  // moeilijkheidscurve hieronder voor hoe dit daarna oploopt.
   startingFallSpeed: 86,
-  speedIncreasePerLevel: 9,
-
   startingSpawnInterval: 1500,
   minimumSpawnInterval: 500,
-  spawnIntervalDecreasePerLevel: 100,
 
-  // Level 1 heeft alleen kleine taken en weinig, langzame meteorieten (zie levels.js).
+  // Mechanics worden één voor één vrijgespeeld (zie levels.js): grote taken vanaf
+  // level 2, meteorieten vanaf level 3, power-ups vanaf level 4.
   meteorStartingFallSpeed: 72,
   meteorStartingSpawnInterval: 3500,
-  meteorSpawnIntervalDecreasePerLevel: 200,
   meteorMinimumSpawnInterval: 1000,
+
+  // Moeilijkheidscurve: level 1 t/m difficultyFlatLevels zijn qua tempo exact
+  // gelijk (alleen mechanics worden vrijgespeeld); pas daarna loopt de moeilijkheid
+  // op via één gedeelde vermenigvuldigingsfactor (+difficultyStepPerLevel per level),
+  // die valsnelheid, spawntempo, grote-taak-kans en meteoriet-frequentie samen stuurt.
+  difficultyFlatLevels: 4,
+  difficultyStepPerLevel: 0.1,
+
+  largeTaskBaseChance: 0.25,
+  largeTaskChanceMax: 0.5,
+
+  // Power-ups worden bij hogere moeilijkheid maar heel licht schaarser dan de rest
+  // (damping < 1 = zwakkere uitwerking van dezelfde moeilijkheidsfactor).
+  powerupDifficultyDamping: 0.3,
+
+  // 'Eerlijke spawns': rond elke vallende taak mag geen meteoriet verschijnen of
+  // blijven hangen. radius = horizontale veilige zone (px), yProximity = hoe dicht
+  // (verticaal) een meteoriet en taak moeten zijn voor het conflict telt,
+  // repulsionSpeed = hoe snel een meteoriet zichzelf wegduwt tijdens een conflict.
+  meteorSafeZoneRadius: 70,
+  meteorSafeZoneYProximity: 140,
+  meteorRepulsionSpeed: 220,
 
   scoreCatchSmallTask: 10,
   scoreCatchLargeTask: 20,
