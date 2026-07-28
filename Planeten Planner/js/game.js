@@ -27,10 +27,13 @@ import {
 import { rectsOverlap, circleRectOverlap } from './collision.js';
 import { sounds, toggleMute, getIsMuted } from './audio.js';
 import { loadAssets, getImage } from './assets.js';
+import { THEME } from './theme.js';
+import { drawRoundedRect } from './canvasUtils.js';
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
-// objecten + raket) gebruikt de resterende hoogte erboven.
-const WEEKPLANNING_PANEL_HEIGHT = 130;
+// objecten + raket) gebruikt de resterende hoogte erboven. Iets hoger dan voorheen
+// zodat de dagpanelen ruimte hebben voor het planeetje + naam in de moderne stijl.
+const WEEKPLANNING_PANEL_HEIGHT = 145;
 
 const canvas = document.getElementById('game-canvas');
 const ctx = canvas.getContext('2d');
@@ -43,8 +46,9 @@ const playAreaHeight = canvas.height - WEEKPLANNING_PANEL_HEIGHT;
 const START_BUTTON = { x: canvas.width / 2 - 100, y: 320, width: 200, height: 56 };
 const RESUME_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 - 28, width: 200, height: 56 };
 const RESTART_BUTTON = { x: canvas.width / 2 - 100, y: canvas.height / 2 + 50, width: 200, height: 56 };
-const PAUSE_ICON_BUTTON = { x: 12, y: 30, width: 60, height: 22 };
-const MUTE_ICON_BUTTON = { x: 12, y: 56, width: 84, height: 22 };
+const PAUSE_ICON_BUTTON = { x: 108, y: 30, width: 64, height: 24 };
+const MUTE_ICON_BUTTON = { x: 108, y: 58, width: 88, height: 24 };
+const HUD_PANEL = { x: 8, y: 6, width: canvas.width - 16, height: 92 };
 
 // Vaste sterrenachtergrond (eenmalig gegenereerd, geen herberekening per frame).
 const STARS = Array.from({ length: 100 }, () => ({
@@ -496,50 +500,83 @@ function update(deltaSeconds) {
 }
 
 function drawButton(rect, label) {
-  ctx.fillStyle = '#10a37f';
-  ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
+  drawRoundedRect(ctx, rect.x, rect.y, rect.width, rect.height, rect.height / 2, {
+    fill: THEME.color.accentGreen,
+    stroke: 'rgba(255, 255, 255, 0.28)',
+    strokeWidth: 1
+  });
 
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 18px \'Inria Sans\', sans-serif';
+  ctx.fillStyle = THEME.color.bgDeep;
+  ctx.font = 'bold 16px \'Inria Sans\', sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 6);
+  ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 5);
+}
+
+// Klein glazen "chip"-knopje voor pauze/geluid, zelfde afgeronde taal als de rest.
+function drawGhostButton(rect, label, { active = false } = {}) {
+  drawRoundedRect(ctx, rect.x, rect.y, rect.width, rect.height, rect.height / 2, {
+    fill: active ? THEME.color.accentBlueSoft : THEME.color.surface,
+    stroke: active ? THEME.color.accentBlue : THEME.color.border,
+    strokeWidth: 1.5
+  });
+
+  ctx.fillStyle = active ? THEME.color.accentBlue : THEME.color.textMuted;
+  ctx.font = '11px \'Inria Sans\', sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 4);
 }
 
 function renderLoadingScreen() {
-  ctx.fillStyle = '#0b1220';
+  ctx.fillStyle = THEME.color.bgDeep;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#94a3b8';
+  ctx.fillStyle = THEME.color.textMuted;
   ctx.font = '16px \'Inria Sans\', sans-serif';
   ctx.fillText('Laden...', canvas.width / 2, canvas.height / 2);
 }
 
+const START_CARD = { width: 380, height: 300, x: canvas.width / 2 - 190, y: 100 };
+
 function renderStartScreen() {
-  ctx.fillStyle = '#0b1220';
+  ctx.fillStyle = THEME.color.bgDeep;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#facc15';
-  ctx.font = 'bold 28px \'Inria Sans\', sans-serif';
-  ctx.fillText('Planeten Planner', canvas.width / 2, 140);
+  drawRoundedRect(ctx, START_CARD.x, START_CARD.y, START_CARD.width, START_CARD.height, THEME.radius.lg, {
+    fill: THEME.color.surface,
+    stroke: THEME.color.border,
+    strokeWidth: 1.5
+  });
 
-  ctx.fillStyle = '#e2e8f0';
-  ctx.font = '15px \'Inria Sans\', sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = THEME.color.accentAmber;
+  ctx.font = 'bold 26px \'Inria Sans\', sans-serif';
+  ctx.fillText('Planeten Planner', canvas.width / 2, START_CARD.y + 56);
+
+  ctx.fillStyle = THEME.color.textMuted;
+  ctx.font = '14px \'Inria Sans\', sans-serif';
   const lines = ['Beweeg met ← en →', 'Vang taken', 'Ontwijk meteorieten', 'Plan met 1 t/m 5'];
-  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, 190 + i * 22));
+  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, START_CARD.y + 100 + i * 22));
 
   drawButton(START_BUTTON, 'Start');
 }
 
+const PAUSE_CARD = { width: 320, height: 170, x: canvas.width / 2 - 160, y: canvas.height / 2 - 95 };
+
 function renderPauseOverlay() {
-  ctx.fillStyle = 'rgba(5, 7, 13, 0.85)';
+  ctx.fillStyle = 'rgba(7, 10, 20, 0.55)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  drawRoundedRect(ctx, PAUSE_CARD.x, PAUSE_CARD.y, PAUSE_CARD.width, PAUSE_CARD.height, THEME.radius.lg, {
+    fill: THEME.color.surfaceStrong,
+    stroke: THEME.color.border,
+    strokeWidth: 1.5
+  });
+
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#e2e8f0';
-  ctx.font = 'bold 26px \'Inria Sans\', sans-serif';
-  ctx.fillText('Gepauzeerd', canvas.width / 2, canvas.height / 2 - 40);
+  ctx.fillStyle = THEME.color.textPrimary;
+  ctx.font = 'bold 20px \'Inria Sans\', sans-serif';
+  ctx.fillText('Gepauzeerd', canvas.width / 2, PAUSE_CARD.y + 50);
 
   drawButton(RESUME_BUTTON, 'Verder');
 }
@@ -556,31 +593,33 @@ function renderActiveEffects() {
 
   ctx.textAlign = 'center';
   ctx.font = 'bold 12px \'Inria Sans\', sans-serif';
-  ctx.fillStyle = '#facc15';
-  ctx.fillText(badges.join('   '), canvas.width / 2, 80);
+  ctx.fillStyle = THEME.color.accentAmber;
+  ctx.fillText(badges.join('   '), canvas.width / 2, 84);
 }
 
 function renderLives() {
   ctx.textAlign = 'left';
-  ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
-  ctx.fillStyle = '#ef4444';
-  ctx.fillText('Levens:', 12, 20);
+  ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
+  ctx.fillStyle = THEME.color.textMuted;
+  ctx.fillText('LEVENS', 20, 24);
 
   const lifeFullImage = getImage('lifeFull');
   const lifeEmptyImage = getImage('lifeEmpty');
-  const iconSize = 22;
+  const iconSize = 20;
   const gap = 3;
-  let iconX = 12 + ctx.measureText('Levens:').width + 8;
+  let iconX = 20;
+  const iconY = 32;
 
   for (let i = 0; i < GAME_CONFIG.maximumLives; i++) {
     const isFilled = i < lives;
     const image = isFilled ? lifeFullImage : lifeEmptyImage;
 
     if (image) {
-      ctx.drawImage(image, iconX, 8, iconSize, iconSize);
+      ctx.drawImage(image, iconX, iconY, iconSize, iconSize);
     } else {
+      ctx.fillStyle = THEME.color.accentRed;
       ctx.font = 'bold 16px \'Inria Sans\', sans-serif';
-      ctx.fillText(isFilled ? '❤' : '♡', iconX, 20);
+      ctx.fillText(isFilled ? '❤' : '♡', iconX, iconY + 16);
     }
 
     iconX += iconSize + gap;
@@ -588,42 +627,37 @@ function renderLives() {
 }
 
 function renderHud() {
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '14px \'Inria Sans\', sans-serif';
+  drawRoundedRect(ctx, HUD_PANEL.x, HUD_PANEL.y, HUD_PANEL.width, HUD_PANEL.height, THEME.radius.md, {
+    fill: THEME.color.surface,
+    stroke: THEME.color.border,
+    strokeWidth: 1.5
+  });
+
+  ctx.fillStyle = THEME.color.textPrimary;
+  ctx.font = 'bold 15px \'Inria Sans\', sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText(`Fase 19: level ${currentLevel}`, canvas.width / 2, 20);
-  ctx.fillText(`Score: ${score}  Week: ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 40);
+  ctx.fillText(`Level ${currentLevel}`, canvas.width / 2, 24);
+
+  ctx.fillStyle = THEME.color.textMuted;
+  ctx.font = '13px \'Inria Sans\', sans-serif';
+  ctx.fillText(`Score ${score}  ·  Week ${totalFilledSlots(weekPlanning)}/${GAME_CONFIG.totalWeekSlots}`, canvas.width / 2, 44);
 
   if (feedbackTimerMs > 0) {
-    ctx.fillStyle = '#38bdf8';
-    ctx.font = '13px \'Inria Sans\', sans-serif';
-    ctx.fillText(feedbackMessage, canvas.width / 2, 60);
+    ctx.fillStyle = THEME.color.accentBlue;
+    ctx.font = '12px \'Inria Sans\', sans-serif';
+    ctx.fillText(feedbackMessage, canvas.width / 2, 64);
   }
 
   renderActiveEffects();
-  renderCargo(ctx, cargo, canvas.width, getImage('taskSmall'), getImage('taskLarge'));
+  renderCargo(ctx, cargo, canvas.width - 8, getImage('taskSmall'), getImage('taskLarge'));
 
   renderLives();
 
   if (gameMode === 'playing') {
-    ctx.fillStyle = '#334155';
-    ctx.fillRect(PAUSE_ICON_BUTTON.x, PAUSE_ICON_BUTTON.y, PAUSE_ICON_BUTTON.width, PAUSE_ICON_BUTTON.height);
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = '11px \'Inria Sans\', sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('⏸ Pauze', PAUSE_ICON_BUTTON.x + PAUSE_ICON_BUTTON.width / 2, PAUSE_ICON_BUTTON.y + 15);
+    drawGhostButton(PAUSE_ICON_BUTTON, '⏸ Pauze');
   }
 
-  ctx.fillStyle = '#334155';
-  ctx.fillRect(MUTE_ICON_BUTTON.x, MUTE_ICON_BUTTON.y, MUTE_ICON_BUTTON.width, MUTE_ICON_BUTTON.height);
-  ctx.fillStyle = '#e2e8f0';
-  ctx.font = '11px \'Inria Sans\', sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(
-    getIsMuted() ? 'Geluid: uit' : 'Geluid: aan',
-    MUTE_ICON_BUTTON.x + MUTE_ICON_BUTTON.width / 2,
-    MUTE_ICON_BUTTON.y + 15
-  );
+  drawGhostButton(MUTE_ICON_BUTTON, getIsMuted() ? 'Geluid: uit' : 'Geluid: aan', { active: !getIsMuted() });
 }
 
 function renderScorePopups() {
@@ -637,24 +671,32 @@ function renderScorePopups() {
   ctx.globalAlpha = 1;
 }
 
+const GAME_OVER_CARD = { width: 380, height: 300, x: canvas.width / 2 - 190, y: canvas.height / 2 - 160 };
+
 function renderGameOverScreen() {
-  ctx.fillStyle = 'rgba(5, 7, 13, 0.9)';
+  ctx.fillStyle = 'rgba(7, 10, 20, 0.6)';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#ef4444';
-  ctx.font = 'bold 32px \'Inria Sans\', sans-serif';
-  ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 110);
+  drawRoundedRect(ctx, GAME_OVER_CARD.x, GAME_OVER_CARD.y, GAME_OVER_CARD.width, GAME_OVER_CARD.height, THEME.radius.lg, {
+    fill: THEME.color.surfaceStrong,
+    stroke: THEME.color.accentRedSoft,
+    strokeWidth: 1.5
+  });
 
-  ctx.fillStyle = '#e2e8f0';
-  ctx.font = '16px \'Inria Sans\', sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillStyle = THEME.color.accentRed;
+  ctx.font = 'bold 26px \'Inria Sans\', sans-serif';
+  ctx.fillText('Game over', canvas.width / 2, GAME_OVER_CARD.y + 55);
+
+  ctx.fillStyle = THEME.color.textPrimary;
+  ctx.font = '15px \'Inria Sans\', sans-serif';
   const lines = [
     `Score: ${score}`,
     `Hoogste level: ${currentLevel}`,
     `Ingeplande taken: ${plannedCount}`,
     `Voltooide weken: ${completedWeeksCount}`
   ];
-  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, canvas.height / 2 - 60 + i * 24));
+  lines.forEach((line, i) => ctx.fillText(line, canvas.width / 2, GAME_OVER_CARD.y + 100 + i * 24));
 
   drawButton(RESTART_BUTTON, 'Opnieuw spelen');
 }
@@ -706,14 +748,14 @@ function render() {
   }
   renderHud();
 
-  ctx.strokeStyle = '#1e293b';
-  ctx.lineWidth = 2;
+  ctx.strokeStyle = THEME.color.border;
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(0, playAreaHeight);
   ctx.lineTo(canvas.width, playAreaHeight);
   ctx.stroke();
 
-  const shakeOffsetX = shakeTimerMs > 0 ? Math.sin(shakeTimerMs / 20) * 10 : 0;
+  const shakeOffsetX = shakeTimerMs > 0 ? Math.sin(shakeTimerMs / 20) * 5 : 0;
   const planetImages = [
     getImage('planetMonday'),
     getImage('planetTuesday'),
@@ -737,7 +779,7 @@ function render() {
   }
 
   if (damageFlashMs > 0) {
-    ctx.fillStyle = `rgba(239, 68, 68, ${(damageFlashMs / 150) * 0.35})`;
+    ctx.fillStyle = `rgba(242, 119, 122, ${(damageFlashMs / 150) * 0.22})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }
 

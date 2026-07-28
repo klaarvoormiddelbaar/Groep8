@@ -1,5 +1,7 @@
 // Weekplanning: 5 dagen met elk een vast aantal taakplekken.
-// Fase 8: alleen de plaatsingslogica. De echte dag-voor-dag UI komt in fase 9.
+
+import { THEME } from './theme.js';
+import { drawRoundedRect } from './canvasUtils.js';
 
 const DAY_NAMES = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag'];
 
@@ -38,88 +40,123 @@ export function totalFilledSlots(planning) {
 // shake = { dayIndex, offsetX } laat één kolom kort zijwaarts schudden (volle dag-feedback).
 // planetImages = [ma, di, wo, do, vr] -> Image|null, elke dag zijn eigen planeetje.
 export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = { dayIndex: -1, offsetX: 0 }, planetImages = []) {
-  const dayWidth = width / planning.days.length;
-  const headerHeight = 30;
-  const slotHeight = (height - headerHeight) / planning.slotsPerDay;
+  const dayGap = 6;
+  const dayWidth = (width - dayGap * (planning.days.length - 1)) / planning.days.length;
+  const headerHeight = 46;
+  const slotHeight = (height - headerHeight - 6) / planning.slotsPerDay;
 
   ctx.textAlign = 'center';
 
   planning.days.forEach((day, dayIndex) => {
     const shakeX = dayIndex === shake.dayIndex ? shake.offsetX : 0;
-    const dayX = x + dayIndex * dayWidth + shakeX;
+    const dayX = x + dayIndex * (dayWidth + dayGap) + shakeX;
     const isFull = usedSlotsInDay(planning, dayIndex) >= planning.slotsPerDay;
 
-    // Kaartachtergrond ('dagpaneel').
-    ctx.fillStyle = '#101a33';
-    ctx.fillRect(dayX + 1, y, dayWidth - 3, height);
+    // Glazen dagkaart: één afgerond paneel per dag, groene rand zodra hij vol zit.
+    drawRoundedRect(ctx, dayX, y, dayWidth, height, THEME.radius.md, {
+      fill: THEME.color.surface,
+      stroke: isFull ? THEME.color.accentGreen : THEME.color.border,
+      strokeWidth: isFull ? 1.5 : 1
+    });
 
-    // KvM-blauwe koptekst-balk met het dagcijfer, groen als de dag vol zit.
-    ctx.fillStyle = isFull ? '#0f4d3c' : '#123a63';
-    ctx.fillRect(dayX + 1, y, dayWidth - 3, headerHeight);
-
+    const centerX = dayX + dayWidth / 2;
+    const planetSize = 26;
+    const planetY = y + 8;
     const planetImage = planetImages[dayIndex];
+
     if (planetImage) {
-      ctx.drawImage(planetImage, dayX + 6, y + 4, 22, 22);
+      ctx.drawImage(planetImage, centerX - planetSize / 2, planetY, planetSize, planetSize);
+    } else {
+      ctx.beginPath();
+      ctx.fillStyle = THEME.color.accentBlueSoft;
+      ctx.arc(centerX, planetY + planetSize / 2, planetSize / 2, 0, Math.PI * 2);
+      ctx.fill();
     }
 
-    ctx.fillStyle = isFull ? '#34d399' : '#72a8f9';
-    ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
-    ctx.fillText(String(dayIndex + 1), dayX + dayWidth / 2, y + 15);
+    // Dagcijfer-badge overlapt de hoek van het planeetje.
+    const badgeX = centerX + planetSize / 2 - 4;
+    const badgeY = planetY + planetSize - 4;
+    ctx.beginPath();
+    ctx.fillStyle = isFull ? THEME.color.accentGreen : THEME.color.accentBlue;
+    ctx.arc(badgeX, badgeY, 8, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = THEME.color.bgDeep;
+    ctx.font = 'bold 9px \'Inria Sans\', sans-serif';
+    ctx.fillText(String(dayIndex + 1), badgeX, badgeY + 3);
 
-    ctx.fillStyle = '#cbd5e1';
+    ctx.fillStyle = THEME.color.textMuted;
     ctx.font = '9px \'Inria Sans\', sans-serif';
-    ctx.fillText(day.name, dayX + dayWidth / 2, y + headerHeight - 4);
+    ctx.fillText(day.name, centerX, planetY + planetSize + 12);
+
+    ctx.strokeStyle = THEME.color.border;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(dayX + 8, y + headerHeight);
+    ctx.lineTo(dayX + dayWidth - 8, y + headerHeight);
+    ctx.stroke();
 
     let slotOffset = 0;
     for (const task of day.tasks) {
       const slotY = y + headerHeight + slotOffset * slotHeight;
-      const chipHeight = slotHeight * task.slots - 2;
+      const chipHeight = slotHeight * task.slots - 3;
       const isLarge = task.slots === 2;
 
-      ctx.fillStyle = isLarge ? '#f59e0b' : '#fde68a';
-      ctx.fillRect(dayX + 3, slotY + 1, dayWidth - 8, chipHeight - 2);
-      ctx.strokeStyle = isLarge ? '#b45309' : '#ca8a04';
-      ctx.lineWidth = isLarge ? 2 : 1;
-      ctx.strokeRect(dayX + 3, slotY + 1, dayWidth - 8, chipHeight - 2);
+      drawRoundedRect(ctx, dayX + 4, slotY + 2, dayWidth - 8, chipHeight - 2, THEME.radius.sm, {
+        fill: isLarge ? THEME.color.taskLargeFill : THEME.color.taskSmallFill,
+        stroke: isLarge ? THEME.color.taskLargeBorder : THEME.color.taskSmallBorder,
+        strokeWidth: isLarge ? 1.5 : 1
+      });
 
-      ctx.fillStyle = '#1f2937';
+      ctx.fillStyle = THEME.color.bgDeep;
       ctx.font = '8px \'Inria Sans\', sans-serif';
-      ctx.fillText(task.label, dayX + dayWidth / 2, slotY + chipHeight / 2 + 3, dayWidth - 10);
+      ctx.fillText(task.label, centerX, slotY + chipHeight / 2 + 3, dayWidth - 12);
 
       slotOffset += task.slots;
     }
 
     for (let slot = slotOffset; slot < planning.slotsPerDay; slot++) {
       const slotY = y + headerHeight + slot * slotHeight;
-      ctx.strokeStyle = 'rgba(114, 168, 249, 0.18)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(dayX + 3, slotY + 1, dayWidth - 8, slotHeight - 4);
+      drawRoundedRect(ctx, dayX + 4, slotY + 2, dayWidth - 8, slotHeight - 4, THEME.radius.sm, {
+        stroke: THEME.color.border,
+        strokeWidth: 1
+      });
     }
   });
 }
 
 // Weekoverzicht na een voltooid level: rustig, leesbaar, voelt als beloning.
 export function renderWeekSummary(ctx, planning, levelNumber, canvasWidth, canvasHeight) {
-  ctx.fillStyle = 'rgba(5, 7, 13, 0.92)';
+  ctx.fillStyle = 'rgba(7, 10, 20, 0.7)';
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-  ctx.textAlign = 'center';
-  ctx.fillStyle = '#facc15';
-  ctx.font = 'bold 22px \'Inria Sans\', sans-serif';
-  ctx.fillText(`WEEK ${levelNumber} VOLTOOID`, canvasWidth / 2, 50);
+  const cardWidth = Math.min(canvasWidth - 60, 720);
+  const cardHeight = canvasHeight - 80;
+  const cardX = (canvasWidth - cardWidth) / 2;
+  const cardY = 40;
 
-  const columnWidth = canvasWidth / planning.days.length;
-  const startY = 90;
+  drawRoundedRect(ctx, cardX, cardY, cardWidth, cardHeight, THEME.radius.lg, {
+    fill: THEME.color.surfaceStrong,
+    stroke: THEME.color.border,
+    strokeWidth: 1.5
+  });
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = THEME.color.accentAmber;
+  ctx.font = 'bold 20px \'Inria Sans\', sans-serif';
+  ctx.fillText(`Week ${levelNumber} voltooid`, canvasWidth / 2, cardY + 40);
+
+  const columnWidth = cardWidth / planning.days.length;
+  const startY = cardY + 75;
 
   planning.days.forEach((day, dayIndex) => {
-    const colX = dayIndex * columnWidth + columnWidth / 2;
+    const colX = cardX + dayIndex * columnWidth + columnWidth / 2;
 
-    ctx.fillStyle = '#38bdf8';
+    ctx.fillStyle = THEME.color.accentBlue;
     ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
     ctx.fillText(day.name, colX, startY);
 
     ctx.font = '11px \'Inria Sans\', sans-serif';
-    ctx.fillStyle = '#e2e8f0';
+    ctx.fillStyle = THEME.color.textPrimary;
     let lineY = startY + 22;
     for (const task of day.tasks) {
       const label = task.slots === 2 ? `${task.label} (2 plekken)` : task.label;
@@ -128,7 +165,7 @@ export function renderWeekSummary(ctx, planning, levelNumber, canvasWidth, canva
     }
   });
 
-  ctx.fillStyle = '#94a3b8';
+  ctx.fillStyle = THEME.color.textMuted;
   ctx.font = '13px \'Inria Sans\', sans-serif';
-  ctx.fillText('Druk op spatie voor de volgende week...', canvasWidth / 2, canvasHeight - 30);
+  ctx.fillText('Druk op spatie voor de volgende week...', canvasWidth / 2, cardY + cardHeight - 20);
 }
