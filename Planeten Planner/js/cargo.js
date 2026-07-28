@@ -70,15 +70,33 @@ export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeIm
   const cardHeight = 80;
   const cardX = rightX - cardWidth;
 
+  // Rustige puls (geen hard knipperlicht) die de rand, gloed en tekst laat
+  // 'ademen' zolang de laadruimte vol is — trekt de blik zonder te schrikken.
+  const pulse = isFull ? 0.5 + 0.5 * Math.sin(Date.now() / 220) : 0;
+  const pulseRed = `rgb(${Math.round(242 + 13 * pulse)}, ${Math.round(119 + 61 * pulse)}, ${Math.round(122 + 60 * pulse)})`;
+
+  if (isFull) {
+    const glowPadding = 3 + pulse * 5;
+    drawRoundedRect(
+      ctx,
+      cardX - glowPadding,
+      topY - glowPadding,
+      cardWidth + glowPadding * 2,
+      cardHeight + glowPadding * 2,
+      THEME.radius.md + glowPadding,
+      { fill: `rgba(242, 119, 122, ${0.1 + pulse * 0.22})` }
+    );
+  }
+
   drawRoundedRect(ctx, cardX, topY, cardWidth, cardHeight, THEME.radius.md, {
     fill: THEME.color.surface,
-    stroke: isFull ? THEME.color.accentRed : THEME.color.border,
-    strokeWidth: isFull ? 1.5 : 1
+    stroke: isFull ? pulseRed : THEME.color.border,
+    strokeWidth: isFull ? 1.5 + pulse : 1
   });
 
   ctx.textAlign = 'right';
   ctx.font = headerFont;
-  ctx.fillStyle = isFull ? THEME.color.accentRed : THEME.color.textMuted;
+  ctx.fillStyle = isFull ? pulseRed : THEME.color.textMuted;
   ctx.fillText(headerLabel, rightX - padding, topY + 18);
 
   const pipY = topY + 24;
