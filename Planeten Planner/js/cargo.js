@@ -1,6 +1,9 @@
 // Laadruimte van de raket: een wachtrij (FIFO) van gevangen taken.
 // De oudste gevangen taak staat vooraan en wordt als eerste ingepland (fase 8).
 
+import { THEME } from './theme.js';
+import { drawRoundedRect } from './canvasUtils.js';
+
 export function createCargo(capacity) {
   return {
     capacity,
@@ -28,40 +31,90 @@ export function removeNextTask(cargo) {
   return cargo.queue.shift();
 }
 
-// smallImage/largeImage: dezelfde taakplaatjes als de vallende taken (objects.js),
-// zodat de wachtrij-iconen automatisch in stijl blijven. Zonder afbeeldingen valt
-// dit terug op de oude gekleurde blokjes.
-export function renderCargo(ctx, cargo, canvasWidth, smallImage = null, largeImage = null) {
+// Toont de laadruimte als een eigen glazen kaartje met genummerde 'plekken' —
+// dezelfde visuele taal als de dagvakken in de weekplanning: een grote taak neemt
+// zichtbaar 2 aaneengesloten plekken in, een kleine taak 1. De voorste (oudste)
+// taak in de wachtrij krijgt een blauwe rand + een tekstregel die met woorden
+// zegt of de volgende in te plannen taak klein of groot is. Bij een volle
+// laadruimte kleurt de hele kaart rood in plaats van alleen een los cijfertje.
+// smallImage/largeImage: dezelfde taakplaatjes als de vallende taken (objects.js).
+export function renderCargo(ctx, cargo, rightX, topY, smallImage = null, largeImage = null) {
   const used = usedSlots(cargo);
+  const isFull = used >= cargo.capacity;
+  const next = peekNextTask(cargo);
+
+  const pipWidthUnit = 22;
+  const pipHeight = 22;
+  const pipGap = 3;
+  const padding = 10;
+  const contentWidth = cargo.capacity * pipWidthUnit + (cargo.capacity - 1) * pipGap;
+
+  const headerFont = 'bold 12px \'Inria Sans\', sans-serif';
+  const nextFont = '11px \'Inria Sans\', sans-serif';
+  const headerLabel = isFull ? 'LAADRUIMTE VOL' : `LAADRUIMTE ${used}/${cargo.capacity}`;
+  const nextLabel = next
+    ? next.slots === 2
+      ? 'Volgende: groot (2 plekken)'
+      : 'Volgende: klein (1 plek)'
+    : 'Nog leeg';
+
+  ctx.font = headerFont;
+  const headerWidth = ctx.measureText(headerLabel).width;
+  ctx.font = nextFont;
+  const nextWidth = ctx.measureText(nextLabel).width;
+
+  const cardWidth = Math.max(contentWidth, headerWidth, nextWidth) + padding * 2;
+  const cardHeight = 80;
+  const cardX = rightX - cardWidth;
+
+  drawRoundedRect(ctx, cardX, topY, cardWidth, cardHeight, THEME.radius.md, {
+    fill: THEME.color.surface,
+    stroke: isFull ? THEME.color.accentRed : THEME.color.border,
+    strokeWidth: isFull ? 1.5 : 1
+  });
 
   ctx.textAlign = 'right';
-  ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
-  ctx.fillStyle = used >= cargo.capacity ? '#f87171' : '#94a3b8';
-  ctx.fillText(`Laadruimte: ${used}/${cargo.capacity}`, canvasWidth - 12, 20);
+  ctx.font = headerFont;
+  ctx.fillStyle = isFull ? THEME.color.accentRed : THEME.color.textMuted;
+  ctx.fillText(headerLabel, rightX - padding, topY + 18);
 
-  const chipSize = 28;
-  const gap = 4;
-  let chipX = canvasWidth - 12 - chipSize;
+  const pipY = topY + 24;
+  let cursorRightX = rightX - padding;
 
   for (let i = 0; i < cargo.queue.length; i++) {
     const task = cargo.queue[i];
     const isNext = i === 0;
     const isLarge = task.slots === 2;
+    const chipWidth = isLarge ? pipWidthUnit * 2 + pipGap : pipWidthUnit;
+    const chipX = cursorRightX - chipWidth;
+
+    drawRoundedRect(ctx, chipX, pipY, chipWidth, pipHeight, THEME.radius.sm, {
+      fill: isLarge ? THEME.color.taskLargeFill : THEME.color.taskSmallFill,
+      stroke: isNext ? THEME.color.accentBlue : (isLarge ? THEME.color.taskLargeBorder : THEME.color.taskSmallBorder),
+      strokeWidth: isNext ? 2 : 1.25
+    });
+
     const image = isLarge ? largeImage : smallImage;
-
     if (image) {
-      ctx.drawImage(image, chipX, 30, chipSize, chipSize);
-    } else {
-      ctx.fillStyle = isLarge ? '#fb923c' : '#facc15';
-      ctx.fillRect(chipX, 30, chipSize, chipSize);
+      const iconSize = pipHeight - 4;
+      ctx.drawImage(image, chipX + chipWidth / 2 - iconSize / 2, pipY + 2, iconSize, iconSize);
     }
 
-    if (isNext) {
-      ctx.strokeStyle = '#38bdf8';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(chipX - 1, 29, chipSize + 2, chipSize + 2);
-    }
-
-    chipX -= chipSize + gap;
+    cursorRightX = chipX - pipGap;
   }
+
+  let remainingSlots = cargo.capacity - used;
+  while (remainingSlots > 0) {
+    const chipX = cursorRightX - pipWidthUnit;
+    drawRoundedRect(ctx, chipX, pipY, pipWidthUnit, pipHeight, THEME.radius.sm, {
+      stroke: THEME.color.border,
+      strokeWidth: 1
+    });
+    cursorRightX = chipX - pipGap;
+    remainingSlots -= 1;
+  }
+
+  ctx.font = nextFont;
+  ctx.fillStyle = next ? THEME.color.accentBlue : THEME.color.textMuted;
+  ctx.fillText(nextLabel, rightX - padding, pipY + pipHeight + 16);
 }

@@ -666,7 +666,7 @@ function renderHud() {
   }
 
   renderActiveEffects();
-  renderCargo(ctx, cargo, LOGICAL_WIDTH - 8, getImage('taskSmall'), getImage('taskLarge'));
+  renderCargo(ctx, cargo, LOGICAL_WIDTH - 16, 10, getImage('taskSmall'), getImage('taskLarge'));
 
   renderLives();
 
