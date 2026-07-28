@@ -33,7 +33,7 @@ import { drawRoundedRect } from './canvasUtils.js';
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
 // objecten + raket) gebruikt de resterende hoogte erboven. Iets hoger dan voorheen
 // zodat de dagpanelen ruimte hebben voor het planeetje + naam in de moderne stijl.
-const WEEKPLANNING_PANEL_HEIGHT = 145;
+const WEEKPLANNING_PANEL_HEIGHT = 155; // was 145, iets hoger voor de grotere dag-tekst
 
 // Alle spellogica en tekencode werkt in deze vaste 'logische' resolutie. Het echte
 // canvas-oppervlak (canvas.width/height) wordt hieronder groter gezet op basis van

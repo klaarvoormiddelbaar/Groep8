@@ -21,12 +21,14 @@ export const THEME = {
     accentRedSoft: 'rgba(242, 119, 122, 0.16)',
 
     textPrimary: '#e8ecf5',
-    textMuted: '#8b93a7',
+    textMuted: '#a3abc0',
 
-    taskSmallFill: '#f6cf7d',
-    taskSmallBorder: 'rgba(180, 130, 30, 0.55)',
-    taskLargeFill: '#f0a95a',
-    taskLargeBorder: 'rgba(150, 85, 20, 0.6)'
+    // Zachte, doorschijnende tint i.p.v. een vol verzadigd blok — sluit aan bij de
+    // glazen panelen in plaats van als los arcade-sticker bovenop te liggen.
+    taskSmallFill: 'rgba(91, 141, 239, 0.18)',
+    taskSmallBorder: 'rgba(125, 165, 245, 0.65)',
+    taskLargeFill: 'rgba(244, 181, 99, 0.20)',
+    taskLargeBorder: 'rgba(244, 181, 99, 0.7)'
   },
   radius: {
     sm: 8,

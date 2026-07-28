@@ -42,7 +42,7 @@ export function totalFilledSlots(planning) {
 export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = { dayIndex: -1, offsetX: 0 }, planetImages = []) {
   const dayGap = 6;
   const dayWidth = (width - dayGap * (planning.days.length - 1)) / planning.days.length;
-  const headerHeight = 46;
+  const headerHeight = 56;
   const slotHeight = (height - headerHeight - 6) / planning.slotsPerDay;
 
   ctx.textAlign = 'center';
@@ -59,8 +59,20 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = {
       strokeWidth: isFull ? 1.5 : 1
     });
 
+    // Dagnummer als los, klein label in de hoek — staat los van de planeet, geen
+    // overlap meer, en leest als een rustige tag in plaats van een sticker-badge.
+    const tagSize = 18;
+    drawRoundedRect(ctx, dayX + 6, y + 6, tagSize, tagSize, THEME.radius.sm, {
+      fill: isFull ? THEME.color.accentGreenSoft : THEME.color.accentBlueSoft,
+      stroke: isFull ? THEME.color.accentGreen : THEME.color.accentBlue,
+      strokeWidth: 1
+    });
+    ctx.fillStyle = isFull ? THEME.color.accentGreen : THEME.color.accentBlue;
+    ctx.font = 'bold 10px \'Inria Sans\', sans-serif';
+    ctx.fillText(String(dayIndex + 1), dayX + 6 + tagSize / 2, y + 6 + tagSize / 2 + 3.5);
+
     const centerX = dayX + dayWidth / 2;
-    const planetSize = 26;
+    const planetSize = 28;
     const planetY = y + 8;
     const planetImage = planetImages[dayIndex];
 
@@ -73,20 +85,11 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = {
       ctx.fill();
     }
 
-    // Dagcijfer-badge overlapt de hoek van het planeetje.
-    const badgeX = centerX + planetSize / 2 - 4;
-    const badgeY = planetY + planetSize - 4;
-    ctx.beginPath();
-    ctx.fillStyle = isFull ? THEME.color.accentGreen : THEME.color.accentBlue;
-    ctx.arc(badgeX, badgeY, 8, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.fillStyle = THEME.color.bgDeep;
-    ctx.font = 'bold 9px \'Inria Sans\', sans-serif';
-    ctx.fillText(String(dayIndex + 1), badgeX, badgeY + 3);
-
-    ctx.fillStyle = THEME.color.textMuted;
-    ctx.font = '9px \'Inria Sans\', sans-serif';
-    ctx.fillText(day.name, centerX, planetY + planetSize + 12);
+    // Dagnaam: groter en helder (textPrimary i.p.v. textMuted) zodat het op
+    // afstand goed leesbaar blijft.
+    ctx.fillStyle = THEME.color.textPrimary;
+    ctx.font = 'bold 12px \'Inria Sans\', sans-serif';
+    ctx.fillText(day.name, centerX, planetY + planetSize + 16);
 
     ctx.strokeStyle = THEME.color.border;
     ctx.lineWidth = 1;
@@ -107,9 +110,9 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = {
         strokeWidth: isLarge ? 1.5 : 1
       });
 
-      ctx.fillStyle = THEME.color.bgDeep;
-      ctx.font = '8px \'Inria Sans\', sans-serif';
-      ctx.fillText(task.label, centerX, slotY + chipHeight / 2 + 3, dayWidth - 12);
+      ctx.fillStyle = THEME.color.textPrimary;
+      ctx.font = '10px \'Inria Sans\', sans-serif';
+      ctx.fillText(task.label, centerX, slotY + chipHeight / 2 + 3.5, dayWidth - 12);
 
       slotOffset += task.slots;
     }

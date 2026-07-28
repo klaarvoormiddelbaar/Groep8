@@ -4,7 +4,7 @@
 
 export const POWERUP_TYPES = ['shield', 'extraCargo', 'magnet', 'slowMotion', 'extraLife', 'doubleScore'];
 
-const POWERUP_SIZE = 45;
+const POWERUP_SIZE = 41; // 10% kleiner
 
 const POWERUP_STYLE = {
   shield: { color: '#38bdf8', label: 'Schild' },

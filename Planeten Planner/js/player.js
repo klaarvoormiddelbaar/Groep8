@@ -2,7 +2,7 @@
 
 // Beeldverhouding van rocket.png (417x642, staand) i.p.v. de vorige brede
 // placeholder-driehoek — de hoogte volgt daaruit.
-const PLAYER_WIDTH = 72;
+const PLAYER_WIDTH = 58; // 20% kleiner
 const PLAYER_HEIGHT = Math.round(PLAYER_WIDTH * (642 / 417));
 const PLAYER_SPEED = 520; // pixels per seconde
 const PLAYER_MARGIN_BOTTOM = 20;

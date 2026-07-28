@@ -1,7 +1,7 @@
 // Meteorieten: vallende gevaarobjecten, visueel duidelijk anders dan taken
 // (onregelmatige rotsvorm i.p.v. de vierkante taakkaartjes).
 
-const METEOR_RADIUS = 30;
+const METEOR_RADIUS = 27; // 10% kleiner
 const METEOR_POINT_COUNT = 9;
 
 // Genereert een vaste, onregelmatige veelhoek (per meteoriet één keer, niet elke frame).
