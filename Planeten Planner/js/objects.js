@@ -1,8 +1,19 @@
 // Vallende schooltaken.
 // Fase 4: kleine taken (1 taakplek) en grote taken (2 taakplekken).
 
-const SMALL_TASK_LABELS = ['Engels', 'Lezen', 'Geschiedenis', 'Biologie', 'Wiskunde', 'Huiswerk', 'Woordjes leren'];
-const LARGE_TASK_LABELS = ['Leren voor toets', 'Presentatie voorbereiden', 'Groot project', 'Werkstuk maken'];
+// Alleen deze 6 vakken, altijd als afkorting, zodat in één oogopslag te zien is
+// om welk vak het gaat: kleine taak = huiswerk, grote taak = een toets leren.
+const SUBJECT_ABBREVIATIONS = {
+  Nederlands: 'NE',
+  Engels: 'EN',
+  Wiskunde: 'WI',
+  Biologie: 'BI',
+  Geschiedenis: 'GS',
+  Aardrijkskunde: 'AK'
+};
+const SUBJECTS = Object.values(SUBJECT_ABBREVIATIONS);
+const SMALL_TASK_LABELS = SUBJECTS.map((abbr) => `${abbr} huiswerk`);
+const LARGE_TASK_LABELS = SUBJECTS.map((abbr) => `leren toets ${abbr}`);
 
 const SMALL_TASK_SIZE = 59; // 10% kleiner
 const LARGE_TASK_SIZE = 86; // 10% kleiner
