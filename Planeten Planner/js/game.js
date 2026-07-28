@@ -756,7 +756,10 @@ function renderHud() {
   const levelPillWidth = ctx.measureText(levelText).width + 28;
   const levelPillHeight = 26;
   const levelPillX = LOGICAL_WIDTH / 2 - levelPillWidth / 2;
-  const levelPillY = 16;
+  // Deze kolom heeft maar 2 regels (pil + score), tegenover 3 regels links en
+  // rechts, dus 'm gewoon hetzelfde y-punt geven als de andere kolommen laat 'm
+  // te hoog hangen. Centreer 'm daarom op zijn eigen inhoud binnen het paneel.
+  const levelPillY = HUD_PANEL.y + 26;
 
   drawRoundedRect(ctx, levelPillX, levelPillY, levelPillWidth, levelPillHeight, levelPillHeight / 2, {
     fill: THEME.color.accentBlueSoft,
