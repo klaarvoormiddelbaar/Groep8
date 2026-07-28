@@ -28,7 +28,7 @@ import { rectsOverlap, circleRectOverlap } from './collision.js';
 import { sounds, toggleMute, getIsMuted } from './audio.js';
 import { loadAssets, getImage } from './assets.js';
 import { THEME } from './theme.js';
-import { drawRoundedRect } from './canvasUtils.js';
+import { drawRoundedRect, drawPillButton, drawStatCard } from './canvasUtils.js';
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
 // objecten + raket) gebruikt de resterende hoogte erboven. Iets hoger dan voorheen
@@ -60,9 +60,18 @@ ctx.imageSmoothingQuality = 'high';
 
 const playAreaHeight = LOGICAL_HEIGHT - WEEKPLANNING_PANEL_HEIGHT;
 
-const START_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: 320, width: 200, height: 56 };
-const RESUME_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: LOGICAL_HEIGHT / 2 - 28, width: 200, height: 56 };
-const RESTART_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: LOGICAL_HEIGHT / 2 + 50, width: 200, height: 56 };
+// Kaarten + hun knop worden hier samen gedefinieerd (knop-positie afgeleid van de
+// kaart-onderkant) zodat lay-outwijzigingen aan één kant nooit de knop laten
+// losraken van de kaart.
+const START_CARD = { width: 440, height: 400, x: LOGICAL_WIDTH / 2 - 220, y: 60 };
+const START_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: START_CARD.y + START_CARD.height - 80, width: 200, height: 56 };
+
+const PAUSE_CARD = { width: 320, height: 170, x: LOGICAL_WIDTH / 2 - 160, y: LOGICAL_HEIGHT / 2 - 95 };
+const RESUME_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: PAUSE_CARD.y + PAUSE_CARD.height - 74, width: 200, height: 56 };
+
+const GAME_OVER_CARD = { width: 420, height: 380, x: LOGICAL_WIDTH / 2 - 210, y: LOGICAL_HEIGHT / 2 - 190 };
+const RESTART_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: GAME_OVER_CARD.y + GAME_OVER_CARD.height - 80, width: 200, height: 56 };
+
 const PAUSE_ICON_BUTTON = { x: 108, y: 30, width: 64, height: 24 };
 const MUTE_ICON_BUTTON = { x: 108, y: 58, width: 88, height: 24 };
 const HUD_PANEL = { x: 8, y: 6, width: LOGICAL_WIDTH - 16, height: 92 };
@@ -119,10 +128,11 @@ let currentLevel;
 let levelSettings;
 
 let isShowingLevelSummary;
-let summaryTimerMs;
 let completedWeekSnapshot;
 let completedLevelNumber;
+let completedLevelScoreGain;
 let completedWeeksCount;
+let weekSummaryButtonRect;
 
 let feedbackMessage;
 let feedbackTimerMs;
@@ -156,10 +166,11 @@ function resetGame() {
   player.x = LOGICAL_WIDTH / 2 - player.width / 2;
 
   isShowingLevelSummary = false;
-  summaryTimerMs = 0;
   completedWeekSnapshot = null;
   completedLevelNumber = 0;
+  completedLevelScoreGain = 0;
   completedWeeksCount = 0;
+  weekSummaryButtonRect = null;
 
   feedbackMessage = '';
   feedbackTimerMs = 0;
@@ -200,9 +211,10 @@ function completeLevel() {
   // terwijl de speler alweer met een schone week kan beginnen.
   completedWeekSnapshot = weekPlanning;
   completedLevelNumber = currentLevel;
+  completedLevelScoreGain = GAME_CONFIG.scoreLevelComplete + lives * GAME_CONFIG.scoreBonusPerRemainingLife;
   completedWeeksCount += 1;
 
-  addScore(GAME_CONFIG.scoreLevelComplete + lives * GAME_CONFIG.scoreBonusPerRemainingLife);
+  addScore(completedLevelScoreGain);
 
   currentLevel += 1;
   levelSettings = getLevelSettings(currentLevel);
@@ -210,14 +222,15 @@ function completeLevel() {
   cargo = createCargo(GAME_CONFIG.cargoCapacity); // reset ook extra laadruimte automatisch
   resetLevelScopedEffects(activeEffects); // tijdelijke effecten eindigen, level-power-ups resetten
 
+  // Geen automatische timer meer: het weekoverzicht blijft staan tot de speler
+  // zelf op 'Volgende week' klikt of spatie drukt.
   isShowingLevelSummary = true;
-  summaryTimerMs = GAME_CONFIG.levelSummaryAutoContinueDelay;
   sounds.levelComplete();
 }
 
 function endLevelSummary() {
   isShowingLevelSummary = false;
-  summaryTimerMs = 0;
+  weekSummaryButtonRect = null;
 }
 
 function showFeedback(message) {
@@ -312,6 +325,10 @@ canvas.addEventListener('click', (event) => {
     resetGame();
     return;
   }
+  if (gameMode === 'playing' && isShowingLevelSummary && weekSummaryButtonRect && hitTest(px, py, weekSummaryButtonRect)) {
+    endLevelSummary();
+    return;
+  }
   if (gameMode === 'playing' && hitTest(px, py, PAUSE_ICON_BUTTON)) {
     gameMode = 'paused';
     return;
@@ -386,11 +403,7 @@ function update(deltaSeconds) {
   if (gameMode !== 'playing') return;
 
   if (isShowingLevelSummary) {
-    summaryTimerMs = Math.max(0, summaryTimerMs - deltaSeconds * 1000);
-    if (summaryTimerMs === 0) {
-      endLevelSummary();
-    }
-    return; // gameplay staat volledig stil tijdens het weekoverzicht
+    return; // gameplay staat stil; wacht op de speler (knop of spatie)
   }
 
   updatePlayer(player, deltaSeconds, LOGICAL_WIDTH);
@@ -517,16 +530,7 @@ function update(deltaSeconds) {
 }
 
 function drawButton(rect, label) {
-  drawRoundedRect(ctx, rect.x, rect.y, rect.width, rect.height, rect.height / 2, {
-    fill: THEME.color.accentGreen,
-    stroke: 'rgba(255, 255, 255, 0.28)',
-    strokeWidth: 1
-  });
-
-  ctx.fillStyle = THEME.color.bgDeep;
-  ctx.font = 'bold 16px \'Inria Sans\', sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 5);
+  drawPillButton(ctx, rect, label);
 }
 
 // Klein glazen "chip"-knopje voor pauze/geluid, zelfde afgeronde taal als de rest.
@@ -553,8 +557,6 @@ function renderLoadingScreen() {
   ctx.fillText('Laden...', LOGICAL_WIDTH / 2, LOGICAL_HEIGHT / 2);
 }
 
-const START_CARD = { width: 380, height: 300, x: LOGICAL_WIDTH / 2 - 190, y: 100 };
-
 function renderStartScreen() {
   ctx.fillStyle = THEME.color.bgDeep;
   ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
@@ -565,20 +567,52 @@ function renderStartScreen() {
     strokeWidth: 1.5
   });
 
+  const centerX = LOGICAL_WIDTH / 2;
+
+  const rocketImage = getImage('rocket');
+  const rocketWidth = 46;
+  const rocketHeight = rocketImage ? Math.round(rocketWidth * (rocketImage.height / rocketImage.width)) : 60;
+  const rocketTop = START_CARD.y + 24;
+  if (rocketImage) {
+    ctx.drawImage(rocketImage, centerX - rocketWidth / 2, rocketTop, rocketWidth, rocketHeight);
+  }
+
   ctx.textAlign = 'center';
   ctx.fillStyle = THEME.color.accentAmber;
   ctx.font = 'bold 26px \'Inria Sans\', sans-serif';
-  ctx.fillText('Planeten Planner', LOGICAL_WIDTH / 2, START_CARD.y + 56);
+  ctx.fillText('Planeten Planner', centerX, rocketTop + rocketHeight + 30);
 
   ctx.fillStyle = THEME.color.textMuted;
-  ctx.font = '14px \'Inria Sans\', sans-serif';
-  const lines = ['Beweeg met ← en →', 'Vang taken', 'Ontwijk meteorieten', 'Plan met 1 t/m 5'];
-  lines.forEach((line, i) => ctx.fillText(line, LOGICAL_WIDTH / 2, START_CARD.y + 100 + i * 22));
+  ctx.font = '13px \'Inria Sans\', sans-serif';
+  ctx.fillText('Vang taken, plan je week en voltooi elk level.', centerX, rocketTop + rocketHeight + 52);
+
+  // Instructierijen: icoon + tekst, links uitgelijnd binnen een vast blok zodat
+  // het als een korte handleiding leest in plaats van een blok gecentreerde tekst.
+  const instructions = [
+    ['⬅➡', 'Beweeg de raket'],
+    ['📦', 'Vang taken die naar beneden vallen'],
+    ['☄️', 'Ontwijk meteorieten'],
+    ['1–5', 'Plan de volgende taak op een dag']
+  ];
+  const instructionsWidth = 300;
+  const instructionsX = centerX - instructionsWidth / 2;
+  let instructionY = rocketTop + rocketHeight + 84;
+
+  for (const [icon, text] of instructions) {
+    ctx.textAlign = 'left';
+    ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
+    ctx.fillStyle = THEME.color.accentBlue;
+    ctx.fillText(icon, instructionsX, instructionY);
+
+    ctx.font = '13px \'Inria Sans\', sans-serif';
+    ctx.fillStyle = THEME.color.textPrimary;
+    ctx.fillText(text, instructionsX + 46, instructionY);
+
+    instructionY += 26;
+  }
 
   drawButton(START_BUTTON, 'Start');
 }
-
-const PAUSE_CARD = { width: 320, height: 170, x: LOGICAL_WIDTH / 2 - 160, y: LOGICAL_HEIGHT / 2 - 95 };
 
 function renderPauseOverlay() {
   ctx.fillStyle = 'rgba(7, 10, 20, 0.55)';
@@ -688,8 +722,6 @@ function renderScorePopups() {
   ctx.globalAlpha = 1;
 }
 
-const GAME_OVER_CARD = { width: 380, height: 300, x: LOGICAL_WIDTH / 2 - 190, y: LOGICAL_HEIGHT / 2 - 160 };
-
 function renderGameOverScreen() {
   ctx.fillStyle = 'rgba(7, 10, 20, 0.6)';
   ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
@@ -703,17 +735,33 @@ function renderGameOverScreen() {
   ctx.textAlign = 'center';
   ctx.fillStyle = THEME.color.accentRed;
   ctx.font = 'bold 26px \'Inria Sans\', sans-serif';
-  ctx.fillText('Game over', LOGICAL_WIDTH / 2, GAME_OVER_CARD.y + 55);
+  ctx.fillText('Game over', LOGICAL_WIDTH / 2, GAME_OVER_CARD.y + 50);
 
-  ctx.fillStyle = THEME.color.textPrimary;
-  ctx.font = '15px \'Inria Sans\', sans-serif';
-  const lines = [
-    `Score: ${score}`,
-    `Hoogste level: ${currentLevel}`,
-    `Ingeplande taken: ${plannedCount}`,
-    `Voltooide weken: ${completedWeeksCount}`
+  ctx.fillStyle = THEME.color.textMuted;
+  ctx.font = '13px \'Inria Sans\', sans-serif';
+  ctx.fillText('Probeer het nog eens!', LOGICAL_WIDTH / 2, GAME_OVER_CARD.y + 74);
+
+  // Cijfers als 2x2 stat-kaarten i.p.v. platte tekstregels, zodat ze in één
+  // oogopslag opvallen.
+  const stats = [
+    ['Score', score],
+    ['Hoogste level', currentLevel],
+    ['Ingeplande taken', plannedCount],
+    ['Voltooide weken', completedWeeksCount]
   ];
-  lines.forEach((line, i) => ctx.fillText(line, LOGICAL_WIDTH / 2, GAME_OVER_CARD.y + 100 + i * 24));
+  const cardW = 170;
+  const cardH = 64;
+  const gap = 16;
+  const gridX = LOGICAL_WIDTH / 2 - cardW - gap / 2;
+  const gridY = GAME_OVER_CARD.y + 100;
+
+  stats.forEach(([label, value], i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    drawStatCard(ctx, gridX + col * (cardW + gap), gridY + row * (cardH + 14), cardW, cardH, label, value, {
+      accent: THEME.color.accentRed
+    });
+  });
 
   drawButton(RESTART_BUTTON, 'Opnieuw spelen');
 }
@@ -792,7 +840,16 @@ function render() {
   );
 
   if (isShowingLevelSummary && completedWeekSnapshot) {
-    renderWeekSummary(ctx, completedWeekSnapshot, completedLevelNumber, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+    weekSummaryButtonRect = renderWeekSummary(
+      ctx,
+      completedWeekSnapshot,
+      completedLevelNumber,
+      completedLevelScoreGain,
+      lives,
+      GAME_CONFIG.maximumLives,
+      LOGICAL_WIDTH,
+      LOGICAL_HEIGHT
+    );
   }
 
   if (damageFlashMs > 0) {

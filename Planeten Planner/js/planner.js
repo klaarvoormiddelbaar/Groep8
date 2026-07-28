@@ -1,7 +1,7 @@
 // Weekplanning: 5 dagen met elk een vast aantal taakplekken.
 
 import { THEME } from './theme.js';
-import { drawRoundedRect } from './canvasUtils.js';
+import { drawRoundedRect, drawPillButton, drawStatCard } from './canvasUtils.js';
 
 const DAY_NAMES = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag'];
 
@@ -128,47 +128,81 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = {
 }
 
 // Weekoverzicht na een voltooid level: rustig, leesbaar, voelt als beloning.
-export function renderWeekSummary(ctx, planning, levelNumber, canvasWidth, canvasHeight) {
-  ctx.fillStyle = 'rgba(7, 10, 20, 0.7)';
+// Geen automatische timer meer — de speler klikt zelf op 'Volgende week' (of
+// drukt spatie); de aangeroepen functie geeft de knop-rect terug zodat het
+// klikbaar gemaakt kan worden in game.js.
+export function renderWeekSummary(ctx, planning, levelNumber, scoreGained, livesRemaining, maxLives, canvasWidth, canvasHeight) {
+  ctx.fillStyle = 'rgba(7, 10, 20, 0.72)';
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
   const cardWidth = Math.min(canvasWidth - 60, 720);
-  const cardHeight = canvasHeight - 80;
+  const cardHeight = 340;
   const cardX = (canvasWidth - cardWidth) / 2;
-  const cardY = 40;
+  const cardY = (canvasHeight - cardHeight) / 2;
 
   drawRoundedRect(ctx, cardX, cardY, cardWidth, cardHeight, THEME.radius.lg, {
     fill: THEME.color.surfaceStrong,
-    stroke: THEME.color.border,
+    stroke: THEME.color.accentGreenSoft,
     strokeWidth: 1.5
   });
 
   ctx.textAlign = 'center';
-  ctx.fillStyle = THEME.color.accentAmber;
-  ctx.font = 'bold 20px \'Inria Sans\', sans-serif';
-  ctx.fillText(`Week ${levelNumber} voltooid`, canvasWidth / 2, cardY + 40);
+  ctx.fillStyle = THEME.color.accentGreen;
+  ctx.font = 'bold 22px \'Inria Sans\', sans-serif';
+  ctx.fillText(`✓ Week ${levelNumber} voltooid`, canvasWidth / 2, cardY + 38);
+
+  // Twee statkaartjes: wat de speler er deze week bij kreeg.
+  const statWidth = 160;
+  const statHeight = 56;
+  const statGap = 16;
+  const statsY = cardY + 56;
+  const statsX = canvasWidth / 2 - statWidth - statGap / 2;
+  drawStatCard(ctx, statsX, statsY, statWidth, statHeight, 'Score deze week', `+${scoreGained}`, {
+    accent: THEME.color.accentGreen
+  });
+  drawStatCard(ctx, statsX + statWidth + statGap, statsY, statWidth, statHeight, 'Levens over', `${livesRemaining}/${maxLives}`, {
+    accent: THEME.color.accentRed
+  });
 
   const columnWidth = cardWidth / planning.days.length;
-  const startY = cardY + 75;
+  const startY = statsY + statHeight + 40;
 
   planning.days.forEach((day, dayIndex) => {
     const colX = cardX + dayIndex * columnWidth + columnWidth / 2;
 
     ctx.fillStyle = THEME.color.accentBlue;
-    ctx.font = 'bold 13px \'Inria Sans\', sans-serif';
+    ctx.font = 'bold 14px \'Inria Sans\', sans-serif';
     ctx.fillText(day.name, colX, startY);
 
-    ctx.font = '11px \'Inria Sans\', sans-serif';
-    ctx.fillStyle = THEME.color.textPrimary;
-    let lineY = startY + 22;
-    for (const task of day.tasks) {
-      const label = task.slots === 2 ? `${task.label} (2 plekken)` : task.label;
-      ctx.fillText(label, colX, lineY, columnWidth - 10);
-      lineY += 20;
+    ctx.font = '12px \'Inria Sans\', sans-serif';
+    let lineY = startY + 24;
+    if (day.tasks.length === 0) {
+      ctx.fillStyle = THEME.color.textMuted;
+      ctx.fillText('—', colX, lineY);
+    } else {
+      for (const task of day.tasks) {
+        const label = task.slots === 2 ? `${task.label} (2 plekken)` : task.label;
+        ctx.fillStyle = THEME.color.textPrimary;
+        ctx.fillText(label, colX, lineY, columnWidth - 10);
+        lineY += 22;
+      }
     }
   });
 
+  const buttonWidth = 220;
+  const buttonHeight = 52;
+  const buttonRect = {
+    x: canvasWidth / 2 - buttonWidth / 2,
+    y: cardY + cardHeight - 80,
+    width: buttonWidth,
+    height: buttonHeight
+  };
+  drawPillButton(ctx, buttonRect, 'Volgende week');
+
+  ctx.textAlign = 'center';
   ctx.fillStyle = THEME.color.textMuted;
-  ctx.font = '13px \'Inria Sans\', sans-serif';
-  ctx.fillText('Druk op spatie voor de volgende week...', canvasWidth / 2, cardY + cardHeight - 20);
+  ctx.font = '11px \'Inria Sans\', sans-serif';
+  ctx.fillText('of druk op spatie', canvasWidth / 2, buttonRect.y + buttonHeight + 18);
+
+  return buttonRect;
 }

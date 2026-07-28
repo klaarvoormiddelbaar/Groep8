@@ -40,8 +40,6 @@ export const GAME_CONFIG = {
   meteorSpawnIntervalDecreasePerLevel: 200,
   meteorMinimumSpawnInterval: 1000,
 
-  levelSummaryAutoContinueDelay: 6000,
-
   scoreCatchSmallTask: 10,
   scoreCatchLargeTask: 20,
   scorePlanSmallTask: 15,
