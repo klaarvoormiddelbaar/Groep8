@@ -102,6 +102,18 @@
   margin-bottom: 16px;
 }
 
+/* Niet-wegklikbaar: geen kruisje, geen knoppen — deze kaart gaat pas dicht als
+   de code zelf close() aanroept (bijv. zodra de laadruimte leeg is), niet op
+   verzoek van de speler. De tekst zelf legt uit wat er moet gebeuren. */
+.tut-card.tut-non-dismissible .tut-close,
+.tut-card.tut-non-dismissible .tut-footer {
+  display: none;
+}
+
+.tut-card.tut-non-dismissible .tut-body {
+  margin-bottom: 0;
+}
+
 .tut-footer {
   display: flex;
   align-items: center;

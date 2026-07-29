@@ -29,9 +29,13 @@ function markTutorialSeen(storageKey) {
 // logische coördinaten; null = kaart gecentreerd tonen zonder spotlight.
 // storageKey: eigen localStorage-sleutel per rondleiding, zodat bijv. de level 1-
 // en level 3-uitleg onafhankelijk van elkaar 'gezien' worden onthouden.
-// variant: 'info' (rustig blauw, standaard) of 'warning' (amber) — voor momenten
-// die om extra aandacht vragen, zoals 'je laadruimte zit vol'.
-export function createTutorial(canvas, logicalWidth, logicalHeight, steps, storageKey, { variant = 'info' } = {}) {
+// variant: 'info' (rustig blauw, standaard), 'warning' (amber) of 'danger' (rood)
+// — voor momenten die om extra aandacht vragen of een speler iets kosten.
+// dismissible: true (standaard) toont een kruisje + knoppen om zelf te sluiten.
+// false = geen enkele manier om 'm zelf weg te klikken — gebruikt voor de
+// laadruimte-vol-pauze, die pas dichtgaat zodra de speler 'm daadwerkelijk heeft
+// leeggepland (zie maybeUpdateCargoFullPause in game.js, dat close() aanroept).
+export function createTutorial(canvas, logicalWidth, logicalHeight, steps, storageKey, { variant = 'info', dismissible = true } = {}) {
   const overlay = document.createElement('div');
   overlay.className = `tut-overlay tut-variant-${variant}`;
   overlay.setAttribute('role', 'dialog');
@@ -55,6 +59,10 @@ export function createTutorial(canvas, logicalWidth, logicalHeight, steps, stora
       </div>
     </div>
   `;
+
+  if (!dismissible) {
+    card.classList.add('tut-non-dismissible');
+  }
 
   overlay.appendChild(spotlight);
   overlay.appendChild(card);
@@ -167,5 +175,16 @@ export function createTutorial(canvas, logicalWidth, logicalHeight, steps, stora
   });
   closeBtn.addEventListener('click', close);
 
-  return { open, close, isOpen: () => isOpen, hasBeenSeen: () => hasSeenTutorial(storageKey) };
+  return {
+    open,
+    close,
+    isOpen: () => isOpen,
+    hasBeenSeen: () => hasSeenTutorial(storageKey),
+    // Herrendert de huidige stap nadat de aanroeper steps[currentIndex] direct
+    // heeft aangepast (bijv. een live aftellend aantal in de tekst) — no-op als
+    // de rondleiding niet open is.
+    refresh: () => {
+      if (isOpen) render(currentIndex);
+    }
+  };
 }

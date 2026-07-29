@@ -193,26 +193,31 @@ const level2Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEV
 const level3Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL3_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level3_v1');
 const level4Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL4_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level4_v1');
 
-// Laadruimte-vol-momenten: pauzeren het spel en leggen precies één keer uit hoe het
-// werkt, zodat een speler niet direct wordt afgestraft (gemiste taken) terwijl die
-// nog aan het uitvinden is wat 'vol' betekent. Level 1 krijgt de basisuitleg; vanaf
-// level 2 (ongeacht of dat 2, 3 of 4 is — gewoon de eerste keer dat het gebeurt)
-// komt er ook een waarschuwing bij over grote taken die 2 plekken innemen.
-const CARGO_FULL_LEVEL1_STEPS = [
-  {
-    label: 'Laadruimte vol!',
-    text: 'Je laadruimte zit vol! Geen paniek: de taken vallen nu even niet verder. Neem rustig de tijd en druk op 1 t/m 5 om ze in te plannen.',
-    region: CARGO_REGION
-  }
-];
+// Laadruimte-vol-pauze: stopt het spel écht totdat de speler de laadruimte
+// helemaal heeft leeggepland (niet zomaar een kaartje dat je meteen wegklikt —
+// dismissible:false hieronder). De teller in de tekst telt live mee terug via
+// refresh(), en het plannen met 1 t/m 5 blijft gewoon werken tijdens de pauze
+// (zie anyBlockingTutorialOpen hieronder, dat deze twee bewust uitsluit).
+// Level 1 krijgt de basisuitleg; vanaf level 2 (ongeacht of dat 2, 3 of 4 is —
+// gewoon de eerste keer dat het gebeurt) komt er ook een waarschuwing bij over
+// grote taken, en de aansporing om dit voortaan te voorkomen.
+function cargoFullLevel1Text(remaining) {
+  return (
+    `Je laadruimte zit vol! Neem rustig de tijd: plan alles in met 1 t/m 5 — de taken vallen pas weer verder zodra ` +
+    `de laadruimte leeg is. Nog ${remaining} te plannen. Probeer 'm voortaan niet meer helemaal vol te laten lopen!`
+  );
+}
 
-const CARGO_FULL_LEVEL2PLUS_STEPS = [
-  {
-    label: 'Laadruimte vol — let op grote taken!',
-    text: 'Je laadruimte zit weer vol. De taken vallen nu even niet verder. Let op: grote taken (oranje) nemen 2 plekken in de week in plaats van 1 — hou daar rekening mee bij het plannen!',
-    region: WEEKPLANNING_REGION
-  }
-];
+function cargoFullLevel2PlusText(remaining) {
+  return (
+    `Je laadruimte zit weer vol! Neem rustig de tijd: plan alles in met 1 t/m 5 (let op: grote taken nemen 2 plekken ` +
+    `in) — de taken vallen pas weer verder zodra de laadruimte leeg is. Nog ${remaining} te plannen. Plan voortaan ` +
+    `op tijd, dan gebeurt dit niet steeds weer!`
+  );
+}
+
+const CARGO_FULL_LEVEL1_STEPS = [{ label: 'Laadruimte vol!', text: '', region: CARGO_REGION }];
+const CARGO_FULL_LEVEL2PLUS_STEPS = [{ label: 'Laadruimte vol — let op grote taken!', text: '', region: WEEKPLANNING_REGION }];
 
 const cargoFullLevel1Tutorial = createTutorial(
   canvas,
@@ -220,7 +225,7 @@ const cargoFullLevel1Tutorial = createTutorial(
   LOGICAL_HEIGHT,
   CARGO_FULL_LEVEL1_STEPS,
   'kvm_planeten_planner_tut_cargofull_l1_v1',
-  { variant: 'warning' }
+  { variant: 'warning', dismissible: false }
 );
 const cargoFullLevel2PlusTutorial = createTutorial(
   canvas,
@@ -228,7 +233,7 @@ const cargoFullLevel2PlusTutorial = createTutorial(
   LOGICAL_HEIGHT,
   CARGO_FULL_LEVEL2PLUS_STEPS,
   'kvm_planeten_planner_tut_cargofull_l2plus_v1',
-  { variant: 'warning' }
+  { variant: 'warning', dismissible: false }
 );
 
 // Noodrem tegen een vastgelopen planning: eerdere maatregelen voorkomen dat een
@@ -256,13 +261,53 @@ function anyTutorialOpen() {
   return ALL_TUTORIALS.some((t) => t.isOpen());
 }
 
-// Toont, precies één keer, uitleg zodra de laadruimte voor het eerst vol zit —
-// welke van de twee hangt af van of dit op level 1 gebeurt of pas later.
+// De laadruimte-vol-pauze is bewust GEEN blokkerende rondleiding: de speler moet
+// er juist mee kunnen blijven plannen (1 t/m 5) terwijl de kaart openstaat. Alle
+// andere rondleidingen blokkeren dat wél (gewoon even lezen, niets anders).
+function anyBlockingTutorialOpen() {
+  return level1Tutorial.isOpen() || level2Tutorial.isOpen() || level3Tutorial.isOpen() || level4Tutorial.isOpen() || rescueTutorial.isOpen();
+}
+
+// Toont, precies één keer, de laadruimte-vol-pauze zodra de laadruimte voor het
+// eerst vol zit — welke van de twee hangt af van of dit op level 1 gebeurt of
+// pas later. Sluit vanzelf weer via maybeUpdateCargoFullPause hieronder.
 function maybeShowCargoFullTutorial() {
-  if (usedSlots(cargo) < cargo.capacity) return;
-  const relevantTutorial = currentLevel === 1 ? cargoFullLevel1Tutorial : cargoFullLevel2PlusTutorial;
-  if (!relevantTutorial.hasBeenSeen()) {
-    relevantTutorial.open();
+  const remaining = usedSlots(cargo);
+  if (remaining < cargo.capacity) return;
+
+  if (currentLevel === 1) {
+    if (cargoFullLevel1Tutorial.hasBeenSeen()) return;
+    CARGO_FULL_LEVEL1_STEPS[0].text = cargoFullLevel1Text(remaining);
+    cargoFullLevel1Tutorial.open();
+  } else {
+    if (cargoFullLevel2PlusTutorial.hasBeenSeen()) return;
+    CARGO_FULL_LEVEL2PLUS_STEPS[0].text = cargoFullLevel2PlusText(remaining);
+    cargoFullLevel2PlusTutorial.open();
+  }
+}
+
+// Wordt na elke geslaagde planningsactie aangeroepen: telt de kaart live mee
+// terug, en sluit 'm pas zodra de laadruimte écht helemaal leeg is — dat was
+// het hele punt van de pauze (rustig alles kwijt kunnen, niet maar 1 taakje).
+function maybeUpdateCargoFullPause() {
+  const remaining = usedSlots(cargo);
+
+  if (cargoFullLevel1Tutorial.isOpen()) {
+    if (remaining === 0) {
+      cargoFullLevel1Tutorial.close();
+    } else {
+      CARGO_FULL_LEVEL1_STEPS[0].text = cargoFullLevel1Text(remaining);
+      cargoFullLevel1Tutorial.refresh();
+    }
+  }
+
+  if (cargoFullLevel2PlusTutorial.isOpen()) {
+    if (remaining === 0) {
+      cargoFullLevel2PlusTutorial.close();
+    } else {
+      CARGO_FULL_LEVEL2PLUS_STEPS[0].text = cargoFullLevel2PlusText(remaining);
+      cargoFullLevel2PlusTutorial.refresh();
+    }
   }
 }
 
@@ -500,6 +545,11 @@ function attemptPlanNextTask(dayIndex) {
   const dayColumnWidth = LOGICAL_WIDTH / GAME_CONFIG.numberOfDays;
   addScorePopup(dayColumnWidth * dayIndex + dayColumnWidth / 2, playAreaHeight - 6, `+${planPoints}`, '#38bdf8');
 
+  // Vóór de level-check: als deze planningsactie de laadruimte leegmaakte, moet
+  // de pauze-kaart al gesloten zijn voordat completeLevel() eventueel de
+  // laadruimte alweer vervangt door een nieuwe (lege) voor de volgende week.
+  maybeUpdateCargoFullPause();
+
   if (totalFilledSlots(weekPlanning) >= GAME_CONFIG.totalWeekSlots) {
     completeLevel();
   } else {
@@ -512,7 +562,19 @@ const DAY_KEYS = ['1', '2', '3', '4', '5'];
 
 window.addEventListener('keydown', (event) => {
   if (event.repeat) return;
-  if (anyTutorialOpen()) return; // geen pauze/plan-toetsen terwijl een rondleiding open staat
+
+  // De laadruimte-vol-pauze is bewust geen blokkerende rondleiding: de speler
+  // moet er juist mee door kunnen plannen (1 t/m 5), maar verder niets — geen
+  // pauzeren, geen andere sneltoetsen, tot de laadruimte leeg is.
+  if (!anyBlockingTutorialOpen() && (cargoFullLevel1Tutorial.isOpen() || cargoFullLevel2PlusTutorial.isOpen())) {
+    if (gameMode === 'playing') {
+      const dayIndex = DAY_KEYS.indexOf(event.key);
+      if (dayIndex !== -1) attemptPlanNextTask(dayIndex);
+    }
+    return;
+  }
+
+  if (anyTutorialOpen()) return; // andere rondleidingen: even helemaal niets, gewoon lezen
 
   if (event.key === ' ') {
     event.preventDefault(); // voorkomt dat de spatiebalk de pagina laat scrollen
