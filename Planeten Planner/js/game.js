@@ -194,46 +194,70 @@ const level3Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEV
 const level4Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL4_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level4_v1');
 
 // Laadruimte-vol-pauze: stopt het spel écht totdat de speler de laadruimte
-// helemaal heeft leeggepland (niet zomaar een kaartje dat je meteen wegklikt —
+// helemaal heeft leeggepland (niet zomaar een kaartje dat je meteen wegklikt,
 // dismissible:false hieronder). De teller in de tekst telt live mee terug via
 // refresh(), en het plannen met 1 t/m 5 blijft gewoon werken tijdens de pauze
 // (zie anyBlockingTutorialOpen hieronder, dat deze twee bewust uitsluit).
-// Level 1 krijgt de basisuitleg; vanaf level 2 (ongeacht of dat 2, 3 of 4 is —
+// Level 1 krijgt de basisuitleg; vanaf level 2 (ongeacht of dat 2, 3 of 4 is,
 // gewoon de eerste keer dat het gebeurt) komt er ook een waarschuwing bij over
 // grote taken, en de aansporing om dit voortaan te voorkomen.
-function cargoFullLevel1Text(remaining) {
+//
+// Twee tekstwolken tegelijk (simultaneous:true, zie tutorial.js): de ene wijst
+// naar de laadruimte zelf, de andere naar de dagen waar de speler moet klikken.
+// Zo hoeft de speler niet eerst op 'volgende' te klikken om te zien wat hij moet
+// doen, beide dingen staan meteen samen in beeld.
+function cargoFullLevel1CargoText(remaining) {
   return (
-    `Je laadruimte zit vol! Neem rustig de tijd: plan alles in met 1 t/m 5 — de taken vallen pas weer verder zodra ` +
-    `de laadruimte leeg is. Nog ${remaining} te plannen. Probeer 'm voortaan niet meer helemaal vol te laten lopen!`
+    `Je laadruimte zit vol. Neem rustig de tijd om alles in te plannen. Nog ${remaining} te plannen. Probeer 'm ` +
+    `voortaan niet meer helemaal vol te laten lopen!`
   );
 }
 
-function cargoFullLevel2PlusText(remaining) {
+function cargoFullDaysText() {
   return (
-    `Je laadruimte zit weer vol! Neem rustig de tijd: plan alles in met 1 t/m 5 (let op: grote taken nemen 2 plekken ` +
-    `in) — de taken vallen pas weer verder zodra de laadruimte leeg is. Nog ${remaining} te plannen. Plan voortaan ` +
-    `op tijd, dan gebeurt dit niet steeds weer!`
+    `Druk op de toetsen 1 tot en met 5 om je volgende taak bij die dag in te plannen. De taken vallen pas weer ` +
+    `verder zodra je laadruimte leeg is.`
   );
 }
 
-const CARGO_FULL_LEVEL1_STEPS = [{ label: 'Laadruimte vol!', text: '', region: CARGO_REGION }];
-const CARGO_FULL_LEVEL2PLUS_STEPS = [{ label: 'Laadruimte vol — let op grote taken!', text: '', region: WEEKPLANNING_REGION }];
+function cargoFullLevel2PlusCargoText(remaining) {
+  return (
+    `Je laadruimte zit weer vol. Neem rustig de tijd om alles in te plannen. Nog ${remaining} te plannen. Plan ` +
+    `voortaan op tijd, dan gebeurt dit niet steeds weer!`
+  );
+}
+
+function cargoFullLevel2PlusDaysText() {
+  return (
+    `Let op: grote taken nemen 2 plekken in bij een dag. Druk op de toetsen 1 tot en met 5 om in te plannen. De ` +
+    `taken vallen pas weer verder zodra je laadruimte leeg is.`
+  );
+}
+
+const CARGO_FULL_LEVEL1_STEPS = [
+  { label: 'Laadruimte vol!', text: '', region: CARGO_REGION },
+  { label: 'Plan hier je taken', text: '', region: WEEKPLANNING_REGION }
+];
+const CARGO_FULL_LEVEL2PLUS_STEPS = [
+  { label: 'Laadruimte weer vol!', text: '', region: CARGO_REGION },
+  { label: 'Let op grote taken', text: '', region: WEEKPLANNING_REGION }
+];
 
 const cargoFullLevel1Tutorial = createTutorial(
   canvas,
   LOGICAL_WIDTH,
   LOGICAL_HEIGHT,
   CARGO_FULL_LEVEL1_STEPS,
-  'kvm_planeten_planner_tut_cargofull_l1_v1',
-  { variant: 'warning', dismissible: false }
+  'kvm_planeten_planner_tut_cargofull_l1_v2',
+  { variant: 'warning', simultaneous: true }
 );
 const cargoFullLevel2PlusTutorial = createTutorial(
   canvas,
   LOGICAL_WIDTH,
   LOGICAL_HEIGHT,
   CARGO_FULL_LEVEL2PLUS_STEPS,
-  'kvm_planeten_planner_tut_cargofull_l2plus_v1',
-  { variant: 'warning', dismissible: false }
+  'kvm_planeten_planner_tut_cargofull_l2plus_v2',
+  { variant: 'warning', simultaneous: true }
 );
 
 // Noodrem tegen een vastgelopen planning: eerdere maatregelen voorkomen dat een
@@ -277,11 +301,13 @@ function maybeShowCargoFullTutorial() {
 
   if (currentLevel === 1) {
     if (cargoFullLevel1Tutorial.hasBeenSeen()) return;
-    CARGO_FULL_LEVEL1_STEPS[0].text = cargoFullLevel1Text(remaining);
+    CARGO_FULL_LEVEL1_STEPS[0].text = cargoFullLevel1CargoText(remaining);
+    CARGO_FULL_LEVEL1_STEPS[1].text = cargoFullDaysText();
     cargoFullLevel1Tutorial.open();
   } else {
     if (cargoFullLevel2PlusTutorial.hasBeenSeen()) return;
-    CARGO_FULL_LEVEL2PLUS_STEPS[0].text = cargoFullLevel2PlusText(remaining);
+    CARGO_FULL_LEVEL2PLUS_STEPS[0].text = cargoFullLevel2PlusCargoText(remaining);
+    CARGO_FULL_LEVEL2PLUS_STEPS[1].text = cargoFullLevel2PlusDaysText();
     cargoFullLevel2PlusTutorial.open();
   }
 }
@@ -296,7 +322,7 @@ function maybeUpdateCargoFullPause() {
     if (remaining === 0) {
       cargoFullLevel1Tutorial.close();
     } else {
-      CARGO_FULL_LEVEL1_STEPS[0].text = cargoFullLevel1Text(remaining);
+      CARGO_FULL_LEVEL1_STEPS[0].text = cargoFullLevel1CargoText(remaining);
       cargoFullLevel1Tutorial.refresh();
     }
   }
@@ -305,7 +331,7 @@ function maybeUpdateCargoFullPause() {
     if (remaining === 0) {
       cargoFullLevel2PlusTutorial.close();
     } else {
-      CARGO_FULL_LEVEL2PLUS_STEPS[0].text = cargoFullLevel2PlusText(remaining);
+      CARGO_FULL_LEVEL2PLUS_STEPS[0].text = cargoFullLevel2PlusCargoText(remaining);
       cargoFullLevel2PlusTutorial.refresh();
     }
   }
@@ -351,10 +377,10 @@ function maybeRescueStuckLargeTask() {
 
   const dayName = weekPlanning.days[rescueDayIndex].name;
   const dayWidth = WEEKPLANNING_REGION.width / weekPlanning.days.length;
-  RESCUE_STEPS[0].label = 'Oeps, vastgelopen planning!';
+  RESCUE_STEPS[0].label = 'Oei, dat past niet meer!';
   RESCUE_STEPS[0].text =
-    `Je had een grote taak, maar nergens was nog plek voor 2. We hebben 'm daarom omgewisseld met ${displacedTask.label} ` +
-    `op ${dayName}, die er weer uit moet. Dat kostte je 1 leven — plan voortaan iets eerder ruimte vrij voor grote taken!`;
+    `Je grote taak had nergens meer plek voor 2. We hebben 'm omgewisseld met ${displacedTask.label} op ${dayName}, ` +
+    `die er weer uit moet. Dat kostte je 1 leven. Plan voortaan iets eerder ruimte vrij voor grote taken!`;
   RESCUE_STEPS[0].region = {
     x: WEEKPLANNING_REGION.x + rescueDayIndex * dayWidth,
     y: WEEKPLANNING_REGION.y,
@@ -472,6 +498,13 @@ loadAssets().then(() => {
 });
 
 function completeLevel() {
+  // Een nieuwe week begint met een lege laadruimte, dus een eventueel nog
+  // openstaande laadruimte-vol-pauze van de VORIGE week slaat nergens meer op.
+  // Zonder dit blijft die kaart hangen en kan de speler niet verder (anyTutorialOpen
+  // in update() blokkeert dan de hele gameplay, inclusief het weekoverzicht).
+  if (cargoFullLevel1Tutorial.isOpen()) cargoFullLevel1Tutorial.close();
+  if (cargoFullLevel2PlusTutorial.isOpen()) cargoFullLevel2PlusTutorial.close();
+
   // Bewaar een referentie naar de voltooide planning vóórdat er een nieuwe,
   // lege planning voor in de plaats komt — zo blijft het overzicht correct
   // terwijl de speler alweer met een schone week kan beginnen.
@@ -723,9 +756,15 @@ function update(deltaSeconds) {
   const speedMultiplier = activeEffects.slowMotionMs > 0 ? GAME_CONFIG.slowMotionMultiplier : 1;
 
   // Een grote taak mag alleen spawnen (en hieronder: gevangen worden) als er nu
-  // ergens in de week nog plek voor is. Zo kan de speler nooit vastlopen door pech
-  // in de taakvolgorde — alleen nog door eigen planningskeuzes.
-  const canFitLargeTask = canPlaceInAnyDay(weekPlanning, { slots: 2 });
+  // ergens in de week nog plek voor is — én die plek nog niet 'gereserveerd' is
+  // door een grote taak die al in de laadruimte zit maar nog niet is ingepland.
+  // Zonder die tweede check zou een 2e grote taak nog kunnen vallen terwijl er
+  // nog maar 1 dag met 2 vrije plekken over is, wat alsnog tot een vastloper leidt.
+  const daysWithRoomForLarge = weekPlanning.days.filter((_day, dayIndex) =>
+    hasRoomInDay(weekPlanning, dayIndex, { slots: 2 })
+  ).length;
+  const queuedLargeTaskCount = cargo.queue.filter((task) => task.slots === 2).length;
+  const canFitLargeTask = daysWithRoomForLarge > queuedLargeTaskCount;
 
   // Hoe voller de week, hoe langer de verplichte afkoelperiode tussen grote taken —
   // richting het einde van een level dus geen 2 grote taken snel na elkaar.
@@ -748,13 +787,11 @@ function update(deltaSeconds) {
 
   // Eerlijke spawns: een meteoriet mag nooit vlak naast een taak (ver)schijnen,
   // anders wordt die taak feitelijk onbereikbaar. Middens van alle huidige taken
-  // vormen de 'veilige zones' die meteors.js bij spawn vermijdt en waar vandaan
-  // een meteoriet zichzelf wegduwt als hij er toch (bijna) tegelijk mee samenvalt.
+  // vormen de 'veilige zones' die meteors.js alleen bij spawn vermijdt — eenmaal
+  // gespawnd valt een meteoriet daarna recht naar beneden, zonder correcties.
   const meteorSafeZoneOptions = {
     zones: taskSpawner.tasks.map((task) => ({ x: task.x + task.width / 2, y: task.y + task.height / 2 })),
-    radius: GAME_CONFIG.meteorSafeZoneRadius,
-    yProximity: GAME_CONFIG.meteorSafeZoneYProximity,
-    repulsionSpeed: GAME_CONFIG.meteorRepulsionSpeed
+    radius: GAME_CONFIG.meteorSafeZoneRadius
   };
 
   updateMeteors(

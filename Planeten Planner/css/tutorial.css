@@ -26,6 +26,36 @@
   pointer-events: none;
 }
 
+/* Eén gedeelde dimlaag voor de gelijktijdige rondleiding (meerdere kaartjes
+   tegelijk in beeld): de gaten worden geponst via clip-path (zie
+   buildHoleyClipPath in tutorial.js) i.p.v. losse box-shadow-cutouts per
+   spotlight, die elkaars gat anders juist weer zouden verduisteren. */
+.tut-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 12, 0.72);
+  pointer-events: none;
+  transition: clip-path 0.25s ease;
+}
+
+/* Alleen de rand van een uitgelicht gebied bij de gelijktijdige rondleiding
+   (het gat zelf komt al van .tut-backdrop hierboven). */
+.tut-spotlight-outline {
+  position: fixed;
+  border-radius: 16px;
+  border: 2px solid rgba(114, 168, 249, 0.7);
+  transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+  pointer-events: none;
+}
+
+.tut-overlay.tut-variant-warning .tut-spotlight-outline {
+  border-color: rgba(245, 158, 11, 0.75);
+}
+
+.tut-overlay.tut-variant-danger .tut-spotlight-outline {
+  border-color: rgba(239, 68, 68, 0.75);
+}
+
 .tut-card {
   position: fixed;
   width: 300px;

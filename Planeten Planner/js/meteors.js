@@ -41,8 +41,10 @@ function pickSafeMeteorX(canvasWidth, radius, safeZones, safeZoneRadius) {
   return minX + Math.random() * (maxX - minX);
 }
 
-// safeZoneOptions: { zones: [{x, y}], radius, yProximity, repulsionSpeed } of null
-// (geen taken/meteorieten-mechanic actief). zones = middens van huidige taken.
+// safeZoneOptions: { zones: [{x, y}], radius } of null (geen taken/meteorieten-
+// mechanic actief). zones = middens van huidige taken, alleen gebruikt bij spawn
+// (pickSafeMeteorX hierboven) — eenmaal gespawnd valt een meteoriet recht naar
+// beneden, zonder zijwaartse correcties, zodat de val voorspelbaar blijft.
 export function spawnMeteor(spawner, fallSpeed, safeZoneOptions = null) {
   const zones = safeZoneOptions?.zones ?? [];
   const radius = safeZoneOptions?.radius ?? 0;
@@ -70,24 +72,6 @@ export function updateMeteors(spawner, deltaSeconds, canvasHeight, spawnInterval
 
   for (const meteor of spawner.meteors) {
     meteor.y += meteor.fallSpeed * speedMultiplier * deltaSeconds;
-  }
-
-  // Eerlijke spawns, doorlopend: als een meteoriet en een taak (bijna) tegelijk op
-  // dezelfde plek terechtkomen, duwt de meteoriet zichzelf opzij totdat het conflict
-  // voorbij is — de taak wordt nooit onbereikbaar door pech in de meteoriet-spawns.
-  if (safeZoneOptions && safeZoneOptions.zones.length > 0) {
-    const { zones, radius, yProximity, repulsionSpeed } = safeZoneOptions;
-    for (const meteor of spawner.meteors) {
-      for (const zone of zones) {
-        if (Math.abs(meteor.y - zone.y) > yProximity) continue;
-        const dx = meteor.x - zone.x;
-        if (Math.abs(dx) >= radius) continue;
-
-        const direction = dx === 0 ? (Math.random() < 0.5 ? -1 : 1) : Math.sign(dx);
-        meteor.x += direction * repulsionSpeed * deltaSeconds;
-        meteor.x = Math.max(meteor.radius, Math.min(spawner.canvasWidth - meteor.radius, meteor.x));
-      }
-    }
   }
 
   spawner.meteors = spawner.meteors.filter((meteor) => meteor.y - meteor.radius <= canvasHeight);

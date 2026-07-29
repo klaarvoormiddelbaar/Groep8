@@ -54,13 +54,11 @@ export const GAME_CONFIG = {
   // (damping < 1 = zwakkere uitwerking van dezelfde moeilijkheidsfactor).
   powerupDifficultyDamping: 0.3,
 
-  // 'Eerlijke spawns': rond elke vallende taak mag geen meteoriet verschijnen of
-  // blijven hangen. radius = horizontale veilige zone (px), yProximity = hoe dicht
-  // (verticaal) een meteoriet en taak moeten zijn voor het conflict telt,
-  // repulsionSpeed = hoe snel een meteoriet zichzelf wegduwt tijdens een conflict.
+  // 'Eerlijke spawns': een meteoriet mag niet vlak naast een vallende taak
+  // verschijnen (radius = horizontale veilige zone in px rond elke taak). Geldt
+  // alleen op het moment van spawnen — daarna valt een meteoriet recht naar
+  // beneden, zonder zijwaartse correcties.
   meteorSafeZoneRadius: 70,
-  meteorSafeZoneYProximity: 140,
-  meteorRepulsionSpeed: 220,
 
   scoreCatchSmallTask: 10,
   scoreCatchLargeTask: 20,
