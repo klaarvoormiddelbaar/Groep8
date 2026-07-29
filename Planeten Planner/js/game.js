@@ -29,7 +29,7 @@ import { sounds, toggleMute, getIsMuted } from './audio.js';
 import { loadAssets, getImage } from './assets.js';
 import { THEME } from './theme.js';
 import { drawRoundedRect, drawPillButton, drawStatCard } from './canvasUtils.js';
-import { createTutorial, hasSeenTutorial } from './tutorial.js';
+import { createTutorial } from './tutorial.js';
 
 // Onderin het scherm staat een vast weekplanning-paneel; het speelveld (vallende
 // objecten + raket) gebruikt de resterende hoogte erboven. Iets hoger dan voorheen
@@ -124,11 +124,15 @@ const meteorSpawner = createMeteorSpawner(LOGICAL_WIDTH);
 const powerupSpawner = createPowerupSpawner(LOGICAL_WIDTH);
 const activeEffects = createActiveEffects();
 
-// Rondleiding voor level 1: legt de basis uit (besturing, taken vangen, plannen,
-// het doel) aan de hand van 5 korte stappen die telkens naar een deel van het
-// scherm wijzen. Start automatisch de allereerste keer (zie resetGame), en is
-// daarna via het lampje-knopje in de HUD altijd opnieuw op te vragen.
-const TUTORIAL_STEPS = [
+// Rondleidingen: level 1 legt de volledige basis uit (5 stappen), level 2 t/m 4
+// leggen telkens alleen de ene nieuwe mechanic uit die op dat level vrijkomt
+// (grote taken / meteorieten / power-ups) — kort, want de rest kennen spelers dan
+// al. Elke rondleiding start automatisch de eerste keer dat een speler dat level
+// bereikt (zie resetGame/endLevelSummary), en is daarna via het lampje-knopje in
+// de HUD altijd opnieuw op te vragen (getTutorialForLevel kiest welke).
+const FALLING_AREA_REGION = { x: 0, y: HUD_PANEL.y + HUD_PANEL.height + 10, width: LOGICAL_WIDTH, height: 130 };
+
+const LEVEL1_TUTORIAL_STEPS = [
   {
     label: 'Jouw raket',
     text: 'Dit is jouw raket. Beweeg hem met de pijltjestoetsen ← en → naar links en naar rechts.',
@@ -137,7 +141,7 @@ const TUTORIAL_STEPS = [
   {
     label: 'Vallende taken',
     text: 'Taken (huiswerk) vallen vanaf boven naar beneden. Vlieg eronder om ze te vangen.',
-    region: { x: 0, y: HUD_PANEL.y + HUD_PANEL.height + 10, width: LOGICAL_WIDTH, height: 130 }
+    region: FALLING_AREA_REGION
   },
   {
     label: 'Je laadruimte',
@@ -156,7 +160,49 @@ const TUTORIAL_STEPS = [
   }
 ];
 
-const tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, TUTORIAL_STEPS);
+const LEVEL2_TUTORIAL_STEPS = [
+  {
+    label: 'Grote taken',
+    text: 'Vanaf nu vallen er ook grote taken (oranje, bijv. "leren toets"). Die nemen 2 plekken in de week in plaats van 1 — plan er op tijd ruimte voor!',
+    region: { x: 0, y: playAreaHeight, width: LOGICAL_WIDTH, height: WEEKPLANNING_PANEL_HEIGHT }
+  }
+];
+
+const LEVEL3_TUTORIAL_STEPS = [
+  {
+    label: 'Meteorieten',
+    text: 'Pas op: vanaf nu vallen er ook meteorieten. Raak je er eentje, dan verlies je een leven — vlieg opzij om ze te ontwijken.',
+    region: FALLING_AREA_REGION
+  }
+];
+
+const LEVEL4_TUTORIAL_STEPS = [
+  {
+    label: 'Power-ups',
+    text: 'Vanaf nu vallen er ook power-ups. Vang ze op voor een bonus: schild, extra laadruimte, magneet, tijdvertrager, extra leven of dubbele score!',
+    region: FALLING_AREA_REGION
+  }
+];
+
+const level1Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL1_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level1_v1');
+const level2Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL2_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level2_v1');
+const level3Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL3_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level3_v1');
+const level4Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL4_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level4_v1');
+const ALL_TUTORIALS = [level1Tutorial, level2Tutorial, level3Tutorial, level4Tutorial];
+
+function anyTutorialOpen() {
+  return ALL_TUTORIALS.some((t) => t.isOpen());
+}
+
+// Welke rondleiding het lampje-knopje opent, en welke automatisch getoond wordt
+// zodra een speler een level voor het eerst bereikt. Level 5+ heeft geen eigen
+// nieuwe mechanic meer, dus valt terug op de laatst geïntroduceerde (power-ups).
+function getTutorialForLevel(level) {
+  if (level <= 1) return level1Tutorial;
+  if (level === 2) return level2Tutorial;
+  if (level === 3) return level3Tutorial;
+  return level4Tutorial;
+}
 
 // 'loading' | 'start' | 'playing' | 'paused' | 'gameOver'
 let gameMode = 'loading';
@@ -285,6 +331,16 @@ function completeLevel() {
 function endLevelSummary() {
   isShowingLevelSummary = false;
   weekSummaryButtonRect = null;
+
+  // Zodra een speler een level met een nieuwe mechanic voor het eerst bereikt
+  // (2, 3 of 4), legt een korte rondleiding uit wat er verandert — maar alleen
+  // de allereerste keer, en pas nadat het weekoverzicht is weggeklikt.
+  if (currentLevel >= 2 && currentLevel <= 4) {
+    const mechanicTutorial = getTutorialForLevel(currentLevel);
+    if (!mechanicTutorial.hasBeenSeen()) {
+      mechanicTutorial.open();
+    }
+  }
 }
 
 function showFeedback(message) {
@@ -330,7 +386,7 @@ const DAY_KEYS = ['1', '2', '3', '4', '5'];
 
 window.addEventListener('keydown', (event) => {
   if (event.repeat) return;
-  if (tutorial.isOpen()) return; // geen pauze/plan-toetsen terwijl de rondleiding open staat
+  if (anyTutorialOpen()) return; // geen pauze/plan-toetsen terwijl een rondleiding open staat
 
   if (event.key === ' ') {
     event.preventDefault(); // voorkomt dat de spatiebalk de pagina laat scrollen
@@ -362,7 +418,7 @@ function hitTest(px, py, rect) {
 }
 
 canvas.addEventListener('click', (event) => {
-  if (tutorial.isOpen()) return; // klikken op de HUD erachter terwijl de rondleiding openstaat, telt niet
+  if (anyTutorialOpen()) return; // klikken op de HUD erachter terwijl een rondleiding openstaat, telt niet
 
   const rect = canvas.getBoundingClientRect();
   const scaleX = LOGICAL_WIDTH / rect.width;
@@ -372,7 +428,7 @@ canvas.addEventListener('click', (event) => {
 
   if (gameMode === 'start' && hitTest(px, py, START_BUTTON)) {
     resetGame();
-    if (!hasSeenTutorial()) tutorial.open(); // legt level 1 uit, maar alleen de allereerste keer
+    if (!level1Tutorial.hasBeenSeen()) level1Tutorial.open(); // legt level 1 uit, maar alleen de allereerste keer
     return;
   }
   if (gameMode === 'paused' && hitTest(px, py, RESUME_BUTTON)) {
@@ -381,11 +437,11 @@ canvas.addEventListener('click', (event) => {
   }
   if (gameMode === 'gameOver' && hitTest(px, py, RESTART_BUTTON)) {
     resetGame();
-    if (!hasSeenTutorial()) tutorial.open();
+    if (!level1Tutorial.hasBeenSeen()) level1Tutorial.open();
     return;
   }
   if (gameMode === 'playing' && hitTest(px, py, HELP_ICON_BUTTON)) {
-    tutorial.open(); // op elk moment opnieuw op te vragen
+    getTutorialForLevel(currentLevel).open(); // op elk moment opnieuw op te vragen, past zich aan het huidige level aan
     return;
   }
   if (gameMode === 'playing' && isShowingLevelSummary && weekSummaryButtonRect && hitTest(px, py, weekSummaryButtonRect)) {
@@ -469,8 +525,8 @@ function update(deltaSeconds) {
     return; // gameplay staat stil; wacht op de speler (knop of spatie)
   }
 
-  if (tutorial.isOpen()) {
-    return; // gameplay staat stil zolang de rondleiding open staat, anders mis je taken tijdens het lezen
+  if (anyTutorialOpen()) {
+    return; // gameplay staat stil zolang een rondleiding open staat, anders mis je taken tijdens het lezen
   }
 
   updatePlayer(player, deltaSeconds, LOGICAL_WIDTH);

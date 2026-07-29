@@ -7,19 +7,17 @@
 // naar een vast gebied in de LOGISCHE canvas-coördinaten (960x540), dat hier
 // wordt omgezet naar echte schermpixels op basis van hoe het canvas is geschaald.
 
-const STORAGE_KEY = 'kvm_planeten_planner_tut_v1';
-
-export function hasSeenTutorial() {
+export function hasSeenTutorial(storageKey) {
   try {
-    return localStorage.getItem(STORAGE_KEY) === '1';
+    return localStorage.getItem(storageKey) === '1';
   } catch {
     return false; // bijv. privé-browsen: rondleiding start dan gewoon elke keer opnieuw
   }
 }
 
-function markTutorialSeen() {
+function markTutorialSeen(storageKey) {
   try {
-    localStorage.setItem(STORAGE_KEY, '1');
+    localStorage.setItem(storageKey, '1');
   } catch {
     // niets aan te doen, geen probleem voor de werking van het spel
   }
@@ -29,7 +27,9 @@ function markTutorialSeen() {
 // logicalWidth/logicalHeight: de vaste 960x540 spellogica-resolutie (game.js).
 // steps: [{ label, html, region: {x,y,width,height} | null }] — region in
 // logische coördinaten; null = kaart gecentreerd tonen zonder spotlight.
-export function createTutorial(canvas, logicalWidth, logicalHeight, steps) {
+// storageKey: eigen localStorage-sleutel per rondleiding, zodat bijv. de level 1-
+// en level 3-uitleg onafhankelijk van elkaar 'gezien' worden onthouden.
+export function createTutorial(canvas, logicalWidth, logicalHeight, steps, storageKey) {
   const overlay = document.createElement('div');
   overlay.className = 'tut-overlay';
   overlay.setAttribute('role', 'dialog');
@@ -70,6 +70,9 @@ export function createTutorial(canvas, logicalWidth, logicalHeight, steps) {
     dotsEl.appendChild(dot);
   });
   const dotEls = [...dotsEl.children];
+  // Bij een uitleg van maar 1 stap (bijv. 'er zijn nu meteorieten') zeggen
+  // voortgangsstipjes niets — dan is er niets om doorheen te bladeren.
+  dotsEl.style.display = steps.length > 1 ? 'flex' : 'none';
 
   let currentIndex = 0;
   let isOpen = false;
@@ -141,7 +144,7 @@ export function createTutorial(canvas, logicalWidth, logicalHeight, steps) {
     overlay.classList.remove('tut-visible');
     window.removeEventListener('resize', handleResize);
     setTimeout(() => overlay.remove(), 200); // wacht de fade-out af
-    markTutorialSeen();
+    markTutorialSeen(storageKey);
   }
 
   function open() {
@@ -162,5 +165,5 @@ export function createTutorial(canvas, logicalWidth, logicalHeight, steps) {
   });
   closeBtn.addEventListener('click', close);
 
-  return { open, close, isOpen: () => isOpen };
+  return { open, close, isOpen: () => isOpen, hasBeenSeen: () => hasSeenTutorial(storageKey) };
 }
