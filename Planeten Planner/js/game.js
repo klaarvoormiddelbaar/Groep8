@@ -1260,7 +1260,8 @@ function render() {
     LOGICAL_WIDTH,
     WEEKPLANNING_PANEL_HEIGHT,
     { dayIndex: shakeDayIndex, offsetX: shakeOffsetX },
-    planetImages
+    planetImages,
+    cargoFullLevel1Tutorial.isOpen() || cargoFullLevel2PlusTutorial.isOpen()
   );
 
   if (isShowingLevelSummary && completedWeekSnapshot) {

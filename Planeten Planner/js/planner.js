@@ -46,11 +46,26 @@ export function totalFilledSlots(planning) {
 // Tekent 5 dagkolommen met taaknamen. Grote taken vullen zichtbaar 2 gekoppelde plekken.
 // shake = { dayIndex, offsetX } laat één kolom kort zijwaarts schudden (volle dag-feedback).
 // planetImages = [ma, di, wo, do, vr] -> Image|null, elke dag zijn eigen planeetje.
-export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = { dayIndex: -1, offsetX: 0 }, planetImages = []) {
+// highlightDaysToPlan: true tijdens de laadruimte-vol-pauze — laat elke dag die nog
+// plek heeft een ademende amber gloed/rand krijgen, zodat meteen duidelijk is wáár
+// gepland kan worden (i.p.v. alleen een los kaartje ergens op het scherm).
+export function renderWeekPlanning(
+  ctx,
+  planning,
+  x,
+  y,
+  width,
+  height,
+  shake = { dayIndex: -1, offsetX: 0 },
+  planetImages = [],
+  highlightDaysToPlan = false
+) {
   const dayGap = 6;
   const dayWidth = (width - dayGap * (planning.days.length - 1)) / planning.days.length;
   const headerHeight = 56;
   const slotHeight = (height - headerHeight - 6) / planning.slotsPerDay;
+  // Eén gedeelde puls voor alle dagen tegelijk, zodat ze synchroon 'ademen'.
+  const pulse = highlightDaysToPlan ? 0.5 + 0.5 * Math.sin(Date.now() / 260) : 0;
 
   ctx.textAlign = 'center';
 
@@ -58,14 +73,29 @@ export function renderWeekPlanning(ctx, planning, x, y, width, height, shake = {
     const shakeX = dayIndex === shake.dayIndex ? shake.offsetX : 0;
     const dayX = x + dayIndex * (dayWidth + dayGap) + shakeX;
     const isFull = usedSlotsInDay(planning, dayIndex) >= planning.slotsPerDay;
+    const isHighlighted = highlightDaysToPlan && !isFull;
 
-    // Glazen dagkaart: één afgerond paneel per dag, groene rand zodra hij vol zit.
+    if (isHighlighted) {
+      const glowPadding = 4 + pulse * 6;
+      drawRoundedRect(
+        ctx,
+        dayX - glowPadding,
+        y - glowPadding,
+        dayWidth + glowPadding * 2,
+        height + glowPadding * 2,
+        THEME.radius.md + glowPadding,
+        { fill: `rgba(245, 158, 11, ${0.14 + pulse * 0.2})` }
+      );
+    }
+
+    // Glazen dagkaart: één afgerond paneel per dag, groene rand zodra hij vol zit,
+    // ademend amber tijdens de laadruimte-vol-pauze zolang er nog plek is.
     // Zachte schaduw eronder zodat de kaart echt van de sterrenhemel af lijkt te
     // zweven i.p.v. er plat bovenop geplakt te zijn.
     drawRoundedRect(ctx, dayX, y, dayWidth, height, THEME.radius.md, {
       fill: THEME.color.surface,
-      stroke: isFull ? THEME.color.accentGreen : THEME.color.border,
-      strokeWidth: isFull ? 1.5 : 1,
+      stroke: isHighlighted ? `rgba(245, 158, 11, ${0.55 + pulse * 0.45})` : isFull ? THEME.color.accentGreen : THEME.color.border,
+      strokeWidth: isHighlighted ? 2 + pulse : isFull ? 1.5 : 1,
       shadow: THEME.shadow.chip
     });
 
