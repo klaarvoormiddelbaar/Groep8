@@ -32,6 +32,13 @@ export function placeTaskInDay(planning, dayIndex, task) {
   planning.days[dayIndex].tasks.push(task);
 }
 
+// Haalt een al ingeplande taak weer weg (index in day.tasks) en geeft 'm terug —
+// gebruikt door de 'vastgelopen grote taak'-redding in game.js, die een kleine
+// taak moet verdringen om een grote taak alsnog een plek te geven.
+export function removeTaskFromDay(planning, dayIndex, taskIndex) {
+  return planning.days[dayIndex].tasks.splice(taskIndex, 1)[0];
+}
+
 export function totalFilledSlots(planning) {
   return planning.days.reduce((sum, _day, i) => sum + usedSlotsInDay(planning, i), 0);
 }

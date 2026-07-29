@@ -6,11 +6,13 @@ import { getLevelSettings } from './levels.js';
 import { createPlayer, initPlayerInput, updatePlayer, renderPlayer } from './player.js';
 import { createTaskSpawner, updateTasks, renderTasks } from './objects.js';
 import { createMeteorSpawner, updateMeteors, renderMeteors } from './meteors.js';
-import { createCargo, hasRoomFor, addToCargo, peekNextTask, removeNextTask, renderCargo } from './cargo.js';
+import { createCargo, usedSlots, hasRoomFor, addToCargo, peekNextTask, removeNextTask, renderCargo } from './cargo.js';
 import {
   createWeekPlanning,
   hasRoomInDay,
+  usedSlotsInDay,
   placeTaskInDay,
+  removeTaskFromDay,
   totalFilledSlots,
   canPlaceInAnyDay,
   renderWeekPlanning,
@@ -131,6 +133,8 @@ const activeEffects = createActiveEffects();
 // bereikt (zie resetGame/endLevelSummary), en is daarna via het lampje-knopje in
 // de HUD altijd opnieuw op te vragen (getTutorialForLevel kiest welke).
 const FALLING_AREA_REGION = { x: 0, y: HUD_PANEL.y + HUD_PANEL.height + 10, width: LOGICAL_WIDTH, height: 130 };
+const CARGO_REGION = { x: LOGICAL_WIDTH - 200, y: HUD_PANEL.y, width: 190, height: HUD_PANEL.height };
+const WEEKPLANNING_REGION = { x: 0, y: playAreaHeight, width: LOGICAL_WIDTH, height: WEEKPLANNING_PANEL_HEIGHT };
 
 const LEVEL1_TUTORIAL_STEPS = [
   {
@@ -146,12 +150,12 @@ const LEVEL1_TUTORIAL_STEPS = [
   {
     label: 'Je laadruimte',
     text: 'Gevangen taken komen hier terecht. Je hebt maar 5 plekken — plan op tijd, anders zit het vol!',
-    region: { x: LOGICAL_WIDTH - 200, y: HUD_PANEL.y, width: 190, height: HUD_PANEL.height }
+    region: CARGO_REGION
   },
   {
     label: 'Plan je week',
     text: 'Druk op 1 t/m 5 om je eerstvolgende taak in te plannen op maandag t/m vrijdag.',
-    region: { x: 0, y: playAreaHeight, width: LOGICAL_WIDTH, height: WEEKPLANNING_PANEL_HEIGHT }
+    region: WEEKPLANNING_REGION
   },
   {
     label: 'Jouw doel',
@@ -164,7 +168,7 @@ const LEVEL2_TUTORIAL_STEPS = [
   {
     label: 'Grote taken',
     text: 'Vanaf nu vallen er ook grote taken (oranje, bijv. "leren toets"). Die nemen 2 plekken in de week in plaats van 1 — plan er op tijd ruimte voor!',
-    region: { x: 0, y: playAreaHeight, width: LOGICAL_WIDTH, height: WEEKPLANNING_PANEL_HEIGHT }
+    region: WEEKPLANNING_REGION
   }
 ];
 
@@ -188,10 +192,131 @@ const level1Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEV
 const level2Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL2_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level2_v1');
 const level3Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL3_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level3_v1');
 const level4Tutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, LEVEL4_TUTORIAL_STEPS, 'kvm_planeten_planner_tut_level4_v1');
-const ALL_TUTORIALS = [level1Tutorial, level2Tutorial, level3Tutorial, level4Tutorial];
+
+// Laadruimte-vol-momenten: pauzeren het spel en leggen precies één keer uit hoe het
+// werkt, zodat een speler niet direct wordt afgestraft (gemiste taken) terwijl die
+// nog aan het uitvinden is wat 'vol' betekent. Level 1 krijgt de basisuitleg; vanaf
+// level 2 (ongeacht of dat 2, 3 of 4 is — gewoon de eerste keer dat het gebeurt)
+// komt er ook een waarschuwing bij over grote taken die 2 plekken innemen.
+const CARGO_FULL_LEVEL1_STEPS = [
+  {
+    label: 'Laadruimte vol!',
+    text: 'Je laadruimte zit vol! Geen paniek: de taken vallen nu even niet verder. Neem rustig de tijd en druk op 1 t/m 5 om ze in te plannen.',
+    region: CARGO_REGION
+  }
+];
+
+const CARGO_FULL_LEVEL2PLUS_STEPS = [
+  {
+    label: 'Laadruimte vol — let op grote taken!',
+    text: 'Je laadruimte zit weer vol. De taken vallen nu even niet verder. Let op: grote taken (oranje) nemen 2 plekken in de week in plaats van 1 — hou daar rekening mee bij het plannen!',
+    region: WEEKPLANNING_REGION
+  }
+];
+
+const cargoFullLevel1Tutorial = createTutorial(
+  canvas,
+  LOGICAL_WIDTH,
+  LOGICAL_HEIGHT,
+  CARGO_FULL_LEVEL1_STEPS,
+  'kvm_planeten_planner_tut_cargofull_l1_v1',
+  { variant: 'warning' }
+);
+const cargoFullLevel2PlusTutorial = createTutorial(
+  canvas,
+  LOGICAL_WIDTH,
+  LOGICAL_HEIGHT,
+  CARGO_FULL_LEVEL2PLUS_STEPS,
+  'kvm_planeten_planner_tut_cargofull_l2plus_v1',
+  { variant: 'warning' }
+);
+
+// Noodrem tegen een vastgelopen planning: eerdere maatregelen voorkomen dat een
+// grote taak wordt gevangen zonder dat er op dát moment nog plek is, maar een
+// speler kan zichzelf daarna alsnog vastzetten door met kleinere taken precies
+// alle 2-plekken-dagen dicht te plannen terwijl er nog een grote taak in de
+// laadruimte zit. Deze inhoud is per redding dynamisch (dagnaam/vak), dus het
+// stap-object wordt hergebruikt en telkens vóór open() bijgewerkt.
+const RESCUE_STEPS = [{ label: '', text: '', region: null }];
+const rescueTutorial = createTutorial(canvas, LOGICAL_WIDTH, LOGICAL_HEIGHT, RESCUE_STEPS, 'kvm_planeten_planner_tut_rescue_v1', {
+  variant: 'danger'
+});
+
+const ALL_TUTORIALS = [
+  level1Tutorial,
+  level2Tutorial,
+  level3Tutorial,
+  level4Tutorial,
+  cargoFullLevel1Tutorial,
+  cargoFullLevel2PlusTutorial,
+  rescueTutorial
+];
 
 function anyTutorialOpen() {
   return ALL_TUTORIALS.some((t) => t.isOpen());
+}
+
+// Toont, precies één keer, uitleg zodra de laadruimte voor het eerst vol zit —
+// welke van de twee hangt af van of dit op level 1 gebeurt of pas later.
+function maybeShowCargoFullTutorial() {
+  if (usedSlots(cargo) < cargo.capacity) return;
+  const relevantTutorial = currentLevel === 1 ? cargoFullLevel1Tutorial : cargoFullLevel2PlusTutorial;
+  if (!relevantTutorial.hasBeenSeen()) {
+    relevantTutorial.open();
+  }
+}
+
+// Eerste dag met precies 1 vrije plek waar minstens 2 kleine taken staan: in een
+// vastgelopen situatie kan geen dag nog 2 vrije plekken hebben, dus 'nog vrij'
+// betekent hier altijd exact 1 plek — het verwijderen van de 2e taak daar maakt
+// precies genoeg ruimte (1 + 1 = 2) voor de vastzittende grote taak.
+function findRescueDayIndex() {
+  for (let dayIndex = 0; dayIndex < weekPlanning.days.length; dayIndex++) {
+    const used = usedSlotsInDay(weekPlanning, dayIndex);
+    if (used === GAME_CONFIG.slotsPerDay - 1 && weekPlanning.days[dayIndex].tasks.length >= 2) {
+      return dayIndex;
+    }
+  }
+  return -1;
+}
+
+function maybeRescueStuckLargeTask() {
+  if (canPlaceInAnyDay(weekPlanning, { slots: 2 })) return; // geen probleem, niets te redden
+  const stuckTask = cargo.queue.find((task) => task.slots === 2);
+  if (!stuckTask) return; // geen grote taak in de laadruimte om vast te lopen
+
+  const rescueDayIndex = findRescueDayIndex();
+  if (rescueDayIndex === -1) return; // geen geldige dag gevonden, doe voor de zekerheid niets
+
+  const displacedTask = removeTaskFromDay(weekPlanning, rescueDayIndex, 1);
+  cargo.queue = cargo.queue.filter((task) => task !== stuckTask);
+  placeTaskInDay(weekPlanning, rescueDayIndex, stuckTask);
+  plannedCount += 1;
+
+  loseLife();
+  if (isGameOver) return; // was de laatste leven: game-over-scherm heeft nu voorrang
+
+  // De redding zelf kan toevallig de allerlaatste plek van de week vullen (netto
+  // +1 plek: -1 verdrongen taak, +2 voor de grote taak) — dan heeft het
+  // weekoverzicht voorrang op het redding-bericht.
+  if (totalFilledSlots(weekPlanning) >= GAME_CONFIG.totalWeekSlots) {
+    completeLevel();
+    return;
+  }
+
+  const dayName = weekPlanning.days[rescueDayIndex].name;
+  const dayWidth = WEEKPLANNING_REGION.width / weekPlanning.days.length;
+  RESCUE_STEPS[0].label = 'Oeps, vastgelopen planning!';
+  RESCUE_STEPS[0].text =
+    `Je had een grote taak, maar nergens was nog plek voor 2. We hebben 'm daarom omgewisseld met ${displacedTask.label} ` +
+    `op ${dayName}, die er weer uit moet. Dat kostte je 1 leven — plan voortaan iets eerder ruimte vrij voor grote taken!`;
+  RESCUE_STEPS[0].region = {
+    x: WEEKPLANNING_REGION.x + rescueDayIndex * dayWidth,
+    y: WEEKPLANNING_REGION.y,
+    width: dayWidth,
+    height: WEEKPLANNING_REGION.height
+  };
+  rescueTutorial.open();
 }
 
 // Welke rondleiding het lampje-knopje opent, en welke automatisch getoond wordt
@@ -379,6 +504,7 @@ function attemptPlanNextTask(dayIndex) {
     completeLevel();
   } else {
     showFeedback(`${nextTask.label} ingepland op ${weekPlanning.days[dayIndex].name}.`);
+    maybeRescueStuckLargeTask(); // deze planningskeuze kan een grote taak in de laadruimte hebben vastgezet
   }
 }
 
@@ -643,6 +769,8 @@ function update(deltaSeconds) {
     addScorePopup(task.x + task.width / 2, task.y, `+${catchPoints}`);
     return false;
   });
+
+  maybeShowCargoFullTutorial();
 
   powerupSpawner.items = powerupSpawner.items.filter((item) => {
     if (!rectsOverlap(player, item)) return true;

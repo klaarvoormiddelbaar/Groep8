@@ -29,9 +29,11 @@ function markTutorialSeen(storageKey) {
 // logische coördinaten; null = kaart gecentreerd tonen zonder spotlight.
 // storageKey: eigen localStorage-sleutel per rondleiding, zodat bijv. de level 1-
 // en level 3-uitleg onafhankelijk van elkaar 'gezien' worden onthouden.
-export function createTutorial(canvas, logicalWidth, logicalHeight, steps, storageKey) {
+// variant: 'info' (rustig blauw, standaard) of 'warning' (amber) — voor momenten
+// die om extra aandacht vragen, zoals 'je laadruimte zit vol'.
+export function createTutorial(canvas, logicalWidth, logicalHeight, steps, storageKey, { variant = 'info' } = {}) {
   const overlay = document.createElement('div');
-  overlay.className = 'tut-overlay';
+  overlay.className = `tut-overlay tut-variant-${variant}`;
   overlay.setAttribute('role', 'dialog');
   overlay.setAttribute('aria-modal', 'true');
   overlay.setAttribute('aria-label', 'Uitleg');
