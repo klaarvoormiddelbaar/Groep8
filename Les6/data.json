@@ -9,35 +9,59 @@
   "tip": "Geef de leerlingen ruim de tijd om hun planning te maken. Benadruk daarna tijdens de klassikale bespreking dat de beste manier van plannen per leerling verschilt.",
   "canva": "https://www.canva.com/design/DAHMQBoM1oA/wo-FqLbDiijUlhDzFqyW8g/view?embed",
   "doelen": [
-    "Leerlingen kunnen hun gevoelens over de overstap benoemen.",
-    "Leerlingen kennen technieken om met spanning om te gaan.",
-    "Leerlingen versterken hun zelfvertrouwen via positieve zelfreflectie."
+    "De leerlingen kunnen een drukke middelbare schoolweek inplannen.",
+    "De leerlingen kennen het 'KvM Planning Stappenplan' nóg beter.",
+    "De leerlingen ervaren spelenderwijs dat op tijd plannen loont."
   ],
   "tl": [
     {
-      "t": "0–10 min",
-      "n": "Check-in",
-      "d": "Thermometer-check: hoe voel jij je over de middelbare? Schaal 1–10."
+      "t": "0–2 min",
+      "n": "Start + leerdoelen",
+      "d": "Open de les, blik kort terug op les 5 en bespreek de leerdoelen van vandaag."
     },
     {
-      "t": "10–28 min",
-      "n": "Gesprek",
-      "d": "Bespreek gevoelens van spanning en opwinding. Wat is het verschil?"
+      "t": "2–10 min",
+      "n": "Herhaling theorie plannen",
+      "d": "Waarom is plannen belangrijk, kennisclip herhaling theorie en belangrijkste dingen van les 2 herhaald."
     },
     {
-      "t": "28–45 min",
-      "n": "Kracht-kaarten",
-      "d": "Leerlingen schrijven 3 eigen kwaliteiten op en delen ze met de klas."
+      "t": "10–40 min",
+      "n": "De middelbare schoolweek inplannen",
+      "d": "Leg de opdracht uit en laat de leerlingen vervolgens in tweetallen een schoolweek plannen met behulp van het 'KvM Planning Stappenplan'. Leerlingen die klaar zijn kunnen op de laptop 'Planeten Planner' spelen."
+    },
+    {
+      "t": "40–45 min",
+      "n": "Bespreken van de opdracht",
+      "d": "Bespreek de vier stappen van het KvM Planning Stappenplan. Benadruk dat iedereen op zijn eigen manier plant."
     },
     {
       "t": "45–55 min",
-      "n": "Ademhalingsoefening",
-      "d": "Oefen samen een korte ademhalingstechniek voor stressvolle momenten."
+      "n": "Planeten Planner",
+      "d": "Laat de leerlingen het spel spelen. Hang de 'Planeten Planner Highscores' op in de klas. Schrijf aan het einde de namen en scores op."
+    },
+    {
+      "t": "55–60 min",
+      "n": "Wat hebben we vandaag geleerd + volgende les",
+      "d": "Herhaal kort de belangrijkste inzichten uit de les en blik vooruit op de volgende les. Ruimte voor vragen en uitloop."
     }
   ],
   "mat": [
-    "Kracht-kaarten (bijlage 8)",
-    "Thermometer-poster",
-    "QR-code naar ademhalingsvideo"
+    "Quiz-kaarten (bijlage 2)",
+    "Smartboard of beamer",
+    "Optioneel: video over een dag op de middelbare"
+  ],
+  "benodigdheden": [
+    {
+      "naam": "Wisbordje",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png"
+    },
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    },
+    {
+      "naam": "Werkboek",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+    }
   ]
 }
