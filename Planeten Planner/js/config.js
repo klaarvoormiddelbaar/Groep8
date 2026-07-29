@@ -25,17 +25,18 @@ export const GAME_CONFIG = {
   slowMotionDuration: 8000,
   slowMotionMultiplier: 0.7,
 
-  // Verlaagd t.o.v. het staande formaat: het speelveld is nu minder hoog, dus een
-  // lagere valsnelheid houdt dezelfde reactietijd (val-tijd) aan als voorheen.
   // Dit zijn de basiswaarden voor level 1 t/m difficultyFlatLevels; zie de
-  // moeilijkheidscurve hieronder voor hoe dit daarna oploopt.
-  startingFallSpeed: 86,
+  // moeilijkheidscurve hieronder voor hoe dit daarna oploopt. Verlaagd (was 86)
+  // omdat de beginsnelheid te hoog aanvoelde: bij 385px speelveldhoogte gaf 86px/s
+  // maar ~4,5s reactietijd om een taak te zien vallen én te vangen — 60px/s geeft
+  // ~6,4s, ruimer voor beginnende spelers.
+  startingFallSpeed: 60,
   startingSpawnInterval: 1500,
   minimumSpawnInterval: 500,
 
   // Mechanics worden één voor één vrijgespeeld (zie levels.js): grote taken vanaf
   // level 2, meteorieten vanaf level 3, power-ups vanaf level 4.
-  meteorStartingFallSpeed: 72,
+  meteorStartingFallSpeed: 50, // zelfde verhouding t.o.v. startingFallSpeed als voorheen
   meteorStartingSpawnInterval: 3500,
   meteorMinimumSpawnInterval: 1000,
 
