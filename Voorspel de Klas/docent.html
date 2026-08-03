@@ -597,6 +597,8 @@
       const idx = sessie.huidige_stelling_index;
       const s = STELLINGEN[idx];
       const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0, gem_voorspelling: 0 };
+      const totaalAntwoorden = r.aantal_ja + r.aantal_nee;
+      const neePct = totaalAntwoorden === 0 ? 0 : 100 - r.klas_pct;
       const isLaatste = idx === STELLINGEN.length - 1;
       const isTussenstandMoment = idx === TUSSENSTAND_NA_INDEX;
       const label = isLaatste ? 'Naar open vraag →' : (isTussenstandMoment ? 'Naar tussenstand →' : 'Volgende stelling →');
@@ -614,8 +616,8 @@
             <div class="balk-track"><div class="balk ja" style="width:${r.klas_pct}%"></div></div>
           </div>
           <div class="resultaat-rij">
-            <div class="resultaat-kop"><span class="resultaat-label">Nee</span><span class="resultaat-pct nee">${100 - r.klas_pct}% (${r.aantal_nee})</span></div>
-            <div class="balk-track"><div class="balk nee" style="width:${100 - r.klas_pct}%"></div></div>
+            <div class="resultaat-kop"><span class="resultaat-label">Nee</span><span class="resultaat-pct nee">${neePct}% (${r.aantal_nee})</span></div>
+            <div class="balk-track"><div class="balk nee" style="width:${neePct}%"></div></div>
           </div>
           <div class="gespreksstarter">
             <div class="gespreksstarter-label">Gespreksstarter${s.gv.length > 1 ? 's' : ''}</div>
