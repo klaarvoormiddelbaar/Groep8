@@ -183,9 +183,23 @@
     .resultaat-pct.nee { color: var(--rood); }
 
     /* Gespreksstarter */
-    .gespreksstarter { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
-    .gespreksstarter-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    .gespreksvraag-rij { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .gespreksstarter { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
+    .gespreksstarter-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .gespreksvraag-lijst { display: flex; flex-direction: column; gap: 10px; }
+    .gespreksvraag-rij {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      background: #f8fafc; border: 1px solid var(--border); border-radius: 16px;
+      padding: 14px 16px;
+      transition: border-color .15s, background .15s;
+    }
+    .gespreksvraag-rij:hover { border-color: rgba(78,142,243,.30); background: var(--primary-soft); }
+    .gespreksvraag-tekst-wrap { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .gespreksvraag-num {
+      width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+      background: var(--primary-soft); color: var(--primary-dark);
+      font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+      display: flex; align-items: center; justify-content: center;
+    }
     .gespreksvraag-tekst { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.4; }
     .mc-help-wrap { position: relative; flex-shrink: 0; }
     .mc-help-btn {
@@ -604,18 +618,23 @@
             <div class="balk-track"><div class="balk nee" style="width:${100 - r.klas_pct}%"></div></div>
           </div>
           <div class="gespreksstarter">
-            <div class="gespreksstarter-label">Gespreksstarter</div>
-            ${s.gv.map(g => `
-            <div class="gespreksvraag-rij">
-              <div class="gespreksvraag-tekst">${escapeHtml(g.vraag)}</div>
-              <div class="mc-help-wrap">
-                <button class="mc-help-btn" onclick="toggleUitleg(this)" aria-label="Antwoord tonen">?</button>
-                <div class="mc-tooltip">
-                  <div class="mc-tooltip-titel">Bijvoorbeeld</div>
-                  ${escapeHtml(g.antwoord)}
+            <div class="gespreksstarter-label">Gespreksstarter${s.gv.length > 1 ? 's' : ''}</div>
+            <div class="gespreksvraag-lijst">
+              ${s.gv.map((g, i) => `
+              <div class="gespreksvraag-rij">
+                <div class="gespreksvraag-tekst-wrap">
+                  ${s.gv.length > 1 ? `<div class="gespreksvraag-num">${i + 1}</div>` : ''}
+                  <div class="gespreksvraag-tekst">${escapeHtml(g.vraag)}</div>
                 </div>
-              </div>
-            </div>`).join('')}
+                <div class="mc-help-wrap">
+                  <button class="mc-help-btn" onclick="toggleUitleg(this)" aria-label="Antwoord tonen">?</button>
+                  <div class="mc-tooltip">
+                    <div class="mc-tooltip-titel">Bijvoorbeeld</div>
+                    ${escapeHtml(g.antwoord)}
+                  </div>
+                </div>
+              </div>`).join('')}
+            </div>
           </div>
 
           <div class="knoppen-rij">
