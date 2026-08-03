@@ -307,7 +307,7 @@
       ] }
     ];
     const TUSSENSTAND_NA_INDEX = 2; // na de 3e stelling (0-based index 2)
-    const OPEN_VRAAG = 'Is er iets over stress dat jij graag met de klas zou willen bespreken? Deel het dan hier, je antwoord blijft anoniem!';
+    const OPEN_VRAAG = 'Is er iets over stress dat jij graag met de klas zou willen bespreken? Deel het dan hier. Je antwoord blijft anoniem!';
 
     function escapeHtml(t) {
       const d = document.createElement('div');
@@ -629,7 +629,7 @@
       abonneerOpOpenAntwoorden();
       document.getElementById('app').innerHTML = `
         <div class="sectie">
-          <div class="anoniem-label">🔒 Volledig anoniem — geen naam of speler zichtbaar</div>
+          <div class="anoniem-label">🔒 VOLLEDIG ANONIEM</div>
           <div class="stelling-groot">${escapeHtml(OPEN_VRAAG)}</div>
           <div class="live-teller">${openAntwoorden.length} reactie${openAntwoorden.length !== 1 ? 's' : ''} binnen</div>
           ${openAntwoorden.length === 0
