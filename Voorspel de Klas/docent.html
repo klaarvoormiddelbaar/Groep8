@@ -182,6 +182,27 @@
     .resultaat-pct.ja  { color: var(--groen-dark); }
     .resultaat-pct.nee { color: var(--rood); }
 
+    /* Top 3 per stelling */
+    .top3-stelling { margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .top3-stelling-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+    .top3-stelling-lijst { display: flex; flex-direction: column; gap: 10px; }
+    .top3-stelling-rij {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--primary-soft); border: 1px solid rgba(78,142,243,.20); border-radius: 16px;
+      padding: 12px 16px;
+    }
+    .top3-stelling-rang {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      color: white; font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', monospace;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .top3-stelling-rang.rang-1 { background: var(--primary-dark); }
+    .top3-stelling-rang.rang-2 { background: var(--primary); }
+    .top3-stelling-rang.rang-3 { background: #9cc4ee; }
+    .top3-stelling-naam { font-weight: 700; color: var(--dark); flex: 1; }
+    .top3-stelling-afwijking { font-size: 14px; color: var(--primary-dark); }
+    .top3-stelling-afwijking strong { font-weight: 700; }
+
     /* Gespreksstarter */
     .gespreksstarter { margin-top: 28px; padding-top: 24px; border-top: 1px solid var(--border); }
     .gespreksstarter-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
@@ -480,21 +501,26 @@
       const aantalNee = lijst.length - aantalJa;
       const klasPct = lijst.length > 0 ? Math.round((aantalJa / lijst.length) * 100) : 0;
       const gemVoorspelling = lijst.length > 0 ? Math.round(lijst.reduce((s, a) => s + a.voorspelling, 0) / lijst.length) : 0;
+      let top3 = [];
 
       if (lijst.length > 0) {
         const deelnemerIds = lijst.map(a => a.deelnemer_id);
-        const { data: deelnemersData } = await db.from('voorspel_deelnemers').select('id, score').in('id', deelnemerIds);
-        const scoreMap = new Map((deelnemersData || []).map(d => [d.id, d.score || 0]));
+        const { data: deelnemersData } = await db.from('voorspel_deelnemers').select('id, spelernummer, score').in('id', deelnemerIds);
+        const deelnemerMap = new Map((deelnemersData || []).map(d => [d.id, d]));
         await Promise.all(lijst.map(a => {
           const afwijking = Math.abs(klasPct - a.voorspelling);
-          const huidigeScore = scoreMap.get(a.deelnemer_id) || 0;
+          const huidigeScore = deelnemerMap.get(a.deelnemer_id)?.score || 0;
           return db.from('voorspel_deelnemers').update({ score: huidigeScore + afwijking }).eq('id', a.deelnemer_id);
         }));
+        top3 = lijst
+          .map(a => ({ spelernummer: deelnemerMap.get(a.deelnemer_id)?.spelernummer, afwijking: Math.abs(klasPct - a.voorspelling) }))
+          .sort((a, b) => a.afwijking - b.afwijking)
+          .slice(0, 3);
       }
 
       await db.from('voorspel_sessies').update({
         onthuld: true,
-        huidig_resultaat: { aantal_ja: aantalJa, aantal_nee: aantalNee, klas_pct: klasPct, gem_voorspelling: gemVoorspelling }
+        huidig_resultaat: { aantal_ja: aantalJa, aantal_nee: aantalNee, klas_pct: klasPct, gem_voorspelling: gemVoorspelling, top3 }
       }).eq('id', sessie.id);
     }
 
@@ -602,7 +628,7 @@
     function toonOnthuld() {
       const idx = sessie.huidige_stelling_index;
       const s = STELLINGEN[idx];
-      const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0, gem_voorspelling: 0 };
+      const r = sessie.huidig_resultaat || { aantal_ja: 0, aantal_nee: 0, klas_pct: 0, gem_voorspelling: 0, top3: [] };
       const totaalAntwoorden = r.aantal_ja + r.aantal_nee;
       const neePct = totaalAntwoorden === 0 ? 0 : 100 - r.klas_pct;
       const isLaatste = idx === STELLINGEN.length - 1;
@@ -625,6 +651,18 @@
             <div class="resultaat-kop"><span class="resultaat-label">Nee</span><span class="resultaat-pct nee">${neePct}% (${r.aantal_nee})</span></div>
             <div class="balk-track"><div class="balk nee" style="width:${neePct}%"></div></div>
           </div>
+          ${(r.top3 || []).length > 0 ? `
+          <div class="top3-stelling">
+            <div class="top3-stelling-label">Dichtst bij de klas zaten</div>
+            <div class="top3-stelling-lijst">
+              ${r.top3.map((t, i) => `
+              <div class="top3-stelling-rij">
+                <div class="top3-stelling-rang rang-${i + 1}">${i + 1}</div>
+                <div class="top3-stelling-naam">Speler ${t.spelernummer}</div>
+                <div class="top3-stelling-afwijking">zit er <strong>${t.afwijking}%</strong> naast</div>
+              </div>`).join('')}
+            </div>
+          </div>` : ''}
           <div class="gespreksstarter">
             <div class="gespreksstarter-label">Gespreksstarter${s.gv.length > 1 ? 's' : ''}</div>
             <div class="gespreksvraag-lijst">
