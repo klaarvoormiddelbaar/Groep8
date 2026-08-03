@@ -523,6 +523,12 @@
       if (btn) { btn.disabled = true; btn.textContent = 'Sessie afgerond ✓'; }
     }
 
+    function terugNaarLes5(e) {
+      e.preventDefault();
+      beeindigSessie().finally(() => { window.location.href = '/les5'; });
+      return false;
+    }
+
     function toggleUitleg(btn) {
       const tooltip = btn.nextElementSibling;
       const wasOpen = tooltip.classList.contains('zichtbaar');
@@ -703,7 +709,7 @@
           ${renderRanglijst(data || [])}
           <div class="knoppen-rij">
             <button class="btn-ghost" id="btnAfronden" onclick="beeindigSessie()">Sessie afronden</button>
-            <a class="btn-resultaten" href="/les5">← Terug naar Les 5</a>
+            <a class="btn-resultaten" href="/les5" onclick="return terugNaarLes5(event)">← Terug naar Les 5</a>
           </div>
         </div>`;
     }
