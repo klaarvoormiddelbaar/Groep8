@@ -6,7 +6,7 @@
   <title>Live quiz — Klaar voor Middelbaar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -129,9 +129,40 @@
       position: relative; font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
       color: rgba(255,255,255,0.78); margin-bottom: 10px;
     }
-    .lobby-title { position: relative; font-size: 34px; font-weight: 700; margin-bottom: 12px; }
-    .lobby-sub { position: relative; font-size: 16px; color: rgba(255,255,255,0.86); margin-bottom: 28px; max-width: 520px; line-height: 1.5; }
-    .lobby-sub strong { color: white; }
+    .lobby-title { position: relative; font-size: 34px; font-weight: 700; margin-bottom: 30px; }
+
+    .lobby-step { position: relative; margin-bottom: 26px; }
+    .lobby-step:last-child { margin-bottom: 0; }
+    .lobby-step-label {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 12.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
+      color: rgba(255,255,255,0.68); margin-bottom: 11px;
+    }
+    .lobby-step-num {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 19px; height: 19px; border-radius: 50%;
+      background: rgba(255,255,255,0.20);
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: white;
+    }
+
+    .join-pill {
+      position: relative; display: inline-flex; align-items: center; gap: 11px;
+      background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
+      border-radius: var(--r-pill); padding: 12px 20px;
+      font-family: inherit; color: white; cursor: pointer; max-width: 100%;
+      transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    }
+    .join-pill:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); }
+    .join-pill:active { transform: scale(0.97); }
+    .join-pill:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+    .join-pill-tekst {
+      font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700;
+      letter-spacing: 0.1px; overflow-wrap: anywhere; text-align: left;
+    }
+    .join-pill-icon { display: flex; flex-shrink: 0; color: rgba(255,255,255,0.85); transition: color 0.18s; }
+    .join-pill.gekopieerd { background: rgba(16,163,127,0.32); border-color: rgba(16,163,127,0.6); }
+    .join-pill.gekopieerd .join-pill-icon { color: #baf3d9; }
+
     .code-display { position: relative; display: flex; gap: 12px; flex-wrap: wrap; }
     .code-digit {
       width: 64px; height: 80px; border-radius: 18px;
@@ -313,6 +344,31 @@
     let huidigeView = 'loading';
     let huidigeVraagIndex = -1;
 
+    const ICOON_KOPIEER = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="10" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M13 7V5.5A2.5 2.5 0 0 0 10.5 3H5.5A2.5 2.5 0 0 0 3 5.5v5A2.5 2.5 0 0 0 5.5 13H7" stroke="currentColor" stroke-width="1.6"/></svg>`;
+    const ICOON_GEKOPIEERD = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.5L8 14.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    let kopieerTimeoutId = null;
+
+    function kopieerJoinLink(url) {
+      try { navigator.clipboard.writeText(url); } catch (fout) {}
+
+      const pill = document.getElementById('join-pill');
+      const tekst = document.getElementById('join-pill-tekst');
+      const icoon = document.getElementById('join-pill-icon');
+      if (!pill || !tekst || !icoon) return;
+
+      const origineleTekst = tekst.textContent;
+      pill.classList.add('gekopieerd');
+      tekst.textContent = 'Gekopieerd naar klembord';
+      icoon.innerHTML = ICOON_GEKOPIEERD;
+
+      if (kopieerTimeoutId) clearTimeout(kopieerTimeoutId);
+      kopieerTimeoutId = setTimeout(() => {
+        pill.classList.remove('gekopieerd');
+        tekst.textContent = origineleTekst;
+        icoon.innerHTML = ICOON_KOPIEER;
+      }, 1800);
+    }
+
     function escapeHtml(tekst) {
       const d = document.createElement('div');
       d.textContent = String(tekst);
@@ -427,16 +483,26 @@
       const joinUrl = `${window.location.origin}/les${lesNum}/quiz`;
       app.innerHTML = `
         <div class="view">
-          <div class="lobby-card">
+          <div class="lobby-card" style="padding-right:280px;">
             <div class="lobby-eyebrow">KvM quiz les ${lesNum}</div>
             <div class="lobby-title">Klaar om te starten?</div>
-            <div class="lobby-sub">
-              Ga naar <strong>groep8.klaarvoormiddelbaar.nl/les${lesNum}/quiz</strong><br>
-              Voer de code en je voornaam in:
+
+            <div class="lobby-step">
+              <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
+              <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink('${joinUrl}')">
+                <span class="join-pill-tekst" id="join-pill-tekst">groep8.klaarvoormiddelbaar.nl/les${lesNum}/quiz</span>
+                <span class="join-pill-icon" id="join-pill-icon">${ICOON_KOPIEER}</span>
+              </button>
             </div>
-            <div class="code-display">
-              ${sessie.code.split('').map(cijfer => `<div class="code-digit">${cijfer}</div>`).join('')}
+
+            <div class="lobby-step">
+              <div class="lobby-step-label"><span class="lobby-step-num">2</span> Vul de code en je voornaam in</div>
+              <div class="code-display">
+                ${sessie.code.split('').map(cijfer => `<div class="code-digit">${cijfer}</div>`).join('')}
+              </div>
             </div>
+            <img src="/Afbeeldingen/Jay%20los/Jay%20Quiz.png" alt="Jay"
+              style="position:absolute; right:68px; top:50%; transform:translateY(-50%) scaleX(-1); height:265px; width:auto; opacity:0.96;">
           </div>
 
           <div class="participants-panel">
