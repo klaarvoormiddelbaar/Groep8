@@ -225,7 +225,7 @@
     async function vindHuidigeSessie() {
       const { data } = await db.from('sessions').select('id, status')
         .eq('link_id', linkId).neq('status', 'ended')
-        .order('aangemaaktop', { ascending: false }).limit(1).maybeSingle();
+        .maybeSingle();
       return data || null;
     }
 

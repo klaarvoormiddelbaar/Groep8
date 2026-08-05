@@ -630,8 +630,6 @@
         .select('*')
         .eq('link_id', linkId)
         .neq('status', 'ended')
-        .order('aangemaaktop', { ascending: false })
-        .limit(1)
         .maybeSingle();
 
       if (leesFout) { toonFout('Kon geen sessie ophalen: ' + leesFout.message); return null; }
