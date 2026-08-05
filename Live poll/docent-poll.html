@@ -6,7 +6,7 @@
   <title>Live poll — Klaar voor Middelbaar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -201,14 +201,27 @@
       margin-bottom: 28px; max-width: 520px; line-height: 1.55;
     }
     .lobby-sub strong { color: white; }
-    .code-display { position: relative; display: flex; gap: 12px; flex-wrap: wrap; }
-    .code-digit {
-      width: 64px; height: 80px; border-radius: 18px;
-      background: rgba(255,255,255,0.18); border: 1.5px solid rgba(255,255,255,0.38);
-      backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 38px; font-weight: 700;
+    .link-url-rij {
+      position: relative; display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 12px; padding: 10px 16px; margin-bottom: 14px;
     }
+    .link-url {
+      font-family: 'JetBrains Mono', monospace; font-weight: 600;
+      font-size: 15px; color: white; word-break: break-all;
+    }
+    .btn-kopieer {
+      position: relative; flex-shrink: 0;
+      display: inline-flex; align-items: center; gap: 10px;
+      background: white; color: var(--primary-dark);
+      border: none; border-radius: var(--r-pill); cursor: pointer;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      padding: 14px 26px;
+      box-shadow: 0 10px 20px rgba(10,30,70,0.25);
+      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
+    }
+    .btn-kopieer:hover { transform: translateY(-2px); box-shadow: 0 14px 26px rgba(10,30,70,0.30); }
+    .btn-kopieer.gekopieerd { background: var(--green); color: white; }
 
     .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
 
@@ -528,6 +541,9 @@
     document.getElementById('docent-avatar').title = docentNaam;
     document.getElementById('bc-les').textContent = lesTitel;
 
+    let huidigeGebruiker = null;
+    let linkId          = null;
+    let leerlingLink     = '';
     let sessie          = null;
     let stellingen      = [];
     const deelnemers    = new Map();
@@ -536,6 +552,18 @@
     let aantalStemmen   = 0;
     let huidigeIndex    = -1;
     let huidigView      = 'loading';
+
+    function kopieerLink() {
+      navigator.clipboard.writeText(leerlingLink).then(() => {
+        const btn = document.getElementById('btn-kopieer');
+        const tekst = document.getElementById('btn-kopieer-tekst');
+        if (!btn || !tekst) return;
+        const vorige = tekst.textContent;
+        btn.classList.add('gekopieerd');
+        tekst.textContent = 'Gekopieerd!';
+        setTimeout(() => { btn.classList.remove('gekopieerd'); tekst.textContent = vorige; }, 1800);
+      });
+    }
 
     function esc(s) {
       const d = document.createElement('div');
@@ -575,7 +603,65 @@
       return '#10a37f';
     }
 
-    // ── Sessie aanmaken ──────────────────────────────────────────────────────
+    // ── Vaste link + sessie ──────────────────────────────────────────────────
+    async function haalOfMaakLink() {
+      const { data: bestaand, error: leesFout } = await db
+        .from('poll_links')
+        .select('id, volgnummer')
+        .eq('docent_id', huidigeGebruiker.id)
+        .eq('les_id', lesId)
+        .maybeSingle();
+
+      if (leesFout) { toonFout('Kon je poll-link niet ophalen: ' + leesFout.message); return null; }
+      if (bestaand) return bestaand;
+
+      const { data: nieuw, error: maakFout } = await db
+        .from('poll_links')
+        .insert({ docent_id: huidigeGebruiker.id, les_id: lesId })
+        .select('id, volgnummer')
+        .single();
+      if (maakFout) { toonFout('Kon geen poll-link aanmaken: ' + maakFout.message); return null; }
+      return nieuw;
+    }
+
+    async function haalOfMaakSessie(stellingenTekst) {
+      const { data: bestaande, error: leesFout } = await db
+        .from('sessions')
+        .select('*')
+        .eq('link_id', linkId)
+        .neq('status', 'ended')
+        .order('aangemaaktop', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (leesFout) { toonFout('Kon geen sessie ophalen: ' + leesFout.message); return null; }
+
+      if (bestaande) {
+        const { data: bestaandeStellingen, error: se } = await db
+          .from('poll_statements').select().eq('session_id', bestaande.id).order('volgorde');
+        if (se) { toonFout('Kon stellingen niet ophalen: ' + se.message); return null; }
+        stellingen = bestaandeStellingen;
+        return bestaande;
+      }
+
+      const { data: nieuwe, error: maakFout } = await db
+        .from('sessions')
+        .insert({ link_id: linkId, les_id: lesId, docent_naam: docentNaam, status: 'lobby', huidige_vraag_index: 0 })
+        .select().single();
+      if (maakFout) { toonFout('Kon sessie niet aanmaken: ' + maakFout.message); return null; }
+
+      const rijen = stellingenTekst.map((tekst, i) => ({
+        session_id: nieuwe.id, tekst, volgorde: i, status: 'waiting'
+      }));
+      const { data: opgeslagen, error: sfe } = await db
+        .from('poll_statements').insert(rijen).select();
+      if (sfe) { toonFout('Kon stellingen niet opslaan: ' + sfe.message); return null; }
+      stellingen = opgeslagen.slice().sort((a, b) => a.volgorde - b.volgorde);
+
+      return nieuwe;
+    }
+
+    // ── Opstarten ────────────────────────────────────────────────────────────
     async function init() {
       const stellingenTekst = POLLS[lesId];
       if (!stellingenTekst || stellingenTekst.length === 0) {
@@ -583,24 +669,14 @@
         return;
       }
 
-      let code;
-      try { code = await genereerUniekeSessieCode(); }
-      catch (e) { toonFout(e.message); return; }
+      const link = await haalOfMaakLink();
+      if (!link) return;
+      linkId = link.id;
+      leerlingLink = `https://groep8.klaarvoormiddelbaar.nl/poll/${link.volgnummer}`;
 
-      const { data: nieuweSessie, error: se } = await db
-        .from('sessions')
-        .insert({ code, les_id: lesId, docent_naam: docentNaam, status: 'lobby', huidige_vraag_index: 0 })
-        .select().single();
-      if (se) { toonFout('Kon sessie niet aanmaken: ' + se.message); return; }
+      const nieuweSessie = await haalOfMaakSessie(stellingenTekst);
+      if (!nieuweSessie) return;
       sessie = nieuweSessie;
-
-      const rijen = stellingenTekst.map((tekst, i) => ({
-        session_id: sessie.id, tekst, volgorde: i, status: 'waiting'
-      }));
-      const { data: opgeslagen, error: sfe } = await db
-        .from('poll_statements').insert(rijen).select();
-      if (sfe) { toonFout('Kon stellingen niet opslaan: ' + sfe.message); return; }
-      stellingen = opgeslagen.slice().sort((a, b) => a.volgorde - b.volgorde);
 
       abonneerOpDeelnemers();
       abonneerOpSessie();
@@ -678,19 +754,21 @@
     // ── Wachtkamer ────────────────────────────────────────────────────────────
     function toonWachtkamer() {
       huidigView = 'lobby';
-      const lesNum = lesId.replace('poll-les-', '');
-      const joinUrl = `${window.location.origin}/les${lesNum}/poll`;
       app.innerHTML = `
         <div class="view">
           <div class="lobby-hero">
             <div class="lobby-eyebrow">Live poll · ${esc(lesTitel)}</div>
             <div class="lobby-title">Klaar om te starten?</div>
-            <div class="lobby-sub">
-              Ga naar <strong>${esc(joinUrl.replace(/^https?:\/\//, ''))}</strong><br>
-              Voer de code en je voornaam in:
+            <div class="lobby-sub">Deel deze link met je leerlingen:</div>
+            <div class="link-url-rij">
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
+              <span class="link-url">${esc(leerlingLink.replace(/^https?:\/\//, ''))}</span>
             </div>
-            <div class="code-display">
-              ${sessie.code.split('').map(c => `<div class="code-digit">${c}</div>`).join('')}
+            <div>
+              <button class="btn-kopieer" id="btn-kopieer" onclick="kopieerLink()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span id="btn-kopieer-tekst">Kopieer link</span>
+              </button>
             </div>
           </div>
 
@@ -700,7 +778,7 @@
               <div class="panel-badge" id="teller-badge">0 leerlingen</div>
             </div>
             <div class="deelnemers-grid" id="d-grid">
-              <div class="leeg">Als leerlingen de code invullen, verschijnen ze hier live!</div>
+              <div class="leeg">Als leerlingen de link openen, verschijnen ze hier live!</div>
             </div>
           </div>
 
@@ -717,7 +795,7 @@
       const g = document.getElementById('d-grid');
       if (!g) return;
       if (deelnemers.size === 0) {
-        g.innerHTML = `<div class="leeg">Als leerlingen de code invullen, verschijnen ze hier live!</div>`;
+        g.innerHTML = `<div class="leeg">Als leerlingen de link openen, verschijnen ze hier live!</div>`;
         return;
       }
       g.innerHTML = [...deelnemers.values()].map(naam => `
@@ -757,7 +835,6 @@
           <div class="poll-kop">
             <div class="poll-stap">Stelling ${huidigeIndex + 1} van ${stellingen.length} · Stemmen loopt</div>
             <div class="poll-meta">
-              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emojis nieuw/sleutel.png" alt=""> Code: ${sessie.code}</div>
               <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> ${deelnemers.size} deelnemers</div>
               <div class="meta-chip" id="stem-chip"><img class="ei" src="/Afbeeldingen/emojis nieuw/envelop.png" alt=""> 0 van ${deelnemers.size} gestemd</div>
             </div>
@@ -838,7 +915,6 @@
           <div class="poll-kop">
             <div class="poll-stap">Stelling ${huidigeIndex + 1} van ${stellingen.length} · Resultaten</div>
             <div class="poll-meta">
-              <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emojis nieuw/sleutel.png" alt=""> Code: ${sessie.code}</div>
               <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> ${deelnemers.size} deelnemers</div>
               <div class="meta-chip"><img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""> ${totaal} stemmen ontvangen</div>
             </div>
@@ -1013,6 +1089,7 @@
         window.location.href = '/Inlogpagina/';
         return;
       }
+      huidigeGebruiker = session.user;
       init();
     })();
   </script>

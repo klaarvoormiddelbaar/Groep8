@@ -368,7 +368,7 @@
 
     // ── State ────────────────────────────────────────────────────────────────
     const params      = new URLSearchParams(window.location.search);
-    const code        = params.get('code');
+    const sessieId    = params.get('sessie');
     const deelnemerId = params.get('deelnemer');
 
     const app = document.getElementById('app');
@@ -397,14 +397,14 @@
 
     // ── Init ─────────────────────────────────────────────────────────────────
     async function init() {
-      if (!code || !deelnemerId) {
+      if (!sessieId || !deelnemerId) {
         toonFout('Ongeldige link. Ga terug naar de join-pagina en probeer opnieuw.');
         return;
       }
 
       const { data: s, error: se } = await db
-        .from('sessions').select().eq('code', code).maybeSingle();
-      if (se || !s) { toonFout('Kon de poll niet laden. Vraag je juf of meester om de code opnieuw.'); return; }
+        .from('sessions').select().eq('id', sessieId).maybeSingle();
+      if (se || !s) { toonFout('Kon de poll niet laden. Vraag je juf of meester om de link opnieuw.'); return; }
       sessie = s;
 
       const { data: d, error: de } = await db

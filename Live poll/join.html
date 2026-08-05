@@ -81,7 +81,9 @@
       outline: none; background: white; border-color: var(--primary);
       box-shadow: 0 0 0 4px rgba(78,142,243,0.16);
     }
-    #code-input { letter-spacing: 9px; font-variant-numeric: tabular-nums; }
+
+    .status-titel { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+    .status-tekst { font-size: 15px; color: var(--muted); line-height: 1.6; }
 
     .btn-meedoen {
       width: 100%; border: none; border-radius: var(--r-pill); cursor: pointer;
@@ -103,8 +105,6 @@
     .feedback.fout  { display: block; background: #fef2f2; border: 1.5px solid #fecaca; color: #b91c1c; }
     .feedback.bezig { display: block; background: var(--primary-soft); border: 1.5px solid rgba(78,142,243,0.25); color: var(--primary-dark); }
 
-    .join-footnote { margin-top: 28px; text-align: center; font-size: 13px; color: var(--muted); }
-
     .scale-preview {
       display: grid; grid-template-columns: repeat(5, 1fr);
       background: #f7f8f9; border: 1px solid var(--border);
@@ -122,127 +122,150 @@
   </style>
 </head>
 <body>
-  <div class="join-card">
+  <div class="join-card" id="join-card">
     <div class="join-logo">
       <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
     </div>
-
-    <div class="join-title">Vul de code van je juf of meester in en doe mee! <img class="ei" src="/Afbeeldingen/emojis nieuw/lamp.png" alt=""></div>
-    <div class="join-sub">Geef aan hoe jij over elke stelling denkt:</div>
-
-    <div class="scale-preview">
-      <div class="scale-item"><div class="scale-circ" style="background:#ef4444">1</div><div class="scale-nr">Helemaal mee oneens</div></div>
-      <div class="scale-item"><div class="scale-circ" style="background:#f97316">2</div><div class="scale-nr">Mee oneens</div></div>
-      <div class="scale-item"><div class="scale-circ" style="background:#eab308">3</div><div class="scale-nr">Neutraal</div></div>
-      <div class="scale-item"><div class="scale-circ" style="background:#22c55e">4</div><div class="scale-nr">Mee eens</div></div>
-      <div class="scale-item"><div class="scale-circ" style="background:#10a37f">5</div><div class="scale-nr">Helemaal mee eens</div></div>
+    <div id="join-inhoud">
+      <div class="status-titel">Even geduld…</div>
+      <div class="status-tekst">De poll wordt geladen.</div>
     </div>
-
-    <form id="join-form" autocomplete="off">
-      <div class="field">
-        <label for="code-input">Code</label>
-        <input id="code-input" name="code" type="text" inputmode="numeric" maxlength="6"
-               placeholder="123456" autocomplete="off">
-      </div>
-      <div class="field">
-        <label for="naam-input">Jouw voornaam</label>
-        <input id="naam-input" name="naam" type="text" maxlength="24"
-               placeholder="Bijvoorbeeld: Sem" autocomplete="off">
-      </div>
-      <button class="btn-meedoen" id="btn-meedoen" type="submit">
-        Meedoen <span class="btn-arrow">→</span>
-      </button>
-      <div class="feedback" id="feedback"></div>
-    </form>
-
-    <div class="join-footnote">Vraag je juf of meester om de 6-cijferige code als je die nog niet hebt.</div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/Live%20poll/supabase-config.js"></script>
   <script>
-    // Als de docent ingelogd is, stuur meteen door naar de docentenweergave
-    (async () => {
+    const inhoud = document.getElementById('join-inhoud');
+    let linkId  = null;
+    let sessie  = null;
+
+    function toonOngeldigeLink() {
+      inhoud.innerHTML = `
+        <div class="status-titel">Ongeldige link</div>
+        <div class="status-tekst">Deze link klopt niet (meer). Vraag je juf of meester om de juiste link.</div>`;
+    }
+
+    function toonWachtOpDocent() {
+      inhoud.innerHTML = `
+        <div class="status-titel">Wacht op je juf of meester</div>
+        <div class="status-tekst">Zodra de poll geopend wordt, kun je hier meedoen. Deze pagina ververst vanzelf.</div>`;
+    }
+
+    function toonNaamForm() {
+      inhoud.innerHTML = `
+        <div class="poll-badge">Live poll</div>
+        <div class="join-title">Vul je voornaam in en doe mee! <img class="ei" src="/Afbeeldingen/emojis nieuw/lamp.png" alt=""></div>
+        <div class="join-sub">Geef aan hoe jij over elke stelling denkt:</div>
+
+        <div class="scale-preview">
+          <div class="scale-item"><div class="scale-circ" style="background:#ef4444">1</div><div class="scale-nr">Helemaal mee oneens</div></div>
+          <div class="scale-item"><div class="scale-circ" style="background:#f97316">2</div><div class="scale-nr">Mee oneens</div></div>
+          <div class="scale-item"><div class="scale-circ" style="background:#eab308">3</div><div class="scale-nr">Neutraal</div></div>
+          <div class="scale-item"><div class="scale-circ" style="background:#22c55e">4</div><div class="scale-nr">Mee eens</div></div>
+          <div class="scale-item"><div class="scale-circ" style="background:#10a37f">5</div><div class="scale-nr">Helemaal mee eens</div></div>
+        </div>
+
+        <form id="join-form" autocomplete="off">
+          <div class="field">
+            <label for="naam-input">Jouw voornaam</label>
+            <input id="naam-input" name="naam" type="text" maxlength="24"
+                   placeholder="Bijvoorbeeld: Sem" autocomplete="off">
+          </div>
+          <button class="btn-meedoen" id="btn-meedoen" type="submit">
+            Meedoen <span class="btn-arrow">→</span>
+          </button>
+          <div class="feedback" id="feedback"></div>
+        </form>`;
+
+      const form      = document.getElementById('join-form');
+      const naamInput = document.getElementById('naam-input');
+      const knop      = document.getElementById('btn-meedoen');
+      const feedback  = document.getElementById('feedback');
+
+      naamInput.addEventListener('input', () => {
+        feedback.className = 'feedback';
+        feedback.textContent = '';
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const naam = naamInput.value.trim();
+        if (!naam) {
+          feedback.className = 'feedback fout';
+          feedback.textContent = 'Vul je voornaam in zodat de klas ziet dat je meedoet.';
+          return;
+        }
+
+        knop.disabled = true;
+        feedback.className = 'feedback bezig';
+        feedback.textContent = 'Je wordt aangemeld…';
+
+        try {
+          const { data: deelnemer, error: meldFout } = await db
+            .from('participants')
+            .insert({ session_id: sessie.id, naam })
+            .select()
+            .single();
+
+          if (meldFout) throw new Error(meldFout.message);
+
+          const url = new URL('/Live%20poll/leerling-poll.html', window.location.origin);
+          url.searchParams.set('sessie', sessie.id);
+          url.searchParams.set('deelnemer', deelnemer.id);
+          window.location.href = url.href;
+        } catch (fout) {
+          feedback.className = 'feedback fout';
+          feedback.textContent = 'Er ging iets mis: ' + fout.message;
+          knop.disabled = false;
+        }
+      });
+    }
+
+    // ── Sessie vinden / wachten ──────────────────────────────────────────────
+    async function vindHuidigeSessie() {
+      const { data } = await db.from('sessions').select('id, status')
+        .eq('link_id', linkId).neq('status', 'ended')
+        .order('aangemaaktop', { ascending: false }).limit(1).maybeSingle();
+      return data || null;
+    }
+
+    function wachtOpNieuweSessie() {
+      db.channel('leerling-poll-wacht-' + linkId)
+        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'sessions', filter: `link_id=eq.${linkId}` }, payload => {
+          sessie = payload.new;
+          toonNaamForm();
+        })
+        .subscribe();
+    }
+
+    async function init() {
+      // Als de docent ingelogd is, stuur meteen door naar de docentenweergave
       const { data: { session } } = await db.auth.getSession();
       if (session) {
         const match  = window.location.pathname.match(/\/les(\d+)\//i);
         const lesNum = match ? match[1] : '1';
         window.location.replace(`/les${lesNum}/docent/poll`);
-      }
-    })();
-
-    const form      = document.getElementById('join-form');
-    const codeInput = document.getElementById('code-input');
-    const naamInput = document.getElementById('naam-input');
-    const knop      = document.getElementById('btn-meedoen');
-    const feedback  = document.getElementById('feedback');
-
-    codeInput.addEventListener('input', () => {
-      codeInput.value = codeInput.value.replace(/\D/g, '').slice(0, 6);
-      verbergFeedback();
-    });
-    naamInput.addEventListener('input', verbergFeedback);
-
-    function toonFeedback(soort, bericht) {
-      feedback.className = `feedback ${soort}`;
-      feedback.textContent = bericht;
-    }
-    function verbergFeedback() {
-      feedback.className = 'feedback';
-      feedback.textContent = '';
-    }
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const code = codeInput.value.trim();
-      const naam = naamInput.value.trim();
-
-      if (code.length !== 6) {
-        toonFeedback('fout', 'Een sessiecode bestaat uit 6 cijfers. Controleer de code op het bord.');
-        return;
-      }
-      if (!naam) {
-        toonFeedback('fout', 'Vul je voornaam in zodat de klas ziet dat je meedoet.');
         return;
       }
 
-      knop.disabled = true;
-      toonFeedback('bezig', 'Even kijken of deze poll actief is…');
+      const padMatch = window.location.pathname.match(/poll\/(\d+)/i);
+      const volgnummer = padMatch ? padMatch[1] : null;
+      if (!volgnummer) { toonOngeldigeLink(); return; }
 
-      try {
-        const { data: sessie, error: zoekFout } = await db
-          .from('sessions')
-          .select('id, status')
-          .eq('code', code)
-          .neq('status', 'ended')
-          .maybeSingle();
+      const { data, error } = await db.rpc('resolve_poll_link', { p_volgnummer: Number(volgnummer) });
+      if (error || !data) { toonOngeldigeLink(); return; }
+      linkId = data;
 
-        if (zoekFout) throw new Error(zoekFout.message);
-        if (!sessie) {
-          toonFeedback('fout', 'Deze code klopt niet (meer), of de poll is al afgelopen. Vraag je juf of meester om de juiste code.');
-          knop.disabled = false;
-          return;
-        }
-
-        toonFeedback('bezig', 'Je wordt aangemeld…');
-
-        const { data: deelnemer, error: meldFout } = await db
-          .from('participants')
-          .insert({ session_id: sessie.id, naam })
-          .select()
-          .single();
-
-        if (meldFout) throw new Error(meldFout.message);
-
-        const url = new URL('/Live%20poll/leerling-poll.html', window.location.origin);
-        url.searchParams.set('code', code);
-        url.searchParams.set('deelnemer', deelnemer.id);
-        window.location.href = url.href;
-      } catch (fout) {
-        toonFeedback('fout', 'Er ging iets mis: ' + fout.message);
-        knop.disabled = false;
+      sessie = await vindHuidigeSessie();
+      if (!sessie) {
+        toonWachtOpDocent();
+        wachtOpNieuweSessie();
+        return;
       }
-    });
+      toonNaamForm();
+    }
+
+    init();
   </script>
 </body>
 </html>
