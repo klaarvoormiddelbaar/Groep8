@@ -625,22 +625,16 @@
     }
 
     async function haalOfMaakSessie(stellingenTekst) {
-      const { data: bestaande, error: leesFout } = await db
+      // Elke keer dat deze pagina laadt (ook bij verversen) sluiten we een
+      // eventuele nog openstaande sessie van een vorig bezoek meteen af en
+      // starten we vers — verversen/tabblad sluiten heeft zo altijd hetzelfde
+      // effect als op "Poll beëindigen" klikken.
+      const { error: eindeFout } = await db
         .from('sessions')
-        .select('*')
+        .update({ status: 'ended' })
         .eq('link_id', linkId)
-        .neq('status', 'ended')
-        .maybeSingle();
-
-      if (leesFout) { toonFout('Kon geen sessie ophalen: ' + leesFout.message); return null; }
-
-      if (bestaande) {
-        const { data: bestaandeStellingen, error: se } = await db
-          .from('poll_statements').select().eq('session_id', bestaande.id).order('volgorde');
-        if (se) { toonFout('Kon stellingen niet ophalen: ' + se.message); return null; }
-        stellingen = bestaandeStellingen;
-        return bestaande;
-      }
+        .neq('status', 'ended');
+      if (eindeFout) { toonFout('Kon een oude sessie niet afsluiten: ' + eindeFout.message); return null; }
 
       const { data: nieuwe, error: maakFout } = await db
         .from('sessions')
