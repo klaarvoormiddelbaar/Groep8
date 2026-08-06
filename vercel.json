@@ -66,6 +66,7 @@
     { "source": "/poll/:nummer", "destination": "/Live poll/join.html" },
     { "source": "/woordwolk/:nummer", "destination": "/Wordcloud/index.html" },
     { "source": "/planeten-planner", "destination": "/Planeten Planner/index.html" },
-    { "source": "/pp", "destination": "/Planeten Planner/index.html" }
+    { "source": "/pp", "destination": "/Planeten Planner/index.html" },
+    { "source": "/spaans", "destination": "/Spaans/index.html" }
   ]
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head><meta charset="UTF-8"><title>matching.js tests</title></head>
+<body>
+<pre id="out" style="font:14px monospace;white-space:pre-wrap;padding:20px;"></pre>
+<script src="/Spaans/matching.js"></script>
+<script>
+  const { classifyAnswer } = window.Spaans.Matching;
+  const out = document.getElementById('out');
+  let pass = 0, fail = 0;
+  function test(naam, userAnswer, accepted, others, verwacht) {
+    const r = classifyAnswer(userAnswer, accepted, others || []);
+    const ok = r.result === verwacht;
+    if (ok) pass++; else fail++;
+    out.textContent += `${ok ? '✅' : '❌'} ${naam}: kreeg "${r.result}" (verwacht "${verwacht}") — input="${userAnswer}"\n`;
+  }
+
+  test('exact goed', 'perdido', ['perdido'], [], 'correct');
+  test('hoofdletters', 'Perdido', ['perdido'], [], 'correct');
+  test('spaties', '  perdido  ', ['perdido'], [], 'correct');
+  test('ontbrekend accent', 'tambien', ['también'], [], 'minor');
+  test('ontbrekend accent 2', 'necesarrio erg fout nee', ['también'], [], 'wrong'); // sanity: irrelevant answer
+  test('een typfout (extra letter)', 'necesarrio', ['necesario'], [], 'minor');
+  test('een typfout (ontbrekende letter)', 'necesari', ['necesario'], [], 'minor');
+  test('meerdere typfouten', 'necesarrioo', ['necesario'], [], 'wrong');
+  test('volledig verkeerd antwoord', 'pasar', ['ocurrir'], [], 'wrong');
+  test('meerdere correcte antwoorden - eerste', 'quizás', ['quizás', 'tal vez', 'a lo mejor'], [], 'correct');
+  test('meerdere correcte antwoorden - tweede', 'tal vez', ['quizás', 'tal vez', 'a lo mejor'], [], 'correct');
+  test('meerdere correcte antwoorden - accent-typo op derde', 'a lo mejorr', ['quizás', 'tal vez', 'a lo mejor'], [], 'minor');
+  test('leeg antwoord', '', ['hola'], [], 'wrong');
+  test('kort woord, 1 letter af = ander woord', 'son', ['sol'], [], 'wrong');
+  test('veiligheidsnet: ander bestaand woord niet als minor goedkeuren', 'pesar', ['pasar'], ['pesar'], 'wrong');
+  test('qué met accent correct', 'qué', ['qué'], [], 'correct');
+  test('qué zonder accent = minor', 'que', ['qué'], [], 'minor');
+  test('cómo zonder accent = minor', 'como', ['cómo'], [], 'minor');
+  test('dónde zonder accent = minor', 'donde', ['dónde'], [], 'minor');
+  test('difícil zonder accent = minor', 'dificil', ['difícil'], [], 'minor');
+
+  out.textContent += `\n${pass} geslaagd, ${fail} gefaald\n`;
+  document.title = fail === 0 ? 'ALLE TESTS OK' : (fail + ' TESTS GEFAALD');
+</script>
+</body>
+</html>
