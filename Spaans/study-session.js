@@ -33,26 +33,27 @@
 
   function promptEnAntwoord(woord, richting) {
     if (richting === 'es-nl') {
-      return { prompt: woord.spanish, acceptedAnswers: [woord.dutch] };
+      return { prompt: woord.spanish, acceptedAnswers: woord.dutchAnswers || [woord.dutch] };
     }
     return { prompt: woord.dutch, acceptedAnswers: woord.acceptedAnswers };
   }
 
   function otherKnownWords(alleWoorden, richting, huidigWoordId, acceptedAnswers) {
-    const veld = richting === 'es-nl' ? 'dutch' : 'spanish';
     const eigenAntwoorden = new Set(
       acceptedAnswers.map(a => Spaans.Matching.stripAccents(Spaans.Matching.normalizeBasic(a)))
     );
     const set = new Set();
     for (const w of alleWoorden) {
       if (w.id === huidigWoordId) continue;
-      // Sommige woorden komen in meerdere categorieën voor met exact dezelfde
-      // vertaling (bijv. "quizás") — dat is dan geen ander, echt woord, dus
-      // die mogen niet als veiligheidsnet-uitsluiting meetellen.
-      const waarde = w[veld];
-      const plat = Spaans.Matching.stripAccents(Spaans.Matching.normalizeBasic(waarde));
-      if (eigenAntwoorden.has(plat)) continue;
-      set.add(waarde);
+      const waarden = richting === 'es-nl' ? (w.dutchAnswers || [w.dutch]) : [w.spanish];
+      for (const waarde of waarden) {
+        // Sommige woorden komen in meerdere categorieën voor met exact dezelfde
+        // vertaling (bijv. "quizás") — dat is dan geen ander, echt woord, dus
+        // die mag niet als veiligheidsnet-uitsluiting meetellen.
+        const plat = Spaans.Matching.stripAccents(Spaans.Matching.normalizeBasic(waarde));
+        if (eigenAntwoorden.has(plat)) continue;
+        set.add(waarde);
+      }
     }
     return Array.from(set);
   }

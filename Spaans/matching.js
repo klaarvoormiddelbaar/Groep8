@@ -4,8 +4,15 @@
 (function () {
   const Spaans = (window.Spaans = window.Spaans || {});
 
+  // Leestekens als ¿ ¡ ? ! . , ; : tellen niet mee bij het beoordelen van een
+  // antwoord (bijv. "¿cómo andás?" mag ook als "como andas" ingetypt worden).
   function normalizeBasic(s) {
-    return String(s == null ? '' : s).trim().toLowerCase().replace(/\s+/g, ' ');
+    return String(s == null ? '' : s)
+      .trim()
+      .toLowerCase()
+      .replace(/[¿¡?!.,;:]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   function stripAccents(s) {
@@ -31,15 +38,6 @@
     return prev[n];
   }
 
-  // Hoeveel afwijking staan we toe, afhankelijk van de woordlengte? Bij korte
-  // woorden is 1 letter verschil vaak al een ander woord, dus dan geen
-  // coulance; bij langere woorden mag een enkele typefout best.
-  function maxAllowedDistance(len) {
-    if (len <= 3) return 0;
-    if (len <= 9) return 1;
-    return 2;
-  }
-
   function classifyAgainstOne(userAnswer, accepted) {
     const u = normalizeBasic(userAnswer);
     const a = normalizeBasic(accepted);
@@ -51,8 +49,24 @@
     if (uPlain === aPlain) return { result: 'minor', reason: 'accent' };
 
     const dist = levenshtein(uPlain, aPlain);
-    const allowed = maxAllowedDistance(aPlain.length);
-    if (dist > 0 && dist <= allowed && dist / aPlain.length <= 0.3) {
+    const lengteVerschil = Math.abs(uPlain.length - aPlain.length);
+    // Als het lengteverschil gelijk is aan de afstand, bestond de afwijking
+    // puur uit een letter te veel/te weinig (invoegen/weglaten) — dat is
+    // vaak gewoon dezelfde vertaling met een tikfoutje, ook bij korte
+    // woorden (bijv. "elk" → "elke"). Eén letter VERVANGEN in een kort
+    // woord levert daarentegen vaak een heel ander, bestaand woord op
+    // (bijv. "son" → "sol"), dus daar blijven we voorzichtiger mee.
+    const isInvoegOfWeglaat = lengteVerschil === dist;
+    const referentieLengte = aPlain.length;
+
+    let magAlsMinor = false;
+    if (dist === 1) {
+      magAlsMinor = isInvoegOfWeglaat ? referentieLengte >= 3 : referentieLengte >= 5;
+    } else if (dist === 2) {
+      magAlsMinor = referentieLengte >= 8;
+    }
+
+    if (magAlsMinor) {
       return { result: 'minor', reason: 'typo', distance: dist };
     }
     return { result: 'wrong' };

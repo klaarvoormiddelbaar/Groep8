@@ -6,6 +6,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hola",
     "acceptedAnswers": [
       "hola"
+    ],
+    "dutchAnswers": [
+      "hallo"
     ]
   },
   {
@@ -15,6 +18,9 @@ const SPAANS_WOORDEN = [
     "spanish": "adiós",
     "acceptedAnswers": [
       "adiós"
+    ],
+    "dutchAnswers": [
+      "tot ziens"
     ]
   },
   {
@@ -24,6 +30,9 @@ const SPAANS_WOORDEN = [
     "spanish": "gracias",
     "acceptedAnswers": [
       "gracias"
+    ],
+    "dutchAnswers": [
+      "bedankt"
     ]
   },
   {
@@ -33,6 +42,9 @@ const SPAANS_WOORDEN = [
     "spanish": "por favor",
     "acceptedAnswers": [
       "por favor"
+    ],
+    "dutchAnswers": [
+      "alsjeblieft"
     ]
   },
   {
@@ -42,6 +54,10 @@ const SPAANS_WOORDEN = [
     "spanish": "perdón",
     "acceptedAnswers": [
       "perdón"
+    ],
+    "dutchAnswers": [
+      "sorry",
+      "pardon"
     ]
   },
   {
@@ -51,6 +67,9 @@ const SPAANS_WOORDEN = [
     "spanish": "claro",
     "acceptedAnswers": [
       "claro"
+    ],
+    "dutchAnswers": [
+      "natuurlijk"
     ]
   },
   {
@@ -60,6 +79,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vale",
     "acceptedAnswers": [
       "vale"
+    ],
+    "dutchAnswers": [
+      "oké"
     ]
   },
   {
@@ -69,6 +91,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quizás",
     "acceptedAnswers": [
       "quizás"
+    ],
+    "dutchAnswers": [
+      "misschien"
     ]
   },
   {
@@ -78,6 +103,9 @@ const SPAANS_WOORDEN = [
     "spanish": "también",
     "acceptedAnswers": [
       "también"
+    ],
+    "dutchAnswers": [
+      "ook"
     ]
   },
   {
@@ -87,6 +115,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tampoco",
     "acceptedAnswers": [
       "tampoco"
+    ],
+    "dutchAnswers": [
+      "ook niet"
     ]
   },
   {
@@ -96,6 +127,10 @@ const SPAANS_WOORDEN = [
     "spanish": "entonces",
     "acceptedAnswers": [
       "entonces"
+    ],
+    "dutchAnswers": [
+      "dus",
+      "toen"
     ]
   },
   {
@@ -105,6 +140,9 @@ const SPAANS_WOORDEN = [
     "spanish": "además",
     "acceptedAnswers": [
       "además"
+    ],
+    "dutchAnswers": [
+      "bovendien"
     ]
   },
   {
@@ -114,6 +152,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aunque",
     "acceptedAnswers": [
       "aunque"
+    ],
+    "dutchAnswers": [
+      "hoewel"
     ]
   },
   {
@@ -123,6 +164,9 @@ const SPAANS_WOORDEN = [
     "spanish": "porque",
     "acceptedAnswers": [
       "porque"
+    ],
+    "dutchAnswers": [
+      "omdat"
     ]
   },
   {
@@ -132,6 +176,9 @@ const SPAANS_WOORDEN = [
     "spanish": "por eso",
     "acceptedAnswers": [
       "por eso"
+    ],
+    "dutchAnswers": [
+      "daarom"
     ]
   },
   {
@@ -141,6 +188,10 @@ const SPAANS_WOORDEN = [
     "spanish": "todavía",
     "acceptedAnswers": [
       "todavía"
+    ],
+    "dutchAnswers": [
+      "nog",
+      "nog steeds"
     ]
   },
   {
@@ -150,6 +201,10 @@ const SPAANS_WOORDEN = [
     "spanish": "ya",
     "acceptedAnswers": [
       "ya"
+    ],
+    "dutchAnswers": [
+      "al",
+      "inmiddels"
     ]
   },
   {
@@ -159,6 +214,9 @@ const SPAANS_WOORDEN = [
     "spanish": "siempre",
     "acceptedAnswers": [
       "siempre"
+    ],
+    "dutchAnswers": [
+      "altijd"
     ]
   },
   {
@@ -168,6 +226,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nunca",
     "acceptedAnswers": [
       "nunca"
+    ],
+    "dutchAnswers": [
+      "nooit"
     ]
   },
   {
@@ -177,6 +238,9 @@ const SPAANS_WOORDEN = [
     "spanish": "a veces",
     "acceptedAnswers": [
       "a veces"
+    ],
+    "dutchAnswers": [
+      "soms"
     ]
   },
   {
@@ -186,6 +250,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ser",
     "acceptedAnswers": [
       "ser"
+    ],
+    "dutchAnswers": [
+      "zijn"
     ]
   },
   {
@@ -195,6 +262,9 @@ const SPAANS_WOORDEN = [
     "spanish": "estar",
     "acceptedAnswers": [
       "estar"
+    ],
+    "dutchAnswers": [
+      "zijn"
     ]
   },
   {
@@ -204,6 +274,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tener",
     "acceptedAnswers": [
       "tener"
+    ],
+    "dutchAnswers": [
+      "hebben"
     ]
   },
   {
@@ -213,6 +286,10 @@ const SPAANS_WOORDEN = [
     "spanish": "hacer",
     "acceptedAnswers": [
       "hacer"
+    ],
+    "dutchAnswers": [
+      "doen",
+      "maken"
     ]
   },
   {
@@ -222,6 +299,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ir",
     "acceptedAnswers": [
       "ir"
+    ],
+    "dutchAnswers": [
+      "gaan"
     ]
   },
   {
@@ -231,6 +311,9 @@ const SPAANS_WOORDEN = [
     "spanish": "venir",
     "acceptedAnswers": [
       "venir"
+    ],
+    "dutchAnswers": [
+      "komen"
     ]
   },
   {
@@ -240,6 +323,10 @@ const SPAANS_WOORDEN = [
     "spanish": "querer",
     "acceptedAnswers": [
       "querer"
+    ],
+    "dutchAnswers": [
+      "willen",
+      "houden van"
     ]
   },
   {
@@ -249,6 +336,9 @@ const SPAANS_WOORDEN = [
     "spanish": "poder",
     "acceptedAnswers": [
       "poder"
+    ],
+    "dutchAnswers": [
+      "kunnen"
     ]
   },
   {
@@ -258,6 +348,10 @@ const SPAANS_WOORDEN = [
     "spanish": "saber",
     "acceptedAnswers": [
       "saber"
+    ],
+    "dutchAnswers": [
+      "weten",
+      "kunnen"
     ]
   },
   {
@@ -267,6 +361,9 @@ const SPAANS_WOORDEN = [
     "spanish": "conocer",
     "acceptedAnswers": [
       "conocer"
+    ],
+    "dutchAnswers": [
+      "kennen"
     ]
   },
   {
@@ -276,6 +373,9 @@ const SPAANS_WOORDEN = [
     "spanish": "decir",
     "acceptedAnswers": [
       "decir"
+    ],
+    "dutchAnswers": [
+      "zeggen"
     ]
   },
   {
@@ -285,6 +385,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hablar",
     "acceptedAnswers": [
       "hablar"
+    ],
+    "dutchAnswers": [
+      "praten"
     ]
   },
   {
@@ -294,6 +397,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ver",
     "acceptedAnswers": [
       "ver"
+    ],
+    "dutchAnswers": [
+      "zien"
     ]
   },
   {
@@ -303,6 +409,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dar",
     "acceptedAnswers": [
       "dar"
+    ],
+    "dutchAnswers": [
+      "geven"
     ]
   },
   {
@@ -312,6 +421,10 @@ const SPAANS_WOORDEN = [
     "spanish": "tomar",
     "acceptedAnswers": [
       "tomar"
+    ],
+    "dutchAnswers": [
+      "nemen",
+      "drinken"
     ]
   },
   {
@@ -321,6 +434,10 @@ const SPAANS_WOORDEN = [
     "spanish": "poner",
     "acceptedAnswers": [
       "poner"
+    ],
+    "dutchAnswers": [
+      "zetten",
+      "doen"
     ]
   },
   {
@@ -330,6 +447,10 @@ const SPAANS_WOORDEN = [
     "spanish": "salir",
     "acceptedAnswers": [
       "salir"
+    ],
+    "dutchAnswers": [
+      "uitgaan",
+      "vertrekken"
     ]
   },
   {
@@ -339,6 +460,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llegar",
     "acceptedAnswers": [
       "llegar"
+    ],
+    "dutchAnswers": [
+      "aankomen"
     ]
   },
   {
@@ -348,6 +472,9 @@ const SPAANS_WOORDEN = [
     "spanish": "volver",
     "acceptedAnswers": [
       "volver"
+    ],
+    "dutchAnswers": [
+      "terugkomen"
     ]
   },
   {
@@ -357,6 +484,10 @@ const SPAANS_WOORDEN = [
     "spanish": "quedar",
     "acceptedAnswers": [
       "quedar"
+    ],
+    "dutchAnswers": [
+      "afspreken",
+      "overblijven"
     ]
   },
   {
@@ -366,6 +497,10 @@ const SPAANS_WOORDEN = [
     "spanish": "llevar",
     "acceptedAnswers": [
       "llevar"
+    ],
+    "dutchAnswers": [
+      "meenemen",
+      "dragen"
     ]
   },
   {
@@ -375,6 +510,9 @@ const SPAANS_WOORDEN = [
     "spanish": "traer",
     "acceptedAnswers": [
       "traer"
+    ],
+    "dutchAnswers": [
+      "meebrengen"
     ]
   },
   {
@@ -384,6 +522,10 @@ const SPAANS_WOORDEN = [
     "spanish": "seguir",
     "acceptedAnswers": [
       "seguir"
+    ],
+    "dutchAnswers": [
+      "doorgaan",
+      "volgen"
     ]
   },
   {
@@ -393,6 +535,9 @@ const SPAANS_WOORDEN = [
     "spanish": "encontrar",
     "acceptedAnswers": [
       "encontrar"
+    ],
+    "dutchAnswers": [
+      "vinden"
     ]
   },
   {
@@ -402,6 +547,9 @@ const SPAANS_WOORDEN = [
     "spanish": "buscar",
     "acceptedAnswers": [
       "buscar"
+    ],
+    "dutchAnswers": [
+      "zoeken"
     ]
   },
   {
@@ -411,6 +559,9 @@ const SPAANS_WOORDEN = [
     "spanish": "necesitar",
     "acceptedAnswers": [
       "necesitar"
+    ],
+    "dutchAnswers": [
+      "nodig hebben"
     ]
   },
   {
@@ -420,6 +571,10 @@ const SPAANS_WOORDEN = [
     "spanish": "pedir",
     "acceptedAnswers": [
       "pedir"
+    ],
+    "dutchAnswers": [
+      "vragen om",
+      "bestellen"
     ]
   },
   {
@@ -429,6 +584,9 @@ const SPAANS_WOORDEN = [
     "spanish": "elegir",
     "acceptedAnswers": [
       "elegir"
+    ],
+    "dutchAnswers": [
+      "kiezen"
     ]
   },
   {
@@ -438,6 +596,10 @@ const SPAANS_WOORDEN = [
     "spanish": "probar",
     "acceptedAnswers": [
       "probar"
+    ],
+    "dutchAnswers": [
+      "proberen",
+      "proeven"
     ]
   },
   {
@@ -447,6 +609,10 @@ const SPAANS_WOORDEN = [
     "spanish": "parecer",
     "acceptedAnswers": [
       "parecer"
+    ],
+    "dutchAnswers": [
+      "lijken",
+      "vinden"
     ]
   },
   {
@@ -456,6 +622,10 @@ const SPAANS_WOORDEN = [
     "spanish": "pasar",
     "acceptedAnswers": [
       "pasar"
+    ],
+    "dutchAnswers": [
+      "gebeuren",
+      "doorbrengen"
     ]
   },
   {
@@ -465,6 +635,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ocurrir",
     "acceptedAnswers": [
       "ocurrir"
+    ],
+    "dutchAnswers": [
+      "gebeuren"
     ]
   },
   {
@@ -474,6 +647,9 @@ const SPAANS_WOORDEN = [
     "spanish": "empezar",
     "acceptedAnswers": [
       "empezar"
+    ],
+    "dutchAnswers": [
+      "beginnen"
     ]
   },
   {
@@ -483,6 +659,9 @@ const SPAANS_WOORDEN = [
     "spanish": "terminar",
     "acceptedAnswers": [
       "terminar"
+    ],
+    "dutchAnswers": [
+      "eindigen"
     ]
   },
   {
@@ -492,6 +671,10 @@ const SPAANS_WOORDEN = [
     "spanish": "esperar",
     "acceptedAnswers": [
       "esperar"
+    ],
+    "dutchAnswers": [
+      "wachten",
+      "hopen"
     ]
   },
   {
@@ -501,6 +684,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ayudar",
     "acceptedAnswers": [
       "ayudar"
+    ],
+    "dutchAnswers": [
+      "helpen"
     ]
   },
   {
@@ -510,6 +696,9 @@ const SPAANS_WOORDEN = [
     "spanish": "usar",
     "acceptedAnswers": [
       "usar"
+    ],
+    "dutchAnswers": [
+      "gebruiken"
     ]
   },
   {
@@ -519,6 +708,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cambiar",
     "acceptedAnswers": [
       "cambiar"
+    ],
+    "dutchAnswers": [
+      "veranderen"
     ]
   },
   {
@@ -528,6 +720,10 @@ const SPAANS_WOORDEN = [
     "spanish": "recordar",
     "acceptedAnswers": [
       "recordar"
+    ],
+    "dutchAnswers": [
+      "onthouden",
+      "herinneren"
     ]
   },
   {
@@ -537,6 +733,9 @@ const SPAANS_WOORDEN = [
     "spanish": "olvidar",
     "acceptedAnswers": [
       "olvidar"
+    ],
+    "dutchAnswers": [
+      "vergeten"
     ]
   },
   {
@@ -546,6 +745,9 @@ const SPAANS_WOORDEN = [
     "spanish": "levantarse",
     "acceptedAnswers": [
       "levantarse"
+    ],
+    "dutchAnswers": [
+      "opstaan"
     ]
   },
   {
@@ -555,6 +757,9 @@ const SPAANS_WOORDEN = [
     "spanish": "despertarse",
     "acceptedAnswers": [
       "despertarse"
+    ],
+    "dutchAnswers": [
+      "wakker worden"
     ]
   },
   {
@@ -564,6 +769,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ducharse",
     "acceptedAnswers": [
       "ducharse"
+    ],
+    "dutchAnswers": [
+      "douchen"
     ]
   },
   {
@@ -573,6 +781,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vestirse",
     "acceptedAnswers": [
       "vestirse"
+    ],
+    "dutchAnswers": [
+      "zich aankleden"
     ]
   },
   {
@@ -582,6 +793,9 @@ const SPAANS_WOORDEN = [
     "spanish": "desayunar",
     "acceptedAnswers": [
       "desayunar"
+    ],
+    "dutchAnswers": [
+      "ontbijten"
     ]
   },
   {
@@ -591,6 +805,9 @@ const SPAANS_WOORDEN = [
     "spanish": "trabajar",
     "acceptedAnswers": [
       "trabajar"
+    ],
+    "dutchAnswers": [
+      "werken"
     ]
   },
   {
@@ -600,6 +817,9 @@ const SPAANS_WOORDEN = [
     "spanish": "estudiar",
     "acceptedAnswers": [
       "estudiar"
+    ],
+    "dutchAnswers": [
+      "studeren"
     ]
   },
   {
@@ -609,6 +829,9 @@ const SPAANS_WOORDEN = [
     "spanish": "descansar",
     "acceptedAnswers": [
       "descansar"
+    ],
+    "dutchAnswers": [
+      "uitrusten"
     ]
   },
   {
@@ -618,6 +841,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dormir",
     "acceptedAnswers": [
       "dormir"
+    ],
+    "dutchAnswers": [
+      "slapen"
     ]
   },
   {
@@ -627,6 +853,9 @@ const SPAANS_WOORDEN = [
     "spanish": "comer",
     "acceptedAnswers": [
       "comer"
+    ],
+    "dutchAnswers": [
+      "eten"
     ]
   },
   {
@@ -636,6 +865,9 @@ const SPAANS_WOORDEN = [
     "spanish": "beber",
     "acceptedAnswers": [
       "beber"
+    ],
+    "dutchAnswers": [
+      "drinken"
     ]
   },
   {
@@ -645,6 +877,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cocinar",
     "acceptedAnswers": [
       "cocinar"
+    ],
+    "dutchAnswers": [
+      "koken"
     ]
   },
   {
@@ -654,6 +889,9 @@ const SPAANS_WOORDEN = [
     "spanish": "limpiar",
     "acceptedAnswers": [
       "limpiar"
+    ],
+    "dutchAnswers": [
+      "schoonmaken"
     ]
   },
   {
@@ -663,6 +901,9 @@ const SPAANS_WOORDEN = [
     "spanish": "comprar",
     "acceptedAnswers": [
       "comprar"
+    ],
+    "dutchAnswers": [
+      "kopen"
     ]
   },
   {
@@ -672,6 +913,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pagar",
     "acceptedAnswers": [
       "pagar"
+    ],
+    "dutchAnswers": [
+      "betalen"
     ]
   },
   {
@@ -681,6 +925,9 @@ const SPAANS_WOORDEN = [
     "spanish": "caminar",
     "acceptedAnswers": [
       "caminar"
+    ],
+    "dutchAnswers": [
+      "lopen"
     ]
   },
   {
@@ -690,6 +937,9 @@ const SPAANS_WOORDEN = [
     "spanish": "conducir",
     "acceptedAnswers": [
       "conducir"
+    ],
+    "dutchAnswers": [
+      "rijden"
     ]
   },
   {
@@ -699,6 +949,9 @@ const SPAANS_WOORDEN = [
     "spanish": "leer",
     "acceptedAnswers": [
       "leer"
+    ],
+    "dutchAnswers": [
+      "lezen"
     ]
   },
   {
@@ -708,6 +961,9 @@ const SPAANS_WOORDEN = [
     "spanish": "escribir",
     "acceptedAnswers": [
       "escribir"
+    ],
+    "dutchAnswers": [
+      "schrijven"
     ]
   },
   {
@@ -717,6 +973,9 @@ const SPAANS_WOORDEN = [
     "spanish": "escuchar",
     "acceptedAnswers": [
       "escuchar"
+    ],
+    "dutchAnswers": [
+      "luisteren"
     ]
   },
   {
@@ -726,6 +985,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hoy",
     "acceptedAnswers": [
       "hoy"
+    ],
+    "dutchAnswers": [
+      "vandaag"
     ]
   },
   {
@@ -735,6 +997,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ayer",
     "acceptedAnswers": [
       "ayer"
+    ],
+    "dutchAnswers": [
+      "gisteren"
     ]
   },
   {
@@ -744,6 +1009,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mañana",
     "acceptedAnswers": [
       "mañana"
+    ],
+    "dutchAnswers": [
+      "morgen"
     ]
   },
   {
@@ -753,6 +1021,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ahora",
     "acceptedAnswers": [
       "ahora"
+    ],
+    "dutchAnswers": [
+      "nu"
     ]
   },
   {
@@ -762,6 +1033,10 @@ const SPAANS_WOORDEN = [
     "spanish": "luego",
     "acceptedAnswers": [
       "luego"
+    ],
+    "dutchAnswers": [
+      "later",
+      "daarna"
     ]
   },
   {
@@ -771,6 +1046,10 @@ const SPAANS_WOORDEN = [
     "spanish": "antes",
     "acceptedAnswers": [
       "antes"
+    ],
+    "dutchAnswers": [
+      "ervoor",
+      "vroeger"
     ]
   },
   {
@@ -780,6 +1059,10 @@ const SPAANS_WOORDEN = [
     "spanish": "después",
     "acceptedAnswers": [
       "después"
+    ],
+    "dutchAnswers": [
+      "erna",
+      "daarna"
     ]
   },
   {
@@ -789,6 +1072,10 @@ const SPAANS_WOORDEN = [
     "spanish": "pronto",
     "acceptedAnswers": [
       "pronto"
+    ],
+    "dutchAnswers": [
+      "binnenkort",
+      "vroeg"
     ]
   },
   {
@@ -798,6 +1085,10 @@ const SPAANS_WOORDEN = [
     "spanish": "tarde",
     "acceptedAnswers": [
       "tarde"
+    ],
+    "dutchAnswers": [
+      "laat",
+      "middag"
     ]
   },
   {
@@ -807,6 +1098,9 @@ const SPAANS_WOORDEN = [
     "spanish": "temprano",
     "acceptedAnswers": [
       "temprano"
+    ],
+    "dutchAnswers": [
+      "vroeg"
     ]
   },
   {
@@ -816,6 +1110,9 @@ const SPAANS_WOORDEN = [
     "spanish": "día",
     "acceptedAnswers": [
       "día"
+    ],
+    "dutchAnswers": [
+      "dag"
     ]
   },
   {
@@ -825,6 +1122,9 @@ const SPAANS_WOORDEN = [
     "spanish": "semana",
     "acceptedAnswers": [
       "semana"
+    ],
+    "dutchAnswers": [
+      "week"
     ]
   },
   {
@@ -834,6 +1134,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mes",
     "acceptedAnswers": [
       "mes"
+    ],
+    "dutchAnswers": [
+      "maand"
     ]
   },
   {
@@ -843,6 +1146,9 @@ const SPAANS_WOORDEN = [
     "spanish": "año",
     "acceptedAnswers": [
       "año"
+    ],
+    "dutchAnswers": [
+      "jaar"
     ]
   },
   {
@@ -852,6 +1158,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hora",
     "acceptedAnswers": [
       "hora"
+    ],
+    "dutchAnswers": [
+      "uur"
     ]
   },
   {
@@ -861,6 +1170,9 @@ const SPAANS_WOORDEN = [
     "spanish": "minuto",
     "acceptedAnswers": [
       "minuto"
+    ],
+    "dutchAnswers": [
+      "minuut"
     ]
   },
   {
@@ -870,6 +1182,9 @@ const SPAANS_WOORDEN = [
     "spanish": "momento",
     "acceptedAnswers": [
       "momento"
+    ],
+    "dutchAnswers": [
+      "moment"
     ]
   },
   {
@@ -879,6 +1194,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vez",
     "acceptedAnswers": [
       "vez"
+    ],
+    "dutchAnswers": [
+      "keer"
     ]
   },
   {
@@ -888,6 +1206,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mientras",
     "acceptedAnswers": [
       "mientras"
+    ],
+    "dutchAnswers": [
+      "terwijl"
     ]
   },
   {
@@ -897,6 +1218,9 @@ const SPAANS_WOORDEN = [
     "spanish": "de repente",
     "acceptedAnswers": [
       "de repente"
+    ],
+    "dutchAnswers": [
+      "plotseling"
     ]
   },
   {
@@ -906,6 +1230,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cero",
     "acceptedAnswers": [
       "cero"
+    ],
+    "dutchAnswers": [
+      "nul"
     ]
   },
   {
@@ -915,6 +1242,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cien",
     "acceptedAnswers": [
       "cien"
+    ],
+    "dutchAnswers": [
+      "honderd"
     ]
   },
   {
@@ -924,6 +1254,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mil",
     "acceptedAnswers": [
       "mil"
+    ],
+    "dutchAnswers": [
+      "duizend"
     ]
   },
   {
@@ -933,6 +1266,9 @@ const SPAANS_WOORDEN = [
     "spanish": "primero",
     "acceptedAnswers": [
       "primero"
+    ],
+    "dutchAnswers": [
+      "eerste"
     ]
   },
   {
@@ -942,6 +1278,9 @@ const SPAANS_WOORDEN = [
     "spanish": "último",
     "acceptedAnswers": [
       "último"
+    ],
+    "dutchAnswers": [
+      "laatste"
     ]
   },
   {
@@ -951,6 +1290,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mucho",
     "acceptedAnswers": [
       "mucho"
+    ],
+    "dutchAnswers": [
+      "veel"
     ]
   },
   {
@@ -960,6 +1302,9 @@ const SPAANS_WOORDEN = [
     "spanish": "poco",
     "acceptedAnswers": [
       "poco"
+    ],
+    "dutchAnswers": [
+      "weinig"
     ]
   },
   {
@@ -969,6 +1314,10 @@ const SPAANS_WOORDEN = [
     "spanish": "bastante",
     "acceptedAnswers": [
       "bastante"
+    ],
+    "dutchAnswers": [
+      "genoeg",
+      "behoorlijk"
     ]
   },
   {
@@ -978,6 +1327,9 @@ const SPAANS_WOORDEN = [
     "spanish": "demasiado",
     "acceptedAnswers": [
       "demasiado"
+    ],
+    "dutchAnswers": [
+      "te veel"
     ]
   },
   {
@@ -987,6 +1339,9 @@ const SPAANS_WOORDEN = [
     "spanish": "más",
     "acceptedAnswers": [
       "más"
+    ],
+    "dutchAnswers": [
+      "meer"
     ]
   },
   {
@@ -996,6 +1351,9 @@ const SPAANS_WOORDEN = [
     "spanish": "menos",
     "acceptedAnswers": [
       "menos"
+    ],
+    "dutchAnswers": [
+      "minder"
     ]
   },
   {
@@ -1005,6 +1363,10 @@ const SPAANS_WOORDEN = [
     "spanish": "todo",
     "acceptedAnswers": [
       "todo"
+    ],
+    "dutchAnswers": [
+      "alles",
+      "heel"
     ]
   },
   {
@@ -1014,6 +1376,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nada",
     "acceptedAnswers": [
       "nada"
+    ],
+    "dutchAnswers": [
+      "niets"
     ]
   },
   {
@@ -1023,6 +1388,9 @@ const SPAANS_WOORDEN = [
     "spanish": "algo",
     "acceptedAnswers": [
       "algo"
+    ],
+    "dutchAnswers": [
+      "iets"
     ]
   },
   {
@@ -1032,6 +1400,9 @@ const SPAANS_WOORDEN = [
     "spanish": "otro",
     "acceptedAnswers": [
       "otro"
+    ],
+    "dutchAnswers": [
+      "ander"
     ]
   },
   {
@@ -1041,6 +1412,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cada",
     "acceptedAnswers": [
       "cada"
+    ],
+    "dutchAnswers": [
+      "elk"
     ]
   },
   {
@@ -1050,6 +1424,9 @@ const SPAANS_WOORDEN = [
     "spanish": "varios",
     "acceptedAnswers": [
       "varios"
+    ],
+    "dutchAnswers": [
+      "verschillende"
     ]
   },
   {
@@ -1059,6 +1436,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mitad",
     "acceptedAnswers": [
       "mitad"
+    ],
+    "dutchAnswers": [
+      "helft"
     ]
   },
   {
@@ -1068,6 +1448,9 @@ const SPAANS_WOORDEN = [
     "spanish": "doble",
     "acceptedAnswers": [
       "doble"
+    ],
+    "dutchAnswers": [
+      "dubbel"
     ]
   },
   {
@@ -1077,6 +1460,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cantidad",
     "acceptedAnswers": [
       "cantidad"
+    ],
+    "dutchAnswers": [
+      "hoeveelheid"
     ]
   },
   {
@@ -1086,6 +1472,9 @@ const SPAANS_WOORDEN = [
     "spanish": "qué",
     "acceptedAnswers": [
       "qué"
+    ],
+    "dutchAnswers": [
+      "wat"
     ]
   },
   {
@@ -1095,6 +1484,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quién",
     "acceptedAnswers": [
       "quién"
+    ],
+    "dutchAnswers": [
+      "wie"
     ]
   },
   {
@@ -1104,6 +1496,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quiénes",
     "acceptedAnswers": [
       "quiénes"
+    ],
+    "dutchAnswers": [
+      "wie"
     ]
   },
   {
@@ -1113,6 +1508,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuál",
     "acceptedAnswers": [
       "cuál"
+    ],
+    "dutchAnswers": [
+      "welke"
     ]
   },
   {
@@ -1122,6 +1520,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuáles",
     "acceptedAnswers": [
       "cuáles"
+    ],
+    "dutchAnswers": [
+      "welke"
     ]
   },
   {
@@ -1131,6 +1532,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuándo",
     "acceptedAnswers": [
       "cuándo"
+    ],
+    "dutchAnswers": [
+      "wanneer"
     ]
   },
   {
@@ -1140,6 +1544,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dónde",
     "acceptedAnswers": [
       "dónde"
+    ],
+    "dutchAnswers": [
+      "waar"
     ]
   },
   {
@@ -1149,6 +1556,9 @@ const SPAANS_WOORDEN = [
     "spanish": "adónde",
     "acceptedAnswers": [
       "adónde"
+    ],
+    "dutchAnswers": [
+      "waarheen"
     ]
   },
   {
@@ -1158,6 +1568,9 @@ const SPAANS_WOORDEN = [
     "spanish": "de dónde",
     "acceptedAnswers": [
       "de dónde"
+    ],
+    "dutchAnswers": [
+      "waarvandaan"
     ]
   },
   {
@@ -1167,6 +1580,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cómo",
     "acceptedAnswers": [
       "cómo"
+    ],
+    "dutchAnswers": [
+      "hoe"
     ]
   },
   {
@@ -1176,6 +1592,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuánto",
     "acceptedAnswers": [
       "cuánto"
+    ],
+    "dutchAnswers": [
+      "hoeveel"
     ]
   },
   {
@@ -1185,6 +1604,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuánta",
     "acceptedAnswers": [
       "cuánta"
+    ],
+    "dutchAnswers": [
+      "hoeveel"
     ]
   },
   {
@@ -1194,6 +1616,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuántos",
     "acceptedAnswers": [
       "cuántos"
+    ],
+    "dutchAnswers": [
+      "hoeveel"
     ]
   },
   {
@@ -1203,6 +1628,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuántas",
     "acceptedAnswers": [
       "cuántas"
+    ],
+    "dutchAnswers": [
+      "hoeveel"
     ]
   },
   {
@@ -1212,6 +1640,9 @@ const SPAANS_WOORDEN = [
     "spanish": "por qué",
     "acceptedAnswers": [
       "por qué"
+    ],
+    "dutchAnswers": [
+      "waarom"
     ]
   },
   {
@@ -1221,6 +1652,9 @@ const SPAANS_WOORDEN = [
     "spanish": "para qué",
     "acceptedAnswers": [
       "para qué"
+    ],
+    "dutchAnswers": [
+      "waarvoor"
     ]
   },
   {
@@ -1230,6 +1664,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿verdad?",
     "acceptedAnswers": [
       "¿verdad?"
+    ],
+    "dutchAnswers": [
+      "toch?"
     ]
   },
   {
@@ -1239,6 +1676,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿no?",
     "acceptedAnswers": [
       "¿no?"
+    ],
+    "dutchAnswers": [
+      "toch?"
     ]
   },
   {
@@ -1248,6 +1688,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿qué pasa?",
     "acceptedAnswers": [
       "¿qué pasa?"
+    ],
+    "dutchAnswers": [
+      "wat is er?"
     ]
   },
   {
@@ -1257,6 +1700,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿qué significa?",
     "acceptedAnswers": [
       "¿qué significa?"
+    ],
+    "dutchAnswers": [
+      "wat betekent?"
     ]
   },
   {
@@ -1266,6 +1712,9 @@ const SPAANS_WOORDEN = [
     "spanish": "bueno",
     "acceptedAnswers": [
       "bueno"
+    ],
+    "dutchAnswers": [
+      "goed"
     ]
   },
   {
@@ -1275,6 +1724,9 @@ const SPAANS_WOORDEN = [
     "spanish": "malo",
     "acceptedAnswers": [
       "malo"
+    ],
+    "dutchAnswers": [
+      "slecht"
     ]
   },
   {
@@ -1284,6 +1736,9 @@ const SPAANS_WOORDEN = [
     "spanish": "bonito",
     "acceptedAnswers": [
       "bonito"
+    ],
+    "dutchAnswers": [
+      "mooi"
     ]
   },
   {
@@ -1293,6 +1748,9 @@ const SPAANS_WOORDEN = [
     "spanish": "feo",
     "acceptedAnswers": [
       "feo"
+    ],
+    "dutchAnswers": [
+      "lelijk"
     ]
   },
   {
@@ -1302,6 +1760,9 @@ const SPAANS_WOORDEN = [
     "spanish": "grande",
     "acceptedAnswers": [
       "grande"
+    ],
+    "dutchAnswers": [
+      "groot"
     ]
   },
   {
@@ -1311,6 +1772,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pequeño",
     "acceptedAnswers": [
       "pequeño"
+    ],
+    "dutchAnswers": [
+      "klein"
     ]
   },
   {
@@ -1320,6 +1784,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nuevo",
     "acceptedAnswers": [
       "nuevo"
+    ],
+    "dutchAnswers": [
+      "nieuw"
     ]
   },
   {
@@ -1329,6 +1796,9 @@ const SPAANS_WOORDEN = [
     "spanish": "viejo",
     "acceptedAnswers": [
       "viejo"
+    ],
+    "dutchAnswers": [
+      "oud"
     ]
   },
   {
@@ -1338,6 +1808,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fácil",
     "acceptedAnswers": [
       "fácil"
+    ],
+    "dutchAnswers": [
+      "makkelijk"
     ]
   },
   {
@@ -1347,6 +1820,9 @@ const SPAANS_WOORDEN = [
     "spanish": "difícil",
     "acceptedAnswers": [
       "difícil"
+    ],
+    "dutchAnswers": [
+      "moeilijk"
     ]
   },
   {
@@ -1356,6 +1832,9 @@ const SPAANS_WOORDEN = [
     "spanish": "importante",
     "acceptedAnswers": [
       "importante"
+    ],
+    "dutchAnswers": [
+      "belangrijk"
     ]
   },
   {
@@ -1365,6 +1844,9 @@ const SPAANS_WOORDEN = [
     "spanish": "interesante",
     "acceptedAnswers": [
       "interesante"
+    ],
+    "dutchAnswers": [
+      "interessant"
     ]
   },
   {
@@ -1374,6 +1856,9 @@ const SPAANS_WOORDEN = [
     "spanish": "diferente",
     "acceptedAnswers": [
       "diferente"
+    ],
+    "dutchAnswers": [
+      "anders"
     ]
   },
   {
@@ -1383,6 +1868,10 @@ const SPAANS_WOORDEN = [
     "spanish": "igual",
     "acceptedAnswers": [
       "igual"
+    ],
+    "dutchAnswers": [
+      "hetzelfde",
+      "gelijk"
     ]
   },
   {
@@ -1392,6 +1881,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mejor",
     "acceptedAnswers": [
       "mejor"
+    ],
+    "dutchAnswers": [
+      "beter"
     ]
   },
   {
@@ -1401,6 +1893,9 @@ const SPAANS_WOORDEN = [
     "spanish": "peor",
     "acceptedAnswers": [
       "peor"
+    ],
+    "dutchAnswers": [
+      "slechter"
     ]
   },
   {
@@ -1410,6 +1905,9 @@ const SPAANS_WOORDEN = [
     "spanish": "caro",
     "acceptedAnswers": [
       "caro"
+    ],
+    "dutchAnswers": [
+      "duur"
     ]
   },
   {
@@ -1419,6 +1917,9 @@ const SPAANS_WOORDEN = [
     "spanish": "barato",
     "acceptedAnswers": [
       "barato"
+    ],
+    "dutchAnswers": [
+      "goedkoop"
     ]
   },
   {
@@ -1428,6 +1929,10 @@ const SPAANS_WOORDEN = [
     "spanish": "seguro",
     "acceptedAnswers": [
       "seguro"
+    ],
+    "dutchAnswers": [
+      "veilig",
+      "zeker"
     ]
   },
   {
@@ -1437,6 +1942,9 @@ const SPAANS_WOORDEN = [
     "spanish": "peligroso",
     "acceptedAnswers": [
       "peligroso"
+    ],
+    "dutchAnswers": [
+      "gevaarlijk"
     ]
   },
   {
@@ -1446,6 +1954,9 @@ const SPAANS_WOORDEN = [
     "spanish": "feliz",
     "acceptedAnswers": [
       "feliz"
+    ],
+    "dutchAnswers": [
+      "blij"
     ]
   },
   {
@@ -1455,6 +1966,9 @@ const SPAANS_WOORDEN = [
     "spanish": "triste",
     "acceptedAnswers": [
       "triste"
+    ],
+    "dutchAnswers": [
+      "verdrietig"
     ]
   },
   {
@@ -1464,6 +1978,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cansado",
     "acceptedAnswers": [
       "cansado"
+    ],
+    "dutchAnswers": [
+      "moe"
     ]
   },
   {
@@ -1473,6 +1990,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nervioso",
     "acceptedAnswers": [
       "nervioso"
+    ],
+    "dutchAnswers": [
+      "nerveus"
     ]
   },
   {
@@ -1482,6 +2002,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tranquilo",
     "acceptedAnswers": [
       "tranquilo"
+    ],
+    "dutchAnswers": [
+      "rustig"
     ]
   },
   {
@@ -1491,6 +2014,9 @@ const SPAANS_WOORDEN = [
     "spanish": "preocupado",
     "acceptedAnswers": [
       "preocupado"
+    ],
+    "dutchAnswers": [
+      "bezorgd"
     ]
   },
   {
@@ -1500,6 +2026,9 @@ const SPAANS_WOORDEN = [
     "spanish": "enfadado",
     "acceptedAnswers": [
       "enfadado"
+    ],
+    "dutchAnswers": [
+      "boos"
     ]
   },
   {
@@ -1509,6 +2038,10 @@ const SPAANS_WOORDEN = [
     "spanish": "emocionado",
     "acceptedAnswers": [
       "emocionado"
+    ],
+    "dutchAnswers": [
+      "enthousiast",
+      "opgewonden"
     ]
   },
   {
@@ -1518,6 +2051,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sorprendido",
     "acceptedAnswers": [
       "sorprendido"
+    ],
+    "dutchAnswers": [
+      "verrast"
     ]
   },
   {
@@ -1527,6 +2063,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aburrido",
     "acceptedAnswers": [
       "aburrido"
+    ],
+    "dutchAnswers": [
+      "verveeld"
     ]
   },
   {
@@ -1536,6 +2075,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cómodo",
     "acceptedAnswers": [
       "cómodo"
+    ],
+    "dutchAnswers": [
+      "comfortabel"
     ]
   },
   {
@@ -1545,6 +2087,9 @@ const SPAANS_WOORDEN = [
     "spanish": "incómodo",
     "acceptedAnswers": [
       "incómodo"
+    ],
+    "dutchAnswers": [
+      "ongemakkelijk"
     ]
   },
   {
@@ -1554,6 +2099,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tener miedo",
     "acceptedAnswers": [
       "tener miedo"
+    ],
+    "dutchAnswers": [
+      "bang zijn"
     ]
   },
   {
@@ -1563,6 +2111,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tener hambre",
     "acceptedAnswers": [
       "tener hambre"
+    ],
+    "dutchAnswers": [
+      "honger hebben"
     ]
   },
   {
@@ -1572,6 +2123,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tener sed",
     "acceptedAnswers": [
       "tener sed"
+    ],
+    "dutchAnswers": [
+      "dorst hebben"
     ]
   },
   {
@@ -1581,6 +2135,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tener sueño",
     "acceptedAnswers": [
       "tener sueño"
+    ],
+    "dutchAnswers": [
+      "slaperig zijn"
     ]
   },
   {
@@ -1590,6 +2147,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sentirse",
     "acceptedAnswers": [
       "sentirse"
+    ],
+    "dutchAnswers": [
+      "zich voelen"
     ]
   },
   {
@@ -1599,6 +2159,9 @@ const SPAANS_WOORDEN = [
     "spanish": "gustar",
     "acceptedAnswers": [
       "gustar"
+    ],
+    "dutchAnswers": [
+      "leuk vinden"
     ]
   },
   {
@@ -1608,6 +2171,9 @@ const SPAANS_WOORDEN = [
     "spanish": "encantar",
     "acceptedAnswers": [
       "encantar"
+    ],
+    "dutchAnswers": [
+      "geweldig vinden"
     ]
   },
   {
@@ -1617,6 +2183,9 @@ const SPAANS_WOORDEN = [
     "spanish": "molestar",
     "acceptedAnswers": [
       "molestar"
+    ],
+    "dutchAnswers": [
+      "storen"
     ]
   },
   {
@@ -1626,6 +2195,9 @@ const SPAANS_WOORDEN = [
     "spanish": "persona",
     "acceptedAnswers": [
       "persona"
+    ],
+    "dutchAnswers": [
+      "persoon"
     ]
   },
   {
@@ -1635,6 +2207,9 @@ const SPAANS_WOORDEN = [
     "spanish": "gente",
     "acceptedAnswers": [
       "gente"
+    ],
+    "dutchAnswers": [
+      "mensen"
     ]
   },
   {
@@ -1644,6 +2219,9 @@ const SPAANS_WOORDEN = [
     "spanish": "amigo",
     "acceptedAnswers": [
       "amigo"
+    ],
+    "dutchAnswers": [
+      "vriend"
     ]
   },
   {
@@ -1653,6 +2231,9 @@ const SPAANS_WOORDEN = [
     "spanish": "amiga",
     "acceptedAnswers": [
       "amiga"
+    ],
+    "dutchAnswers": [
+      "vriendin"
     ]
   },
   {
@@ -1662,6 +2243,10 @@ const SPAANS_WOORDEN = [
     "spanish": "novio",
     "acceptedAnswers": [
       "novio"
+    ],
+    "dutchAnswers": [
+      "vriend",
+      "partner"
     ]
   },
   {
@@ -1671,6 +2256,10 @@ const SPAANS_WOORDEN = [
     "spanish": "novia",
     "acceptedAnswers": [
       "novia"
+    ],
+    "dutchAnswers": [
+      "vriendin",
+      "partner"
     ]
   },
   {
@@ -1680,6 +2269,10 @@ const SPAANS_WOORDEN = [
     "spanish": "pareja",
     "acceptedAnswers": [
       "pareja"
+    ],
+    "dutchAnswers": [
+      "partner",
+      "stel"
     ]
   },
   {
@@ -1689,6 +2282,9 @@ const SPAANS_WOORDEN = [
     "spanish": "familia",
     "acceptedAnswers": [
       "familia"
+    ],
+    "dutchAnswers": [
+      "familie"
     ]
   },
   {
@@ -1698,6 +2294,9 @@ const SPAANS_WOORDEN = [
     "spanish": "padre",
     "acceptedAnswers": [
       "padre"
+    ],
+    "dutchAnswers": [
+      "vader"
     ]
   },
   {
@@ -1707,6 +2306,9 @@ const SPAANS_WOORDEN = [
     "spanish": "madre",
     "acceptedAnswers": [
       "madre"
+    ],
+    "dutchAnswers": [
+      "moeder"
     ]
   },
   {
@@ -1716,6 +2318,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hermano",
     "acceptedAnswers": [
       "hermano"
+    ],
+    "dutchAnswers": [
+      "broer"
     ]
   },
   {
@@ -1725,6 +2330,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hermana",
     "acceptedAnswers": [
       "hermana"
+    ],
+    "dutchAnswers": [
+      "zus"
     ]
   },
   {
@@ -1734,6 +2342,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hijo",
     "acceptedAnswers": [
       "hijo"
+    ],
+    "dutchAnswers": [
+      "zoon"
     ]
   },
   {
@@ -1743,6 +2354,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hija",
     "acceptedAnswers": [
       "hija"
+    ],
+    "dutchAnswers": [
+      "dochter"
     ]
   },
   {
@@ -1752,6 +2366,10 @@ const SPAANS_WOORDEN = [
     "spanish": "compañero",
     "acceptedAnswers": [
       "compañero"
+    ],
+    "dutchAnswers": [
+      "collega",
+      "medeleerling"
     ]
   },
   {
@@ -1761,6 +2379,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vecino",
     "acceptedAnswers": [
       "vecino"
+    ],
+    "dutchAnswers": [
+      "buurman"
     ]
   },
   {
@@ -1770,6 +2391,9 @@ const SPAANS_WOORDEN = [
     "spanish": "extranjero",
     "acceptedAnswers": [
       "extranjero"
+    ],
+    "dutchAnswers": [
+      "buitenlander"
     ]
   },
   {
@@ -1779,6 +2403,9 @@ const SPAANS_WOORDEN = [
     "spanish": "turista",
     "acceptedAnswers": [
       "turista"
+    ],
+    "dutchAnswers": [
+      "toerist"
     ]
   },
   {
@@ -1788,6 +2415,10 @@ const SPAANS_WOORDEN = [
     "spanish": "local",
     "acceptedAnswers": [
       "local"
+    ],
+    "dutchAnswers": [
+      "local",
+      "plaatselijke bewoner"
     ]
   },
   {
@@ -1797,6 +2428,9 @@ const SPAANS_WOORDEN = [
     "spanish": "desconocido",
     "acceptedAnswers": [
       "desconocido"
+    ],
+    "dutchAnswers": [
+      "onbekende"
     ]
   },
   {
@@ -1806,6 +2440,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llamarse",
     "acceptedAnswers": [
       "llamarse"
+    ],
+    "dutchAnswers": [
+      "heten"
     ]
   },
   {
@@ -1815,6 +2452,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nombre",
     "acceptedAnswers": [
       "nombre"
+    ],
+    "dutchAnswers": [
+      "naam"
     ]
   },
   {
@@ -1824,6 +2464,9 @@ const SPAANS_WOORDEN = [
     "spanish": "edad",
     "acceptedAnswers": [
       "edad"
+    ],
+    "dutchAnswers": [
+      "leeftijd"
     ]
   },
   {
@@ -1833,6 +2476,10 @@ const SPAANS_WOORDEN = [
     "spanish": "vivir",
     "acceptedAnswers": [
       "vivir"
+    ],
+    "dutchAnswers": [
+      "wonen",
+      "leven"
     ]
   },
   {
@@ -1842,6 +2489,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nacer",
     "acceptedAnswers": [
       "nacer"
+    ],
+    "dutchAnswers": [
+      "geboren worden"
     ]
   },
   {
@@ -1851,6 +2501,9 @@ const SPAANS_WOORDEN = [
     "spanish": "país",
     "acceptedAnswers": [
       "país"
+    ],
+    "dutchAnswers": [
+      "land"
     ]
   },
   {
@@ -1860,6 +2513,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ciudad",
     "acceptedAnswers": [
       "ciudad"
+    ],
+    "dutchAnswers": [
+      "stad"
     ]
   },
   {
@@ -1869,6 +2525,9 @@ const SPAANS_WOORDEN = [
     "spanish": "trabajo",
     "acceptedAnswers": [
       "trabajo"
+    ],
+    "dutchAnswers": [
+      "werk"
     ]
   },
   {
@@ -1878,6 +2537,9 @@ const SPAANS_WOORDEN = [
     "spanish": "profesión",
     "acceptedAnswers": [
       "profesión"
+    ],
+    "dutchAnswers": [
+      "beroep"
     ]
   },
   {
@@ -1887,6 +2549,9 @@ const SPAANS_WOORDEN = [
     "spanish": "afición",
     "acceptedAnswers": [
       "afición"
+    ],
+    "dutchAnswers": [
+      "hobby"
     ]
   },
   {
@@ -1896,6 +2561,9 @@ const SPAANS_WOORDEN = [
     "spanish": "viajar",
     "acceptedAnswers": [
       "viajar"
+    ],
+    "dutchAnswers": [
+      "reizen"
     ]
   },
   {
@@ -1905,6 +2573,9 @@ const SPAANS_WOORDEN = [
     "spanish": "solo",
     "acceptedAnswers": [
       "solo"
+    ],
+    "dutchAnswers": [
+      "alleen"
     ]
   },
   {
@@ -1914,6 +2585,9 @@ const SPAANS_WOORDEN = [
     "spanish": "juntos",
     "acceptedAnswers": [
       "juntos"
+    ],
+    "dutchAnswers": [
+      "samen"
     ]
   },
   {
@@ -1923,6 +2597,9 @@ const SPAANS_WOORDEN = [
     "spanish": "conocer a alguien",
     "acceptedAnswers": [
       "conocer a alguien"
+    ],
+    "dutchAnswers": [
+      "iemand leren kennen"
     ]
   },
   {
@@ -1932,6 +2609,9 @@ const SPAANS_WOORDEN = [
     "spanish": "presentarse",
     "acceptedAnswers": [
       "presentarse"
+    ],
+    "dutchAnswers": [
+      "zich voorstellen"
     ]
   },
   {
@@ -1941,6 +2621,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿de dónde eres?",
     "acceptedAnswers": [
       "¿de dónde eres?"
+    ],
+    "dutchAnswers": [
+      "waar kom je vandaan?"
     ]
   },
   {
@@ -1950,6 +2633,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿a qué te dedicas?",
     "acceptedAnswers": [
       "¿a qué te dedicas?"
+    ],
+    "dutchAnswers": [
+      "wat doe je voor werk?"
     ]
   },
   {
@@ -1959,6 +2645,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cuánto tiempo...?",
     "acceptedAnswers": [
       "¿cuánto tiempo...?"
+    ],
+    "dutchAnswers": [
+      "hoe lang...?"
     ]
   },
   {
@@ -1968,6 +2657,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mucho gusto",
     "acceptedAnswers": [
       "mucho gusto"
+    ],
+    "dutchAnswers": [
+      "aangenaam"
     ]
   },
   {
@@ -1977,6 +2669,9 @@ const SPAANS_WOORDEN = [
     "spanish": "encantado",
     "acceptedAnswers": [
       "encantado"
+    ],
+    "dutchAnswers": [
+      "aangenaam"
     ]
   },
   {
@@ -1986,6 +2681,9 @@ const SPAANS_WOORDEN = [
     "spanish": "restaurante",
     "acceptedAnswers": [
       "restaurante"
+    ],
+    "dutchAnswers": [
+      "restaurant"
     ]
   },
   {
@@ -1995,6 +2693,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mesa",
     "acceptedAnswers": [
       "mesa"
+    ],
+    "dutchAnswers": [
+      "tafel"
     ]
   },
   {
@@ -2004,6 +2705,9 @@ const SPAANS_WOORDEN = [
     "spanish": "camarero",
     "acceptedAnswers": [
       "camarero"
+    ],
+    "dutchAnswers": [
+      "ober"
     ]
   },
   {
@@ -2013,6 +2717,9 @@ const SPAANS_WOORDEN = [
     "spanish": "camarera",
     "acceptedAnswers": [
       "camarera"
+    ],
+    "dutchAnswers": [
+      "serveerster"
     ]
   },
   {
@@ -2022,6 +2729,9 @@ const SPAANS_WOORDEN = [
     "spanish": "menú",
     "acceptedAnswers": [
       "menú"
+    ],
+    "dutchAnswers": [
+      "menu"
     ]
   },
   {
@@ -2031,6 +2741,9 @@ const SPAANS_WOORDEN = [
     "spanish": "carta",
     "acceptedAnswers": [
       "carta"
+    ],
+    "dutchAnswers": [
+      "menukaart"
     ]
   },
   {
@@ -2040,6 +2753,10 @@ const SPAANS_WOORDEN = [
     "spanish": "plato",
     "acceptedAnswers": [
       "plato"
+    ],
+    "dutchAnswers": [
+      "gerecht",
+      "bord"
     ]
   },
   {
@@ -2049,6 +2766,9 @@ const SPAANS_WOORDEN = [
     "spanish": "comida",
     "acceptedAnswers": [
       "comida"
+    ],
+    "dutchAnswers": [
+      "eten"
     ]
   },
   {
@@ -2058,6 +2778,9 @@ const SPAANS_WOORDEN = [
     "spanish": "bebida",
     "acceptedAnswers": [
       "bebida"
+    ],
+    "dutchAnswers": [
+      "drank"
     ]
   },
   {
@@ -2067,6 +2790,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuenta",
     "acceptedAnswers": [
       "cuenta"
+    ],
+    "dutchAnswers": [
+      "rekening"
     ]
   },
   {
@@ -2076,6 +2802,9 @@ const SPAANS_WOORDEN = [
     "spanish": "propina",
     "acceptedAnswers": [
       "propina"
+    ],
+    "dutchAnswers": [
+      "fooi"
     ]
   },
   {
@@ -2085,6 +2814,9 @@ const SPAANS_WOORDEN = [
     "spanish": "reservar",
     "acceptedAnswers": [
       "reservar"
+    ],
+    "dutchAnswers": [
+      "reserveren"
     ]
   },
   {
@@ -2094,6 +2826,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ordenar",
     "acceptedAnswers": [
       "ordenar"
+    ],
+    "dutchAnswers": [
+      "bestellen"
     ]
   },
   {
@@ -2103,6 +2838,9 @@ const SPAANS_WOORDEN = [
     "spanish": "servir",
     "acceptedAnswers": [
       "servir"
+    ],
+    "dutchAnswers": [
+      "serveren"
     ]
   },
   {
@@ -2112,6 +2850,9 @@ const SPAANS_WOORDEN = [
     "spanish": "compartir",
     "acceptedAnswers": [
       "compartir"
+    ],
+    "dutchAnswers": [
+      "delen"
     ]
   },
   {
@@ -2121,6 +2862,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entrada",
     "acceptedAnswers": [
       "entrada"
+    ],
+    "dutchAnswers": [
+      "voorgerecht"
     ]
   },
   {
@@ -2130,6 +2874,9 @@ const SPAANS_WOORDEN = [
     "spanish": "plato principal",
     "acceptedAnswers": [
       "plato principal"
+    ],
+    "dutchAnswers": [
+      "hoofdgerecht"
     ]
   },
   {
@@ -2139,6 +2886,9 @@ const SPAANS_WOORDEN = [
     "spanish": "postre",
     "acceptedAnswers": [
       "postre"
+    ],
+    "dutchAnswers": [
+      "dessert"
     ]
   },
   {
@@ -2148,6 +2898,9 @@ const SPAANS_WOORDEN = [
     "spanish": "especialidad",
     "acceptedAnswers": [
       "especialidad"
+    ],
+    "dutchAnswers": [
+      "specialiteit"
     ]
   },
   {
@@ -2157,6 +2910,9 @@ const SPAANS_WOORDEN = [
     "spanish": "para llevar",
     "acceptedAnswers": [
       "para llevar"
+    ],
+    "dutchAnswers": [
+      "om mee te nemen"
     ]
   },
   {
@@ -2166,6 +2922,9 @@ const SPAANS_WOORDEN = [
     "spanish": "carne",
     "acceptedAnswers": [
       "carne"
+    ],
+    "dutchAnswers": [
+      "vlees"
     ]
   },
   {
@@ -2175,6 +2934,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pollo",
     "acceptedAnswers": [
       "pollo"
+    ],
+    "dutchAnswers": [
+      "kip"
     ]
   },
   {
@@ -2184,6 +2946,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pescado",
     "acceptedAnswers": [
       "pescado"
+    ],
+    "dutchAnswers": [
+      "vis"
     ]
   },
   {
@@ -2193,6 +2958,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cerdo",
     "acceptedAnswers": [
       "cerdo"
+    ],
+    "dutchAnswers": [
+      "varkensvlees"
     ]
   },
   {
@@ -2202,6 +2970,9 @@ const SPAANS_WOORDEN = [
     "spanish": "huevo",
     "acceptedAnswers": [
       "huevo"
+    ],
+    "dutchAnswers": [
+      "ei"
     ]
   },
   {
@@ -2211,6 +2982,9 @@ const SPAANS_WOORDEN = [
     "spanish": "arroz",
     "acceptedAnswers": [
       "arroz"
+    ],
+    "dutchAnswers": [
+      "rijst"
     ]
   },
   {
@@ -2219,6 +2993,9 @@ const SPAANS_WOORDEN = [
     "dutch": "pasta",
     "spanish": "pasta",
     "acceptedAnswers": [
+      "pasta"
+    ],
+    "dutchAnswers": [
       "pasta"
     ]
   },
@@ -2229,6 +3006,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pan",
     "acceptedAnswers": [
       "pan"
+    ],
+    "dutchAnswers": [
+      "brood"
     ]
   },
   {
@@ -2238,6 +3018,9 @@ const SPAANS_WOORDEN = [
     "spanish": "queso",
     "acceptedAnswers": [
       "queso"
+    ],
+    "dutchAnswers": [
+      "kaas"
     ]
   },
   {
@@ -2247,6 +3030,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sopa",
     "acceptedAnswers": [
       "sopa"
+    ],
+    "dutchAnswers": [
+      "soep"
     ]
   },
   {
@@ -2256,6 +3042,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ensalada",
     "acceptedAnswers": [
       "ensalada"
+    ],
+    "dutchAnswers": [
+      "salade"
     ]
   },
   {
@@ -2265,6 +3054,9 @@ const SPAANS_WOORDEN = [
     "spanish": "verduras",
     "acceptedAnswers": [
       "verduras"
+    ],
+    "dutchAnswers": [
+      "groenten"
     ]
   },
   {
@@ -2274,6 +3066,9 @@ const SPAANS_WOORDEN = [
     "spanish": "papas",
     "acceptedAnswers": [
       "papas"
+    ],
+    "dutchAnswers": [
+      "aardappelen"
     ]
   },
   {
@@ -2283,6 +3078,9 @@ const SPAANS_WOORDEN = [
     "spanish": "frijoles",
     "acceptedAnswers": [
       "frijoles"
+    ],
+    "dutchAnswers": [
+      "bonen"
     ]
   },
   {
@@ -2292,6 +3090,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salsa",
     "acceptedAnswers": [
       "salsa"
+    ],
+    "dutchAnswers": [
+      "saus"
     ]
   },
   {
@@ -2301,6 +3102,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sal",
     "acceptedAnswers": [
       "sal"
+    ],
+    "dutchAnswers": [
+      "zout"
     ]
   },
   {
@@ -2310,6 +3114,9 @@ const SPAANS_WOORDEN = [
     "spanish": "azúcar",
     "acceptedAnswers": [
       "azúcar"
+    ],
+    "dutchAnswers": [
+      "suiker"
     ]
   },
   {
@@ -2319,6 +3126,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aceite",
     "acceptedAnswers": [
       "aceite"
+    ],
+    "dutchAnswers": [
+      "olie"
     ]
   },
   {
@@ -2328,6 +3138,9 @@ const SPAANS_WOORDEN = [
     "spanish": "picante",
     "acceptedAnswers": [
       "picante"
+    ],
+    "dutchAnswers": [
+      "pittig"
     ]
   },
   {
@@ -2337,6 +3150,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dulce",
     "acceptedAnswers": [
       "dulce"
+    ],
+    "dutchAnswers": [
+      "zoet"
     ]
   },
   {
@@ -2346,6 +3162,9 @@ const SPAANS_WOORDEN = [
     "spanish": "agua",
     "acceptedAnswers": [
       "agua"
+    ],
+    "dutchAnswers": [
+      "water"
     ]
   },
   {
@@ -2355,6 +3174,9 @@ const SPAANS_WOORDEN = [
     "spanish": "agua potable",
     "acceptedAnswers": [
       "agua potable"
+    ],
+    "dutchAnswers": [
+      "drinkwater"
     ]
   },
   {
@@ -2364,6 +3186,9 @@ const SPAANS_WOORDEN = [
     "spanish": "agua con gas",
     "acceptedAnswers": [
       "agua con gas"
+    ],
+    "dutchAnswers": [
+      "bruiswater"
     ]
   },
   {
@@ -2373,6 +3198,9 @@ const SPAANS_WOORDEN = [
     "spanish": "agua sin gas",
     "acceptedAnswers": [
       "agua sin gas"
+    ],
+    "dutchAnswers": [
+      "plat water"
     ]
   },
   {
@@ -2382,6 +3210,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cerveza",
     "acceptedAnswers": [
       "cerveza"
+    ],
+    "dutchAnswers": [
+      "bier"
     ]
   },
   {
@@ -2391,6 +3222,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vino",
     "acceptedAnswers": [
       "vino"
+    ],
+    "dutchAnswers": [
+      "wijn"
     ]
   },
   {
@@ -2400,6 +3234,9 @@ const SPAANS_WOORDEN = [
     "spanish": "café",
     "acceptedAnswers": [
       "café"
+    ],
+    "dutchAnswers": [
+      "koffie"
     ]
   },
   {
@@ -2409,6 +3246,9 @@ const SPAANS_WOORDEN = [
     "spanish": "té",
     "acceptedAnswers": [
       "té"
+    ],
+    "dutchAnswers": [
+      "thee"
     ]
   },
   {
@@ -2418,6 +3258,9 @@ const SPAANS_WOORDEN = [
     "spanish": "jugo",
     "acceptedAnswers": [
       "jugo"
+    ],
+    "dutchAnswers": [
+      "sap"
     ]
   },
   {
@@ -2427,6 +3270,9 @@ const SPAANS_WOORDEN = [
     "spanish": "refresco",
     "acceptedAnswers": [
       "refresco"
+    ],
+    "dutchAnswers": [
+      "frisdrank"
     ]
   },
   {
@@ -2436,6 +3282,9 @@ const SPAANS_WOORDEN = [
     "spanish": "botella",
     "acceptedAnswers": [
       "botella"
+    ],
+    "dutchAnswers": [
+      "fles"
     ]
   },
   {
@@ -2445,6 +3294,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vaso",
     "acceptedAnswers": [
       "vaso"
+    ],
+    "dutchAnswers": [
+      "glas"
     ]
   },
   {
@@ -2454,6 +3306,9 @@ const SPAANS_WOORDEN = [
     "spanish": "taza",
     "acceptedAnswers": [
       "taza"
+    ],
+    "dutchAnswers": [
+      "kopje"
     ]
   },
   {
@@ -2463,6 +3318,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hielo",
     "acceptedAnswers": [
       "hielo"
+    ],
+    "dutchAnswers": [
+      "ijs"
     ]
   },
   {
@@ -2472,6 +3330,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sed",
     "acceptedAnswers": [
       "sed"
+    ],
+    "dutchAnswers": [
+      "dorst"
     ]
   },
   {
@@ -2481,6 +3342,9 @@ const SPAANS_WOORDEN = [
     "spanish": "frío",
     "acceptedAnswers": [
       "frío"
+    ],
+    "dutchAnswers": [
+      "koud"
     ]
   },
   {
@@ -2490,6 +3354,10 @@ const SPAANS_WOORDEN = [
     "spanish": "caliente",
     "acceptedAnswers": [
       "caliente"
+    ],
+    "dutchAnswers": [
+      "warm",
+      "heet"
     ]
   },
   {
@@ -2499,6 +3367,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sin azúcar",
     "acceptedAnswers": [
       "sin azúcar"
+    ],
+    "dutchAnswers": [
+      "zonder suiker"
     ]
   },
   {
@@ -2508,6 +3379,9 @@ const SPAANS_WOORDEN = [
     "spanish": "otra ronda",
     "acceptedAnswers": [
       "otra ronda"
+    ],
+    "dutchAnswers": [
+      "nog een ronde"
     ]
   },
   {
@@ -2517,6 +3391,9 @@ const SPAANS_WOORDEN = [
     "spanish": "brindar",
     "acceptedAnswers": [
       "brindar"
+    ],
+    "dutchAnswers": [
+      "proosten"
     ]
   },
   {
@@ -2526,6 +3403,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fruta",
     "acceptedAnswers": [
       "fruta"
+    ],
+    "dutchAnswers": [
+      "fruit"
     ]
   },
   {
@@ -2535,6 +3415,9 @@ const SPAANS_WOORDEN = [
     "spanish": "manzana",
     "acceptedAnswers": [
       "manzana"
+    ],
+    "dutchAnswers": [
+      "appel"
     ]
   },
   {
@@ -2544,6 +3427,9 @@ const SPAANS_WOORDEN = [
     "spanish": "banana",
     "acceptedAnswers": [
       "banana"
+    ],
+    "dutchAnswers": [
+      "banaan"
     ]
   },
   {
@@ -2553,6 +3439,9 @@ const SPAANS_WOORDEN = [
     "spanish": "naranja",
     "acceptedAnswers": [
       "naranja"
+    ],
+    "dutchAnswers": [
+      "sinaasappel"
     ]
   },
   {
@@ -2562,6 +3451,9 @@ const SPAANS_WOORDEN = [
     "spanish": "limón",
     "acceptedAnswers": [
       "limón"
+    ],
+    "dutchAnswers": [
+      "citroen"
     ]
   },
   {
@@ -2571,6 +3463,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aguacate",
     "acceptedAnswers": [
       "aguacate"
+    ],
+    "dutchAnswers": [
+      "avocado"
     ]
   },
   {
@@ -2579,6 +3474,9 @@ const SPAANS_WOORDEN = [
     "dutch": "mango",
     "spanish": "mango",
     "acceptedAnswers": [
+      "mango"
+    ],
+    "dutchAnswers": [
       "mango"
     ]
   },
@@ -2589,6 +3487,9 @@ const SPAANS_WOORDEN = [
     "spanish": "piña",
     "acceptedAnswers": [
       "piña"
+    ],
+    "dutchAnswers": [
+      "ananas"
     ]
   },
   {
@@ -2598,6 +3499,9 @@ const SPAANS_WOORDEN = [
     "spanish": "uva",
     "acceptedAnswers": [
       "uva"
+    ],
+    "dutchAnswers": [
+      "druif"
     ]
   },
   {
@@ -2607,6 +3511,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sandía",
     "acceptedAnswers": [
       "sandía"
+    ],
+    "dutchAnswers": [
+      "watermeloen"
     ]
   },
   {
@@ -2616,6 +3523,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fresa",
     "acceptedAnswers": [
       "fresa"
+    ],
+    "dutchAnswers": [
+      "aardbei"
     ]
   },
   {
@@ -2625,6 +3535,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mercado",
     "acceptedAnswers": [
       "mercado"
+    ],
+    "dutchAnswers": [
+      "markt"
     ]
   },
   {
@@ -2634,6 +3547,9 @@ const SPAANS_WOORDEN = [
     "spanish": "puesto",
     "acceptedAnswers": [
       "puesto"
+    ],
+    "dutchAnswers": [
+      "kraam"
     ]
   },
   {
@@ -2642,6 +3558,9 @@ const SPAANS_WOORDEN = [
     "dutch": "kilo",
     "spanish": "kilo",
     "acceptedAnswers": [
+      "kilo"
+    ],
+    "dutchAnswers": [
       "kilo"
     ]
   },
@@ -2652,6 +3571,9 @@ const SPAANS_WOORDEN = [
     "spanish": "medio kilo",
     "acceptedAnswers": [
       "medio kilo"
+    ],
+    "dutchAnswers": [
+      "halve kilo"
     ]
   },
   {
@@ -2661,6 +3583,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fresco",
     "acceptedAnswers": [
       "fresco"
+    ],
+    "dutchAnswers": [
+      "vers"
     ]
   },
   {
@@ -2670,6 +3595,9 @@ const SPAANS_WOORDEN = [
     "spanish": "maduro",
     "acceptedAnswers": [
       "maduro"
+    ],
+    "dutchAnswers": [
+      "rijp"
     ]
   },
   {
@@ -2679,6 +3607,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pesar",
     "acceptedAnswers": [
       "pesar"
+    ],
+    "dutchAnswers": [
+      "wegen"
     ]
   },
   {
@@ -2688,6 +3619,10 @@ const SPAANS_WOORDEN = [
     "spanish": "bolsa",
     "acceptedAnswers": [
       "bolsa"
+    ],
+    "dutchAnswers": [
+      "zak",
+      "tas"
     ]
   },
   {
@@ -2697,6 +3632,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vendedor",
     "acceptedAnswers": [
       "vendedor"
+    ],
+    "dutchAnswers": [
+      "verkoper"
     ]
   },
   {
@@ -2706,6 +3644,9 @@ const SPAANS_WOORDEN = [
     "spanish": "precio",
     "acceptedAnswers": [
       "precio"
+    ],
+    "dutchAnswers": [
+      "prijs"
     ]
   },
   {
@@ -2715,6 +3656,9 @@ const SPAANS_WOORDEN = [
     "spanish": "costar",
     "acceptedAnswers": [
       "costar"
+    ],
+    "dutchAnswers": [
+      "kosten"
     ]
   },
   {
@@ -2724,6 +3668,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dinero",
     "acceptedAnswers": [
       "dinero"
+    ],
+    "dutchAnswers": [
+      "geld"
     ]
   },
   {
@@ -2733,6 +3680,9 @@ const SPAANS_WOORDEN = [
     "spanish": "efectivo",
     "acceptedAnswers": [
       "efectivo"
+    ],
+    "dutchAnswers": [
+      "contant geld"
     ]
   },
   {
@@ -2742,6 +3692,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tarjeta",
     "acceptedAnswers": [
       "tarjeta"
+    ],
+    "dutchAnswers": [
+      "kaart"
     ]
   },
   {
@@ -2751,6 +3704,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cambio",
     "acceptedAnswers": [
       "cambio"
+    ],
+    "dutchAnswers": [
+      "wisselgeld"
     ]
   },
   {
@@ -2760,6 +3716,9 @@ const SPAANS_WOORDEN = [
     "spanish": "descuento",
     "acceptedAnswers": [
       "descuento"
+    ],
+    "dutchAnswers": [
+      "korting"
     ]
   },
   {
@@ -2769,6 +3728,9 @@ const SPAANS_WOORDEN = [
     "spanish": "oferta",
     "acceptedAnswers": [
       "oferta"
+    ],
+    "dutchAnswers": [
+      "aanbieding"
     ]
   },
   {
@@ -2778,6 +3740,9 @@ const SPAANS_WOORDEN = [
     "spanish": "negociar",
     "acceptedAnswers": [
       "negociar"
+    ],
+    "dutchAnswers": [
+      "onderhandelen"
     ]
   },
   {
@@ -2787,6 +3752,9 @@ const SPAANS_WOORDEN = [
     "spanish": "regatear",
     "acceptedAnswers": [
       "regatear"
+    ],
+    "dutchAnswers": [
+      "afdingen"
     ]
   },
   {
@@ -2796,6 +3764,9 @@ const SPAANS_WOORDEN = [
     "spanish": "demasiado caro",
     "acceptedAnswers": [
       "demasiado caro"
+    ],
+    "dutchAnswers": [
+      "te duur"
     ]
   },
   {
@@ -2805,6 +3776,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cuánto cuesta?",
     "acceptedAnswers": [
       "¿cuánto cuesta?"
+    ],
+    "dutchAnswers": [
+      "hoeveel kost het?"
     ]
   },
   {
@@ -2814,6 +3788,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cuánto es?",
     "acceptedAnswers": [
       "¿cuánto es?"
+    ],
+    "dutchAnswers": [
+      "hoeveel is het?"
     ]
   },
   {
@@ -2823,6 +3800,9 @@ const SPAANS_WOORDEN = [
     "spanish": "te doy...",
     "acceptedAnswers": [
       "te doy..."
+    ],
+    "dutchAnswers": [
+      "ik geef je..."
     ]
   },
   {
@@ -2832,6 +3812,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿me lo deja en...?",
     "acceptedAnswers": [
       "¿me lo deja en...?"
+    ],
+    "dutchAnswers": [
+      "kunt u het voor ... geven?"
     ]
   },
   {
@@ -2841,6 +3824,9 @@ const SPAANS_WOORDEN = [
     "spanish": "comprar",
     "acceptedAnswers": [
       "comprar"
+    ],
+    "dutchAnswers": [
+      "kopen"
     ]
   },
   {
@@ -2850,6 +3836,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vender",
     "acceptedAnswers": [
       "vender"
+    ],
+    "dutchAnswers": [
+      "verkopen"
     ]
   },
   {
@@ -2859,6 +3848,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tienda",
     "acceptedAnswers": [
       "tienda"
+    ],
+    "dutchAnswers": [
+      "winkel"
     ]
   },
   {
@@ -2868,6 +3860,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recibo",
     "acceptedAnswers": [
       "recibo"
+    ],
+    "dutchAnswers": [
+      "bonnetje"
     ]
   },
   {
@@ -2877,6 +3872,9 @@ const SPAANS_WOORDEN = [
     "spanish": "abierto",
     "acceptedAnswers": [
       "abierto"
+    ],
+    "dutchAnswers": [
+      "open"
     ]
   },
   {
@@ -2885,6 +3883,9 @@ const SPAANS_WOORDEN = [
     "dutch": "hotel",
     "spanish": "hotel",
     "acceptedAnswers": [
+      "hotel"
+    ],
+    "dutchAnswers": [
       "hotel"
     ]
   },
@@ -2895,6 +3896,10 @@ const SPAANS_WOORDEN = [
     "spanish": "hostal",
     "acceptedAnswers": [
       "hostal"
+    ],
+    "dutchAnswers": [
+      "hostel",
+      "pension"
     ]
   },
   {
@@ -2904,6 +3909,9 @@ const SPAANS_WOORDEN = [
     "spanish": "habitación",
     "acceptedAnswers": [
       "habitación"
+    ],
+    "dutchAnswers": [
+      "kamer"
     ]
   },
   {
@@ -2913,6 +3921,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cama",
     "acceptedAnswers": [
       "cama"
+    ],
+    "dutchAnswers": [
+      "bed"
     ]
   },
   {
@@ -2922,6 +3933,9 @@ const SPAANS_WOORDEN = [
     "spanish": "baño",
     "acceptedAnswers": [
       "baño"
+    ],
+    "dutchAnswers": [
+      "badkamer"
     ]
   },
   {
@@ -2931,6 +3945,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ducha",
     "acceptedAnswers": [
       "ducha"
+    ],
+    "dutchAnswers": [
+      "douche"
     ]
   },
   {
@@ -2940,6 +3957,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llave",
     "acceptedAnswers": [
       "llave"
+    ],
+    "dutchAnswers": [
+      "sleutel"
     ]
   },
   {
@@ -2949,6 +3969,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recepción",
     "acceptedAnswers": [
       "recepción"
+    ],
+    "dutchAnswers": [
+      "receptie"
     ]
   },
   {
@@ -2958,6 +3981,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recepcionista",
     "acceptedAnswers": [
       "recepcionista"
+    ],
+    "dutchAnswers": [
+      "receptionist"
     ]
   },
   {
@@ -2967,6 +3993,9 @@ const SPAANS_WOORDEN = [
     "spanish": "reserva",
     "acceptedAnswers": [
       "reserva"
+    ],
+    "dutchAnswers": [
+      "reservering"
     ]
   },
   {
@@ -2976,6 +4005,9 @@ const SPAANS_WOORDEN = [
     "spanish": "disponible",
     "acceptedAnswers": [
       "disponible"
+    ],
+    "dutchAnswers": [
+      "beschikbaar"
     ]
   },
   {
@@ -2985,6 +4017,9 @@ const SPAANS_WOORDEN = [
     "spanish": "noche",
     "acceptedAnswers": [
       "noche"
+    ],
+    "dutchAnswers": [
+      "nacht"
     ]
   },
   {
@@ -2994,6 +4029,9 @@ const SPAANS_WOORDEN = [
     "spanish": "huésped",
     "acceptedAnswers": [
       "huésped"
+    ],
+    "dutchAnswers": [
+      "gast"
     ]
   },
   {
@@ -3003,6 +4041,9 @@ const SPAANS_WOORDEN = [
     "spanish": "equipaje",
     "acceptedAnswers": [
       "equipaje"
+    ],
+    "dutchAnswers": [
+      "bagage"
     ]
   },
   {
@@ -3012,6 +4053,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mochila",
     "acceptedAnswers": [
       "mochila"
+    ],
+    "dutchAnswers": [
+      "rugzak"
     ]
   },
   {
@@ -3021,6 +4065,9 @@ const SPAANS_WOORDEN = [
     "spanish": "toalla",
     "acceptedAnswers": [
       "toalla"
+    ],
+    "dutchAnswers": [
+      "handdoek"
     ]
   },
   {
@@ -3030,6 +4077,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sábana",
     "acceptedAnswers": [
       "sábana"
+    ],
+    "dutchAnswers": [
+      "laken"
     ]
   },
   {
@@ -3038,6 +4088,9 @@ const SPAANS_WOORDEN = [
     "dutch": "wifi",
     "spanish": "wifi",
     "acceptedAnswers": [
+      "wifi"
+    ],
+    "dutchAnswers": [
       "wifi"
     ]
   },
@@ -3048,6 +4101,9 @@ const SPAANS_WOORDEN = [
     "spanish": "contraseña",
     "acceptedAnswers": [
       "contraseña"
+    ],
+    "dutchAnswers": [
+      "wachtwoord"
     ]
   },
   {
@@ -3057,6 +4113,10 @@ const SPAANS_WOORDEN = [
     "spanish": "salida",
     "acceptedAnswers": [
       "salida"
+    ],
+    "dutchAnswers": [
+      "uitchecken",
+      "uitgang"
     ]
   },
   {
@@ -3066,6 +4126,9 @@ const SPAANS_WOORDEN = [
     "spanish": "no funciona",
     "acceptedAnswers": [
       "no funciona"
+    ],
+    "dutchAnswers": [
+      "het werkt niet"
     ]
   },
   {
@@ -3075,6 +4138,9 @@ const SPAANS_WOORDEN = [
     "spanish": "roto",
     "acceptedAnswers": [
       "roto"
+    ],
+    "dutchAnswers": [
+      "kapot"
     ]
   },
   {
@@ -3084,6 +4150,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sucio",
     "acceptedAnswers": [
       "sucio"
+    ],
+    "dutchAnswers": [
+      "vies"
     ]
   },
   {
@@ -3093,6 +4162,9 @@ const SPAANS_WOORDEN = [
     "spanish": "limpio",
     "acceptedAnswers": [
       "limpio"
+    ],
+    "dutchAnswers": [
+      "schoon"
     ]
   },
   {
@@ -3102,6 +4174,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ruido",
     "acceptedAnswers": [
       "ruido"
+    ],
+    "dutchAnswers": [
+      "lawaai"
     ]
   },
   {
@@ -3111,6 +4186,9 @@ const SPAANS_WOORDEN = [
     "spanish": "silencioso",
     "acceptedAnswers": [
       "silencioso"
+    ],
+    "dutchAnswers": [
+      "stil"
     ]
   },
   {
@@ -3120,6 +4198,9 @@ const SPAANS_WOORDEN = [
     "spanish": "agua caliente",
     "acceptedAnswers": [
       "agua caliente"
+    ],
+    "dutchAnswers": [
+      "warm water"
     ]
   },
   {
@@ -3129,6 +4210,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aire acondicionado",
     "acceptedAnswers": [
       "aire acondicionado"
+    ],
+    "dutchAnswers": [
+      "airconditioning"
     ]
   },
   {
@@ -3138,6 +4222,9 @@ const SPAANS_WOORDEN = [
     "spanish": "calefacción",
     "acceptedAnswers": [
       "calefacción"
+    ],
+    "dutchAnswers": [
+      "verwarming"
     ]
   },
   {
@@ -3147,6 +4234,9 @@ const SPAANS_WOORDEN = [
     "spanish": "enchufe",
     "acceptedAnswers": [
       "enchufe"
+    ],
+    "dutchAnswers": [
+      "stopcontact"
     ]
   },
   {
@@ -3156,6 +4246,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cambiar de habitación",
     "acceptedAnswers": [
       "cambiar de habitación"
+    ],
+    "dutchAnswers": [
+      "van kamer wisselen"
     ]
   },
   {
@@ -3165,6 +4258,9 @@ const SPAANS_WOORDEN = [
     "spanish": "falta",
     "acceptedAnswers": [
       "falta"
+    ],
+    "dutchAnswers": [
+      "ontbreekt"
     ]
   },
   {
@@ -3174,6 +4270,9 @@ const SPAANS_WOORDEN = [
     "spanish": "problema",
     "acceptedAnswers": [
       "problema"
+    ],
+    "dutchAnswers": [
+      "probleem"
     ]
   },
   {
@@ -3183,6 +4282,9 @@ const SPAANS_WOORDEN = [
     "spanish": "solución",
     "acceptedAnswers": [
       "solución"
+    ],
+    "dutchAnswers": [
+      "oplossing"
     ]
   },
   {
@@ -3192,6 +4294,9 @@ const SPAANS_WOORDEN = [
     "spanish": "arreglar",
     "acceptedAnswers": [
       "arreglar"
+    ],
+    "dutchAnswers": [
+      "repareren"
     ]
   },
   {
@@ -3201,6 +4306,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cancelar",
     "acceptedAnswers": [
       "cancelar"
+    ],
+    "dutchAnswers": [
+      "annuleren"
     ]
   },
   {
@@ -3210,6 +4318,9 @@ const SPAANS_WOORDEN = [
     "spanish": "confirmar",
     "acceptedAnswers": [
       "confirmar"
+    ],
+    "dutchAnswers": [
+      "bevestigen"
     ]
   },
   {
@@ -3219,6 +4330,9 @@ const SPAANS_WOORDEN = [
     "spanish": "incluido",
     "acceptedAnswers": [
       "incluido"
+    ],
+    "dutchAnswers": [
+      "inbegrepen"
     ]
   },
   {
@@ -3228,6 +4342,9 @@ const SPAANS_WOORDEN = [
     "spanish": "guardar el equipaje",
     "acceptedAnswers": [
       "guardar el equipaje"
+    ],
+    "dutchAnswers": [
+      "bagage bewaren"
     ]
   },
   {
@@ -3237,6 +4354,9 @@ const SPAANS_WOORDEN = [
     "spanish": "check-in",
     "acceptedAnswers": [
       "check-in"
+    ],
+    "dutchAnswers": [
+      "inchecken"
     ]
   },
   {
@@ -3246,6 +4366,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aeropuerto",
     "acceptedAnswers": [
       "aeropuerto"
+    ],
+    "dutchAnswers": [
+      "vliegveld"
     ]
   },
   {
@@ -3255,6 +4378,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vuelo",
     "acceptedAnswers": [
       "vuelo"
+    ],
+    "dutchAnswers": [
+      "vlucht"
     ]
   },
   {
@@ -3264,6 +4390,9 @@ const SPAANS_WOORDEN = [
     "spanish": "avión",
     "acceptedAnswers": [
       "avión"
+    ],
+    "dutchAnswers": [
+      "vliegtuig"
     ]
   },
   {
@@ -3273,6 +4402,9 @@ const SPAANS_WOORDEN = [
     "spanish": "billete",
     "acceptedAnswers": [
       "billete"
+    ],
+    "dutchAnswers": [
+      "ticket"
     ]
   },
   {
@@ -3282,6 +4414,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pasaporte",
     "acceptedAnswers": [
       "pasaporte"
+    ],
+    "dutchAnswers": [
+      "paspoort"
     ]
   },
   {
@@ -3291,6 +4426,10 @@ const SPAANS_WOORDEN = [
     "spanish": "puerta",
     "acceptedAnswers": [
       "puerta"
+    ],
+    "dutchAnswers": [
+      "gate",
+      "deur"
     ]
   },
   {
@@ -3299,6 +4438,9 @@ const SPAANS_WOORDEN = [
     "dutch": "terminal",
     "spanish": "terminal",
     "acceptedAnswers": [
+      "terminal"
+    ],
+    "dutchAnswers": [
       "terminal"
     ]
   },
@@ -3309,6 +4451,9 @@ const SPAANS_WOORDEN = [
     "spanish": "embarque",
     "acceptedAnswers": [
       "embarque"
+    ],
+    "dutchAnswers": [
+      "boarding"
     ]
   },
   {
@@ -3318,6 +4463,10 @@ const SPAANS_WOORDEN = [
     "spanish": "facturar",
     "acceptedAnswers": [
       "facturar"
+    ],
+    "dutchAnswers": [
+      "inchecken",
+      "bagage afgeven"
     ]
   },
   {
@@ -3327,6 +4476,9 @@ const SPAANS_WOORDEN = [
     "spanish": "maleta",
     "acceptedAnswers": [
       "maleta"
+    ],
+    "dutchAnswers": [
+      "koffer"
     ]
   },
   {
@@ -3336,6 +4488,9 @@ const SPAANS_WOORDEN = [
     "spanish": "equipaje de mano",
     "acceptedAnswers": [
       "equipaje de mano"
+    ],
+    "dutchAnswers": [
+      "handbagage"
     ]
   },
   {
@@ -3345,6 +4500,9 @@ const SPAANS_WOORDEN = [
     "spanish": "retraso",
     "acceptedAnswers": [
       "retraso"
+    ],
+    "dutchAnswers": [
+      "vertraging"
     ]
   },
   {
@@ -3354,6 +4512,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cancelado",
     "acceptedAnswers": [
       "cancelado"
+    ],
+    "dutchAnswers": [
+      "geannuleerd"
     ]
   },
   {
@@ -3363,6 +4524,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salida",
     "acceptedAnswers": [
       "salida"
+    ],
+    "dutchAnswers": [
+      "vertrek"
     ]
   },
   {
@@ -3372,6 +4536,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llegada",
     "acceptedAnswers": [
       "llegada"
+    ],
+    "dutchAnswers": [
+      "aankomst"
     ]
   },
   {
@@ -3381,6 +4548,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aduana",
     "acceptedAnswers": [
       "aduana"
+    ],
+    "dutchAnswers": [
+      "douane"
     ]
   },
   {
@@ -3390,6 +4560,9 @@ const SPAANS_WOORDEN = [
     "spanish": "control de seguridad",
     "acceptedAnswers": [
       "control de seguridad"
+    ],
+    "dutchAnswers": [
+      "veiligheidscontrole"
     ]
   },
   {
@@ -3399,6 +4572,9 @@ const SPAANS_WOORDEN = [
     "spanish": "asiento",
     "acceptedAnswers": [
       "asiento"
+    ],
+    "dutchAnswers": [
+      "stoel"
     ]
   },
   {
@@ -3408,6 +4584,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ventanilla",
     "acceptedAnswers": [
       "ventanilla"
+    ],
+    "dutchAnswers": [
+      "raam"
     ]
   },
   {
@@ -3417,6 +4596,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pasillo",
     "acceptedAnswers": [
       "pasillo"
+    ],
+    "dutchAnswers": [
+      "gangpad"
     ]
   },
   {
@@ -3426,6 +4608,9 @@ const SPAANS_WOORDEN = [
     "spanish": "autobús",
     "acceptedAnswers": [
       "autobús"
+    ],
+    "dutchAnswers": [
+      "bus"
     ]
   },
   {
@@ -3435,6 +4620,9 @@ const SPAANS_WOORDEN = [
     "spanish": "minibús",
     "acceptedAnswers": [
       "minibús"
+    ],
+    "dutchAnswers": [
+      "minibus"
     ]
   },
   {
@@ -3444,6 +4632,9 @@ const SPAANS_WOORDEN = [
     "spanish": "colectivo",
     "acceptedAnswers": [
       "colectivo"
+    ],
+    "dutchAnswers": [
+      "gedeeld openbaar vervoer"
     ]
   },
   {
@@ -3453,6 +4644,9 @@ const SPAANS_WOORDEN = [
     "spanish": "chofer",
     "acceptedAnswers": [
       "chofer"
+    ],
+    "dutchAnswers": [
+      "chauffeur"
     ]
   },
   {
@@ -3462,6 +4656,9 @@ const SPAANS_WOORDEN = [
     "spanish": "parada",
     "acceptedAnswers": [
       "parada"
+    ],
+    "dutchAnswers": [
+      "halte"
     ]
   },
   {
@@ -3471,6 +4668,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ruta",
     "acceptedAnswers": [
       "ruta"
+    ],
+    "dutchAnswers": [
+      "route"
     ]
   },
   {
@@ -3480,6 +4680,10 @@ const SPAANS_WOORDEN = [
     "spanish": "pasaje",
     "acceptedAnswers": [
       "pasaje"
+    ],
+    "dutchAnswers": [
+      "ritprijs",
+      "ticket"
     ]
   },
   {
@@ -3489,6 +4693,10 @@ const SPAANS_WOORDEN = [
     "spanish": "subir",
     "acceptedAnswers": [
       "subir"
+    ],
+    "dutchAnswers": [
+      "instappen",
+      "omhooggaan"
     ]
   },
   {
@@ -3498,6 +4706,10 @@ const SPAANS_WOORDEN = [
     "spanish": "bajar",
     "acceptedAnswers": [
       "bajar"
+    ],
+    "dutchAnswers": [
+      "uitstappen",
+      "omlaaggaan"
     ]
   },
   {
@@ -3507,6 +4719,9 @@ const SPAANS_WOORDEN = [
     "spanish": "parar",
     "acceptedAnswers": [
       "parar"
+    ],
+    "dutchAnswers": [
+      "stoppen"
     ]
   },
   {
@@ -3516,6 +4731,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿va a...?",
     "acceptedAnswers": [
       "¿va a...?"
+    ],
+    "dutchAnswers": [
+      "gaat deze naar...?"
     ]
   },
   {
@@ -3525,6 +4743,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿dónde me bajo?",
     "acceptedAnswers": [
       "¿dónde me bajo?"
+    ],
+    "dutchAnswers": [
+      "waar moet ik uitstappen?"
     ]
   },
   {
@@ -3534,6 +4755,10 @@ const SPAANS_WOORDEN = [
     "spanish": "avísame",
     "acceptedAnswers": [
       "avísame"
+    ],
+    "dutchAnswers": [
+      "waarschuw me",
+      "laat me weten"
     ]
   },
   {
@@ -3543,6 +4768,9 @@ const SPAANS_WOORDEN = [
     "spanish": "asiento",
     "acceptedAnswers": [
       "asiento"
+    ],
+    "dutchAnswers": [
+      "zitplaats"
     ]
   },
   {
@@ -3552,6 +4780,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lleno",
     "acceptedAnswers": [
       "lleno"
+    ],
+    "dutchAnswers": [
+      "vol"
     ]
   },
   {
@@ -3561,6 +4792,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vacío",
     "acceptedAnswers": [
       "vacío"
+    ],
+    "dutchAnswers": [
+      "leeg"
     ]
   },
   {
@@ -3570,6 +4804,9 @@ const SPAANS_WOORDEN = [
     "spanish": "directo",
     "acceptedAnswers": [
       "directo"
+    ],
+    "dutchAnswers": [
+      "rechtstreeks"
     ]
   },
   {
@@ -3579,6 +4816,9 @@ const SPAANS_WOORDEN = [
     "spanish": "transbordo",
     "acceptedAnswers": [
       "transbordo"
+    ],
+    "dutchAnswers": [
+      "overstap"
     ]
   },
   {
@@ -3588,6 +4828,9 @@ const SPAANS_WOORDEN = [
     "spanish": "horario",
     "acceptedAnswers": [
       "horario"
+    ],
+    "dutchAnswers": [
+      "dienstregeling"
     ]
   },
   {
@@ -3597,6 +4840,9 @@ const SPAANS_WOORDEN = [
     "spanish": "estación",
     "acceptedAnswers": [
       "estación"
+    ],
+    "dutchAnswers": [
+      "station"
     ]
   },
   {
@@ -3605,6 +4851,9 @@ const SPAANS_WOORDEN = [
     "dutch": "taxi",
     "spanish": "taxi",
     "acceptedAnswers": [
+      "taxi"
+    ],
+    "dutchAnswers": [
       "taxi"
     ]
   },
@@ -3615,6 +4864,9 @@ const SPAANS_WOORDEN = [
     "spanish": "taxista",
     "acceptedAnswers": [
       "taxista"
+    ],
+    "dutchAnswers": [
+      "taxichauffeur"
     ]
   },
   {
@@ -3624,6 +4876,10 @@ const SPAANS_WOORDEN = [
     "spanish": "dirección",
     "acceptedAnswers": [
       "dirección"
+    ],
+    "dutchAnswers": [
+      "adres",
+      "richting"
     ]
   },
   {
@@ -3633,6 +4889,9 @@ const SPAANS_WOORDEN = [
     "spanish": "destino",
     "acceptedAnswers": [
       "destino"
+    ],
+    "dutchAnswers": [
+      "bestemming"
     ]
   },
   {
@@ -3642,6 +4901,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llevarme",
     "acceptedAnswers": [
       "llevarme"
+    ],
+    "dutchAnswers": [
+      "mij brengen"
     ]
   },
   {
@@ -3651,6 +4913,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recoger",
     "acceptedAnswers": [
       "recoger"
+    ],
+    "dutchAnswers": [
+      "ophalen"
     ]
   },
   {
@@ -3660,6 +4925,9 @@ const SPAANS_WOORDEN = [
     "spanish": "taxímetro",
     "acceptedAnswers": [
       "taxímetro"
+    ],
+    "dutchAnswers": [
+      "taximeter"
     ]
   },
   {
@@ -3669,6 +4937,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tarifa",
     "acceptedAnswers": [
       "tarifa"
+    ],
+    "dutchAnswers": [
+      "tarief"
     ]
   },
   {
@@ -3678,6 +4949,10 @@ const SPAANS_WOORDEN = [
     "spanish": "trayecto",
     "acceptedAnswers": [
       "trayecto"
+    ],
+    "dutchAnswers": [
+      "rit",
+      "traject"
     ]
   },
   {
@@ -3687,6 +4962,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tráfico",
     "acceptedAnswers": [
       "tráfico"
+    ],
+    "dutchAnswers": [
+      "verkeer"
     ]
   },
   {
@@ -3696,6 +4974,9 @@ const SPAANS_WOORDEN = [
     "spanish": "atasco",
     "acceptedAnswers": [
       "atasco"
+    ],
+    "dutchAnswers": [
+      "file"
     ]
   },
   {
@@ -3705,6 +4986,9 @@ const SPAANS_WOORDEN = [
     "spanish": "rápido",
     "acceptedAnswers": [
       "rápido"
+    ],
+    "dutchAnswers": [
+      "snel"
     ]
   },
   {
@@ -3714,6 +4998,9 @@ const SPAANS_WOORDEN = [
     "spanish": "despacio",
     "acceptedAnswers": [
       "despacio"
+    ],
+    "dutchAnswers": [
+      "langzaam"
     ]
   },
   {
@@ -3723,6 +5010,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aquí está bien",
     "acceptedAnswers": [
       "aquí está bien"
+    ],
+    "dutchAnswers": [
+      "hier is prima"
     ]
   },
   {
@@ -3732,6 +5022,9 @@ const SPAANS_WOORDEN = [
     "spanish": "déjeme aquí",
     "acceptedAnswers": [
       "déjeme aquí"
+    ],
+    "dutchAnswers": [
+      "zet me hier af"
     ]
   },
   {
@@ -3741,6 +5034,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cuánto tarda?",
     "acceptedAnswers": [
       "¿cuánto tarda?"
+    ],
+    "dutchAnswers": [
+      "hoe lang duurt het?"
     ]
   },
   {
@@ -3750,6 +5046,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cuánto cuesta?",
     "acceptedAnswers": [
       "¿cuánto cuesta?"
+    ],
+    "dutchAnswers": [
+      "hoeveel kost het?"
     ]
   },
   {
@@ -3759,6 +5058,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aplicación",
     "acceptedAnswers": [
       "aplicación"
+    ],
+    "dutchAnswers": [
+      "app"
     ]
   },
   {
@@ -3768,6 +5070,9 @@ const SPAANS_WOORDEN = [
     "spanish": "conductor",
     "acceptedAnswers": [
       "conductor"
+    ],
+    "dutchAnswers": [
+      "bestuurder"
     ]
   },
   {
@@ -3777,6 +5082,9 @@ const SPAANS_WOORDEN = [
     "spanish": "matrícula",
     "acceptedAnswers": [
       "matrícula"
+    ],
+    "dutchAnswers": [
+      "kenteken"
     ]
   },
   {
@@ -3786,6 +5094,9 @@ const SPAANS_WOORDEN = [
     "spanish": "calle",
     "acceptedAnswers": [
       "calle"
+    ],
+    "dutchAnswers": [
+      "straat"
     ]
   },
   {
@@ -3795,6 +5106,9 @@ const SPAANS_WOORDEN = [
     "spanish": "avenida",
     "acceptedAnswers": [
       "avenida"
+    ],
+    "dutchAnswers": [
+      "laan"
     ]
   },
   {
@@ -3804,6 +5118,9 @@ const SPAANS_WOORDEN = [
     "spanish": "plaza",
     "acceptedAnswers": [
       "plaza"
+    ],
+    "dutchAnswers": [
+      "plein"
     ]
   },
   {
@@ -3813,6 +5130,9 @@ const SPAANS_WOORDEN = [
     "spanish": "esquina",
     "acceptedAnswers": [
       "esquina"
+    ],
+    "dutchAnswers": [
+      "hoek"
     ]
   },
   {
@@ -3822,6 +5142,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuadra",
     "acceptedAnswers": [
       "cuadra"
+    ],
+    "dutchAnswers": [
+      "huizenblok"
     ]
   },
   {
@@ -3831,6 +5154,9 @@ const SPAANS_WOORDEN = [
     "spanish": "derecha",
     "acceptedAnswers": [
       "derecha"
+    ],
+    "dutchAnswers": [
+      "rechts"
     ]
   },
   {
@@ -3840,6 +5166,9 @@ const SPAANS_WOORDEN = [
     "spanish": "izquierda",
     "acceptedAnswers": [
       "izquierda"
+    ],
+    "dutchAnswers": [
+      "links"
     ]
   },
   {
@@ -3849,6 +5178,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recto",
     "acceptedAnswers": [
       "recto"
+    ],
+    "dutchAnswers": [
+      "rechtdoor"
     ]
   },
   {
@@ -3858,6 +5190,9 @@ const SPAANS_WOORDEN = [
     "spanish": "girar",
     "acceptedAnswers": [
       "girar"
+    ],
+    "dutchAnswers": [
+      "afslaan"
     ]
   },
   {
@@ -3867,6 +5202,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cruzar",
     "acceptedAnswers": [
       "cruzar"
+    ],
+    "dutchAnswers": [
+      "oversteken"
     ]
   },
   {
@@ -3876,6 +5214,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cerca",
     "acceptedAnswers": [
       "cerca"
+    ],
+    "dutchAnswers": [
+      "dichtbij"
     ]
   },
   {
@@ -3885,6 +5226,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lejos",
     "acceptedAnswers": [
       "lejos"
+    ],
+    "dutchAnswers": [
+      "ver"
     ]
   },
   {
@@ -3894,6 +5238,9 @@ const SPAANS_WOORDEN = [
     "spanish": "al lado de",
     "acceptedAnswers": [
       "al lado de"
+    ],
+    "dutchAnswers": [
+      "naast"
     ]
   },
   {
@@ -3903,6 +5250,9 @@ const SPAANS_WOORDEN = [
     "spanish": "enfrente de",
     "acceptedAnswers": [
       "enfrente de"
+    ],
+    "dutchAnswers": [
+      "tegenover"
     ]
   },
   {
@@ -3912,6 +5262,9 @@ const SPAANS_WOORDEN = [
     "spanish": "detrás de",
     "acceptedAnswers": [
       "detrás de"
+    ],
+    "dutchAnswers": [
+      "achter"
     ]
   },
   {
@@ -3921,6 +5274,9 @@ const SPAANS_WOORDEN = [
     "spanish": "delante de",
     "acceptedAnswers": [
       "delante de"
+    ],
+    "dutchAnswers": [
+      "voor"
     ]
   },
   {
@@ -3930,6 +5286,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entre",
     "acceptedAnswers": [
       "entre"
+    ],
+    "dutchAnswers": [
+      "tussen"
     ]
   },
   {
@@ -3939,6 +5298,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mapa",
     "acceptedAnswers": [
       "mapa"
+    ],
+    "dutchAnswers": [
+      "kaart"
     ]
   },
   {
@@ -3948,6 +5310,9 @@ const SPAANS_WOORDEN = [
     "spanish": "perdido",
     "acceptedAnswers": [
       "perdido"
+    ],
+    "dutchAnswers": [
+      "verdwaald"
     ]
   },
   {
@@ -3957,6 +5322,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cómo llego a...?",
     "acceptedAnswers": [
       "¿cómo llego a...?"
+    ],
+    "dutchAnswers": [
+      "hoe kom ik bij...?"
     ]
   },
   {
@@ -3966,6 +5334,9 @@ const SPAANS_WOORDEN = [
     "spanish": "centro",
     "acceptedAnswers": [
       "centro"
+    ],
+    "dutchAnswers": [
+      "centrum"
     ]
   },
   {
@@ -3975,6 +5346,9 @@ const SPAANS_WOORDEN = [
     "spanish": "barrio",
     "acceptedAnswers": [
       "barrio"
+    ],
+    "dutchAnswers": [
+      "wijk"
     ]
   },
   {
@@ -3984,6 +5358,9 @@ const SPAANS_WOORDEN = [
     "spanish": "edificio",
     "acceptedAnswers": [
       "edificio"
+    ],
+    "dutchAnswers": [
+      "gebouw"
     ]
   },
   {
@@ -3993,6 +5370,9 @@ const SPAANS_WOORDEN = [
     "spanish": "iglesia",
     "acceptedAnswers": [
       "iglesia"
+    ],
+    "dutchAnswers": [
+      "kerk"
     ]
   },
   {
@@ -4002,6 +5382,9 @@ const SPAANS_WOORDEN = [
     "spanish": "museo",
     "acceptedAnswers": [
       "museo"
+    ],
+    "dutchAnswers": [
+      "museum"
     ]
   },
   {
@@ -4011,6 +5394,9 @@ const SPAANS_WOORDEN = [
     "spanish": "banco",
     "acceptedAnswers": [
       "banco"
+    ],
+    "dutchAnswers": [
+      "bank"
     ]
   },
   {
@@ -4020,6 +5406,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cajero automático",
     "acceptedAnswers": [
       "cajero automático"
+    ],
+    "dutchAnswers": [
+      "geldautomaat"
     ]
   },
   {
@@ -4029,6 +5418,9 @@ const SPAANS_WOORDEN = [
     "spanish": "farmacia",
     "acceptedAnswers": [
       "farmacia"
+    ],
+    "dutchAnswers": [
+      "apotheek"
     ]
   },
   {
@@ -4038,6 +5430,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hospital",
     "acceptedAnswers": [
       "hospital"
+    ],
+    "dutchAnswers": [
+      "ziekenhuis"
     ]
   },
   {
@@ -4047,6 +5442,9 @@ const SPAANS_WOORDEN = [
     "spanish": "comisaría",
     "acceptedAnswers": [
       "comisaría"
+    ],
+    "dutchAnswers": [
+      "politiebureau"
     ]
   },
   {
@@ -4056,6 +5454,9 @@ const SPAANS_WOORDEN = [
     "spanish": "baño público",
     "acceptedAnswers": [
       "baño público"
+    ],
+    "dutchAnswers": [
+      "openbaar toilet"
     ]
   },
   {
@@ -4065,6 +5466,9 @@ const SPAANS_WOORDEN = [
     "spanish": "supermercado",
     "acceptedAnswers": [
       "supermercado"
+    ],
+    "dutchAnswers": [
+      "supermarkt"
     ]
   },
   {
@@ -4074,6 +5478,9 @@ const SPAANS_WOORDEN = [
     "spanish": "panadería",
     "acceptedAnswers": [
       "panadería"
+    ],
+    "dutchAnswers": [
+      "bakkerij"
     ]
   },
   {
@@ -4083,6 +5490,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lavandería",
     "acceptedAnswers": [
       "lavandería"
+    ],
+    "dutchAnswers": [
+      "wasserette"
     ]
   },
   {
@@ -4092,6 +5502,9 @@ const SPAANS_WOORDEN = [
     "spanish": "gasolinera",
     "acceptedAnswers": [
       "gasolinera"
+    ],
+    "dutchAnswers": [
+      "tankstation"
     ]
   },
   {
@@ -4101,6 +5514,9 @@ const SPAANS_WOORDEN = [
     "spanish": "parque",
     "acceptedAnswers": [
       "parque"
+    ],
+    "dutchAnswers": [
+      "park"
     ]
   },
   {
@@ -4110,6 +5526,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entrada",
     "acceptedAnswers": [
       "entrada"
+    ],
+    "dutchAnswers": [
+      "ingang"
     ]
   },
   {
@@ -4119,6 +5538,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salida",
     "acceptedAnswers": [
       "salida"
+    ],
+    "dutchAnswers": [
+      "uitgang"
     ]
   },
   {
@@ -4128,6 +5550,9 @@ const SPAANS_WOORDEN = [
     "spanish": "abierto",
     "acceptedAnswers": [
       "abierto"
+    ],
+    "dutchAnswers": [
+      "open"
     ]
   },
   {
@@ -4137,6 +5562,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cerrado",
     "acceptedAnswers": [
       "cerrado"
+    ],
+    "dutchAnswers": [
+      "gesloten"
     ]
   },
   {
@@ -4146,6 +5574,9 @@ const SPAANS_WOORDEN = [
     "spanish": "viaje",
     "acceptedAnswers": [
       "viaje"
+    ],
+    "dutchAnswers": [
+      "reis"
     ]
   },
   {
@@ -4154,6 +5585,9 @@ const SPAANS_WOORDEN = [
     "dutch": "plan",
     "spanish": "plan",
     "acceptedAnswers": [
+      "plan"
+    ],
+    "dutchAnswers": [
       "plan"
     ]
   },
@@ -4164,6 +5598,9 @@ const SPAANS_WOORDEN = [
     "spanish": "itinerario",
     "acceptedAnswers": [
       "itinerario"
+    ],
+    "dutchAnswers": [
+      "reisroute"
     ]
   },
   {
@@ -4173,6 +5610,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fecha",
     "acceptedAnswers": [
       "fecha"
+    ],
+    "dutchAnswers": [
+      "datum"
     ]
   },
   {
@@ -4182,6 +5622,9 @@ const SPAANS_WOORDEN = [
     "spanish": "reservar",
     "acceptedAnswers": [
       "reservar"
+    ],
+    "dutchAnswers": [
+      "boeken"
     ]
   },
   {
@@ -4191,6 +5634,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cancelar",
     "acceptedAnswers": [
       "cancelar"
+    ],
+    "dutchAnswers": [
+      "annuleren"
     ]
   },
   {
@@ -4200,6 +5646,9 @@ const SPAANS_WOORDEN = [
     "spanish": "confirmar",
     "acceptedAnswers": [
       "confirmar"
+    ],
+    "dutchAnswers": [
+      "bevestigen"
     ]
   },
   {
@@ -4209,6 +5658,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quedarse",
     "acceptedAnswers": [
       "quedarse"
+    ],
+    "dutchAnswers": [
+      "verblijven"
     ]
   },
   {
@@ -4218,6 +5670,9 @@ const SPAANS_WOORDEN = [
     "spanish": "visitar",
     "acceptedAnswers": [
       "visitar"
+    ],
+    "dutchAnswers": [
+      "bezoeken"
     ]
   },
   {
@@ -4227,6 +5682,10 @@ const SPAANS_WOORDEN = [
     "spanish": "recorrer",
     "acceptedAnswers": [
       "recorrer"
+    ],
+    "dutchAnswers": [
+      "rondreizen",
+      "afleggen"
     ]
   },
   {
@@ -4236,6 +5695,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salir",
     "acceptedAnswers": [
       "salir"
+    ],
+    "dutchAnswers": [
+      "vertrekken"
     ]
   },
   {
@@ -4245,6 +5707,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llegar",
     "acceptedAnswers": [
       "llegar"
+    ],
+    "dutchAnswers": [
+      "aankomen"
     ]
   },
   {
@@ -4254,6 +5719,9 @@ const SPAANS_WOORDEN = [
     "spanish": "duración",
     "acceptedAnswers": [
       "duración"
+    ],
+    "dutchAnswers": [
+      "duur"
     ]
   },
   {
@@ -4263,6 +5731,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ida",
     "acceptedAnswers": [
       "ida"
+    ],
+    "dutchAnswers": [
+      "heenreis"
     ]
   },
   {
@@ -4272,6 +5743,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vuelta",
     "acceptedAnswers": [
       "vuelta"
+    ],
+    "dutchAnswers": [
+      "terugreis"
     ]
   },
   {
@@ -4281,6 +5755,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ida y vuelta",
     "acceptedAnswers": [
       "ida y vuelta"
+    ],
+    "dutchAnswers": [
+      "retour"
     ]
   },
   {
@@ -4290,6 +5767,9 @@ const SPAANS_WOORDEN = [
     "spanish": "próximo",
     "acceptedAnswers": [
       "próximo"
+    ],
+    "dutchAnswers": [
+      "volgende"
     ]
   },
   {
@@ -4299,6 +5779,9 @@ const SPAANS_WOORDEN = [
     "spanish": "disponibilidad",
     "acceptedAnswers": [
       "disponibilidad"
+    ],
+    "dutchAnswers": [
+      "beschikbaarheid"
     ]
   },
   {
@@ -4308,6 +5791,9 @@ const SPAANS_WOORDEN = [
     "spanish": "temporada",
     "acceptedAnswers": [
       "temporada"
+    ],
+    "dutchAnswers": [
+      "seizoen"
     ]
   },
   {
@@ -4317,6 +5803,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recomendar",
     "acceptedAnswers": [
       "recomendar"
+    ],
+    "dutchAnswers": [
+      "aanraden"
     ]
   },
   {
@@ -4325,6 +5814,9 @@ const SPAANS_WOORDEN = [
     "dutch": "tour",
     "spanish": "tour",
     "acceptedAnswers": [
+      "tour"
+    ],
+    "dutchAnswers": [
       "tour"
     ]
   },
@@ -4335,6 +5827,9 @@ const SPAANS_WOORDEN = [
     "spanish": "excursión",
     "acceptedAnswers": [
       "excursión"
+    ],
+    "dutchAnswers": [
+      "excursie"
     ]
   },
   {
@@ -4344,6 +5839,9 @@ const SPAANS_WOORDEN = [
     "spanish": "guía",
     "acceptedAnswers": [
       "guía"
+    ],
+    "dutchAnswers": [
+      "gids"
     ]
   },
   {
@@ -4353,6 +5851,9 @@ const SPAANS_WOORDEN = [
     "spanish": "grupo",
     "acceptedAnswers": [
       "grupo"
+    ],
+    "dutchAnswers": [
+      "groep"
     ]
   },
   {
@@ -4362,6 +5863,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salida",
     "acceptedAnswers": [
       "salida"
+    ],
+    "dutchAnswers": [
+      "vertrek"
     ]
   },
   {
@@ -4371,6 +5875,9 @@ const SPAANS_WOORDEN = [
     "spanish": "regreso",
     "acceptedAnswers": [
       "regreso"
+    ],
+    "dutchAnswers": [
+      "terugkeer"
     ]
   },
   {
@@ -4380,6 +5887,9 @@ const SPAANS_WOORDEN = [
     "spanish": "incluye",
     "acceptedAnswers": [
       "incluye"
+    ],
+    "dutchAnswers": [
+      "het omvat"
     ]
   },
   {
@@ -4389,6 +5899,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entrada",
     "acceptedAnswers": [
       "entrada"
+    ],
+    "dutchAnswers": [
+      "toegangsbewijs"
     ]
   },
   {
@@ -4398,6 +5911,9 @@ const SPAANS_WOORDEN = [
     "spanish": "precio",
     "acceptedAnswers": [
       "precio"
+    ],
+    "dutchAnswers": [
+      "prijs"
     ]
   },
   {
@@ -4407,6 +5923,9 @@ const SPAANS_WOORDEN = [
     "spanish": "reservar",
     "acceptedAnswers": [
       "reservar"
+    ],
+    "dutchAnswers": [
+      "reserveren"
     ]
   },
   {
@@ -4416,6 +5935,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cancelación",
     "acceptedAnswers": [
       "cancelación"
+    ],
+    "dutchAnswers": [
+      "annulering"
     ]
   },
   {
@@ -4425,6 +5947,9 @@ const SPAANS_WOORDEN = [
     "spanish": "punto de encuentro",
     "acceptedAnswers": [
       "punto de encuentro"
+    ],
+    "dutchAnswers": [
+      "verzamelpunt"
     ]
   },
   {
@@ -4434,6 +5959,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recogida",
     "acceptedAnswers": [
       "recogida"
+    ],
+    "dutchAnswers": [
+      "ophalen"
     ]
   },
   {
@@ -4443,6 +5971,9 @@ const SPAANS_WOORDEN = [
     "spanish": "equipo",
     "acceptedAnswers": [
       "equipo"
+    ],
+    "dutchAnswers": [
+      "uitrusting"
     ]
   },
   {
@@ -4452,6 +5983,9 @@ const SPAANS_WOORDEN = [
     "spanish": "comida incluida",
     "acceptedAnswers": [
       "comida incluida"
+    ],
+    "dutchAnswers": [
+      "eten inbegrepen"
     ]
   },
   {
@@ -4461,6 +5995,9 @@ const SPAANS_WOORDEN = [
     "spanish": "seguro",
     "acceptedAnswers": [
       "seguro"
+    ],
+    "dutchAnswers": [
+      "verzekering"
     ]
   },
   {
@@ -4470,6 +6007,9 @@ const SPAANS_WOORDEN = [
     "spanish": "disponible",
     "acceptedAnswers": [
       "disponible"
+    ],
+    "dutchAnswers": [
+      "beschikbaar"
     ]
   },
   {
@@ -4479,6 +6019,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recomendación",
     "acceptedAnswers": [
       "recomendación"
+    ],
+    "dutchAnswers": [
+      "aanbeveling"
     ]
   },
   {
@@ -4488,6 +6031,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vale la pena",
     "acceptedAnswers": [
       "vale la pena"
+    ],
+    "dutchAnswers": [
+      "het is de moeite waard"
     ]
   },
   {
@@ -4497,6 +6043,9 @@ const SPAANS_WOORDEN = [
     "spanish": "por mi cuenta",
     "acceptedAnswers": [
       "por mi cuenta"
+    ],
+    "dutchAnswers": [
+      "op eigen houtje"
     ]
   },
   {
@@ -4506,6 +6055,9 @@ const SPAANS_WOORDEN = [
     "spanish": "montaña",
     "acceptedAnswers": [
       "montaña"
+    ],
+    "dutchAnswers": [
+      "berg"
     ]
   },
   {
@@ -4515,6 +6067,9 @@ const SPAANS_WOORDEN = [
     "spanish": "valle",
     "acceptedAnswers": [
       "valle"
+    ],
+    "dutchAnswers": [
+      "vallei"
     ]
   },
   {
@@ -4524,6 +6079,9 @@ const SPAANS_WOORDEN = [
     "spanish": "río",
     "acceptedAnswers": [
       "río"
+    ],
+    "dutchAnswers": [
+      "rivier"
     ]
   },
   {
@@ -4533,6 +6091,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lago",
     "acceptedAnswers": [
       "lago"
+    ],
+    "dutchAnswers": [
+      "meer"
     ]
   },
   {
@@ -4542,6 +6103,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mar",
     "acceptedAnswers": [
       "mar"
+    ],
+    "dutchAnswers": [
+      "zee"
     ]
   },
   {
@@ -4551,6 +6115,9 @@ const SPAANS_WOORDEN = [
     "spanish": "playa",
     "acceptedAnswers": [
       "playa"
+    ],
+    "dutchAnswers": [
+      "strand"
     ]
   },
   {
@@ -4560,6 +6127,9 @@ const SPAANS_WOORDEN = [
     "spanish": "bosque",
     "acceptedAnswers": [
       "bosque"
+    ],
+    "dutchAnswers": [
+      "bos"
     ]
   },
   {
@@ -4569,6 +6139,9 @@ const SPAANS_WOORDEN = [
     "spanish": "selva",
     "acceptedAnswers": [
       "selva"
+    ],
+    "dutchAnswers": [
+      "jungle"
     ]
   },
   {
@@ -4578,6 +6151,9 @@ const SPAANS_WOORDEN = [
     "spanish": "desierto",
     "acceptedAnswers": [
       "desierto"
+    ],
+    "dutchAnswers": [
+      "woestijn"
     ]
   },
   {
@@ -4587,6 +6163,9 @@ const SPAANS_WOORDEN = [
     "spanish": "isla",
     "acceptedAnswers": [
       "isla"
+    ],
+    "dutchAnswers": [
+      "eiland"
     ]
   },
   {
@@ -4596,6 +6175,9 @@ const SPAANS_WOORDEN = [
     "spanish": "volcán",
     "acceptedAnswers": [
       "volcán"
+    ],
+    "dutchAnswers": [
+      "vulkaan"
     ]
   },
   {
@@ -4605,6 +6187,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cascada",
     "acceptedAnswers": [
       "cascada"
+    ],
+    "dutchAnswers": [
+      "waterval"
     ]
   },
   {
@@ -4614,6 +6199,9 @@ const SPAANS_WOORDEN = [
     "spanish": "paisaje",
     "acceptedAnswers": [
       "paisaje"
+    ],
+    "dutchAnswers": [
+      "landschap"
     ]
   },
   {
@@ -4623,6 +6211,9 @@ const SPAANS_WOORDEN = [
     "spanish": "naturaleza",
     "acceptedAnswers": [
       "naturaleza"
+    ],
+    "dutchAnswers": [
+      "natuur"
     ]
   },
   {
@@ -4632,6 +6223,9 @@ const SPAANS_WOORDEN = [
     "spanish": "animal",
     "acceptedAnswers": [
       "animal"
+    ],
+    "dutchAnswers": [
+      "dier"
     ]
   },
   {
@@ -4641,6 +6235,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pájaro",
     "acceptedAnswers": [
       "pájaro"
+    ],
+    "dutchAnswers": [
+      "vogel"
     ]
   },
   {
@@ -4650,6 +6247,9 @@ const SPAANS_WOORDEN = [
     "spanish": "árbol",
     "acceptedAnswers": [
       "árbol"
+    ],
+    "dutchAnswers": [
+      "boom"
     ]
   },
   {
@@ -4659,6 +6259,9 @@ const SPAANS_WOORDEN = [
     "spanish": "flor",
     "acceptedAnswers": [
       "flor"
+    ],
+    "dutchAnswers": [
+      "bloem"
     ]
   },
   {
@@ -4668,6 +6271,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cielo",
     "acceptedAnswers": [
       "cielo"
+    ],
+    "dutchAnswers": [
+      "lucht"
     ]
   },
   {
@@ -4677,6 +6283,9 @@ const SPAANS_WOORDEN = [
     "spanish": "estrella",
     "acceptedAnswers": [
       "estrella"
+    ],
+    "dutchAnswers": [
+      "ster"
     ]
   },
   {
@@ -4686,6 +6295,9 @@ const SPAANS_WOORDEN = [
     "spanish": "caminar",
     "acceptedAnswers": [
       "caminar"
+    ],
+    "dutchAnswers": [
+      "wandelen"
     ]
   },
   {
@@ -4695,6 +6307,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sendero",
     "acceptedAnswers": [
       "sendero"
+    ],
+    "dutchAnswers": [
+      "wandelpad"
     ]
   },
   {
@@ -4704,6 +6319,10 @@ const SPAANS_WOORDEN = [
     "spanish": "caminata",
     "acceptedAnswers": [
       "caminata"
+    ],
+    "dutchAnswers": [
+      "wandeling",
+      "hike"
     ]
   },
   {
@@ -4713,6 +6332,10 @@ const SPAANS_WOORDEN = [
     "spanish": "subir",
     "acceptedAnswers": [
       "subir"
+    ],
+    "dutchAnswers": [
+      "stijgen",
+      "beklimmen"
     ]
   },
   {
@@ -4722,6 +6345,9 @@ const SPAANS_WOORDEN = [
     "spanish": "bajar",
     "acceptedAnswers": [
       "bajar"
+    ],
+    "dutchAnswers": [
+      "afdalen"
     ]
   },
   {
@@ -4731,6 +6357,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cima",
     "acceptedAnswers": [
       "cima"
+    ],
+    "dutchAnswers": [
+      "top"
     ]
   },
   {
@@ -4740,6 +6369,9 @@ const SPAANS_WOORDEN = [
     "spanish": "altura",
     "acceptedAnswers": [
       "altura"
+    ],
+    "dutchAnswers": [
+      "hoogte"
     ]
   },
   {
@@ -4749,6 +6381,9 @@ const SPAANS_WOORDEN = [
     "spanish": "altitud",
     "acceptedAnswers": [
       "altitud"
+    ],
+    "dutchAnswers": [
+      "hoogteligging"
     ]
   },
   {
@@ -4758,6 +6393,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pendiente",
     "acceptedAnswers": [
       "pendiente"
+    ],
+    "dutchAnswers": [
+      "helling"
     ]
   },
   {
@@ -4767,6 +6405,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mochila",
     "acceptedAnswers": [
       "mochila"
+    ],
+    "dutchAnswers": [
+      "rugzak"
     ]
   },
   {
@@ -4776,6 +6417,9 @@ const SPAANS_WOORDEN = [
     "spanish": "botas",
     "acceptedAnswers": [
       "botas"
+    ],
+    "dutchAnswers": [
+      "wandelschoenen"
     ]
   },
   {
@@ -4785,6 +6429,9 @@ const SPAANS_WOORDEN = [
     "spanish": "abrigo",
     "acceptedAnswers": [
       "abrigo"
+    ],
+    "dutchAnswers": [
+      "warme jas"
     ]
   },
   {
@@ -4794,6 +6441,9 @@ const SPAANS_WOORDEN = [
     "spanish": "agua",
     "acceptedAnswers": [
       "agua"
+    ],
+    "dutchAnswers": [
+      "water"
     ]
   },
   {
@@ -4803,6 +6453,9 @@ const SPAANS_WOORDEN = [
     "spanish": "protector solar",
     "acceptedAnswers": [
       "protector solar"
+    ],
+    "dutchAnswers": [
+      "zonnebrand"
     ]
   },
   {
@@ -4812,6 +6465,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mapa",
     "acceptedAnswers": [
       "mapa"
+    ],
+    "dutchAnswers": [
+      "kaart"
     ]
   },
   {
@@ -4821,6 +6477,9 @@ const SPAANS_WOORDEN = [
     "spanish": "perderse",
     "acceptedAnswers": [
       "perderse"
+    ],
+    "dutchAnswers": [
+      "verdwalen"
     ]
   },
   {
@@ -4830,6 +6489,9 @@ const SPAANS_WOORDEN = [
     "spanish": "guía",
     "acceptedAnswers": [
       "guía"
+    ],
+    "dutchAnswers": [
+      "gids"
     ]
   },
   {
@@ -4839,6 +6501,9 @@ const SPAANS_WOORDEN = [
     "spanish": "descanso",
     "acceptedAnswers": [
       "descanso"
+    ],
+    "dutchAnswers": [
+      "pauze"
     ]
   },
   {
@@ -4848,6 +6513,9 @@ const SPAANS_WOORDEN = [
     "spanish": "respirar",
     "acceptedAnswers": [
       "respirar"
+    ],
+    "dutchAnswers": [
+      "ademen"
     ]
   },
   {
@@ -4857,6 +6525,9 @@ const SPAANS_WOORDEN = [
     "spanish": "agotado",
     "acceptedAnswers": [
       "agotado"
+    ],
+    "dutchAnswers": [
+      "uitgeput"
     ]
   },
   {
@@ -4866,6 +6537,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tiempo",
     "acceptedAnswers": [
       "tiempo"
+    ],
+    "dutchAnswers": [
+      "weer"
     ]
   },
   {
@@ -4875,6 +6549,9 @@ const SPAANS_WOORDEN = [
     "spanish": "clima",
     "acceptedAnswers": [
       "clima"
+    ],
+    "dutchAnswers": [
+      "klimaat"
     ]
   },
   {
@@ -4884,6 +6561,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sol",
     "acceptedAnswers": [
       "sol"
+    ],
+    "dutchAnswers": [
+      "zon"
     ]
   },
   {
@@ -4893,6 +6573,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lluvia",
     "acceptedAnswers": [
       "lluvia"
+    ],
+    "dutchAnswers": [
+      "regen"
     ]
   },
   {
@@ -4902,6 +6585,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llover",
     "acceptedAnswers": [
       "llover"
+    ],
+    "dutchAnswers": [
+      "regenen"
     ]
   },
   {
@@ -4911,6 +6597,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nube",
     "acceptedAnswers": [
       "nube"
+    ],
+    "dutchAnswers": [
+      "wolk"
     ]
   },
   {
@@ -4920,6 +6609,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nublado",
     "acceptedAnswers": [
       "nublado"
+    ],
+    "dutchAnswers": [
+      "bewolkt"
     ]
   },
   {
@@ -4929,6 +6621,9 @@ const SPAANS_WOORDEN = [
     "spanish": "viento",
     "acceptedAnswers": [
       "viento"
+    ],
+    "dutchAnswers": [
+      "wind"
     ]
   },
   {
@@ -4938,6 +6633,9 @@ const SPAANS_WOORDEN = [
     "spanish": "calor",
     "acceptedAnswers": [
       "calor"
+    ],
+    "dutchAnswers": [
+      "hitte"
     ]
   },
   {
@@ -4947,6 +6645,9 @@ const SPAANS_WOORDEN = [
     "spanish": "frío",
     "acceptedAnswers": [
       "frío"
+    ],
+    "dutchAnswers": [
+      "kou"
     ]
   },
   {
@@ -4956,6 +6657,9 @@ const SPAANS_WOORDEN = [
     "spanish": "temperatura",
     "acceptedAnswers": [
       "temperatura"
+    ],
+    "dutchAnswers": [
+      "temperatuur"
     ]
   },
   {
@@ -4965,6 +6669,9 @@ const SPAANS_WOORDEN = [
     "spanish": "grado",
     "acceptedAnswers": [
       "grado"
+    ],
+    "dutchAnswers": [
+      "graad"
     ]
   },
   {
@@ -4974,6 +6681,10 @@ const SPAANS_WOORDEN = [
     "spanish": "tormenta",
     "acceptedAnswers": [
       "tormenta"
+    ],
+    "dutchAnswers": [
+      "storm",
+      "onweer"
     ]
   },
   {
@@ -4983,6 +6694,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nieve",
     "acceptedAnswers": [
       "nieve"
+    ],
+    "dutchAnswers": [
+      "sneeuw"
     ]
   },
   {
@@ -4992,6 +6706,9 @@ const SPAANS_WOORDEN = [
     "spanish": "nevar",
     "acceptedAnswers": [
       "nevar"
+    ],
+    "dutchAnswers": [
+      "sneeuwen"
     ]
   },
   {
@@ -5001,6 +6718,9 @@ const SPAANS_WOORDEN = [
     "spanish": "seco",
     "acceptedAnswers": [
       "seco"
+    ],
+    "dutchAnswers": [
+      "droog"
     ]
   },
   {
@@ -5010,6 +6730,9 @@ const SPAANS_WOORDEN = [
     "spanish": "húmedo",
     "acceptedAnswers": [
       "húmedo"
+    ],
+    "dutchAnswers": [
+      "vochtig"
     ]
   },
   {
@@ -5019,6 +6742,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pronóstico",
     "acceptedAnswers": [
       "pronóstico"
+    ],
+    "dutchAnswers": [
+      "weersverwachting"
     ]
   },
   {
@@ -5028,6 +6754,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hace calor",
     "acceptedAnswers": [
       "hace calor"
+    ],
+    "dutchAnswers": [
+      "het is warm"
     ]
   },
   {
@@ -5037,6 +6766,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hace frío",
     "acceptedAnswers": [
       "hace frío"
+    ],
+    "dutchAnswers": [
+      "het is koud"
     ]
   },
   {
@@ -5046,6 +6778,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salud",
     "acceptedAnswers": [
       "salud"
+    ],
+    "dutchAnswers": [
+      "gezondheid"
     ]
   },
   {
@@ -5055,6 +6790,9 @@ const SPAANS_WOORDEN = [
     "spanish": "médico",
     "acceptedAnswers": [
       "médico"
+    ],
+    "dutchAnswers": [
+      "arts"
     ]
   },
   {
@@ -5064,6 +6802,9 @@ const SPAANS_WOORDEN = [
     "spanish": "enfermero",
     "acceptedAnswers": [
       "enfermero"
+    ],
+    "dutchAnswers": [
+      "verpleegkundige"
     ]
   },
   {
@@ -5073,6 +6814,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hospital",
     "acceptedAnswers": [
       "hospital"
+    ],
+    "dutchAnswers": [
+      "ziekenhuis"
     ]
   },
   {
@@ -5082,6 +6826,9 @@ const SPAANS_WOORDEN = [
     "spanish": "farmacia",
     "acceptedAnswers": [
       "farmacia"
+    ],
+    "dutchAnswers": [
+      "apotheek"
     ]
   },
   {
@@ -5091,6 +6838,9 @@ const SPAANS_WOORDEN = [
     "spanish": "medicina",
     "acceptedAnswers": [
       "medicina"
+    ],
+    "dutchAnswers": [
+      "medicijn"
     ]
   },
   {
@@ -5100,6 +6850,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dolor",
     "acceptedAnswers": [
       "dolor"
+    ],
+    "dutchAnswers": [
+      "pijn"
     ]
   },
   {
@@ -5109,6 +6862,9 @@ const SPAANS_WOORDEN = [
     "spanish": "enfermo",
     "acceptedAnswers": [
       "enfermo"
+    ],
+    "dutchAnswers": [
+      "ziek"
     ]
   },
   {
@@ -5118,6 +6874,9 @@ const SPAANS_WOORDEN = [
     "spanish": "herida",
     "acceptedAnswers": [
       "herida"
+    ],
+    "dutchAnswers": [
+      "wond"
     ]
   },
   {
@@ -5127,6 +6886,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fiebre",
     "acceptedAnswers": [
       "fiebre"
+    ],
+    "dutchAnswers": [
+      "koorts"
     ]
   },
   {
@@ -5136,6 +6898,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tos",
     "acceptedAnswers": [
       "tos"
+    ],
+    "dutchAnswers": [
+      "hoest"
     ]
   },
   {
@@ -5145,6 +6910,9 @@ const SPAANS_WOORDEN = [
     "spanish": "resfriado",
     "acceptedAnswers": [
       "resfriado"
+    ],
+    "dutchAnswers": [
+      "verkoudheid"
     ]
   },
   {
@@ -5154,6 +6922,9 @@ const SPAANS_WOORDEN = [
     "spanish": "alergia",
     "acceptedAnswers": [
       "alergia"
+    ],
+    "dutchAnswers": [
+      "allergie"
     ]
   },
   {
@@ -5163,6 +6934,9 @@ const SPAANS_WOORDEN = [
     "spanish": "estómago",
     "acceptedAnswers": [
       "estómago"
+    ],
+    "dutchAnswers": [
+      "maag"
     ]
   },
   {
@@ -5172,6 +6946,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cabeza",
     "acceptedAnswers": [
       "cabeza"
+    ],
+    "dutchAnswers": [
+      "hoofd"
     ]
   },
   {
@@ -5181,6 +6958,9 @@ const SPAANS_WOORDEN = [
     "spanish": "espalda",
     "acceptedAnswers": [
       "espalda"
+    ],
+    "dutchAnswers": [
+      "rug"
     ]
   },
   {
@@ -5190,6 +6970,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pie",
     "acceptedAnswers": [
       "pie"
+    ],
+    "dutchAnswers": [
+      "voet"
     ]
   },
   {
@@ -5199,6 +6982,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mano",
     "acceptedAnswers": [
       "mano"
+    ],
+    "dutchAnswers": [
+      "hand"
     ]
   },
   {
@@ -5208,6 +6994,9 @@ const SPAANS_WOORDEN = [
     "spanish": "descansar",
     "acceptedAnswers": [
       "descansar"
+    ],
+    "dutchAnswers": [
+      "rusten"
     ]
   },
   {
@@ -5217,6 +7006,9 @@ const SPAANS_WOORDEN = [
     "spanish": "me duele...",
     "acceptedAnswers": [
       "me duele..."
+    ],
+    "dutchAnswers": [
+      "... doet pijn"
     ]
   },
   {
@@ -5226,6 +7018,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mareado",
     "acceptedAnswers": [
       "mareado"
+    ],
+    "dutchAnswers": [
+      "duizelig"
     ]
   },
   {
@@ -5235,6 +7030,9 @@ const SPAANS_WOORDEN = [
     "spanish": "náuseas",
     "acceptedAnswers": [
       "náuseas"
+    ],
+    "dutchAnswers": [
+      "misselijkheid"
     ]
   },
   {
@@ -5244,6 +7042,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vomitar",
     "acceptedAnswers": [
       "vomitar"
+    ],
+    "dutchAnswers": [
+      "overgeven"
     ]
   },
   {
@@ -5253,6 +7054,9 @@ const SPAANS_WOORDEN = [
     "spanish": "diarrea",
     "acceptedAnswers": [
       "diarrea"
+    ],
+    "dutchAnswers": [
+      "diarree"
     ]
   },
   {
@@ -5262,6 +7066,9 @@ const SPAANS_WOORDEN = [
     "spanish": "deshidratado",
     "acceptedAnswers": [
       "deshidratado"
+    ],
+    "dutchAnswers": [
+      "uitgedroogd"
     ]
   },
   {
@@ -5271,6 +7078,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mal de altura",
     "acceptedAnswers": [
       "mal de altura"
+    ],
+    "dutchAnswers": [
+      "hoogteziekte"
     ]
   },
   {
@@ -5280,6 +7090,9 @@ const SPAANS_WOORDEN = [
     "spanish": "respirar",
     "acceptedAnswers": [
       "respirar"
+    ],
+    "dutchAnswers": [
+      "ademen"
     ]
   },
   {
@@ -5289,6 +7102,9 @@ const SPAANS_WOORDEN = [
     "spanish": "oxígeno",
     "acceptedAnswers": [
       "oxígeno"
+    ],
+    "dutchAnswers": [
+      "zuurstof"
     ]
   },
   {
@@ -5298,6 +7114,9 @@ const SPAANS_WOORDEN = [
     "spanish": "emergencia",
     "acceptedAnswers": [
       "emergencia"
+    ],
+    "dutchAnswers": [
+      "noodgeval"
     ]
   },
   {
@@ -5307,6 +7126,9 @@ const SPAANS_WOORDEN = [
     "spanish": "urgente",
     "acceptedAnswers": [
       "urgente"
+    ],
+    "dutchAnswers": [
+      "dringend"
     ]
   },
   {
@@ -5316,6 +7138,9 @@ const SPAANS_WOORDEN = [
     "spanish": "seguro de viaje",
     "acceptedAnswers": [
       "seguro de viaje"
+    ],
+    "dutchAnswers": [
+      "reisverzekering"
     ]
   },
   {
@@ -5325,6 +7150,9 @@ const SPAANS_WOORDEN = [
     "spanish": "receta",
     "acceptedAnswers": [
       "receta"
+    ],
+    "dutchAnswers": [
+      "recept"
     ]
   },
   {
@@ -5334,6 +7162,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pastilla",
     "acceptedAnswers": [
       "pastilla"
+    ],
+    "dutchAnswers": [
+      "pil"
     ]
   },
   {
@@ -5343,6 +7174,9 @@ const SPAANS_WOORDEN = [
     "spanish": "venda",
     "acceptedAnswers": [
       "venda"
+    ],
+    "dutchAnswers": [
+      "verband"
     ]
   },
   {
@@ -5352,6 +7186,9 @@ const SPAANS_WOORDEN = [
     "spanish": "desinfectante",
     "acceptedAnswers": [
       "desinfectante"
+    ],
+    "dutchAnswers": [
+      "ontsmettingsmiddel"
     ]
   },
   {
@@ -5361,6 +7198,10 @@ const SPAANS_WOORDEN = [
     "spanish": "picadura",
     "acceptedAnswers": [
       "picadura"
+    ],
+    "dutchAnswers": [
+      "beet",
+      "steek"
     ]
   },
   {
@@ -5370,6 +7211,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quemadura",
     "acceptedAnswers": [
       "quemadura"
+    ],
+    "dutchAnswers": [
+      "brandwond"
     ]
   },
   {
@@ -5379,6 +7223,9 @@ const SPAANS_WOORDEN = [
     "spanish": "me siento mal",
     "acceptedAnswers": [
       "me siento mal"
+    ],
+    "dutchAnswers": [
+      "ik voel me niet goed"
     ]
   },
   {
@@ -5388,6 +7235,9 @@ const SPAANS_WOORDEN = [
     "spanish": "necesito un médico",
     "acceptedAnswers": [
       "necesito un médico"
+    ],
+    "dutchAnswers": [
+      "ik heb een arts nodig"
     ]
   },
   {
@@ -5397,6 +7247,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿es grave?",
     "acceptedAnswers": [
       "¿es grave?"
+    ],
+    "dutchAnswers": [
+      "is het ernstig?"
     ]
   },
   {
@@ -5406,6 +7259,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ayuda",
     "acceptedAnswers": [
       "ayuda"
+    ],
+    "dutchAnswers": [
+      "hulp"
     ]
   },
   {
@@ -5415,6 +7271,9 @@ const SPAANS_WOORDEN = [
     "spanish": "policía",
     "acceptedAnswers": [
       "policía"
+    ],
+    "dutchAnswers": [
+      "politie"
     ]
   },
   {
@@ -5424,6 +7283,9 @@ const SPAANS_WOORDEN = [
     "spanish": "emergencia",
     "acceptedAnswers": [
       "emergencia"
+    ],
+    "dutchAnswers": [
+      "noodgeval"
     ]
   },
   {
@@ -5433,6 +7295,9 @@ const SPAANS_WOORDEN = [
     "spanish": "peligro",
     "acceptedAnswers": [
       "peligro"
+    ],
+    "dutchAnswers": [
+      "gevaar"
     ]
   },
   {
@@ -5442,6 +7307,9 @@ const SPAANS_WOORDEN = [
     "spanish": "seguro",
     "acceptedAnswers": [
       "seguro"
+    ],
+    "dutchAnswers": [
+      "veilig"
     ]
   },
   {
@@ -5451,6 +7319,9 @@ const SPAANS_WOORDEN = [
     "spanish": "robar",
     "acceptedAnswers": [
       "robar"
+    ],
+    "dutchAnswers": [
+      "stelen"
     ]
   },
   {
@@ -5460,6 +7331,9 @@ const SPAANS_WOORDEN = [
     "spanish": "robo",
     "acceptedAnswers": [
       "robo"
+    ],
+    "dutchAnswers": [
+      "diefstal"
     ]
   },
   {
@@ -5469,6 +7343,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ladrón",
     "acceptedAnswers": [
       "ladrón"
+    ],
+    "dutchAnswers": [
+      "dief"
     ]
   },
   {
@@ -5478,6 +7355,9 @@ const SPAANS_WOORDEN = [
     "spanish": "perder",
     "acceptedAnswers": [
       "perder"
+    ],
+    "dutchAnswers": [
+      "verliezen"
     ]
   },
   {
@@ -5487,6 +7367,10 @@ const SPAANS_WOORDEN = [
     "spanish": "perdido",
     "acceptedAnswers": [
       "perdido"
+    ],
+    "dutchAnswers": [
+      "kwijt",
+      "verdwaald"
     ]
   },
   {
@@ -5496,6 +7380,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pasaporte",
     "acceptedAnswers": [
       "pasaporte"
+    ],
+    "dutchAnswers": [
+      "paspoort"
     ]
   },
   {
@@ -5505,6 +7392,9 @@ const SPAANS_WOORDEN = [
     "spanish": "teléfono",
     "acceptedAnswers": [
       "teléfono"
+    ],
+    "dutchAnswers": [
+      "telefoon"
     ]
   },
   {
@@ -5514,6 +7404,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cartera",
     "acceptedAnswers": [
       "cartera"
+    ],
+    "dutchAnswers": [
+      "portemonnee"
     ]
   },
   {
@@ -5523,6 +7416,9 @@ const SPAANS_WOORDEN = [
     "spanish": "documento",
     "acceptedAnswers": [
       "documento"
+    ],
+    "dutchAnswers": [
+      "document"
     ]
   },
   {
@@ -5532,6 +7428,9 @@ const SPAANS_WOORDEN = [
     "spanish": "denunciar",
     "acceptedAnswers": [
       "denunciar"
+    ],
+    "dutchAnswers": [
+      "aangifte doen"
     ]
   },
   {
@@ -5541,6 +7440,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuidado",
     "acceptedAnswers": [
       "cuidado"
+    ],
+    "dutchAnswers": [
+      "voorzichtig"
     ]
   },
   {
@@ -5550,6 +7452,9 @@ const SPAANS_WOORDEN = [
     "spanish": "déjame en paz",
     "acceptedAnswers": [
       "déjame en paz"
+    ],
+    "dutchAnswers": [
+      "laat me met rust"
     ]
   },
   {
@@ -5559,6 +7464,9 @@ const SPAANS_WOORDEN = [
     "spanish": "no me toque",
     "acceptedAnswers": [
       "no me toque"
+    ],
+    "dutchAnswers": [
+      "raak me niet aan"
     ]
   },
   {
@@ -5568,6 +7476,9 @@ const SPAANS_WOORDEN = [
     "spanish": "necesito ayuda",
     "acceptedAnswers": [
       "necesito ayuda"
+    ],
+    "dutchAnswers": [
+      "ik heb hulp nodig"
     ]
   },
   {
@@ -5577,6 +7488,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llame a la policía",
     "acceptedAnswers": [
       "llame a la policía"
+    ],
+    "dutchAnswers": [
+      "bel de politie"
     ]
   },
   {
@@ -5586,6 +7500,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dinero",
     "acceptedAnswers": [
       "dinero"
+    ],
+    "dutchAnswers": [
+      "geld"
     ]
   },
   {
@@ -5595,6 +7512,9 @@ const SPAANS_WOORDEN = [
     "spanish": "boliviano",
     "acceptedAnswers": [
       "boliviano"
+    ],
+    "dutchAnswers": [
+      "Boliviaanse boliviano"
     ]
   },
   {
@@ -5603,6 +7523,9 @@ const SPAANS_WOORDEN = [
     "dutch": "peso",
     "spanish": "peso",
     "acceptedAnswers": [
+      "peso"
+    ],
+    "dutchAnswers": [
       "peso"
     ]
   },
@@ -5613,6 +7536,9 @@ const SPAANS_WOORDEN = [
     "spanish": "efectivo",
     "acceptedAnswers": [
       "efectivo"
+    ],
+    "dutchAnswers": [
+      "contant geld"
     ]
   },
   {
@@ -5622,6 +7548,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tarjeta",
     "acceptedAnswers": [
       "tarjeta"
+    ],
+    "dutchAnswers": [
+      "betaalkaart"
     ]
   },
   {
@@ -5631,6 +7560,9 @@ const SPAANS_WOORDEN = [
     "spanish": "banco",
     "acceptedAnswers": [
       "banco"
+    ],
+    "dutchAnswers": [
+      "bank"
     ]
   },
   {
@@ -5640,6 +7572,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cajero",
     "acceptedAnswers": [
       "cajero"
+    ],
+    "dutchAnswers": [
+      "geldautomaat"
     ]
   },
   {
@@ -5649,6 +7584,9 @@ const SPAANS_WOORDEN = [
     "spanish": "retirar",
     "acceptedAnswers": [
       "retirar"
+    ],
+    "dutchAnswers": [
+      "opnemen"
     ]
   },
   {
@@ -5658,6 +7596,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cambiar dinero",
     "acceptedAnswers": [
       "cambiar dinero"
+    ],
+    "dutchAnswers": [
+      "geld wisselen"
     ]
   },
   {
@@ -5667,6 +7608,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tipo de cambio",
     "acceptedAnswers": [
       "tipo de cambio"
+    ],
+    "dutchAnswers": [
+      "wisselkoers"
     ]
   },
   {
@@ -5676,6 +7620,10 @@ const SPAANS_WOORDEN = [
     "spanish": "comisión",
     "acceptedAnswers": [
       "comisión"
+    ],
+    "dutchAnswers": [
+      "commissie",
+      "kosten"
     ]
   },
   {
@@ -5685,6 +7633,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pagar",
     "acceptedAnswers": [
       "pagar"
+    ],
+    "dutchAnswers": [
+      "betalen"
     ]
   },
   {
@@ -5694,6 +7645,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cobrar",
     "acceptedAnswers": [
       "cobrar"
+    ],
+    "dutchAnswers": [
+      "in rekening brengen"
     ]
   },
   {
@@ -5703,6 +7657,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cuenta",
     "acceptedAnswers": [
       "cuenta"
+    ],
+    "dutchAnswers": [
+      "rekening"
     ]
   },
   {
@@ -5711,6 +7668,9 @@ const SPAANS_WOORDEN = [
     "dutch": "saldo",
     "spanish": "saldo",
     "acceptedAnswers": [
+      "saldo"
+    ],
+    "dutchAnswers": [
       "saldo"
     ]
   },
@@ -5721,6 +7681,10 @@ const SPAANS_WOORDEN = [
     "spanish": "moneda",
     "acceptedAnswers": [
       "moneda"
+    ],
+    "dutchAnswers": [
+      "munt",
+      "valuta"
     ]
   },
   {
@@ -5730,6 +7694,9 @@ const SPAANS_WOORDEN = [
     "spanish": "billete",
     "acceptedAnswers": [
       "billete"
+    ],
+    "dutchAnswers": [
+      "bankbiljet"
     ]
   },
   {
@@ -5739,6 +7706,9 @@ const SPAANS_WOORDEN = [
     "spanish": "moneda pequeña",
     "acceptedAnswers": [
       "moneda pequeña"
+    ],
+    "dutchAnswers": [
+      "kleingeld"
     ]
   },
   {
@@ -5748,6 +7718,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recibo",
     "acceptedAnswers": [
       "recibo"
+    ],
+    "dutchAnswers": [
+      "bonnetje"
     ]
   },
   {
@@ -5757,6 +7730,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿aceptan tarjeta?",
     "acceptedAnswers": [
       "¿aceptan tarjeta?"
+    ],
+    "dutchAnswers": [
+      "accepteren jullie kaart?"
     ]
   },
   {
@@ -5766,6 +7742,9 @@ const SPAANS_WOORDEN = [
     "spanish": "teléfono",
     "acceptedAnswers": [
       "teléfono"
+    ],
+    "dutchAnswers": [
+      "telefoon"
     ]
   },
   {
@@ -5775,6 +7754,9 @@ const SPAANS_WOORDEN = [
     "spanish": "móvil",
     "acceptedAnswers": [
       "móvil"
+    ],
+    "dutchAnswers": [
+      "mobiel"
     ]
   },
   {
@@ -5783,6 +7765,9 @@ const SPAANS_WOORDEN = [
     "dutch": "internet",
     "spanish": "internet",
     "acceptedAnswers": [
+      "internet"
+    ],
+    "dutchAnswers": [
       "internet"
     ]
   },
@@ -5793,6 +7778,9 @@ const SPAANS_WOORDEN = [
     "spanish": "wifi",
     "acceptedAnswers": [
       "wifi"
+    ],
+    "dutchAnswers": [
+      "wifi"
     ]
   },
   {
@@ -5802,6 +7790,9 @@ const SPAANS_WOORDEN = [
     "spanish": "contraseña",
     "acceptedAnswers": [
       "contraseña"
+    ],
+    "dutchAnswers": [
+      "wachtwoord"
     ]
   },
   {
@@ -5811,6 +7802,10 @@ const SPAANS_WOORDEN = [
     "spanish": "señal",
     "acceptedAnswers": [
       "señal"
+    ],
+    "dutchAnswers": [
+      "bereik",
+      "signaal"
     ]
   },
   {
@@ -5820,6 +7815,9 @@ const SPAANS_WOORDEN = [
     "spanish": "datos",
     "acceptedAnswers": [
       "datos"
+    ],
+    "dutchAnswers": [
+      "mobiele data"
     ]
   },
   {
@@ -5829,6 +7827,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tarjeta SIM",
     "acceptedAnswers": [
       "tarjeta SIM"
+    ],
+    "dutchAnswers": [
+      "simkaart"
     ]
   },
   {
@@ -5838,6 +7839,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cargador",
     "acceptedAnswers": [
       "cargador"
+    ],
+    "dutchAnswers": [
+      "oplader"
     ]
   },
   {
@@ -5847,6 +7851,9 @@ const SPAANS_WOORDEN = [
     "spanish": "batería",
     "acceptedAnswers": [
       "batería"
+    ],
+    "dutchAnswers": [
+      "batterij"
     ]
   },
   {
@@ -5856,6 +7863,9 @@ const SPAANS_WOORDEN = [
     "spanish": "enchufe",
     "acceptedAnswers": [
       "enchufe"
+    ],
+    "dutchAnswers": [
+      "stopcontact"
     ]
   },
   {
@@ -5865,6 +7875,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llamar",
     "acceptedAnswers": [
       "llamar"
+    ],
+    "dutchAnswers": [
+      "bellen"
     ]
   },
   {
@@ -5874,6 +7887,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mensaje",
     "acceptedAnswers": [
       "mensaje"
+    ],
+    "dutchAnswers": [
+      "bericht"
     ]
   },
   {
@@ -5883,6 +7899,9 @@ const SPAANS_WOORDEN = [
     "spanish": "enviar",
     "acceptedAnswers": [
       "enviar"
+    ],
+    "dutchAnswers": [
+      "sturen"
     ]
   },
   {
@@ -5892,6 +7911,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recibir",
     "acceptedAnswers": [
       "recibir"
+    ],
+    "dutchAnswers": [
+      "ontvangen"
     ]
   },
   {
@@ -5901,6 +7923,9 @@ const SPAANS_WOORDEN = [
     "spanish": "conectarse",
     "acceptedAnswers": [
       "conectarse"
+    ],
+    "dutchAnswers": [
+      "verbinden"
     ]
   },
   {
@@ -5910,6 +7935,9 @@ const SPAANS_WOORDEN = [
     "spanish": "funcionar",
     "acceptedAnswers": [
       "funcionar"
+    ],
+    "dutchAnswers": [
+      "werken"
     ]
   },
   {
@@ -5919,6 +7947,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sin conexión",
     "acceptedAnswers": [
       "sin conexión"
+    ],
+    "dutchAnswers": [
+      "offline"
     ]
   },
   {
@@ -5928,6 +7959,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ubicación",
     "acceptedAnswers": [
       "ubicación"
+    ],
+    "dutchAnswers": [
+      "locatie"
     ]
   },
   {
@@ -5937,6 +7971,9 @@ const SPAANS_WOORDEN = [
     "spanish": "compartir ubicación",
     "acceptedAnswers": [
       "compartir ubicación"
+    ],
+    "dutchAnswers": [
+      "locatie delen"
     ]
   },
   {
@@ -5946,6 +7983,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿qué tal?",
     "acceptedAnswers": [
       "¿qué tal?"
+    ],
+    "dutchAnswers": [
+      "hoe gaat het?"
     ]
   },
   {
@@ -5955,6 +7995,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cómo te va?",
     "acceptedAnswers": [
       "¿cómo te va?"
+    ],
+    "dutchAnswers": [
+      "hoe gaat het met je?"
     ]
   },
   {
@@ -5964,6 +8007,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿qué haces?",
     "acceptedAnswers": [
       "¿qué haces?"
+    ],
+    "dutchAnswers": [
+      "wat doe je?"
     ]
   },
   {
@@ -5973,6 +8019,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿qué planes tienes?",
     "acceptedAnswers": [
       "¿qué planes tienes?"
+    ],
+    "dutchAnswers": [
+      "wat zijn je plannen?"
     ]
   },
   {
@@ -5982,6 +8031,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿te gusta...?",
     "acceptedAnswers": [
       "¿te gusta...?"
+    ],
+    "dutchAnswers": [
+      "vind je ... leuk?"
     ]
   },
   {
@@ -5991,6 +8043,9 @@ const SPAANS_WOORDEN = [
     "spanish": "creo que",
     "acceptedAnswers": [
       "creo que"
+    ],
+    "dutchAnswers": [
+      "ik denk dat"
     ]
   },
   {
@@ -6000,6 +8055,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pienso que",
     "acceptedAnswers": [
       "pienso que"
+    ],
+    "dutchAnswers": [
+      "ik denk dat"
     ]
   },
   {
@@ -6009,6 +8067,9 @@ const SPAANS_WOORDEN = [
     "spanish": "para mí",
     "acceptedAnswers": [
       "para mí"
+    ],
+    "dutchAnswers": [
+      "voor mij"
     ]
   },
   {
@@ -6018,6 +8079,9 @@ const SPAANS_WOORDEN = [
     "spanish": "en mi opinión",
     "acceptedAnswers": [
       "en mi opinión"
+    ],
+    "dutchAnswers": [
+      "naar mijn mening"
     ]
   },
   {
@@ -6027,6 +8091,9 @@ const SPAANS_WOORDEN = [
     "spanish": "depende",
     "acceptedAnswers": [
       "depende"
+    ],
+    "dutchAnswers": [
+      "hangt ervan af"
     ]
   },
   {
@@ -6036,6 +8103,9 @@ const SPAANS_WOORDEN = [
     "spanish": "estoy de acuerdo",
     "acceptedAnswers": [
       "estoy de acuerdo"
+    ],
+    "dutchAnswers": [
+      "ik ben het eens"
     ]
   },
   {
@@ -6045,6 +8115,9 @@ const SPAANS_WOORDEN = [
     "spanish": "no estoy de acuerdo",
     "acceptedAnswers": [
       "no estoy de acuerdo"
+    ],
+    "dutchAnswers": [
+      "ik ben het niet eens"
     ]
   },
   {
@@ -6054,6 +8127,9 @@ const SPAANS_WOORDEN = [
     "spanish": "exacto",
     "acceptedAnswers": [
       "exacto"
+    ],
+    "dutchAnswers": [
+      "precies"
     ]
   },
   {
@@ -6063,6 +8139,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entiendo",
     "acceptedAnswers": [
       "entiendo"
+    ],
+    "dutchAnswers": [
+      "ik begrijp het"
     ]
   },
   {
@@ -6072,6 +8151,9 @@ const SPAANS_WOORDEN = [
     "spanish": "no entiendo",
     "acceptedAnswers": [
       "no entiendo"
+    ],
+    "dutchAnswers": [
+      "ik begrijp het niet"
     ]
   },
   {
@@ -6081,6 +8163,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿puedes repetir?",
     "acceptedAnswers": [
       "¿puedes repetir?"
+    ],
+    "dutchAnswers": [
+      "kun je het herhalen?"
     ]
   },
   {
@@ -6090,6 +8175,9 @@ const SPAANS_WOORDEN = [
     "spanish": "más despacio",
     "acceptedAnswers": [
       "más despacio"
+    ],
+    "dutchAnswers": [
+      "langzamer"
     ]
   },
   {
@@ -6099,6 +8187,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cómo se dice...?",
     "acceptedAnswers": [
       "¿cómo se dice...?"
+    ],
+    "dutchAnswers": [
+      "hoe zeg je...?"
     ]
   },
   {
@@ -6108,6 +8199,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿qué quieres decir?",
     "acceptedAnswers": [
       "¿qué quieres decir?"
+    ],
+    "dutchAnswers": [
+      "wat bedoel je?"
     ]
   },
   {
@@ -6117,6 +8211,9 @@ const SPAANS_WOORDEN = [
     "spanish": "buena pregunta",
     "acceptedAnswers": [
       "buena pregunta"
+    ],
+    "dutchAnswers": [
+      "goede vraag"
     ]
   },
   {
@@ -6125,6 +8222,9 @@ const SPAANS_WOORDEN = [
     "dutch": "bar",
     "spanish": "bar",
     "acceptedAnswers": [
+      "bar"
+    ],
+    "dutchAnswers": [
       "bar"
     ]
   },
@@ -6135,6 +8235,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fiesta",
     "acceptedAnswers": [
       "fiesta"
+    ],
+    "dutchAnswers": [
+      "feest"
     ]
   },
   {
@@ -6144,6 +8247,9 @@ const SPAANS_WOORDEN = [
     "spanish": "discoteca",
     "acceptedAnswers": [
       "discoteca"
+    ],
+    "dutchAnswers": [
+      "club"
     ]
   },
   {
@@ -6153,6 +8259,9 @@ const SPAANS_WOORDEN = [
     "spanish": "música",
     "acceptedAnswers": [
       "música"
+    ],
+    "dutchAnswers": [
+      "muziek"
     ]
   },
   {
@@ -6162,6 +8271,9 @@ const SPAANS_WOORDEN = [
     "spanish": "bailar",
     "acceptedAnswers": [
       "bailar"
+    ],
+    "dutchAnswers": [
+      "dansen"
     ]
   },
   {
@@ -6171,6 +8283,9 @@ const SPAANS_WOORDEN = [
     "spanish": "beber",
     "acceptedAnswers": [
       "beber"
+    ],
+    "dutchAnswers": [
+      "drinken"
     ]
   },
   {
@@ -6180,6 +8295,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cerveza",
     "acceptedAnswers": [
       "cerveza"
+    ],
+    "dutchAnswers": [
+      "bier"
     ]
   },
   {
@@ -6189,6 +8307,10 @@ const SPAANS_WOORDEN = [
     "spanish": "copa",
     "acceptedAnswers": [
       "copa"
+    ],
+    "dutchAnswers": [
+      "drankje",
+      "glas"
     ]
   },
   {
@@ -6198,6 +8320,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entrada",
     "acceptedAnswers": [
       "entrada"
+    ],
+    "dutchAnswers": [
+      "entree"
     ]
   },
   {
@@ -6207,6 +8332,9 @@ const SPAANS_WOORDEN = [
     "spanish": "amigos",
     "acceptedAnswers": [
       "amigos"
+    ],
+    "dutchAnswers": [
+      "vrienden"
     ]
   },
   {
@@ -6216,6 +8344,9 @@ const SPAANS_WOORDEN = [
     "spanish": "conocer gente",
     "acceptedAnswers": [
       "conocer gente"
+    ],
+    "dutchAnswers": [
+      "mensen ontmoeten"
     ]
   },
   {
@@ -6225,6 +8356,9 @@ const SPAANS_WOORDEN = [
     "spanish": "divertirse",
     "acceptedAnswers": [
       "divertirse"
+    ],
+    "dutchAnswers": [
+      "plezier hebben"
     ]
   },
   {
@@ -6234,6 +8368,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pasarlo bien",
     "acceptedAnswers": [
       "pasarlo bien"
+    ],
+    "dutchAnswers": [
+      "het leuk hebben"
     ]
   },
   {
@@ -6243,6 +8380,10 @@ const SPAANS_WOORDEN = [
     "spanish": "invitar",
     "acceptedAnswers": [
       "invitar"
+    ],
+    "dutchAnswers": [
+      "uitnodigen",
+      "trakteren"
     ]
   },
   {
@@ -6252,6 +8393,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quedar",
     "acceptedAnswers": [
       "quedar"
+    ],
+    "dutchAnswers": [
+      "afspreken"
     ]
   },
   {
@@ -6261,6 +8405,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hora",
     "acceptedAnswers": [
       "hora"
+    ],
+    "dutchAnswers": [
+      "tijdstip"
     ]
   },
   {
@@ -6270,6 +8417,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cerrar",
     "acceptedAnswers": [
       "cerrar"
+    ],
+    "dutchAnswers": [
+      "sluiten"
     ]
   },
   {
@@ -6279,6 +8429,9 @@ const SPAANS_WOORDEN = [
     "spanish": "abierto",
     "acceptedAnswers": [
       "abierto"
+    ],
+    "dutchAnswers": [
+      "open"
     ]
   },
   {
@@ -6288,6 +8441,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿quieres venir?",
     "acceptedAnswers": [
       "¿quieres venir?"
+    ],
+    "dutchAnswers": [
+      "wil je meekomen?"
     ]
   },
   {
@@ -6297,6 +8453,10 @@ const SPAANS_WOORDEN = [
     "spanish": "nos vemos",
     "acceptedAnswers": [
       "nos vemos"
+    ],
+    "dutchAnswers": [
+      "tot straks",
+      "we zien elkaar"
     ]
   },
   {
@@ -6306,6 +8466,9 @@ const SPAANS_WOORDEN = [
     "spanish": "deporte",
     "acceptedAnswers": [
       "deporte"
+    ],
+    "dutchAnswers": [
+      "sport"
     ]
   },
   {
@@ -6315,6 +8478,9 @@ const SPAANS_WOORDEN = [
     "spanish": "jugar",
     "acceptedAnswers": [
       "jugar"
+    ],
+    "dutchAnswers": [
+      "spelen"
     ]
   },
   {
@@ -6324,6 +8490,9 @@ const SPAANS_WOORDEN = [
     "spanish": "partido",
     "acceptedAnswers": [
       "partido"
+    ],
+    "dutchAnswers": [
+      "wedstrijd"
     ]
   },
   {
@@ -6333,6 +8502,9 @@ const SPAANS_WOORDEN = [
     "spanish": "equipo",
     "acceptedAnswers": [
       "equipo"
+    ],
+    "dutchAnswers": [
+      "team"
     ]
   },
   {
@@ -6342,6 +8514,9 @@ const SPAANS_WOORDEN = [
     "spanish": "jugador",
     "acceptedAnswers": [
       "jugador"
+    ],
+    "dutchAnswers": [
+      "speler"
     ]
   },
   {
@@ -6351,6 +8526,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entrenar",
     "acceptedAnswers": [
       "entrenar"
+    ],
+    "dutchAnswers": [
+      "trainen"
     ]
   },
   {
@@ -6360,6 +8538,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entrenamiento",
     "acceptedAnswers": [
       "entrenamiento"
+    ],
+    "dutchAnswers": [
+      "training"
     ]
   },
   {
@@ -6369,6 +8550,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ganar",
     "acceptedAnswers": [
       "ganar"
+    ],
+    "dutchAnswers": [
+      "winnen"
     ]
   },
   {
@@ -6378,6 +8562,9 @@ const SPAANS_WOORDEN = [
     "spanish": "perder",
     "acceptedAnswers": [
       "perder"
+    ],
+    "dutchAnswers": [
+      "verliezen"
     ]
   },
   {
@@ -6387,6 +8574,9 @@ const SPAANS_WOORDEN = [
     "spanish": "empatar",
     "acceptedAnswers": [
       "empatar"
+    ],
+    "dutchAnswers": [
+      "gelijkspelen"
     ]
   },
   {
@@ -6396,6 +8586,9 @@ const SPAANS_WOORDEN = [
     "spanish": "punto",
     "acceptedAnswers": [
       "punto"
+    ],
+    "dutchAnswers": [
+      "punt"
     ]
   },
   {
@@ -6405,6 +8598,9 @@ const SPAANS_WOORDEN = [
     "spanish": "resultado",
     "acceptedAnswers": [
       "resultado"
+    ],
+    "dutchAnswers": [
+      "uitslag"
     ]
   },
   {
@@ -6414,6 +8610,9 @@ const SPAANS_WOORDEN = [
     "spanish": "campo",
     "acceptedAnswers": [
       "campo"
+    ],
+    "dutchAnswers": [
+      "veld"
     ]
   },
   {
@@ -6423,6 +8622,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pista",
     "acceptedAnswers": [
       "pista"
+    ],
+    "dutchAnswers": [
+      "baan"
     ]
   },
   {
@@ -6432,6 +8634,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pelota",
     "acceptedAnswers": [
       "pelota"
+    ],
+    "dutchAnswers": [
+      "bal"
     ]
   },
   {
@@ -6441,6 +8646,9 @@ const SPAANS_WOORDEN = [
     "spanish": "rápido",
     "acceptedAnswers": [
       "rápido"
+    ],
+    "dutchAnswers": [
+      "snel"
     ]
   },
   {
@@ -6450,6 +8658,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fuerte",
     "acceptedAnswers": [
       "fuerte"
+    ],
+    "dutchAnswers": [
+      "sterk"
     ]
   },
   {
@@ -6459,6 +8670,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cansado",
     "acceptedAnswers": [
       "cansado"
+    ],
+    "dutchAnswers": [
+      "moe"
     ]
   },
   {
@@ -6468,6 +8682,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lesión",
     "acceptedAnswers": [
       "lesión"
+    ],
+    "dutchAnswers": [
+      "blessure"
     ]
   },
   {
@@ -6477,6 +8694,9 @@ const SPAANS_WOORDEN = [
     "spanish": "competición",
     "acceptedAnswers": [
       "competición"
+    ],
+    "dutchAnswers": [
+      "competitie"
     ]
   },
   {
@@ -6486,6 +8706,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pádel",
     "acceptedAnswers": [
       "pádel"
+    ],
+    "dutchAnswers": [
+      "padel"
     ]
   },
   {
@@ -6495,6 +8718,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pala",
     "acceptedAnswers": [
       "pala"
+    ],
+    "dutchAnswers": [
+      "racket"
     ]
   },
   {
@@ -6504,6 +8730,9 @@ const SPAANS_WOORDEN = [
     "spanish": "saque",
     "acceptedAnswers": [
       "saque"
+    ],
+    "dutchAnswers": [
+      "service"
     ]
   },
   {
@@ -6513,6 +8742,9 @@ const SPAANS_WOORDEN = [
     "spanish": "volea",
     "acceptedAnswers": [
       "volea"
+    ],
+    "dutchAnswers": [
+      "volley"
     ]
   },
   {
@@ -6521,6 +8753,9 @@ const SPAANS_WOORDEN = [
     "dutch": "bandeja",
     "spanish": "bandeja",
     "acceptedAnswers": [
+      "bandeja"
+    ],
+    "dutchAnswers": [
       "bandeja"
     ]
   },
@@ -6531,6 +8766,9 @@ const SPAANS_WOORDEN = [
     "spanish": "víbora",
     "acceptedAnswers": [
       "víbora"
+    ],
+    "dutchAnswers": [
+      "víbora"
     ]
   },
   {
@@ -6540,6 +8778,9 @@ const SPAANS_WOORDEN = [
     "spanish": "remate",
     "acceptedAnswers": [
       "remate"
+    ],
+    "dutchAnswers": [
+      "smash"
     ]
   },
   {
@@ -6549,6 +8790,9 @@ const SPAANS_WOORDEN = [
     "spanish": "globo",
     "acceptedAnswers": [
       "globo"
+    ],
+    "dutchAnswers": [
+      "lob"
     ]
   },
   {
@@ -6558,6 +8802,9 @@ const SPAANS_WOORDEN = [
     "spanish": "revés",
     "acceptedAnswers": [
       "revés"
+    ],
+    "dutchAnswers": [
+      "backhand"
     ]
   },
   {
@@ -6567,6 +8814,9 @@ const SPAANS_WOORDEN = [
     "spanish": "derecha",
     "acceptedAnswers": [
       "derecha"
+    ],
+    "dutchAnswers": [
+      "forehand"
     ]
   },
   {
@@ -6576,6 +8826,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pared",
     "acceptedAnswers": [
       "pared"
+    ],
+    "dutchAnswers": [
+      "muur"
     ]
   },
   {
@@ -6585,6 +8838,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pared trasera",
     "acceptedAnswers": [
       "pared trasera"
+    ],
+    "dutchAnswers": [
+      "achterwand"
     ]
   },
   {
@@ -6594,6 +8850,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pared lateral",
     "acceptedAnswers": [
       "pared lateral"
+    ],
+    "dutchAnswers": [
+      "zijwand"
     ]
   },
   {
@@ -6603,6 +8862,10 @@ const SPAANS_WOORDEN = [
     "spanish": "rebote",
     "acceptedAnswers": [
       "rebote"
+    ],
+    "dutchAnswers": [
+      "stuit",
+      "rebound"
     ]
   },
   {
@@ -6612,6 +8875,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dobles",
     "acceptedAnswers": [
       "dobles"
+    ],
+    "dutchAnswers": [
+      "dubbelspel"
     ]
   },
   {
@@ -6621,6 +8887,9 @@ const SPAANS_WOORDEN = [
     "spanish": "red",
     "acceptedAnswers": [
       "red"
+    ],
+    "dutchAnswers": [
+      "net"
     ]
   },
   {
@@ -6630,6 +8899,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ventaja",
     "acceptedAnswers": [
       "ventaja"
+    ],
+    "dutchAnswers": [
+      "voordeel"
     ]
   },
   {
@@ -6639,6 +8911,9 @@ const SPAANS_WOORDEN = [
     "spanish": "punto de partido",
     "acceptedAnswers": [
       "punto de partido"
+    ],
+    "dutchAnswers": [
+      "matchpoint"
     ]
   },
   {
@@ -6648,6 +8923,9 @@ const SPAANS_WOORDEN = [
     "spanish": "defender",
     "acceptedAnswers": [
       "defender"
+    ],
+    "dutchAnswers": [
+      "verdedigen"
     ]
   },
   {
@@ -6657,6 +8935,9 @@ const SPAANS_WOORDEN = [
     "spanish": "atacar",
     "acceptedAnswers": [
       "atacar"
+    ],
+    "dutchAnswers": [
+      "aanvallen"
     ]
   },
   {
@@ -6666,6 +8947,9 @@ const SPAANS_WOORDEN = [
     "spanish": "trabajo",
     "acceptedAnswers": [
       "trabajo"
+    ],
+    "dutchAnswers": [
+      "werk"
     ]
   },
   {
@@ -6675,6 +8959,9 @@ const SPAANS_WOORDEN = [
     "spanish": "trabajar",
     "acceptedAnswers": [
       "trabajar"
+    ],
+    "dutchAnswers": [
+      "werken"
     ]
   },
   {
@@ -6684,6 +8971,9 @@ const SPAANS_WOORDEN = [
     "spanish": "empresa",
     "acceptedAnswers": [
       "empresa"
+    ],
+    "dutchAnswers": [
+      "bedrijf"
     ]
   },
   {
@@ -6693,6 +8983,9 @@ const SPAANS_WOORDEN = [
     "spanish": "negocio",
     "acceptedAnswers": [
       "negocio"
+    ],
+    "dutchAnswers": [
+      "onderneming"
     ]
   },
   {
@@ -6702,6 +8995,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cliente",
     "acceptedAnswers": [
       "cliente"
+    ],
+    "dutchAnswers": [
+      "klant"
     ]
   },
   {
@@ -6711,6 +9007,9 @@ const SPAANS_WOORDEN = [
     "spanish": "compañero",
     "acceptedAnswers": [
       "compañero"
+    ],
+    "dutchAnswers": [
+      "collega"
     ]
   },
   {
@@ -6720,6 +9019,9 @@ const SPAANS_WOORDEN = [
     "spanish": "jefe",
     "acceptedAnswers": [
       "jefe"
+    ],
+    "dutchAnswers": [
+      "baas"
     ]
   },
   {
@@ -6729,6 +9031,9 @@ const SPAANS_WOORDEN = [
     "spanish": "reunión",
     "acceptedAnswers": [
       "reunión"
+    ],
+    "dutchAnswers": [
+      "vergadering"
     ]
   },
   {
@@ -6738,6 +9043,9 @@ const SPAANS_WOORDEN = [
     "spanish": "proyecto",
     "acceptedAnswers": [
       "proyecto"
+    ],
+    "dutchAnswers": [
+      "project"
     ]
   },
   {
@@ -6747,6 +9055,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tarea",
     "acceptedAnswers": [
       "tarea"
+    ],
+    "dutchAnswers": [
+      "taak"
     ]
   },
   {
@@ -6756,6 +9067,9 @@ const SPAANS_WOORDEN = [
     "spanish": "correo",
     "acceptedAnswers": [
       "correo"
+    ],
+    "dutchAnswers": [
+      "e-mail"
     ]
   },
   {
@@ -6765,6 +9079,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llamada",
     "acceptedAnswers": [
       "llamada"
+    ],
+    "dutchAnswers": [
+      "telefoongesprek"
     ]
   },
   {
@@ -6774,6 +9091,9 @@ const SPAANS_WOORDEN = [
     "spanish": "oficina",
     "acceptedAnswers": [
       "oficina"
+    ],
+    "dutchAnswers": [
+      "kantoor"
     ]
   },
   {
@@ -6783,6 +9103,9 @@ const SPAANS_WOORDEN = [
     "spanish": "horario",
     "acceptedAnswers": [
       "horario"
+    ],
+    "dutchAnswers": [
+      "werktijden"
     ]
   },
   {
@@ -6792,6 +9115,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dinero",
     "acceptedAnswers": [
       "dinero"
+    ],
+    "dutchAnswers": [
+      "geld"
     ]
   },
   {
@@ -6801,6 +9127,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vender",
     "acceptedAnswers": [
       "vender"
+    ],
+    "dutchAnswers": [
+      "verkopen"
     ]
   },
   {
@@ -6810,6 +9139,10 @@ const SPAANS_WOORDEN = [
     "spanish": "comprar",
     "acceptedAnswers": [
       "comprar"
+    ],
+    "dutchAnswers": [
+      "inkopen",
+      "kopen"
     ]
   },
   {
@@ -6819,6 +9152,9 @@ const SPAANS_WOORDEN = [
     "spanish": "enseñar",
     "acceptedAnswers": [
       "enseñar"
+    ],
+    "dutchAnswers": [
+      "lesgeven"
     ]
   },
   {
@@ -6828,6 +9164,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aprender",
     "acceptedAnswers": [
       "aprender"
+    ],
+    "dutchAnswers": [
+      "leren"
     ]
   },
   {
@@ -6837,6 +9176,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ocupado",
     "acceptedAnswers": [
       "ocupado"
+    ],
+    "dutchAnswers": [
+      "druk"
     ]
   },
   {
@@ -6846,6 +9188,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aprender",
     "acceptedAnswers": [
       "aprender"
+    ],
+    "dutchAnswers": [
+      "leren"
     ]
   },
   {
@@ -6855,6 +9200,9 @@ const SPAANS_WOORDEN = [
     "spanish": "estudiar",
     "acceptedAnswers": [
       "estudiar"
+    ],
+    "dutchAnswers": [
+      "studeren"
     ]
   },
   {
@@ -6864,6 +9212,9 @@ const SPAANS_WOORDEN = [
     "spanish": "practicar",
     "acceptedAnswers": [
       "practicar"
+    ],
+    "dutchAnswers": [
+      "oefenen"
     ]
   },
   {
@@ -6873,6 +9224,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entender",
     "acceptedAnswers": [
       "entender"
+    ],
+    "dutchAnswers": [
+      "begrijpen"
     ]
   },
   {
@@ -6882,6 +9236,9 @@ const SPAANS_WOORDEN = [
     "spanish": "explicar",
     "acceptedAnswers": [
       "explicar"
+    ],
+    "dutchAnswers": [
+      "uitleggen"
     ]
   },
   {
@@ -6891,6 +9248,9 @@ const SPAANS_WOORDEN = [
     "spanish": "preguntar",
     "acceptedAnswers": [
       "preguntar"
+    ],
+    "dutchAnswers": [
+      "vragen"
     ]
   },
   {
@@ -6900,6 +9260,9 @@ const SPAANS_WOORDEN = [
     "spanish": "responder",
     "acceptedAnswers": [
       "responder"
+    ],
+    "dutchAnswers": [
+      "antwoorden"
     ]
   },
   {
@@ -6909,6 +9272,9 @@ const SPAANS_WOORDEN = [
     "spanish": "palabra",
     "acceptedAnswers": [
       "palabra"
+    ],
+    "dutchAnswers": [
+      "woord"
     ]
   },
   {
@@ -6918,6 +9284,9 @@ const SPAANS_WOORDEN = [
     "spanish": "frase",
     "acceptedAnswers": [
       "frase"
+    ],
+    "dutchAnswers": [
+      "zin"
     ]
   },
   {
@@ -6927,6 +9296,9 @@ const SPAANS_WOORDEN = [
     "spanish": "idioma",
     "acceptedAnswers": [
       "idioma"
+    ],
+    "dutchAnswers": [
+      "taal"
     ]
   },
   {
@@ -6936,6 +9308,9 @@ const SPAANS_WOORDEN = [
     "spanish": "español",
     "acceptedAnswers": [
       "español"
+    ],
+    "dutchAnswers": [
+      "Spaans"
     ]
   },
   {
@@ -6945,6 +9320,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vocabulario",
     "acceptedAnswers": [
       "vocabulario"
+    ],
+    "dutchAnswers": [
+      "woordenschat"
     ]
   },
   {
@@ -6954,6 +9332,9 @@ const SPAANS_WOORDEN = [
     "spanish": "gramática",
     "acceptedAnswers": [
       "gramática"
+    ],
+    "dutchAnswers": [
+      "grammatica"
     ]
   },
   {
@@ -6963,6 +9344,9 @@ const SPAANS_WOORDEN = [
     "spanish": "error",
     "acceptedAnswers": [
       "error"
+    ],
+    "dutchAnswers": [
+      "fout"
     ]
   },
   {
@@ -6972,6 +9356,9 @@ const SPAANS_WOORDEN = [
     "spanish": "corregir",
     "acceptedAnswers": [
       "corregir"
+    ],
+    "dutchAnswers": [
+      "corrigeren"
     ]
   },
   {
@@ -6981,6 +9368,9 @@ const SPAANS_WOORDEN = [
     "spanish": "repetir",
     "acceptedAnswers": [
       "repetir"
+    ],
+    "dutchAnswers": [
+      "herhalen"
     ]
   },
   {
@@ -6990,6 +9380,9 @@ const SPAANS_WOORDEN = [
     "spanish": "traducir",
     "acceptedAnswers": [
       "traducir"
+    ],
+    "dutchAnswers": [
+      "vertalen"
     ]
   },
   {
@@ -6999,6 +9392,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pronunciar",
     "acceptedAnswers": [
       "pronunciar"
+    ],
+    "dutchAnswers": [
+      "uitspreken"
     ]
   },
   {
@@ -7008,6 +9404,9 @@ const SPAANS_WOORDEN = [
     "spanish": "significar",
     "acceptedAnswers": [
       "significar"
+    ],
+    "dutchAnswers": [
+      "betekenen"
     ]
   },
   {
@@ -7017,6 +9416,9 @@ const SPAANS_WOORDEN = [
     "spanish": "recordar",
     "acceptedAnswers": [
       "recordar"
+    ],
+    "dutchAnswers": [
+      "onthouden"
     ]
   },
   {
@@ -7026,6 +9428,10 @@ const SPAANS_WOORDEN = [
     "spanish": "fui",
     "acceptedAnswers": [
       "fui"
+    ],
+    "dutchAnswers": [
+      "ik ging",
+      "was"
     ]
   },
   {
@@ -7035,6 +9441,10 @@ const SPAANS_WOORDEN = [
     "spanish": "estuve",
     "acceptedAnswers": [
       "estuve"
+    ],
+    "dutchAnswers": [
+      "ik was",
+      "verbleef"
     ]
   },
   {
@@ -7044,6 +9454,10 @@ const SPAANS_WOORDEN = [
     "spanish": "hice",
     "acceptedAnswers": [
       "hice"
+    ],
+    "dutchAnswers": [
+      "ik deed",
+      "maakte"
     ]
   },
   {
@@ -7053,6 +9467,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tuve",
     "acceptedAnswers": [
       "tuve"
+    ],
+    "dutchAnswers": [
+      "ik had"
     ]
   },
   {
@@ -7062,6 +9479,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vi",
     "acceptedAnswers": [
       "vi"
+    ],
+    "dutchAnswers": [
+      "ik zag"
     ]
   },
   {
@@ -7071,6 +9491,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dije",
     "acceptedAnswers": [
       "dije"
+    ],
+    "dutchAnswers": [
+      "ik zei"
     ]
   },
   {
@@ -7080,6 +9503,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vine",
     "acceptedAnswers": [
       "vine"
+    ],
+    "dutchAnswers": [
+      "ik kwam"
     ]
   },
   {
@@ -7089,6 +9515,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pude",
     "acceptedAnswers": [
       "pude"
+    ],
+    "dutchAnswers": [
+      "ik kon"
     ]
   },
   {
@@ -7098,6 +9527,10 @@ const SPAANS_WOORDEN = [
     "spanish": "quise",
     "acceptedAnswers": [
       "quise"
+    ],
+    "dutchAnswers": [
+      "ik wilde",
+      "probeerde"
     ]
   },
   {
@@ -7107,6 +9540,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pasó",
     "acceptedAnswers": [
       "pasó"
+    ],
+    "dutchAnswers": [
+      "het gebeurde"
     ]
   },
   {
@@ -7116,6 +9552,9 @@ const SPAANS_WOORDEN = [
     "spanish": "era",
     "acceptedAnswers": [
       "era"
+    ],
+    "dutchAnswers": [
+      "ik/hij/zij was"
     ]
   },
   {
@@ -7125,6 +9564,9 @@ const SPAANS_WOORDEN = [
     "spanish": "estaba",
     "acceptedAnswers": [
       "estaba"
+    ],
+    "dutchAnswers": [
+      "ik/hij/zij was"
     ]
   },
   {
@@ -7134,6 +9576,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tenía",
     "acceptedAnswers": [
       "tenía"
+    ],
+    "dutchAnswers": [
+      "ik/hij/zij had"
     ]
   },
   {
@@ -7143,6 +9588,10 @@ const SPAANS_WOORDEN = [
     "spanish": "hacía",
     "acceptedAnswers": [
       "hacía"
+    ],
+    "dutchAnswers": [
+      "ik/hij/zij deed",
+      "het was"
     ]
   },
   {
@@ -7152,6 +9601,9 @@ const SPAANS_WOORDEN = [
     "spanish": "iba",
     "acceptedAnswers": [
       "iba"
+    ],
+    "dutchAnswers": [
+      "ik/hij/zij ging"
     ]
   },
   {
@@ -7161,6 +9613,10 @@ const SPAANS_WOORDEN = [
     "spanish": "cuando",
     "acceptedAnswers": [
       "cuando"
+    ],
+    "dutchAnswers": [
+      "toen",
+      "wanneer"
     ]
   },
   {
@@ -7170,6 +9626,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mientras",
     "acceptedAnswers": [
       "mientras"
+    ],
+    "dutchAnswers": [
+      "terwijl"
     ]
   },
   {
@@ -7179,6 +9638,10 @@ const SPAANS_WOORDEN = [
     "spanish": "antes",
     "acceptedAnswers": [
       "antes"
+    ],
+    "dutchAnswers": [
+      "vroeger",
+      "ervoor"
     ]
   },
   {
@@ -7188,6 +9651,9 @@ const SPAANS_WOORDEN = [
     "spanish": "después",
     "acceptedAnswers": [
       "después"
+    ],
+    "dutchAnswers": [
+      "daarna"
     ]
   },
   {
@@ -7197,6 +9663,9 @@ const SPAANS_WOORDEN = [
     "spanish": "al final",
     "acceptedAnswers": [
       "al final"
+    ],
+    "dutchAnswers": [
+      "uiteindelijk"
     ]
   },
   {
@@ -7206,6 +9675,9 @@ const SPAANS_WOORDEN = [
     "spanish": "voy a",
     "acceptedAnswers": [
       "voy a"
+    ],
+    "dutchAnswers": [
+      "ik ga"
     ]
   },
   {
@@ -7215,6 +9687,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quiero",
     "acceptedAnswers": [
       "quiero"
+    ],
+    "dutchAnswers": [
+      "ik wil"
     ]
   },
   {
@@ -7224,6 +9699,10 @@ const SPAANS_WOORDEN = [
     "spanish": "pienso",
     "acceptedAnswers": [
       "pienso"
+    ],
+    "dutchAnswers": [
+      "ik ben van plan",
+      "denk"
     ]
   },
   {
@@ -7233,6 +9712,9 @@ const SPAANS_WOORDEN = [
     "spanish": "espero",
     "acceptedAnswers": [
       "espero"
+    ],
+    "dutchAnswers": [
+      "ik hoop"
     ]
   },
   {
@@ -7242,6 +9724,9 @@ const SPAANS_WOORDEN = [
     "spanish": "planeo",
     "acceptedAnswers": [
       "planeo"
+    ],
+    "dutchAnswers": [
+      "ik plan"
     ]
   },
   {
@@ -7251,6 +9736,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mañana",
     "acceptedAnswers": [
       "mañana"
+    ],
+    "dutchAnswers": [
+      "morgen"
     ]
   },
   {
@@ -7260,6 +9748,9 @@ const SPAANS_WOORDEN = [
     "spanish": "la próxima semana",
     "acceptedAnswers": [
       "la próxima semana"
+    ],
+    "dutchAnswers": [
+      "volgende week"
     ]
   },
   {
@@ -7269,6 +9760,9 @@ const SPAANS_WOORDEN = [
     "spanish": "el próximo mes",
     "acceptedAnswers": [
       "el próximo mes"
+    ],
+    "dutchAnswers": [
+      "volgende maand"
     ]
   },
   {
@@ -7278,6 +9772,9 @@ const SPAANS_WOORDEN = [
     "spanish": "futuro",
     "acceptedAnswers": [
       "futuro"
+    ],
+    "dutchAnswers": [
+      "toekomst"
     ]
   },
   {
@@ -7286,6 +9783,9 @@ const SPAANS_WOORDEN = [
     "dutch": "plan",
     "spanish": "plan",
     "acceptedAnswers": [
+      "plan"
+    ],
+    "dutchAnswers": [
       "plan"
     ]
   },
@@ -7296,6 +9796,9 @@ const SPAANS_WOORDEN = [
     "spanish": "decidir",
     "acceptedAnswers": [
       "decidir"
+    ],
+    "dutchAnswers": [
+      "beslissen"
     ]
   },
   {
@@ -7305,6 +9808,9 @@ const SPAANS_WOORDEN = [
     "spanish": "organizar",
     "acceptedAnswers": [
       "organizar"
+    ],
+    "dutchAnswers": [
+      "organiseren"
     ]
   },
   {
@@ -7314,6 +9820,9 @@ const SPAANS_WOORDEN = [
     "spanish": "preparar",
     "acceptedAnswers": [
       "preparar"
+    ],
+    "dutchAnswers": [
+      "voorbereiden"
     ]
   },
   {
@@ -7323,6 +9832,9 @@ const SPAANS_WOORDEN = [
     "spanish": "reservar",
     "acceptedAnswers": [
       "reservar"
+    ],
+    "dutchAnswers": [
+      "boeken"
     ]
   },
   {
@@ -7332,6 +9844,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salir",
     "acceptedAnswers": [
       "salir"
+    ],
+    "dutchAnswers": [
+      "vertrekken"
     ]
   },
   {
@@ -7341,6 +9856,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quedarse",
     "acceptedAnswers": [
       "quedarse"
+    ],
+    "dutchAnswers": [
+      "verblijven"
     ]
   },
   {
@@ -7350,6 +9868,9 @@ const SPAANS_WOORDEN = [
     "spanish": "visitar",
     "acceptedAnswers": [
       "visitar"
+    ],
+    "dutchAnswers": [
+      "bezoeken"
     ]
   },
   {
@@ -7359,6 +9880,9 @@ const SPAANS_WOORDEN = [
     "spanish": "intentar",
     "acceptedAnswers": [
       "intentar"
+    ],
+    "dutchAnswers": [
+      "proberen"
     ]
   },
   {
@@ -7368,6 +9892,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tener ganas de",
     "acceptedAnswers": [
       "tener ganas de"
+    ],
+    "dutchAnswers": [
+      "zin hebben in"
     ]
   },
   {
@@ -7377,6 +9904,9 @@ const SPAANS_WOORDEN = [
     "spanish": "quizás",
     "acceptedAnswers": [
       "quizás"
+    ],
+    "dutchAnswers": [
+      "misschien"
     ]
   },
   {
@@ -7386,6 +9916,9 @@ const SPAANS_WOORDEN = [
     "spanish": "y",
     "acceptedAnswers": [
       "y"
+    ],
+    "dutchAnswers": [
+      "en"
     ]
   },
   {
@@ -7395,6 +9928,9 @@ const SPAANS_WOORDEN = [
     "spanish": "o",
     "acceptedAnswers": [
       "o"
+    ],
+    "dutchAnswers": [
+      "of"
     ]
   },
   {
@@ -7404,6 +9940,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pero",
     "acceptedAnswers": [
       "pero"
+    ],
+    "dutchAnswers": [
+      "maar"
     ]
   },
   {
@@ -7413,6 +9952,9 @@ const SPAANS_WOORDEN = [
     "spanish": "porque",
     "acceptedAnswers": [
       "porque"
+    ],
+    "dutchAnswers": [
+      "omdat"
     ]
   },
   {
@@ -7422,6 +9964,9 @@ const SPAANS_WOORDEN = [
     "spanish": "por eso",
     "acceptedAnswers": [
       "por eso"
+    ],
+    "dutchAnswers": [
+      "daarom"
     ]
   },
   {
@@ -7431,6 +9976,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aunque",
     "acceptedAnswers": [
       "aunque"
+    ],
+    "dutchAnswers": [
+      "hoewel"
     ]
   },
   {
@@ -7440,6 +9988,10 @@ const SPAANS_WOORDEN = [
     "spanish": "si",
     "acceptedAnswers": [
       "si"
+    ],
+    "dutchAnswers": [
+      "als",
+      "indien"
     ]
   },
   {
@@ -7449,6 +10001,10 @@ const SPAANS_WOORDEN = [
     "spanish": "cuando",
     "acceptedAnswers": [
       "cuando"
+    ],
+    "dutchAnswers": [
+      "wanneer",
+      "toen"
     ]
   },
   {
@@ -7458,6 +10014,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mientras",
     "acceptedAnswers": [
       "mientras"
+    ],
+    "dutchAnswers": [
+      "terwijl"
     ]
   },
   {
@@ -7467,6 +10026,10 @@ const SPAANS_WOORDEN = [
     "spanish": "entonces",
     "acceptedAnswers": [
       "entonces"
+    ],
+    "dutchAnswers": [
+      "dus",
+      "toen"
     ]
   },
   {
@@ -7476,6 +10039,9 @@ const SPAANS_WOORDEN = [
     "spanish": "además",
     "acceptedAnswers": [
       "además"
+    ],
+    "dutchAnswers": [
+      "bovendien"
     ]
   },
   {
@@ -7485,6 +10051,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sin embargo",
     "acceptedAnswers": [
       "sin embargo"
+    ],
+    "dutchAnswers": [
+      "echter"
     ]
   },
   {
@@ -7494,6 +10063,9 @@ const SPAANS_WOORDEN = [
     "spanish": "también",
     "acceptedAnswers": [
       "también"
+    ],
+    "dutchAnswers": [
+      "ook"
     ]
   },
   {
@@ -7503,6 +10075,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tampoco",
     "acceptedAnswers": [
       "tampoco"
+    ],
+    "dutchAnswers": [
+      "ook niet"
     ]
   },
   {
@@ -7512,6 +10087,9 @@ const SPAANS_WOORDEN = [
     "spanish": "primero",
     "acceptedAnswers": [
       "primero"
+    ],
+    "dutchAnswers": [
+      "eerst"
     ]
   },
   {
@@ -7521,6 +10099,9 @@ const SPAANS_WOORDEN = [
     "spanish": "después",
     "acceptedAnswers": [
       "después"
+    ],
+    "dutchAnswers": [
+      "daarna"
     ]
   },
   {
@@ -7530,6 +10111,9 @@ const SPAANS_WOORDEN = [
     "spanish": "luego",
     "acceptedAnswers": [
       "luego"
+    ],
+    "dutchAnswers": [
+      "vervolgens"
     ]
   },
   {
@@ -7539,6 +10123,9 @@ const SPAANS_WOORDEN = [
     "spanish": "finalmente",
     "acceptedAnswers": [
       "finalmente"
+    ],
+    "dutchAnswers": [
+      "uiteindelijk"
     ]
   },
   {
@@ -7548,6 +10135,9 @@ const SPAANS_WOORDEN = [
     "spanish": "por ejemplo",
     "acceptedAnswers": [
       "por ejemplo"
+    ],
+    "dutchAnswers": [
+      "bijvoorbeeld"
     ]
   },
   {
@@ -7557,6 +10147,10 @@ const SPAANS_WOORDEN = [
     "spanish": "en realidad",
     "acceptedAnswers": [
       "en realidad"
+    ],
+    "dutchAnswers": [
+      "eigenlijk",
+      "in werkelijkheid"
     ]
   },
   {
@@ -7566,6 +10160,9 @@ const SPAANS_WOORDEN = [
     "spanish": "aquí",
     "acceptedAnswers": [
       "aquí"
+    ],
+    "dutchAnswers": [
+      "hier"
     ]
   },
   {
@@ -7575,6 +10172,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ahí",
     "acceptedAnswers": [
       "ahí"
+    ],
+    "dutchAnswers": [
+      "daar"
     ]
   },
   {
@@ -7584,6 +10184,9 @@ const SPAANS_WOORDEN = [
     "spanish": "allí",
     "acceptedAnswers": [
       "allí"
+    ],
+    "dutchAnswers": [
+      "daar"
     ]
   },
   {
@@ -7593,6 +10196,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cerca",
     "acceptedAnswers": [
       "cerca"
+    ],
+    "dutchAnswers": [
+      "dichtbij"
     ]
   },
   {
@@ -7602,6 +10208,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lejos",
     "acceptedAnswers": [
       "lejos"
+    ],
+    "dutchAnswers": [
+      "ver weg"
     ]
   },
   {
@@ -7611,6 +10220,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dentro",
     "acceptedAnswers": [
       "dentro"
+    ],
+    "dutchAnswers": [
+      "binnen"
     ]
   },
   {
@@ -7620,6 +10232,9 @@ const SPAANS_WOORDEN = [
     "spanish": "fuera",
     "acceptedAnswers": [
       "fuera"
+    ],
+    "dutchAnswers": [
+      "buiten"
     ]
   },
   {
@@ -7629,6 +10244,9 @@ const SPAANS_WOORDEN = [
     "spanish": "arriba",
     "acceptedAnswers": [
       "arriba"
+    ],
+    "dutchAnswers": [
+      "boven"
     ]
   },
   {
@@ -7638,6 +10256,9 @@ const SPAANS_WOORDEN = [
     "spanish": "abajo",
     "acceptedAnswers": [
       "abajo"
+    ],
+    "dutchAnswers": [
+      "beneden"
     ]
   },
   {
@@ -7647,6 +10268,9 @@ const SPAANS_WOORDEN = [
     "spanish": "bien",
     "acceptedAnswers": [
       "bien"
+    ],
+    "dutchAnswers": [
+      "goed"
     ]
   },
   {
@@ -7656,6 +10280,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mal",
     "acceptedAnswers": [
       "mal"
+    ],
+    "dutchAnswers": [
+      "slecht"
     ]
   },
   {
@@ -7665,6 +10292,9 @@ const SPAANS_WOORDEN = [
     "spanish": "rápidamente",
     "acceptedAnswers": [
       "rápidamente"
+    ],
+    "dutchAnswers": [
+      "snel"
     ]
   },
   {
@@ -7674,6 +10304,9 @@ const SPAANS_WOORDEN = [
     "spanish": "despacio",
     "acceptedAnswers": [
       "despacio"
+    ],
+    "dutchAnswers": [
+      "langzaam"
     ]
   },
   {
@@ -7683,6 +10316,9 @@ const SPAANS_WOORDEN = [
     "spanish": "juntos",
     "acceptedAnswers": [
       "juntos"
+    ],
+    "dutchAnswers": [
+      "samen"
     ]
   },
   {
@@ -7692,6 +10328,9 @@ const SPAANS_WOORDEN = [
     "spanish": "solo",
     "acceptedAnswers": [
       "solo"
+    ],
+    "dutchAnswers": [
+      "alleen"
     ]
   },
   {
@@ -7701,6 +10340,9 @@ const SPAANS_WOORDEN = [
     "spanish": "casi",
     "acceptedAnswers": [
       "casi"
+    ],
+    "dutchAnswers": [
+      "bijna"
     ]
   },
   {
@@ -7710,6 +10352,9 @@ const SPAANS_WOORDEN = [
     "spanish": "realmente",
     "acceptedAnswers": [
       "realmente"
+    ],
+    "dutchAnswers": [
+      "echt"
     ]
   },
   {
@@ -7719,6 +10364,9 @@ const SPAANS_WOORDEN = [
     "spanish": "especialmente",
     "acceptedAnswers": [
       "especialmente"
+    ],
+    "dutchAnswers": [
+      "vooral"
     ]
   },
   {
@@ -7728,6 +10376,9 @@ const SPAANS_WOORDEN = [
     "spanish": "probablemente",
     "acceptedAnswers": [
       "probablemente"
+    ],
+    "dutchAnswers": [
+      "waarschijnlijk"
     ]
   },
   {
@@ -7737,6 +10388,9 @@ const SPAANS_WOORDEN = [
     "spanish": "normalmente",
     "acceptedAnswers": [
       "normalmente"
+    ],
+    "dutchAnswers": [
+      "normaal gesproken"
     ]
   },
   {
@@ -7746,6 +10400,10 @@ const SPAANS_WOORDEN = [
     "spanish": "a",
     "acceptedAnswers": [
       "a"
+    ],
+    "dutchAnswers": [
+      "naar",
+      "aan"
     ]
   },
   {
@@ -7755,6 +10413,10 @@ const SPAANS_WOORDEN = [
     "spanish": "de",
     "acceptedAnswers": [
       "de"
+    ],
+    "dutchAnswers": [
+      "van",
+      "uit"
     ]
   },
   {
@@ -7764,6 +10426,10 @@ const SPAANS_WOORDEN = [
     "spanish": "en",
     "acceptedAnswers": [
       "en"
+    ],
+    "dutchAnswers": [
+      "in",
+      "op"
     ]
   },
   {
@@ -7773,6 +10439,9 @@ const SPAANS_WOORDEN = [
     "spanish": "con",
     "acceptedAnswers": [
       "con"
+    ],
+    "dutchAnswers": [
+      "met"
     ]
   },
   {
@@ -7782,6 +10451,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sin",
     "acceptedAnswers": [
       "sin"
+    ],
+    "dutchAnswers": [
+      "zonder"
     ]
   },
   {
@@ -7791,6 +10463,11 @@ const SPAANS_WOORDEN = [
     "spanish": "por",
     "acceptedAnswers": [
       "por"
+    ],
+    "dutchAnswers": [
+      "door",
+      "wegens",
+      "per"
     ]
   },
   {
@@ -7800,6 +10477,10 @@ const SPAANS_WOORDEN = [
     "spanish": "para",
     "acceptedAnswers": [
       "para"
+    ],
+    "dutchAnswers": [
+      "voor",
+      "om te"
     ]
   },
   {
@@ -7809,6 +10490,10 @@ const SPAANS_WOORDEN = [
     "spanish": "sobre",
     "acceptedAnswers": [
       "sobre"
+    ],
+    "dutchAnswers": [
+      "over",
+      "op"
     ]
   },
   {
@@ -7818,6 +10503,9 @@ const SPAANS_WOORDEN = [
     "spanish": "entre",
     "acceptedAnswers": [
       "entre"
+    ],
+    "dutchAnswers": [
+      "tussen"
     ]
   },
   {
@@ -7827,6 +10515,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hasta",
     "acceptedAnswers": [
       "hasta"
+    ],
+    "dutchAnswers": [
+      "tot"
     ]
   },
   {
@@ -7836,6 +10527,9 @@ const SPAANS_WOORDEN = [
     "spanish": "desde",
     "acceptedAnswers": [
       "desde"
+    ],
+    "dutchAnswers": [
+      "vanaf"
     ]
   },
   {
@@ -7845,6 +10539,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hacia",
     "acceptedAnswers": [
       "hacia"
+    ],
+    "dutchAnswers": [
+      "richting"
     ]
   },
   {
@@ -7854,6 +10551,9 @@ const SPAANS_WOORDEN = [
     "spanish": "contra",
     "acceptedAnswers": [
       "contra"
+    ],
+    "dutchAnswers": [
+      "tegen"
     ]
   },
   {
@@ -7863,6 +10563,9 @@ const SPAANS_WOORDEN = [
     "spanish": "al lado de",
     "acceptedAnswers": [
       "al lado de"
+    ],
+    "dutchAnswers": [
+      "naast"
     ]
   },
   {
@@ -7872,6 +10575,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cerca de",
     "acceptedAnswers": [
       "cerca de"
+    ],
+    "dutchAnswers": [
+      "dicht bij"
     ]
   },
   {
@@ -7881,6 +10587,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lejos de",
     "acceptedAnswers": [
       "lejos de"
+    ],
+    "dutchAnswers": [
+      "ver van"
     ]
   },
   {
@@ -7890,6 +10599,9 @@ const SPAANS_WOORDEN = [
     "spanish": "delante de",
     "acceptedAnswers": [
       "delante de"
+    ],
+    "dutchAnswers": [
+      "voor"
     ]
   },
   {
@@ -7899,6 +10611,9 @@ const SPAANS_WOORDEN = [
     "spanish": "detrás de",
     "acceptedAnswers": [
       "detrás de"
+    ],
+    "dutchAnswers": [
+      "achter"
     ]
   },
   {
@@ -7908,6 +10623,9 @@ const SPAANS_WOORDEN = [
     "spanish": "encima de",
     "acceptedAnswers": [
       "encima de"
+    ],
+    "dutchAnswers": [
+      "bovenop"
     ]
   },
   {
@@ -7917,6 +10635,9 @@ const SPAANS_WOORDEN = [
     "spanish": "debajo de",
     "acceptedAnswers": [
       "debajo de"
+    ],
+    "dutchAnswers": [
+      "onder"
     ]
   },
   {
@@ -7926,6 +10647,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ropa",
     "acceptedAnswers": [
       "ropa"
+    ],
+    "dutchAnswers": [
+      "kleding"
     ]
   },
   {
@@ -7935,6 +10659,9 @@ const SPAANS_WOORDEN = [
     "spanish": "camiseta",
     "acceptedAnswers": [
       "camiseta"
+    ],
+    "dutchAnswers": [
+      "T-shirt"
     ]
   },
   {
@@ -7944,6 +10671,9 @@ const SPAANS_WOORDEN = [
     "spanish": "camisa",
     "acceptedAnswers": [
       "camisa"
+    ],
+    "dutchAnswers": [
+      "overhemd"
     ]
   },
   {
@@ -7953,6 +10683,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pantalón",
     "acceptedAnswers": [
       "pantalón"
+    ],
+    "dutchAnswers": [
+      "broek"
     ]
   },
   {
@@ -7962,6 +10695,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pantalón corto",
     "acceptedAnswers": [
       "pantalón corto"
+    ],
+    "dutchAnswers": [
+      "korte broek"
     ]
   },
   {
@@ -7971,6 +10707,9 @@ const SPAANS_WOORDEN = [
     "spanish": "chaqueta",
     "acceptedAnswers": [
       "chaqueta"
+    ],
+    "dutchAnswers": [
+      "jas"
     ]
   },
   {
@@ -7980,6 +10719,9 @@ const SPAANS_WOORDEN = [
     "spanish": "abrigo",
     "acceptedAnswers": [
       "abrigo"
+    ],
+    "dutchAnswers": [
+      "warme jas"
     ]
   },
   {
@@ -7989,6 +10731,9 @@ const SPAANS_WOORDEN = [
     "spanish": "suéter",
     "acceptedAnswers": [
       "suéter"
+    ],
+    "dutchAnswers": [
+      "trui"
     ]
   },
   {
@@ -7998,6 +10743,9 @@ const SPAANS_WOORDEN = [
     "spanish": "zapatos",
     "acceptedAnswers": [
       "zapatos"
+    ],
+    "dutchAnswers": [
+      "schoenen"
     ]
   },
   {
@@ -8007,6 +10755,9 @@ const SPAANS_WOORDEN = [
     "spanish": "zapatillas",
     "acceptedAnswers": [
       "zapatillas"
+    ],
+    "dutchAnswers": [
+      "sneakers"
     ]
   },
   {
@@ -8016,6 +10767,9 @@ const SPAANS_WOORDEN = [
     "spanish": "calcetines",
     "acceptedAnswers": [
       "calcetines"
+    ],
+    "dutchAnswers": [
+      "sokken"
     ]
   },
   {
@@ -8025,6 +10779,9 @@ const SPAANS_WOORDEN = [
     "spanish": "gorra",
     "acceptedAnswers": [
       "gorra"
+    ],
+    "dutchAnswers": [
+      "pet"
     ]
   },
   {
@@ -8034,6 +10791,9 @@ const SPAANS_WOORDEN = [
     "spanish": "sombrero",
     "acceptedAnswers": [
       "sombrero"
+    ],
+    "dutchAnswers": [
+      "hoed"
     ]
   },
   {
@@ -8043,6 +10803,9 @@ const SPAANS_WOORDEN = [
     "spanish": "gafas de sol",
     "acceptedAnswers": [
       "gafas de sol"
+    ],
+    "dutchAnswers": [
+      "zonnebril"
     ]
   },
   {
@@ -8052,6 +10815,9 @@ const SPAANS_WOORDEN = [
     "spanish": "talla",
     "acceptedAnswers": [
       "talla"
+    ],
+    "dutchAnswers": [
+      "maat"
     ]
   },
   {
@@ -8061,6 +10827,9 @@ const SPAANS_WOORDEN = [
     "spanish": "probarse",
     "acceptedAnswers": [
       "probarse"
+    ],
+    "dutchAnswers": [
+      "passen"
     ]
   },
   {
@@ -8070,6 +10839,10 @@ const SPAANS_WOORDEN = [
     "spanish": "quedar bien",
     "acceptedAnswers": [
       "quedar bien"
+    ],
+    "dutchAnswers": [
+      "goed staan",
+      "passen"
     ]
   },
   {
@@ -8079,6 +10852,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mojado",
     "acceptedAnswers": [
       "mojado"
+    ],
+    "dutchAnswers": [
+      "nat"
     ]
   },
   {
@@ -8088,6 +10864,9 @@ const SPAANS_WOORDEN = [
     "spanish": "seco",
     "acceptedAnswers": [
       "seco"
+    ],
+    "dutchAnswers": [
+      "droog"
     ]
   },
   {
@@ -8097,6 +10876,9 @@ const SPAANS_WOORDEN = [
     "spanish": "lavar",
     "acceptedAnswers": [
       "lavar"
+    ],
+    "dutchAnswers": [
+      "wassen"
     ]
   },
   {
@@ -8106,6 +10888,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mochila",
     "acceptedAnswers": [
       "mochila"
+    ],
+    "dutchAnswers": [
+      "rugzak"
     ]
   },
   {
@@ -8115,6 +10900,9 @@ const SPAANS_WOORDEN = [
     "spanish": "maleta",
     "acceptedAnswers": [
       "maleta"
+    ],
+    "dutchAnswers": [
+      "koffer"
     ]
   },
   {
@@ -8124,6 +10912,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cartera",
     "acceptedAnswers": [
       "cartera"
+    ],
+    "dutchAnswers": [
+      "portemonnee"
     ]
   },
   {
@@ -8133,6 +10924,9 @@ const SPAANS_WOORDEN = [
     "spanish": "teléfono",
     "acceptedAnswers": [
       "teléfono"
+    ],
+    "dutchAnswers": [
+      "telefoon"
     ]
   },
   {
@@ -8142,6 +10936,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llaves",
     "acceptedAnswers": [
       "llaves"
+    ],
+    "dutchAnswers": [
+      "sleutels"
     ]
   },
   {
@@ -8151,6 +10948,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pasaporte",
     "acceptedAnswers": [
       "pasaporte"
+    ],
+    "dutchAnswers": [
+      "paspoort"
     ]
   },
   {
@@ -8160,6 +10960,9 @@ const SPAANS_WOORDEN = [
     "spanish": "documentos",
     "acceptedAnswers": [
       "documentos"
+    ],
+    "dutchAnswers": [
+      "documenten"
     ]
   },
   {
@@ -8169,6 +10972,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dinero",
     "acceptedAnswers": [
       "dinero"
+    ],
+    "dutchAnswers": [
+      "geld"
     ]
   },
   {
@@ -8178,6 +10984,9 @@ const SPAANS_WOORDEN = [
     "spanish": "tarjeta",
     "acceptedAnswers": [
       "tarjeta"
+    ],
+    "dutchAnswers": [
+      "kaart"
     ]
   },
   {
@@ -8187,6 +10996,9 @@ const SPAANS_WOORDEN = [
     "spanish": "botella",
     "acceptedAnswers": [
       "botella"
+    ],
+    "dutchAnswers": [
+      "fles"
     ]
   },
   {
@@ -8196,6 +11008,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cargador",
     "acceptedAnswers": [
       "cargador"
+    ],
+    "dutchAnswers": [
+      "oplader"
     ]
   },
   {
@@ -8205,6 +11020,10 @@ const SPAANS_WOORDEN = [
     "spanish": "auriculares",
     "acceptedAnswers": [
       "auriculares"
+    ],
+    "dutchAnswers": [
+      "oordopjes",
+      "koptelefoon"
     ]
   },
   {
@@ -8214,6 +11033,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cámara",
     "acceptedAnswers": [
       "cámara"
+    ],
+    "dutchAnswers": [
+      "camera"
     ]
   },
   {
@@ -8223,6 +11045,9 @@ const SPAANS_WOORDEN = [
     "spanish": "toalla",
     "acceptedAnswers": [
       "toalla"
+    ],
+    "dutchAnswers": [
+      "handdoek"
     ]
   },
   {
@@ -8232,6 +11057,9 @@ const SPAANS_WOORDEN = [
     "spanish": "protector solar",
     "acceptedAnswers": [
       "protector solar"
+    ],
+    "dutchAnswers": [
+      "zonnebrand"
     ]
   },
   {
@@ -8241,6 +11069,9 @@ const SPAANS_WOORDEN = [
     "spanish": "gafas",
     "acceptedAnswers": [
       "gafas"
+    ],
+    "dutchAnswers": [
+      "bril"
     ]
   },
   {
@@ -8250,6 +11081,9 @@ const SPAANS_WOORDEN = [
     "spanish": "reloj",
     "acceptedAnswers": [
       "reloj"
+    ],
+    "dutchAnswers": [
+      "horloge"
     ]
   },
   {
@@ -8259,6 +11093,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mapa",
     "acceptedAnswers": [
       "mapa"
+    ],
+    "dutchAnswers": [
+      "kaart"
     ]
   },
   {
@@ -8268,6 +11105,9 @@ const SPAANS_WOORDEN = [
     "spanish": "perder",
     "acceptedAnswers": [
       "perder"
+    ],
+    "dutchAnswers": [
+      "kwijtraken"
     ]
   },
   {
@@ -8277,6 +11117,10 @@ const SPAANS_WOORDEN = [
     "spanish": "guardar",
     "acceptedAnswers": [
       "guardar"
+    ],
+    "dutchAnswers": [
+      "bewaren",
+      "opbergen"
     ]
   },
   {
@@ -8286,6 +11130,9 @@ const SPAANS_WOORDEN = [
     "spanish": "casa",
     "acceptedAnswers": [
       "casa"
+    ],
+    "dutchAnswers": [
+      "huis"
     ]
   },
   {
@@ -8295,6 +11142,9 @@ const SPAANS_WOORDEN = [
     "spanish": "apartamento",
     "acceptedAnswers": [
       "apartamento"
+    ],
+    "dutchAnswers": [
+      "appartement"
     ]
   },
   {
@@ -8304,6 +11154,9 @@ const SPAANS_WOORDEN = [
     "spanish": "habitación",
     "acceptedAnswers": [
       "habitación"
+    ],
+    "dutchAnswers": [
+      "kamer"
     ]
   },
   {
@@ -8313,6 +11166,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cocina",
     "acceptedAnswers": [
       "cocina"
+    ],
+    "dutchAnswers": [
+      "keuken"
     ]
   },
   {
@@ -8322,6 +11178,9 @@ const SPAANS_WOORDEN = [
     "spanish": "baño",
     "acceptedAnswers": [
       "baño"
+    ],
+    "dutchAnswers": [
+      "badkamer"
     ]
   },
   {
@@ -8331,6 +11190,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salón",
     "acceptedAnswers": [
       "salón"
+    ],
+    "dutchAnswers": [
+      "woonkamer"
     ]
   },
   {
@@ -8340,6 +11202,9 @@ const SPAANS_WOORDEN = [
     "spanish": "puerta",
     "acceptedAnswers": [
       "puerta"
+    ],
+    "dutchAnswers": [
+      "deur"
     ]
   },
   {
@@ -8349,6 +11214,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ventana",
     "acceptedAnswers": [
       "ventana"
+    ],
+    "dutchAnswers": [
+      "raam"
     ]
   },
   {
@@ -8358,6 +11226,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mesa",
     "acceptedAnswers": [
       "mesa"
+    ],
+    "dutchAnswers": [
+      "tafel"
     ]
   },
   {
@@ -8367,6 +11238,9 @@ const SPAANS_WOORDEN = [
     "spanish": "silla",
     "acceptedAnswers": [
       "silla"
+    ],
+    "dutchAnswers": [
+      "stoel"
     ]
   },
   {
@@ -8376,6 +11250,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cama",
     "acceptedAnswers": [
       "cama"
+    ],
+    "dutchAnswers": [
+      "bed"
     ]
   },
   {
@@ -8385,6 +11262,9 @@ const SPAANS_WOORDEN = [
     "spanish": "luz",
     "acceptedAnswers": [
       "luz"
+    ],
+    "dutchAnswers": [
+      "licht"
     ]
   },
   {
@@ -8394,6 +11274,9 @@ const SPAANS_WOORDEN = [
     "spanish": "agua",
     "acceptedAnswers": [
       "agua"
+    ],
+    "dutchAnswers": [
+      "water"
     ]
   },
   {
@@ -8403,6 +11286,9 @@ const SPAANS_WOORDEN = [
     "spanish": "electricidad",
     "acceptedAnswers": [
       "electricidad"
+    ],
+    "dutchAnswers": [
+      "elektriciteit"
     ]
   },
   {
@@ -8412,6 +11298,9 @@ const SPAANS_WOORDEN = [
     "spanish": "alquiler",
     "acceptedAnswers": [
       "alquiler"
+    ],
+    "dutchAnswers": [
+      "huur"
     ]
   },
   {
@@ -8421,6 +11310,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dueño",
     "acceptedAnswers": [
       "dueño"
+    ],
+    "dutchAnswers": [
+      "eigenaar"
     ]
   },
   {
@@ -8430,6 +11322,9 @@ const SPAANS_WOORDEN = [
     "spanish": "compartir",
     "acceptedAnswers": [
       "compartir"
+    ],
+    "dutchAnswers": [
+      "delen"
     ]
   },
   {
@@ -8439,6 +11334,9 @@ const SPAANS_WOORDEN = [
     "spanish": "dirección",
     "acceptedAnswers": [
       "dirección"
+    ],
+    "dutchAnswers": [
+      "adres"
     ]
   },
   {
@@ -8448,6 +11346,10 @@ const SPAANS_WOORDEN = [
     "spanish": "piso",
     "acceptedAnswers": [
       "piso"
+    ],
+    "dutchAnswers": [
+      "verdieping",
+      "appartement"
     ]
   },
   {
@@ -8457,6 +11359,9 @@ const SPAANS_WOORDEN = [
     "spanish": "ascensor",
     "acceptedAnswers": [
       "ascensor"
+    ],
+    "dutchAnswers": [
+      "lift"
     ]
   },
   {
@@ -8465,6 +11370,9 @@ const SPAANS_WOORDEN = [
     "dutch": "boliviano (valuta)",
     "spanish": "boliviano",
     "acceptedAnswers": [
+      "boliviano"
+    ],
+    "dutchAnswers": [
       "boliviano"
     ]
   },
@@ -8475,6 +11383,9 @@ const SPAANS_WOORDEN = [
     "spanish": "La Paz",
     "acceptedAnswers": [
       "La Paz"
+    ],
+    "dutchAnswers": [
+      "La Paz"
     ]
   },
   {
@@ -8483,6 +11394,9 @@ const SPAANS_WOORDEN = [
     "dutch": "Santa Cruz",
     "spanish": "Santa Cruz",
     "acceptedAnswers": [
+      "Santa Cruz"
+    ],
+    "dutchAnswers": [
       "Santa Cruz"
     ]
   },
@@ -8493,6 +11407,9 @@ const SPAANS_WOORDEN = [
     "spanish": "Uyuni",
     "acceptedAnswers": [
       "Uyuni"
+    ],
+    "dutchAnswers": [
+      "Uyuni"
     ]
   },
   {
@@ -8501,6 +11418,9 @@ const SPAANS_WOORDEN = [
     "dutch": "Sucre",
     "spanish": "Sucre",
     "acceptedAnswers": [
+      "Sucre"
+    ],
+    "dutchAnswers": [
       "Sucre"
     ]
   },
@@ -8511,6 +11431,9 @@ const SPAANS_WOORDEN = [
     "spanish": "altiplano",
     "acceptedAnswers": [
       "altiplano"
+    ],
+    "dutchAnswers": [
+      "hoogvlakte"
     ]
   },
   {
@@ -8520,6 +11443,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salar",
     "acceptedAnswers": [
       "salar"
+    ],
+    "dutchAnswers": [
+      "zoutvlakte"
     ]
   },
   {
@@ -8529,6 +11455,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mercado",
     "acceptedAnswers": [
       "mercado"
+    ],
+    "dutchAnswers": [
+      "markt"
     ]
   },
   {
@@ -8538,6 +11467,9 @@ const SPAANS_WOORDEN = [
     "spanish": "minibús",
     "acceptedAnswers": [
       "minibús"
+    ],
+    "dutchAnswers": [
+      "minibus"
     ]
   },
   {
@@ -8547,6 +11479,9 @@ const SPAANS_WOORDEN = [
     "spanish": "teleférico",
     "acceptedAnswers": [
       "teleférico"
+    ],
+    "dutchAnswers": [
+      "kabelbaan"
     ]
   },
   {
@@ -8556,6 +11491,9 @@ const SPAANS_WOORDEN = [
     "spanish": "salteña",
     "acceptedAnswers": [
       "salteña"
+    ],
+    "dutchAnswers": [
+      "Boliviaans pasteitje"
     ]
   },
   {
@@ -8565,6 +11503,9 @@ const SPAANS_WOORDEN = [
     "spanish": "api",
     "acceptedAnswers": [
       "api"
+    ],
+    "dutchAnswers": [
+      "Boliviaanse maïsdrank"
     ]
   },
   {
@@ -8574,6 +11515,9 @@ const SPAANS_WOORDEN = [
     "spanish": "llajua",
     "acceptedAnswers": [
       "llajua"
+    ],
+    "dutchAnswers": [
+      "Boliviaanse pittige saus"
     ]
   },
   {
@@ -8583,6 +11527,9 @@ const SPAANS_WOORDEN = [
     "spanish": "hoja de coca",
     "acceptedAnswers": [
       "hoja de coca"
+    ],
+    "dutchAnswers": [
+      "cocabladeren"
     ]
   },
   {
@@ -8592,6 +11539,9 @@ const SPAANS_WOORDEN = [
     "spanish": "altura",
     "acceptedAnswers": [
       "altura"
+    ],
+    "dutchAnswers": [
+      "hoogte"
     ]
   },
   {
@@ -8601,6 +11551,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mal de altura",
     "acceptedAnswers": [
       "mal de altura"
+    ],
+    "dutchAnswers": [
+      "hoogteziekte"
     ]
   },
   {
@@ -8610,6 +11563,9 @@ const SPAANS_WOORDEN = [
     "spanish": "efectivo",
     "acceptedAnswers": [
       "efectivo"
+    ],
+    "dutchAnswers": [
+      "contant geld"
     ]
   },
   {
@@ -8619,6 +11575,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cambio",
     "acceptedAnswers": [
       "cambio"
+    ],
+    "dutchAnswers": [
+      "wisselgeld"
     ]
   },
   {
@@ -8628,6 +11587,9 @@ const SPAANS_WOORDEN = [
     "spanish": "casera",
     "acceptedAnswers": [
       "casera"
+    ],
+    "dutchAnswers": [
+      "aanspreekvorm voor vrouwelijke marktverkoper"
     ]
   },
   {
@@ -8637,6 +11599,9 @@ const SPAANS_WOORDEN = [
     "spanish": "casero",
     "acceptedAnswers": [
       "casero"
+    ],
+    "dutchAnswers": [
+      "aanspreekvorm voor mannelijke marktverkoper"
     ]
   },
   {
@@ -8646,6 +11611,9 @@ const SPAANS_WOORDEN = [
     "spanish": "Argentina",
     "acceptedAnswers": [
       "Argentina"
+    ],
+    "dutchAnswers": [
+      "Argentinië"
     ]
   },
   {
@@ -8654,6 +11622,9 @@ const SPAANS_WOORDEN = [
     "dutch": "Buenos Aires",
     "spanish": "Buenos Aires",
     "acceptedAnswers": [
+      "Buenos Aires"
+    ],
+    "dutchAnswers": [
       "Buenos Aires"
     ]
   },
@@ -8664,6 +11635,9 @@ const SPAANS_WOORDEN = [
     "spanish": "Salta",
     "acceptedAnswers": [
       "Salta"
+    ],
+    "dutchAnswers": [
+      "Salta"
     ]
   },
   {
@@ -8673,6 +11647,9 @@ const SPAANS_WOORDEN = [
     "spanish": "peso argentino",
     "acceptedAnswers": [
       "peso argentino"
+    ],
+    "dutchAnswers": [
+      "Argentijnse peso"
     ]
   },
   {
@@ -8682,6 +11659,9 @@ const SPAANS_WOORDEN = [
     "spanish": "colectivo",
     "acceptedAnswers": [
       "colectivo"
+    ],
+    "dutchAnswers": [
+      "stadsbus"
     ]
   },
   {
@@ -8691,6 +11671,9 @@ const SPAANS_WOORDEN = [
     "spanish": "subte",
     "acceptedAnswers": [
       "subte"
+    ],
+    "dutchAnswers": [
+      "metro"
     ]
   },
   {
@@ -8700,6 +11683,9 @@ const SPAANS_WOORDEN = [
     "spanish": "remís",
     "acceptedAnswers": [
       "remís"
+    ],
+    "dutchAnswers": [
+      "taxidienst met vaste prijs"
     ]
   },
   {
@@ -8709,6 +11695,9 @@ const SPAANS_WOORDEN = [
     "spanish": "mate",
     "acceptedAnswers": [
       "mate"
+    ],
+    "dutchAnswers": [
+      "mate-thee"
     ]
   },
   {
@@ -8718,6 +11707,9 @@ const SPAANS_WOORDEN = [
     "spanish": "parrilla",
     "acceptedAnswers": [
       "parrilla"
+    ],
+    "dutchAnswers": [
+      "grillrestaurant"
     ]
   },
   {
@@ -8727,6 +11719,9 @@ const SPAANS_WOORDEN = [
     "spanish": "asado",
     "acceptedAnswers": [
       "asado"
+    ],
+    "dutchAnswers": [
+      "barbecue"
     ]
   },
   {
@@ -8735,6 +11730,9 @@ const SPAANS_WOORDEN = [
     "dutch": "empanada",
     "spanish": "empanada",
     "acceptedAnswers": [
+      "empanada"
+    ],
+    "dutchAnswers": [
       "empanada"
     ]
   },
@@ -8745,6 +11743,10 @@ const SPAANS_WOORDEN = [
     "spanish": "factura",
     "acceptedAnswers": [
       "factura"
+    ],
+    "dutchAnswers": [
+      "zoet broodje",
+      "gebakje"
     ]
   },
   {
@@ -8754,6 +11756,9 @@ const SPAANS_WOORDEN = [
     "spanish": "vos",
     "acceptedAnswers": [
       "vos"
+    ],
+    "dutchAnswers": [
+      "jij"
     ]
   },
   {
@@ -8763,6 +11768,10 @@ const SPAANS_WOORDEN = [
     "spanish": "che",
     "acceptedAnswers": [
       "che"
+    ],
+    "dutchAnswers": [
+      "hé",
+      "joh"
     ]
   },
   {
@@ -8772,6 +11781,10 @@ const SPAANS_WOORDEN = [
     "spanish": "dale",
     "acceptedAnswers": [
       "dale"
+    ],
+    "dutchAnswers": [
+      "oké",
+      "kom op"
     ]
   },
   {
@@ -8781,6 +11794,9 @@ const SPAANS_WOORDEN = [
     "spanish": "¿cómo andás?",
     "acceptedAnswers": [
       "¿cómo andás?"
+    ],
+    "dutchAnswers": [
+      "hoe gaat het?"
     ]
   },
   {
@@ -8790,6 +11806,9 @@ const SPAANS_WOORDEN = [
     "spanish": "plata",
     "acceptedAnswers": [
       "plata"
+    ],
+    "dutchAnswers": [
+      "geld"
     ]
   },
   {
@@ -8799,6 +11818,10 @@ const SPAANS_WOORDEN = [
     "spanish": "boludo",
     "acceptedAnswers": [
       "boludo"
+    ],
+    "dutchAnswers": [
+      "gozer",
+      "idioot, contextafhankelijk"
     ]
   },
   {
@@ -8808,6 +11831,10 @@ const SPAANS_WOORDEN = [
     "spanish": "quilombo",
     "acceptedAnswers": [
       "quilombo"
+    ],
+    "dutchAnswers": [
+      "chaos",
+      "gedoe"
     ]
   },
   {
@@ -8817,6 +11844,10 @@ const SPAANS_WOORDEN = [
     "spanish": "re",
     "acceptedAnswers": [
       "re"
+    ],
+    "dutchAnswers": [
+      "heel",
+      "super"
     ]
   },
   {
@@ -8826,6 +11857,9 @@ const SPAANS_WOORDEN = [
     "spanish": "Chile",
     "acceptedAnswers": [
       "Chile"
+    ],
+    "dutchAnswers": [
+      "Chili"
     ]
   },
   {
@@ -8834,6 +11868,9 @@ const SPAANS_WOORDEN = [
     "dutch": "Santiago",
     "spanish": "Santiago",
     "acceptedAnswers": [
+      "Santiago"
+    ],
+    "dutchAnswers": [
       "Santiago"
     ]
   },
@@ -8844,6 +11881,9 @@ const SPAANS_WOORDEN = [
     "spanish": "peso chileno",
     "acceptedAnswers": [
       "peso chileno"
+    ],
+    "dutchAnswers": [
+      "Chileense peso"
     ]
   },
   {
@@ -8853,6 +11893,9 @@ const SPAANS_WOORDEN = [
     "spanish": "micro",
     "acceptedAnswers": [
       "micro"
+    ],
+    "dutchAnswers": [
+      "bus"
     ]
   },
   {
@@ -8861,6 +11904,9 @@ const SPAANS_WOORDEN = [
     "dutch": "metro",
     "spanish": "metro",
     "acceptedAnswers": [
+      "metro"
+    ],
+    "dutchAnswers": [
       "metro"
     ]
   },
@@ -8871,6 +11917,9 @@ const SPAANS_WOORDEN = [
     "spanish": "pololo",
     "acceptedAnswers": [
       "pololo"
+    ],
+    "dutchAnswers": [
+      "vriendje"
     ]
   },
   {
@@ -8880,6 +11929,9 @@ const SPAANS_WOORDEN = [
     "spanish": "polola",
     "acceptedAnswers": [
       "polola"
+    ],
+    "dutchAnswers": [
+      "vriendinnetje"
     ]
   },
   {
@@ -8889,6 +11941,10 @@ const SPAANS_WOORDEN = [
     "spanish": "carrete",
     "acceptedAnswers": [
       "carrete"
+    ],
+    "dutchAnswers": [
+      "feest",
+      "uitgaan"
     ]
   },
   {
@@ -8898,6 +11954,10 @@ const SPAANS_WOORDEN = [
     "spanish": "pega",
     "acceptedAnswers": [
       "pega"
+    ],
+    "dutchAnswers": [
+      "werk",
+      "baan"
     ]
   },
   {
@@ -8907,6 +11967,10 @@ const SPAANS_WOORDEN = [
     "spanish": "lucas",
     "acceptedAnswers": [
       "lucas"
+    ],
+    "dutchAnswers": [
+      "geld",
+      "duizend pesos"
     ]
   },
   {
@@ -8916,6 +11980,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cachai",
     "acceptedAnswers": [
       "cachai"
+    ],
+    "dutchAnswers": [
+      "snap je?"
     ]
   },
   {
@@ -8925,6 +11992,10 @@ const SPAANS_WOORDEN = [
     "spanish": "bacán",
     "acceptedAnswers": [
       "bacán"
+    ],
+    "dutchAnswers": [
+      "cool",
+      "geweldig"
     ]
   },
   {
@@ -8934,6 +12005,9 @@ const SPAANS_WOORDEN = [
     "spanish": "al tiro",
     "acceptedAnswers": [
       "al tiro"
+    ],
+    "dutchAnswers": [
+      "meteen"
     ]
   },
   {
@@ -8943,6 +12017,9 @@ const SPAANS_WOORDEN = [
     "spanish": "po",
     "acceptedAnswers": [
       "po"
+    ],
+    "dutchAnswers": [
+      "informeel stopwoordje"
     ]
   },
   {
@@ -8952,6 +12029,10 @@ const SPAANS_WOORDEN = [
     "spanish": "once",
     "acceptedAnswers": [
       "once"
+    ],
+    "dutchAnswers": [
+      "lichte avondmaaltijd",
+      "thee"
     ]
   },
   {
@@ -8961,6 +12042,9 @@ const SPAANS_WOORDEN = [
     "spanish": "completo",
     "acceptedAnswers": [
       "completo"
+    ],
+    "dutchAnswers": [
+      "Chileense hotdog"
     ]
   },
   {
@@ -8970,6 +12054,9 @@ const SPAANS_WOORDEN = [
     "spanish": "palta",
     "acceptedAnswers": [
       "palta"
+    ],
+    "dutchAnswers": [
+      "avocado"
     ]
   },
   {
@@ -8979,6 +12066,9 @@ const SPAANS_WOORDEN = [
     "spanish": "terminal de buses",
     "acceptedAnswers": [
       "terminal de buses"
+    ],
+    "dutchAnswers": [
+      "busstation"
     ]
   },
   {
@@ -8988,6 +12078,9 @@ const SPAANS_WOORDEN = [
     "spanish": "cordillera",
     "acceptedAnswers": [
       "cordillera"
+    ],
+    "dutchAnswers": [
+      "bergketen"
     ]
   },
   {
@@ -8997,6 +12090,9 @@ const SPAANS_WOORDEN = [
     "spanish": "costa",
     "acceptedAnswers": [
       "costa"
+    ],
+    "dutchAnswers": [
+      "kust"
     ]
   }
 ];

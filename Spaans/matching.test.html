@@ -22,19 +22,26 @@
   test('ontbrekend accent 2', 'necesarrio erg fout nee', ['también'], [], 'wrong'); // sanity: irrelevant answer
   test('een typfout (extra letter)', 'necesarrio', ['necesario'], [], 'minor');
   test('een typfout (ontbrekende letter)', 'necesari', ['necesario'], [], 'minor');
-  test('meerdere typfouten', 'necesarrioo', ['necesario'], [], 'wrong');
+  test('meerdere typfouten (2 vervangen letters, te kort voor coulance)', 'viejor', ['viajar'], [], 'wrong');
   test('volledig verkeerd antwoord', 'pasar', ['ocurrir'], [], 'wrong');
   test('meerdere correcte antwoorden - eerste', 'quizás', ['quizás', 'tal vez', 'a lo mejor'], [], 'correct');
   test('meerdere correcte antwoorden - tweede', 'tal vez', ['quizás', 'tal vez', 'a lo mejor'], [], 'correct');
   test('meerdere correcte antwoorden - accent-typo op derde', 'a lo mejorr', ['quizás', 'tal vez', 'a lo mejor'], [], 'minor');
   test('leeg antwoord', '', ['hola'], [], 'wrong');
-  test('kort woord, 1 letter af = ander woord', 'son', ['sol'], [], 'wrong');
   test('veiligheidsnet: ander bestaand woord niet als minor goedkeuren', 'pesar', ['pasar'], ['pesar'], 'wrong');
   test('qué met accent correct', 'qué', ['qué'], [], 'correct');
   test('qué zonder accent = minor', 'que', ['qué'], [], 'minor');
   test('cómo zonder accent = minor', 'como', ['cómo'], [], 'minor');
   test('dónde zonder accent = minor', 'donde', ['dónde'], [], 'minor');
   test('difícil zonder accent = minor', 'dificil', ['difícil'], [], 'minor');
+  test('kort woord, extra letter (invoeging) = minor', 'elke', ['elk'], [], 'minor');
+  test('kort woord, letter vervangen blijft ander woord', 'son', ['sol'], [], 'wrong');
+  test('kort woord, ontbrekende letter (weglating) = minor', 'a', ['al'], [], 'wrong'); // te kort om coulant te zijn
+  test('gemiddeld woord, letter vervangen te kort voor coulance', 'casa', ['caza'], [], 'wrong');
+  test('langer woord, letter vervangen wel coulant (len>=5)', 'trebajo', ['trabajo'], [], 'minor');
+  test('vraagtekens tellen niet mee', 'cómo andás', ['¿cómo andás?'], [], 'correct');
+  test('uitroeptekens tellen niet mee', 'hola', ['¡hola!'], [], 'correct');
+  test('leestekens in eigen antwoord tellen ook niet mee', '¿qué pasa?', ['qué pasa'], [], 'correct');
 
   out.textContent += `\n${pass} geslaagd, ${fail} gefaald\n`;
   document.title = fail === 0 ? 'ALLE TESTS OK' : (fail + ' TESTS GEFAALD');
