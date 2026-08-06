@@ -4,12 +4,14 @@
 (function () {
   const Spaans = (window.Spaans = window.Spaans || {});
 
-  // Leestekens als ¿ ¡ ? ! . , ; : tellen niet mee bij het beoordelen van een
-  // antwoord (bijv. "¿cómo andás?" mag ook als "como andas" ingetypt worden).
+  // Tekst tussen haakjes (verduidelijkende toevoeging, bijv. "zijn
+  // (toestand/plaats)") en leestekens als ¿ ¡ ? ! . , ; : tellen niet mee
+  // bij het beoordelen van een antwoord.
   function normalizeBasic(s) {
     return String(s == null ? '' : s)
       .trim()
       .toLowerCase()
+      .replace(/\([^)]*\)/g, '')
       .replace(/[¿¡?!.,;:]/g, '')
       .replace(/\s+/g, ' ')
       .trim();

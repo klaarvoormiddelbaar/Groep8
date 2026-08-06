@@ -42,6 +42,8 @@
   test('vraagtekens tellen niet mee', 'cómo andás', ['¿cómo andás?'], [], 'correct');
   test('uitroeptekens tellen niet mee', 'hola', ['¡hola!'], [], 'correct');
   test('leestekens in eigen antwoord tellen ook niet mee', '¿qué pasa?', ['qué pasa'], [], 'correct');
+  test('haakjes tellen niet mee', 'zijn', ['zijn (toestand/plaats)'], [], 'correct');
+  test('haakjes in eigen antwoord tellen ook niet mee', 'zijn (toestand)', ['zijn'], [], 'correct');
 
   out.textContent += `\n${pass} geslaagd, ${fail} gefaald\n`;
   document.title = fail === 0 ? 'ALLE TESTS OK' : (fail + ' TESTS GEFAALD');
