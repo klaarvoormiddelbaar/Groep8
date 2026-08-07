@@ -211,6 +211,7 @@
       z-index: 10;
     }
     .canva-fs-btn {
+      scroll-margin-top: 88px;
       display: inline-flex; align-items: center; gap: 8px;
       background: rgba(255,255,255,0.07);
       border: 1px solid rgba(255,255,255,0.12);
@@ -248,6 +249,7 @@
       grid-template-columns: 1fr 1fr;
       gap: 24px;
       margin-bottom: 24px;
+      scroll-margin-top: 92px;
       animation: fadeUp 0.5s 0.1s cubic-bezier(0.22,1,0.36,1) both;
     }
     .content-card {
@@ -790,7 +792,7 @@
           <img class="hero-jay" src="/Afbeeldingen/Jay los/Jay waving.png" alt="" aria-hidden="true">
         </div>
 
-        <div class="content-grid">
+        <div class="content-grid" id="content-grid">
           <div style="display:flex;flex-direction:column;gap:24px;min-width:0;">
             <div class="tip-card" style="margin-bottom:0;animation:none;padding:36px;flex:1 1 auto;">
               <div class="tip-icon"><img src="/Afbeeldingen/emojis nieuw/lamp.png" alt="" style="width:32px;height:32px;object-fit:contain"></div>
@@ -858,25 +860,6 @@
       (window._tutReadyPromise || Promise.resolve()).then(function () {
         if (L.n === 1 && typeof tutMaybeStart === 'function') tutMaybeStart();
       });
-      (function () {
-        var stage = document.getElementById('canva-stage');
-        if (!stage) return;
-        var io = new IntersectionObserver(function (entries) {
-          if (entries[0].isIntersecting) {
-            io.disconnect();
-            var t;
-            function fire() {
-              clearTimeout(t);
-              window.removeEventListener('scroll', reset, true);
-              if (typeof canvaTutMaybeStart === 'function') canvaTutMaybeStart();
-            }
-            function reset() { clearTimeout(t); t = setTimeout(fire, 420); }
-            window.addEventListener('scroll', reset, { passive: true, capture: true });
-            t = setTimeout(fire, 900);
-          }
-        }, { threshold: 0.5 });
-        io.observe(stage);
-      })();
     }
     function initCarousel() {
       const inner     = document.getElementById('mat-inner');
@@ -919,15 +902,6 @@
       var el = document.getElementById('canva-stage');
       if (!el) return;
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      var t;
-      function fire() {
-        clearTimeout(t);
-        window.removeEventListener('scroll', reset, true);
-        if (typeof canvaTutMaybeStart === 'function') canvaTutMaybeStart();
-      }
-      function reset() { clearTimeout(t); t = setTimeout(fire, 420); }
-      window.addEventListener('scroll', reset, { passive: true, capture: true });
-      t = setTimeout(fire, 900);
     }
 
     function openLightbox(src, naam) {
@@ -982,8 +956,7 @@
           const { data: { user } } = await supabase.auth.getUser();
           if (user && user.user_metadata) {
             const m = user.user_metadata;
-            if (m.kvm_les_tut_v1)   window._tutDone.add('kvm_les_tut_v1');
-            if (m.kvm_canva_tut_v1) window._tutDone.add('kvm_canva_tut_v1');
+            if (m.kvm_les_tut_v2) window._tutDone.add('kvm_les_tut_v2');
           }
         } catch (e) {}
       })(),
@@ -1006,7 +979,7 @@
     <div id="tut-spotlight" aria-hidden="true"></div>
     <div id="tut-card">
       <button id="tut-close" aria-label="Rondleiding sluiten">✕</button>
-      <div id="tut-lbl">Stap 1 van 3</div>
+      <div id="tut-lbl">Stap 1 van 6</div>
       <div id="tut-body"></div>
       <div id="tut-footer">
         <div id="tut-dots"></div>
@@ -1020,9 +993,8 @@
 
   <script>
   (function () {
-    var BTN_KEY   = 'kvm_les_tut_v1';
-    var CANVA_KEY = 'kvm_canva_tut_v1';
-    var currentKey = BTN_KEY;
+    var TUT_KEY = 'kvm_les_tut_v2';
+    var currentKey = TUT_KEY;
     var step = 0;
     var activeSteps = [];
 
@@ -1069,14 +1041,25 @@
       }
     ];
 
+    var CONTENT_STEP = {
+      id:              'content-grid',
+      text:            'Hier vind je alles wat je als leerkracht nodig hebt voor deze les.',
+      radius:          '28px',
+      alwaysScrollTop: true
+    };
+
     var CANVA_STEPS = [
       {
-        id:   'canva-fs-btn',
-        text: 'Open de les op volledig scherm. Zo zien de leerlingen de presentatie goed op het bord.'
+        id:              'canva-stage',
+        html:            '<div>Navigeer door de slides door in de presentatie te klikken.</div><div style="display:flex;margin-top:14px;border-radius:10px;overflow:hidden;border:1.5px solid #eceeee"><div style="flex:1;padding:12px 8px;text-align:center;background:#f7f9fb;border-right:1px solid #eceeee"><div style="font-size:22px">&#8592;</div><div style="font-size:13px;font-weight:700;color:#191c1d;margin-top:4px">Vorige</div><div style="font-size:12px;color:#6d747a;margin-top:2px">Links klikken</div></div><div style="flex:1;padding:12px 8px;text-align:center;background:#f7f9fb"><div style="font-size:22px">&#8594;</div><div style="font-size:13px;font-weight:700;color:#191c1d;margin-top:4px">Volgende</div><div style="font-size:12px;color:#6d747a;margin-top:2px">Rechts klikken</div></div></div>',
+        alwaysScrollTop: true,
+        forceBelow:      true
       },
       {
-        id:   'canva-stage',
-        html: '<div>Navigeer door de slides door in de presentatie te klikken.</div><div style="display:flex;margin-top:14px;border-radius:10px;overflow:hidden;border:1.5px solid #eceeee"><div style="flex:1;padding:12px 8px;text-align:center;background:#f7f9fb;border-right:1px solid #eceeee"><div style="font-size:22px">&#8592;</div><div style="font-size:13px;font-weight:700;color:#191c1d;margin-top:4px">Vorige</div><div style="font-size:12px;color:#6d747a;margin-top:2px">Links klikken</div></div><div style="flex:1;padding:12px 8px;text-align:center;background:#f7f9fb"><div style="font-size:22px">&#8594;</div><div style="font-size:13px;font-weight:700;color:#191c1d;margin-top:4px">Volgende</div><div style="font-size:12px;color:#6d747a;margin-top:2px">Rechts klikken</div></div></div>'
+        id:              'canva-fs-btn',
+        text:            'Open de les op volledig scherm. Zo zien de leerlingen de presentatie goed op het bord.',
+        alwaysScrollTop: true,
+        forceBelow:      true
       }
     ];
 
@@ -1114,13 +1097,20 @@
       spotlight.style.left         = (r.left   - pad) + 'px';
       spotlight.style.width        = (r.width  + pad * 2) + 'px';
       spotlight.style.height       = (r.height + pad * 2) + 'px';
-      spotlight.style.borderRadius = getComputedStyle(target).borderRadius || '9999px';
+      spotlight.style.borderRadius = st.radius || getComputedStyle(target).borderRadius || '9999px';
 
-      var cardTop   = r.bottom + pad + gap;
-      var arrowDown = false;
-      if (cardTop + cH > window.innerHeight - 16) {
-        cardTop   = r.top - cH - gap;
-        arrowDown = true;
+      var cardTop, arrowDown = false;
+      if (st.forceBelow) {
+        /* Kaart altijd onder het doel, spraakwolk boven — ook als het
+           doel (bijna) net zo hoog is als het scherm zelf */
+        cardTop = Math.min(r.bottom, window.innerHeight) + pad + gap;
+        cardTop = Math.min(cardTop, window.innerHeight - cH - 16);
+      } else {
+        cardTop = r.bottom + pad + gap;
+        if (cardTop + cH > window.innerHeight - 16) {
+          cardTop   = r.top - cH - gap;
+          arrowDown = true;
+        }
       }
       cardTop = Math.max(16, cardTop);
 
@@ -1149,9 +1139,22 @@
       nextBtn.textContent = (s === activeSteps.length - 1) ? 'Klaar!' : 'Volgende →';
     }
 
+    function isInView(target) {
+      var r = target.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight;
+    }
+
     function show(s) {
       step = s;
-      positionStep(s);
+      var st     = activeSteps[s];
+      var target = document.getElementById(st.id);
+      if (!target) { tutClose(); return; }
+      if (st.alwaysScrollTop) {
+        target.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      } else if (!isInView(target)) {
+        target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+      requestAnimationFrame(function () { positionStep(s); });
     }
 
     function tutOpenWith(steps, key) {
@@ -1160,62 +1163,64 @@
       activeSteps = steps;
       buildDots(steps.length);
 
-      if (key === BTN_KEY) {
-        /* Stop lopende hero-animatie zodat getBoundingClientRect klopt */
-        var hero = document.querySelector('.hero');
-        if (hero) hero.style.animation = 'none';
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        document.body.style.overflow = 'hidden';
-      }
+      /* Stop lopende hero-animatie zodat getBoundingClientRect klopt */
+      var hero = document.querySelector('.hero');
+      if (hero) hero.style.animation = 'none';
+
+      /* Extra ruimte onderaan zodat de kaart bij de laatste stappen altijd
+         onder het doel past (spraakwolk boven i.p.v. omgeklapt eronder) */
+      var stage = document.getElementById('canva-stage');
+      if (stage) stage.style.marginBottom = '140px';
 
       spotlight.style.transition = 'none';
       card.style.transition      = 'none';
       step = 0;
 
+      var target = document.getElementById(steps[0].id);
+      if (target) target.scrollIntoView({ block: 'center', behavior: 'instant' });
+
+      /* Dubbele rAF: geeft de browser een extra frame om lay-out (lettertypen,
+         afbeeldingen, animaties) helemaal te laten settelen voordat we de
+         positie meten — voorkomt dat de kaart bij de allereerste stap soms
+         verkeerd omklapt door een nog niet definitieve lay-out. */
       requestAnimationFrame(function () {
-        positionStep(0);
-        spotlight.style.transition = '';
-        card.style.transition      = '';
-        overlay.classList.add('active');
+        requestAnimationFrame(function () {
+          positionStep(0);
+          spotlight.style.transition = '';
+          card.style.transition      = '';
+          overlay.classList.add('active');
+        });
       });
     }
 
     function tutClose() {
       overlay.classList.remove('active');
-      document.body.style.overflow = '';
+      var stage = document.getElementById('canva-stage');
+      if (stage) stage.style.marginBottom = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       try { localStorage.setItem(currentKey, '1'); } catch (e) {}
       if (window._tutDone) window._tutDone.add(currentKey);
       if (window._markTutDone) window._markTutDone(currentKey);
     }
 
-    /* ── Knoppenrondleiding ── */
+    /* ── Rondleiding: knoppen + informatieblokken + presentatie samen ── */
+    function buildTutSteps() {
+      var exists = function (s) { return !!document.getElementById(s.id); };
+      return ALL_STEPS.filter(exists)
+        .concat(exists(CONTENT_STEP) ? [CONTENT_STEP] : [])
+        .concat(CANVA_STEPS.filter(exists));
+    }
+
     window.tutMaybeStart = function () {
-      try { if (localStorage.getItem(BTN_KEY) || (window._tutDone && window._tutDone.has(BTN_KEY))) return; } catch (e) {}
+      try { if (localStorage.getItem(TUT_KEY) || (window._tutDone && window._tutDone.has(TUT_KEY))) return; } catch (e) {}
       if (overlay.classList.contains('active')) return;
-      var steps = ALL_STEPS.filter(function (s) { return !!document.getElementById(s.id); });
-      tutOpenWith(steps, BTN_KEY);
+      tutOpenWith(buildTutSteps(), TUT_KEY);
     };
 
     window.tutStart = function () {
-      try { localStorage.removeItem(BTN_KEY); } catch (e) {}
+      try { localStorage.removeItem(TUT_KEY); } catch (e) {}
       if (overlay.classList.contains('active')) tutClose();
-      var steps = ALL_STEPS.filter(function (s) { return !!document.getElementById(s.id); });
-      tutOpenWith(steps, BTN_KEY);
-    };
-
-    /* ── Canva-rondleiding ── */
-    window.canvaTutMaybeStart = function () {
-      try { if (localStorage.getItem(CANVA_KEY) || (window._tutDone && window._tutDone.has(CANVA_KEY))) return; } catch (e) {}
-      if (overlay.classList.contains('active')) return;
-      var steps = CANVA_STEPS.filter(function (s) { return !!document.getElementById(s.id); });
-      tutOpenWith(steps, CANVA_KEY);
-    };
-
-    window.canvaTutStart = function () {
-      try { localStorage.removeItem(CANVA_KEY); } catch (e) {}
-      if (overlay.classList.contains('active')) tutClose();
-      var steps = CANVA_STEPS.filter(function (s) { return !!document.getElementById(s.id); });
-      tutOpenWith(steps, CANVA_KEY);
+      tutOpenWith(buildTutSteps(), TUT_KEY);
     };
 
     closeBtn.addEventListener('click', tutClose);
