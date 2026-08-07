@@ -249,6 +249,13 @@
       margin-bottom: 8px;
     }
 
+    .form-hint {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
     .input-wrap { position: relative; }
 
     .input-prefix {
@@ -607,7 +614,7 @@
                   </svg>
                 </span>
                 <input type="password" id="newPassword" name="newPassword" class="form-input"
-                  placeholder="Minimaal 6 tekens" autocomplete="new-password" required>
+                  placeholder="Kies een nieuw wachtwoord" autocomplete="new-password" required>
                 <button type="button" class="pw-toggle" id="pwToggle1" aria-label="Wachtwoord tonen">
                   <svg id="eyeOpen1" width="18" height="18" viewBox="0 0 18 18" fill="none">
                     <path d="M9 4C5.5 4 2 9 2 9s3.5 5 7 5 7-5 7-5-3.5-5-7-5Z" stroke="currentColor" stroke-width="1.4"/>
@@ -619,6 +626,7 @@
                   </svg>
                 </button>
               </div>
+              <p class="form-hint">Minimaal 8 tekens, met een hoofdletter, een kleine letter, een cijfer en een speciaal teken.</p>
             </div>
 
             <div class="form-group">
@@ -909,9 +917,33 @@
       newPasswordEl.classList.remove('is-error');
       confirmPasswordEl.classList.remove('is-error');
 
-      if (!wachtwoord || wachtwoord.length < 6) {
+      if (!wachtwoord || wachtwoord.length < 8) {
         newPasswordEl.classList.add('is-error');
-        showMsg('is-error', 'Je wachtwoord moet minimaal 6 tekens bevatten.');
+        showMsg('is-error', 'Je wachtwoord moet minimaal 8 tekens bevatten.');
+        newPasswordEl.focus();
+        return false;
+      }
+      if (!/[A-Z]/.test(wachtwoord)) {
+        newPasswordEl.classList.add('is-error');
+        showMsg('is-error', 'Je wachtwoord moet minimaal 1 hoofdletter bevatten.');
+        newPasswordEl.focus();
+        return false;
+      }
+      if (!/[a-z]/.test(wachtwoord)) {
+        newPasswordEl.classList.add('is-error');
+        showMsg('is-error', 'Je wachtwoord moet minimaal 1 kleine letter bevatten.');
+        newPasswordEl.focus();
+        return false;
+      }
+      if (!/[0-9]/.test(wachtwoord)) {
+        newPasswordEl.classList.add('is-error');
+        showMsg('is-error', 'Je wachtwoord moet minimaal 1 cijfer bevatten.');
+        newPasswordEl.focus();
+        return false;
+      }
+      if (!/[^A-Za-z0-9]/.test(wachtwoord)) {
+        newPasswordEl.classList.add('is-error');
+        showMsg('is-error', 'Je wachtwoord moet minimaal 1 speciaal teken bevatten (bijv. ! @ # $ %).');
         newPasswordEl.focus();
         return false;
       }
