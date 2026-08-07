@@ -326,17 +326,18 @@
     }
     .checkbox-label input[type="checkbox"]::before {
       content: '';
-      width: 10px; height: 10px;
-      border-radius: 3px;
-      background: var(--blue);
-      transform: scale(0);
+      width: 5px; height: 9px;
+      margin-top: -2px;
+      border-right: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: scale(0) rotate(45deg);
       transition: transform .15s cubic-bezier(.22,.68,0,1.4);
     }
     .checkbox-label input[type="checkbox"]:checked {
       border-color: var(--blue);
-      background: rgba(var(--blue-rgb),.08);
+      background: var(--blue);
     }
-    .checkbox-label input[type="checkbox"]:checked::before { transform: scale(1); }
+    .checkbox-label input[type="checkbox"]:checked::before { transform: scale(1) rotate(45deg); }
 
     .forgot-link {
       font-size: 14px; font-weight: 700;
@@ -477,7 +478,7 @@
   <!-- ══ HEADER ═══════════════════════════════════════════════════════ -->
   <header class="site-header">
     <div class="header-inner">
-      <img src="KvM logo no background.png" alt="Klaar voor Middelbaar" class="header-logo">
+      <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar" class="header-logo">
 
       <nav class="header-breadcrumb" aria-label="Navigatie">
         <span>Klaar voor Middelbaar</span>
@@ -584,7 +585,7 @@
       <div class="card-accent" aria-hidden="true"></div>
 
       <div class="card-body">
-        <img src="KvM logo no background.png" alt="Klaar voor Middelbaar" class="card-logo">
+        <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar" class="card-logo">
 
         <div id="loginView">
         <h1 class="card-title">Welkom</h1>
@@ -738,7 +739,7 @@
   <!-- ══ FOOTER ════════════════════════════════════════════════════════ -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <img src="KvM logo no background.png" alt="Klaar voor Middelbaar" class="footer-logo">
+      <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar" class="footer-logo">
       <nav class="footer-links" aria-label="Footer navigatie">
         <a href="#">Privacy</a>
         <a href="#">Contact</a>
