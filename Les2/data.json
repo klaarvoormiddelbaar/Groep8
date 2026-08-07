@@ -68,6 +68,10 @@
     {
       "naam": "Werkboek",
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+    },
+    {
+      "naam": "Planeten Planner Highscores",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Highscore.png"
     }
   ]
 }
