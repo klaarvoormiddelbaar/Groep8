@@ -18,6 +18,7 @@
     { "source": "/les7/docent/open-boek-quiz", "destination": "/les7/docent/quiz", "permanent": false }
   ],
   "rewrites": [
+    { "source": "/",                "destination": "/Inlogpagina/index.html" },
     { "source": "/Dashboard/",      "destination": "/Dashboard/dashboard.html" },
     { "source": "/proef/",          "destination": "/Proeflicentie/dashboard.html" },
     { "source": "/proef/inloggen",  "destination": "/Proeflicentie/inlogpagina.html" },
