@@ -346,6 +346,72 @@ const QUIZZES = {
       goed_index: 1,
       tijdslimiet_seconden: 20
     }
+  ],
+  'les-6': [
+    {
+      type: 'multiple_choice',
+      vraag: 'Zet de stappen van het KvM Planning Stappenplan in de juiste volgorde.',
+      opties: [
+        'Taken indelen → Taken opsplitsen → Bepalen wat belangrijk is → Planning maken',
+        'Bepalen wat belangrijk is → Taken opsplitsen → Taken indelen → Planning maken',
+        'Planning maken → Taken opsplitsen → Taken indelen → Bepalen wat belangrijk is',
+        'Taken opsplitsen → Bepalen wat belangrijk is → Planning maken → Taken indelen'
+      ],
+      goed_index: 0,
+      tijdslimiet_seconden: 25
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Je hebt deze week toneelrepetitie op maandag en woensdag, en een proefwerk biologie op donderdag. Wanneer plan je het beste in om voor biologie te leren?',
+      opties: [
+        'Pas woensdagavond, vlak voor de repetitie',
+        'Verspreid over meerdere dagen, ook op dagen dat je geen repetitie hebt',
+        'Helemaal niet, donderdag is nog ver weg',
+        'Op donderdagochtend vlak voor de toets'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'true_false',
+      vraag: 'Als je week onverwacht drukker wordt (bijvoorbeeld een extra training), betekent dat dat je planning niet goed was.',
+      opties: ['Waar', 'Niet waar'],
+      goed_index: 1,
+      toelichting: 'Een goede planning mag je aanpassen. Flexibel blijven hoort erbij, ook een drukke week loopt niet altijd zoals gepland.',
+      tijdslimiet_seconden: 15
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Je merkt dat je planning voor deze drukke week niet lukt: je hebt gewoon te veel te doen. Wat is een goede eerste stap?',
+      opties: [
+        'Toch proberen om alles zoals gepland af te krijgen, ook als je daardoor heel laat naar bed gaat',
+        'Bekijken wat het belangrijkst is om eerst te doen, en de rest doorschuiven naar een later moment',
+        "Meteen al je sport of hobby's van deze week afzeggen",
+        'Afwachten en hopen dat het vanzelf minder druk wordt'
+      ],
+      goed_index: 1,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: "Waar moet je extra op letten als je week naast school ook vol staat met sport of hobby's?",
+      opties: [
+        'Dat je ook tijd overhoudt om te ontspannen',
+        'Dat je taken niet allemaal op dezelfde avond samenkomen',
+        'Dat je een beetje flexibel blijft, want een drukke week loopt niet altijd zoals gepland',
+        'Al deze antwoorden zijn belangrijk'
+      ],
+      goed_index: 3,
+      tijdslimiet_seconden: 20
+    },
+    {
+      type: 'multiple_choice',
+      vraag: 'Schattingsvraag: hoeveel uur per week besteedt een gemiddelde middelbare scholier aan huiswerk?',
+      opties: ['Minder dan 3 uur', '5 tot 10 uur', '12 tot 15 uur', 'Meer dan 15 uur'],
+      goed_index: 1,
+      toelichting: "Dat verschilt per niveau: op het vmbo is dat gemiddeld zo'n 5 uur per week, op de havo ongeveer 7,5 uur en op het vwo rond de 10 uur.",
+      tijdslimiet_seconden: 20
+    }
   ]
 };
 
