@@ -297,7 +297,7 @@
 
     /* Locked card */
     .lesson-card.locked {
-      cursor: default;
+      cursor: pointer;
       opacity: 0.84;
     }
     .lesson-card.locked:hover {
@@ -481,10 +481,11 @@
       border-radius: 99px; cursor: pointer;
       font-family: 'Inria Sans', Georgia, serif;
       font-size: 15px; font-weight: 700; color: var(--muted);
-      transition: border-color 0.2s, color 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
       margin-top: 10px;
     }
-    .btn-sluit:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-sluit:hover { border-color: var(--primary); color: var(--primary); box-shadow: 0 6px 16px rgba(0,0,0,0.09); }
     .btn-upgrade {
       display: flex; align-items: center; justify-content: center;
       width: 100%; height: 52px;
@@ -639,7 +640,7 @@
         Met de volledige licentie krijgt de juf of meester toegang tot alle 8 lessen.
       </p>
       <a class="btn-upgrade"
-         href="mailto:contact@klaarvoormiddelbaar.nl?subject=Informatie%20volledige%20KvM-licentie">
+         href="mailto:contact@klaarvoormiddelbaar.nl?subject=Informatie%20volledige%20KvM-licentie&body=Beste%20lezer%2C%0D%0A%0D%0AIk%20heb%20de%20proefversie%20van%20Klaar%20voor%20Middelbaar%20bekeken%20en%20ben%20ge%C3%AFnteresseerd%20in%20de%20volledige%20licentie%2C%20met%20toegang%20tot%20alle%208%20lessen.%0D%0A%0D%0AZou%20u%20mij%20meer%20informatie%20kunnen%20sturen%20over%20de%20mogelijkheden%20en%20de%20kosten%3F%0D%0A%0D%0AMet%20vriendelijke%20groet%2C">
         Vraag informatie aan
       </a>
       <button class="btn-sluit" onclick="sluitUpgradeModal()">Sluit</button>
