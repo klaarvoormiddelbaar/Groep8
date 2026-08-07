@@ -66,8 +66,10 @@
     { "source": "/voorspel/:nummer", "destination": "/Voorspel de Klas/index.html" },
     { "source": "/poll/:nummer", "destination": "/Live poll/join.html" },
     { "source": "/woordwolk/:nummer", "destination": "/Wordcloud/index.html" },
-    { "source": "/planeten-planner", "destination": "/Planeten Planner/index.html" },
-    { "source": "/pp", "destination": "/Planeten Planner/index.html" },
+    { "source": "/planeten-planner",      "destination": "/Planeten Planner/uitleg.html" },
+    { "source": "/planeten-planner/spel", "destination": "/Planeten Planner/index.html" },
+    { "source": "/pp",                    "destination": "/Planeten Planner/uitleg.html" },
+    { "source": "/pp/spel",               "destination": "/Planeten Planner/index.html" },
     { "source": "/spaans", "destination": "/Spaans/index.html" }
   ]
 }
