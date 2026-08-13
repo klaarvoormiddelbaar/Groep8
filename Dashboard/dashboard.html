@@ -847,11 +847,14 @@
       document.getElementById('dashboard-view').classList.add('hidden');
       document.getElementById('bc-current').textContent = `Les ${L.n}: ${L.title}`;
 
-      const liveSessieUrl = `/KvM%20Quiz/docent-sessie.html?les=les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
-      const livePollParams = `les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
+      const liveSessieParams = `titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
+      const liveSessieUrl = L.n === 7
+        ? `/KvM%20Quiz/docent-sessie.html?les=les-${L.n}&${liveSessieParams}`
+        : `/les${L.n}/docent/quiz/uitleg?${liveSessieParams}`;
+      const livePollParams = `titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
       const livePollUrl   = L.n === 1
-        ? `/Live%20poll/uitleg.html?${livePollParams}`
-        : `/Live%20poll/docent-poll.html?${livePollParams}`;
+        ? `/les${L.n}/docent/poll/uitleg?${livePollParams}`
+        : `/les${L.n}/docent/poll?${livePollParams}`;
 
       const dv = document.getElementById('detail-view');
       dv.innerHTML = `

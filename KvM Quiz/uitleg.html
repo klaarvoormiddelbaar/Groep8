@@ -447,7 +447,7 @@
       </div>
 
       <div class="cta-row">
-        <a class="cta-btn" href="/les1/docent/quiz">Naar KvM Kwiz →</a>
+        <a class="cta-btn" id="cta-quiz" href="/les1/docent/quiz">Naar KvM Kwiz →</a>
       </div>
     </div>
   </main>
@@ -460,5 +460,12 @@
     </div>
   </footer>
 
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const lesNum = (params.get('les') || 'les-1').replace('les-', '');
+    params.delete('les');
+    const extra = params.toString();
+    document.getElementById('cta-quiz').href = `/les${lesNum}/docent/quiz${extra ? '?' + extra : ''}`;
+  </script>
 </body>
 </html>
