@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Start KvM Kwiz — Klaar voor Middelbaar</title>
+  <title>Uitleg KvM Kwiz — Klaar voor Middelbaar</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -116,16 +116,13 @@
     }
     .title img { height: 1.05em; width: auto; }
 
-    .intro { font-size: 17px; line-height: 1.65; color: var(--dark); margin-bottom: 16px; }
-    .intro:last-of-type { margin-bottom: 32px; }
-
     .lessen-title {
       font-size: 14px; font-weight: 700; letter-spacing: 1px;
       text-transform: uppercase; color: var(--muted);
       margin-bottom: 16px;
     }
 
-    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 56px; }
     .role-card {
       border-radius: 18px;
       padding: 22px 24px;
@@ -146,23 +143,86 @@
     .role-card.docent .role-label { color: var(--green); }
     .role-text { font-size: 14.5px; line-height: 1.6; color: var(--dark); }
 
-    .stappen-list { margin-bottom: 36px; }
-    .stap-row { position: relative; padding-left: 46px; padding-bottom: 22px; }
-    .stap-row:last-child { padding-bottom: 0; }
-    .stap-row:not(:last-child)::before {
-      content: ''; position: absolute; left: 14px; top: 30px; bottom: 0;
-      width: 2px; background: rgba(16,163,127,0.25);
+    /* ── VOORBEELD (statische mockups) ── */
+    .voorbeeld-row { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; margin-bottom: 56px; }
+    .voorbeeld-row:last-of-type { margin-bottom: 40px; }
+    .voorbeeld-text h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .voorbeeld-text p { font-size: 14px; line-height: 1.65; color: var(--muted); }
+
+    .mock-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 14px 28px -10px rgba(0,0,0,.14);
+      padding: 26px 24px 22px;
+      overflow: hidden;
     }
-    .stap-num {
-      position: absolute; left: 0; top: 0;
-      width: 30px; height: 30px; border-radius: 50%;
-      background: var(--green); color: white;
-      font-size: 14px; font-weight: 700;
+    .mock-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--primary-dark) 0%, #4fd1c5 55%, var(--green) 100%);
+    }
+    .mock-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--primary-soft); color: var(--primary-dark);
+      font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 9999px; margin-bottom: 14px;
+    }
+    .mock-badge.closed { background: var(--green-soft); color: var(--green); }
+    .mock-title { font-size: 16px; font-weight: 700; line-height: 1.35; color: var(--dark); margin-bottom: 18px; }
+
+    /* meerkeuzevraag (leerling) */
+    .mock-quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .mock-quiz-option {
+      display: flex; align-items: center; gap: 12px;
+      background: #f4f6f8; border-radius: 14px; padding: 12px 14px;
+      font-size: 12px; font-weight: 700; color: var(--dark); line-height: 1.35;
+    }
+    .mock-letter {
+      width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
-      z-index: 1;
+      color: #fff; font-size: 12px; font-weight: 700;
     }
-    .stap-titel { font-size: 15px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
-    .stap-tekst { font-size: 14px; line-height: 1.55; color: var(--muted); }
+    .mock-letter.a, .mock-letter-sm.a { background: var(--primary-dark); }
+    .mock-letter.b, .mock-letter-sm.b { background: var(--green); }
+    .mock-letter.c, .mock-letter-sm.c { background: #e8c14a; }
+    .mock-letter.d, .mock-letter-sm.d { background: #e2574c; }
+
+    /* meerkeuzevraag resultaat (docent) */
+    .mock-quiz-row { padding: 10px 12px; border-radius: 14px; margin-bottom: 6px; border: 1.5px solid transparent; }
+    .mock-quiz-row:last-child { margin-bottom: 0; }
+    .mock-quiz-row.correct { background: var(--green-soft); border-color: rgba(16,163,127,.30); }
+    .mock-quiz-row-top { display: flex; align-items: center; gap: 10px; margin-bottom: 7px; }
+    .mock-letter-sm {
+      width: 20px; height: 20px; border-radius: 6px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 10px; font-weight: 700;
+    }
+    .mock-quiz-row-label { flex: 1; font-size: 11.5px; font-weight: 700; color: var(--dark); }
+    .mock-quiz-correct-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: var(--green); color: #fff;
+      font-size: 9px; font-weight: 700; letter-spacing: .3px;
+      padding: 4px 9px; border-radius: 9999px; white-space: nowrap;
+    }
+    .mock-quiz-count { font-size: 10.5px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+    .mock-quiz-bar-track { height: 7px; border-radius: 9999px; background: #eef0f2; overflow: hidden; margin-left: 30px; }
+    .mock-quiz-bar-fill { height: 100%; border-radius: 9999px; }
+
+    /* klassement */
+    .mock-board-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid var(--border); }
+    .mock-board-row:last-child { border-bottom: none; }
+    .mock-rank {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 12px; font-weight: 700;
+    }
+    .mock-rank.gold   { background: #e8b93a; }
+    .mock-rank.silver { background: #aab2bd; }
+    .mock-rank.bronze { background: #c98a52; }
+    .mock-board-name { flex: 1; font-size: 13.5px; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 6px; }
+    .mock-board-name img { height: 1em; width: auto; }
+    .mock-board-points { font-size: 12.5px; font-weight: 700; color: var(--primary-dark); white-space: nowrap; }
 
     .cta-row { display: flex; justify-content: flex-end; margin-top: 8px; }
     .cta-btn {
@@ -203,6 +263,8 @@
       .card { padding: 32px 24px; }
       .cta-row { justify-content: stretch; }
       .cta-btn { width: 100%; justify-content: center; }
+      .voorbeeld-row { grid-template-columns: 1fr; gap: 18px; }
+      .mock-quiz-options { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -222,7 +284,7 @@
       <nav class="breadcrumb">
         <a class="bc-link" href="/Dashboard">Dashboard</a>
         <span class="bc-sep">/</span>
-        <span class="bc-current">Start KvM Kwiz</span>
+        <span class="bc-current">Uitleg KvM Kwiz</span>
       </nav>
 
       <a class="back-btn" href="/Dashboard">← Terug naar dashboard</a>
@@ -232,50 +294,132 @@
   <!-- ══ MAIN ═════════════════════════════════════════════════════ -->
   <main class="main">
     <div class="card">
-      <h1 class="title"><img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">Start KvM Kwiz</h1>
+      <h1 class="title"><img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">Uitleg KvM Kwiz</h1>
 
-      <p class="intro">
-        Elke les wordt afgesloten met een korte interactieve quiz over de stof van die les. Leerlingen doen live mee vanaf hun eigen apparaat.
-      </p>
-
-      <div class="lessen-title">Hoe werkt het</div>
       <div class="role-grid">
         <div class="role-card leerling">
           <div class="role-label">Leerling</div>
-          <div class="role-text">Scant een code of opent een link, en beantwoordt de vragen live mee vanaf zijn eigen apparaat.</div>
+          <div class="role-text">De leerling beantwoordt meerkeuzevragen vanaf het eigen apparaat. Hoe sneller en beter het antwoord, hoe meer punten dat oplevert.</div>
         </div>
         <div class="role-card docent">
           <div class="role-label">Docent</div>
-          <div class="role-text">Op het grote scherm zie je per vraag direct de antwoorden en het klassement binnenkomen.</div>
+          <div class="role-text">Je doorloopt de vragen één voor één. Na elke vraag zie je meteen het juiste antwoord en de tussenstand, met een eindklassement aan het slot.</div>
         </div>
       </div>
 
-      <div class="lessen-title">Stappenplan</div>
-      <div class="stappen-list">
-        <div class="stap-row">
-          <div class="stap-num">1</div>
-          <div class="stap-titel">Open de quiz</div>
-          <div class="stap-tekst">Start de sessie vanuit het docentenportaal.</div>
+      <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>De leerling beantwoordt de vraag</h3>
+          <p>Leerlingen krijgen een meerkeuzevraag met vier antwoordopties op hun eigen apparaat. Ze kiezen zo snel mogelijk het antwoord dat ze goed denken.</p>
         </div>
-        <div class="stap-row">
-          <div class="stap-num">2</div>
-          <div class="stap-titel">Leerlingen doen mee</div>
-          <div class="stap-tekst">Ze scannen de code of openen de link op hun eigen apparaat.</div>
+        <div class="mock-card">
+          <div class="mock-badge">Meerkeuzevraag</div>
+          <div class="mock-title">Wat is het doel van het Klaar voor Middelbaar-programma?</div>
+          <div class="mock-quiz-options">
+            <div class="mock-quiz-option"><span class="mock-letter a">A</span>Leerlingen voorbereiden op de overstap naar de middelbare school</div>
+            <div class="mock-quiz-option"><span class="mock-letter b">B</span>Leerlingen helpen bij het kiezen van een middelbare school</div>
+            <div class="mock-quiz-option"><span class="mock-letter c">C</span>Leerlingen extra oefenen met rekenen en taal</div>
+            <div class="mock-quiz-option"><span class="mock-letter d">D</span>Leerlingen kennis laten maken met verschillende beroepen</div>
+          </div>
         </div>
-        <div class="stap-row">
-          <div class="stap-num">3</div>
-          <div class="stap-titel">Volg het live</div>
-          <div class="stap-tekst">Antwoorden en klassement verschijnen per vraag op het grote scherm.</div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="mock-card">
+          <div class="mock-badge">Meerkeuzevraag</div>
+          <div class="mock-title">Wat is het doel van het Klaar voor Middelbaar-programma?</div>
+          <div class="mock-quiz-row correct">
+            <div class="mock-quiz-row-top">
+              <span class="mock-letter-sm a">A</span>
+              <div class="mock-quiz-row-label">Leerlingen voorbereiden op de overstap naar de middelbare school</div>
+              <span class="mock-quiz-correct-badge">✓ Juiste antwoord</span>
+              <span class="mock-quiz-count">18 · 75%</span>
+            </div>
+            <div class="mock-quiz-bar-track"><div class="mock-quiz-bar-fill" style="background:var(--green); width:75%;"></div></div>
+          </div>
+          <div class="mock-quiz-row">
+            <div class="mock-quiz-row-top">
+              <span class="mock-letter-sm b">B</span>
+              <div class="mock-quiz-row-label">Leerlingen helpen bij het kiezen van een middelbare school</div>
+              <span class="mock-quiz-count">4 · 17%</span>
+            </div>
+            <div class="mock-quiz-bar-track"><div class="mock-quiz-bar-fill" style="background:#c7ccd1; width:17%;"></div></div>
+          </div>
+          <div class="mock-quiz-row">
+            <div class="mock-quiz-row-top">
+              <span class="mock-letter-sm c">C</span>
+              <div class="mock-quiz-row-label">Leerlingen extra oefenen met rekenen en taal</div>
+              <span class="mock-quiz-count">1 · 4%</span>
+            </div>
+            <div class="mock-quiz-bar-track"><div class="mock-quiz-bar-fill" style="background:#c7ccd1; width:4%;"></div></div>
+          </div>
+          <div class="mock-quiz-row">
+            <div class="mock-quiz-row-top">
+              <span class="mock-letter-sm d">D</span>
+              <div class="mock-quiz-row-label">Leerlingen kennis laten maken met verschillende beroepen</div>
+              <span class="mock-quiz-count">1 · 4%</span>
+            </div>
+            <div class="mock-quiz-bar-track"><div class="mock-quiz-bar-fill" style="background:#c7ccd1; width:4%;"></div></div>
+          </div>
         </div>
-        <div class="stap-row">
-          <div class="stap-num">4</div>
-          <div class="stap-titel">Sluit af</div>
-          <div class="stap-tekst">Bespreek kort de winnaar en eventuele lastige vragen.</div>
+        <div class="voorbeeld-text">
+          <h3>Jullie zien het juiste antwoord en de punten</h3>
+          <p>Zodra de tijd om is, zie je meteen welk antwoord goed was en hoeveel leerlingen elk antwoord kozen. Hoe sneller een leerling het juiste antwoord gaf, hoe meer punten diegene verdient.</p>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>Na elke vraag: de tussenstand</h3>
+          <p>Na iedere vraag verschijnt de tussenstand in beeld, zodat de klas ziet wie op dat moment voorstaat.</p>
+        </div>
+        <div class="mock-card">
+          <div class="mock-badge">Tussenstand · Na vraag 2 van 6</div>
+          <div class="mock-board-row">
+            <span class="mock-rank gold">1</span>
+            <div class="mock-board-name">Sanne</div>
+            <div class="mock-board-points">480 punten</div>
+          </div>
+          <div class="mock-board-row">
+            <span class="mock-rank silver">2</span>
+            <div class="mock-board-name">Daan</div>
+            <div class="mock-board-points">410 punten</div>
+          </div>
+          <div class="mock-board-row">
+            <span class="mock-rank bronze">3</span>
+            <div class="mock-board-name">Mila</div>
+            <div class="mock-board-points">375 punten</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="mock-card">
+          <div class="mock-badge closed">🏆 Eindstand</div>
+          <div class="mock-board-row">
+            <span class="mock-rank gold">1</span>
+            <div class="mock-board-name">Sanne <img src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
+            <div class="mock-board-points">860 punten</div>
+          </div>
+          <div class="mock-board-row">
+            <span class="mock-rank silver">2</span>
+            <div class="mock-board-name">Daan</div>
+            <div class="mock-board-points">790 punten</div>
+          </div>
+          <div class="mock-board-row">
+            <span class="mock-rank bronze">3</span>
+            <div class="mock-board-name">Mila</div>
+            <div class="mock-board-points">705 punten</div>
+          </div>
+        </div>
+        <div class="voorbeeld-text">
+          <h3>Aan het einde: de eindstand</h3>
+          <p>Na de laatste vraag verschijnt de volledige eindstand met de winnaar van de klas. Een leuk moment om de quiz mee af te sluiten.</p>
         </div>
       </div>
 
       <div class="cta-row">
-        <a class="cta-btn" href="/les1/docent/quiz">Naar live quiz →</a>
+        <a class="cta-btn" href="/les1/docent/quiz">Naar KvM Kwiz →</a>
       </div>
     </div>
   </main>
