@@ -175,17 +175,18 @@
     .mock-title { font-size: 16px; font-weight: 700; line-height: 1.35; color: var(--dark); margin-bottom: 18px; }
     .mock-title.compact { margin-bottom: 16px; }
 
-    .mock-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .mock-options { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
     .mock-option {
-      display: flex; align-items: center; gap: 8px;
-      background: #f4f6f8; border-radius: 12px; padding: 9px 13px;
-      font-size: 12px; font-weight: 700; color: var(--dark);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      background: #f4f6f8; border-radius: 14px; padding: 14px 4px;
+      font-size: 10px; font-weight: 700; color: var(--muted); text-align: center; line-height: 1.3;
     }
     .mock-num {
       width: 22px; height: 22px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0;
     }
+    .mock-option .mock-num { width: 30px; height: 30px; font-size: 13px; }
     .mock-num.s1 { background: #e2574c; }
     .mock-num.s2 { background: #ef9a3d; }
     .mock-num.s3 { background: #e8c14a; }
@@ -202,7 +203,7 @@
     .mock-result-row:last-child { margin-bottom: 0; }
     .mock-result-label { width: 108px; font-size: 11px; font-weight: 700; color: var(--dark); flex-shrink: 0; }
     .mock-result-bar-track { flex: 1; height: 16px; border-radius: 9999px; background: #eef0f2; position: relative; overflow: hidden; }
-    .mock-result-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; width: 22px; border-radius: 9999px; }
+    .mock-result-bar-fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 9999px; }
     .mock-result-count { width: 34px; text-align: right; font-size: 11px; font-weight: 700; color: var(--dark); display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
     .mock-result-count span { font-size: 9px; font-weight: 400; color: var(--muted); }
 
@@ -319,7 +320,7 @@
           <p>Leerlingen krijgen op hun eigen telefoon of laptop een stelling te zien, met vijf antwoordopties van 'helemaal mee oneens' tot 'helemaal mee eens'. Ze kiezen anoniem het antwoord dat het beste bij ze past.</p>
         </div>
         <div class="mock-card">
-          <div class="mock-badge">Stelling 1</div>
+          <div class="mock-badge">Geef jouw mening</div>
           <div class="mock-title">Ik zou morgen al willen beginnen in de brugklas.</div>
           <div class="mock-options">
             <div class="mock-option"><span class="mock-num s1">1</span>Helemaal mee oneens</div>
@@ -337,7 +338,7 @@
             <div class="mock-badge closed">✓ Stemmen gesloten · Stelling 1</div>
             <div class="mock-avg-box">
               <div class="mock-avg-label">Gemiddelde</div>
-              <div class="mock-avg-dash">—</div>
+              <div class="mock-avg-dash">3.8</div>
               <div class="mock-avg-sub">van 5</div>
             </div>
           </div>
@@ -345,32 +346,32 @@
           <div class="mock-result-row">
             <span class="mock-num s1">1</span>
             <div class="mock-result-label">Helemaal mee oneens</div>
-            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#e2574c;"></div></div>
-            <div class="mock-result-count">0<span>0%</span></div>
+            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#e2574c; width:5%;"></div></div>
+            <div class="mock-result-count">1<span>5%</span></div>
           </div>
           <div class="mock-result-row">
             <span class="mock-num s2">2</span>
             <div class="mock-result-label">Mee oneens</div>
-            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#ef9a3d;"></div></div>
-            <div class="mock-result-count">0<span>0%</span></div>
+            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#ef9a3d; width:9%;"></div></div>
+            <div class="mock-result-count">2<span>9%</span></div>
           </div>
           <div class="mock-result-row">
             <span class="mock-num s3">3</span>
             <div class="mock-result-label">Neutraal</div>
-            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#e8c14a;"></div></div>
-            <div class="mock-result-count">0<span>0%</span></div>
+            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#e8c14a; width:18%;"></div></div>
+            <div class="mock-result-count">4<span>18%</span></div>
           </div>
           <div class="mock-result-row">
             <span class="mock-num s4">4</span>
             <div class="mock-result-label">Mee eens</div>
-            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#6fc96a;"></div></div>
-            <div class="mock-result-count">0<span>0%</span></div>
+            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#6fc96a; width:41%;"></div></div>
+            <div class="mock-result-count">9<span>41%</span></div>
           </div>
           <div class="mock-result-row">
             <span class="mock-num s5">5</span>
             <div class="mock-result-label">Helemaal mee eens</div>
-            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#2f9e78;"></div></div>
-            <div class="mock-result-count">0<span>0%</span></div>
+            <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#2f9e78; width:27%;"></div></div>
+            <div class="mock-result-count">6<span>27%</span></div>
           </div>
         </div>
         <div class="voorbeeld-text">
