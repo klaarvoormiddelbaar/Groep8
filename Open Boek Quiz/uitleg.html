@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uitleg Open boek quiz — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --page-bg:    #f2f6fd;
+      --card-bg:    #ffffff;
+      --border:     #eceeee;
+      --primary:    #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --green:      #10a37f;
+      --green-soft: rgba(16,163,127,0.08);
+      --dark:       #191c1d;
+      --muted:      #6d747a;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --max-w:      1040px;
+      --pad:        48px;
+      --r-card:     28px;
+      --r-pill:     9999px;
+    }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(rgba(78,142,243,0.06) 1.5px, transparent 1.5px),
+        radial-gradient(ellipse at 108% -8%,  rgba(114,168,249,0.24) 0%, transparent 52%),
+        radial-gradient(ellipse at -8%   8%,  rgba(156,196,238,0.20) 0%, transparent 48%),
+        radial-gradient(ellipse at 50%  40%,  rgba(255,255,255,0.68) 0%, transparent 58%);
+      background-size: 28px 28px, 100% 100%, 100% 100%, 100% 100%;
+      background-attachment: scroll, fixed, fixed, fixed;
+      display: flex; flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(242,246,253,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: 1184px; margin: 0 auto;
+      padding: 0 var(--pad); height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+      flex-shrink: 0;
+    }
+    .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
+    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .bc-link { color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; }
+    .bc-link:hover { color: var(--primary); }
+    .bc-sep { color: rgba(109,116,122,0.4); }
+    .bc-current { color: var(--primary); font-weight: 700; }
+    .back-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,0.20);
+      border-radius: var(--r-pill);
+      padding: 8px 18px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      color: var(--primary); cursor: pointer; text-decoration: none;
+      transition: background 0.18s, box-shadow 0.18s;
+      white-space: nowrap;
+    }
+    .back-btn:hover {
+      background: rgba(78,142,243,0.16);
+      box-shadow: 0 4px 12px rgba(78,142,243,0.15);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 56px var(--pad) 96px;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 48px;
+      animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    .title {
+      font-size: 40px; font-weight: 700; line-height: 1.1;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .title img { height: 1.05em; width: auto; }
+
+    .intro { font-size: 17px; line-height: 1.65; color: var(--dark); margin-bottom: 16px; }
+    .intro:last-of-type { margin-bottom: 32px; }
+
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 56px; }
+    .role-card {
+      border-radius: 18px;
+      padding: 22px 24px;
+    }
+    .role-card.leerling {
+      background: linear-gradient(135deg, rgba(78,142,243,0.08) 0%, rgba(78,142,243,0.02) 100%);
+      border: 1px solid rgba(78,142,243,0.28);
+    }
+    .role-card.docent {
+      background: linear-gradient(135deg, rgba(16,163,127,0.08) 0%, rgba(16,163,127,0.02) 100%);
+      border: 1px solid rgba(16,163,127,0.28);
+    }
+    .role-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .role-card.leerling .role-label { color: var(--primary-dark); }
+    .role-card.docent .role-label { color: var(--green); }
+    .role-text { font-size: 14.5px; line-height: 1.6; color: var(--dark); }
+
+    /* ── VOORBEELD (statische mockups) ── */
+    .voorbeeld-row { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; margin-bottom: 56px; }
+    .voorbeeld-row:last-of-type { margin-bottom: 40px; }
+    .voorbeeld-text h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .voorbeeld-text p { font-size: 14px; line-height: 1.65; color: var(--muted); }
+
+    .mock-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 14px 28px -10px rgba(0,0,0,.14);
+      padding: 26px 24px 22px;
+      overflow: hidden;
+    }
+    .mock-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--primary-dark) 0%, #4fd1c5 55%, var(--green) 100%);
+    }
+    .mock-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--primary-soft); color: var(--primary-dark);
+      font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 9999px; margin-bottom: 14px;
+    }
+    .mock-title { font-size: 16px; font-weight: 700; line-height: 1.35; color: var(--dark); margin-bottom: 18px; }
+
+    /* Waar/niet waar mockup */
+    .mock-opties { display: flex; gap: 10px; }
+    .mock-optie-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      border-radius: 14px; padding: 13px; font-size: 13px; font-weight: 700;
+      border: 1.5px solid var(--border); color: var(--muted);
+    }
+    .mock-optie-btn.actief { background: var(--green-soft); border-color: rgba(16,163,127,.4); color: var(--green); }
+    .mock-optie-bol { width: 10px; height: 10px; border-radius: 50%; border: 2px solid currentColor; flex-shrink: 0; }
+    .mock-optie-btn.actief .mock-optie-bol { background: var(--green); }
+
+    /* Leerlingen live-kolommen mockup */
+    .mock-kolommen { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .mock-groep { border-radius: 16px; padding: 14px; }
+    .mock-groep.geel { background: #fffaf0; border: 1.5px solid #fbe6b8; }
+    .mock-groep.groen { background: var(--green-soft); border: 1.5px solid rgba(16,163,127,0.25); }
+    .mock-groep-titel { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+    .mock-groep.geel .mock-groep-titel { color: #92600a; }
+    .mock-groep.groen .mock-groep-titel { color: #0c8268; }
+    .mock-chip { display: flex; align-items: center; gap: 8px; background: white; border: 1px solid var(--border); border-radius: 9999px; padding: 5px 12px 5px 5px; font-size: 12px; font-weight: 700; margin-bottom: 6px; }
+    .mock-chip:last-child { margin-bottom: 0; }
+    .mock-chip-avatar { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: white; }
+    .mock-groep.geel .mock-chip-avatar { background: linear-gradient(135deg, #f5a623, #c97f0a); }
+    .mock-groep.groen .mock-chip-avatar { background: linear-gradient(135deg, var(--green), #0c8268); }
+
+    /* Podium mockup */
+    .mock-podium { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .mock-podium-spot { background: #f7f8f9; border: 1px solid var(--border); border-radius: 16px; padding: 16px 10px; text-align: center; }
+    .mock-podium-spot.eerste { background: #fffaf0; border-color: #f8d760; }
+    .mock-podium-medal { font-size: 22px; margin-bottom: 6px; }
+    .mock-podium-naam { font-size: 12px; font-weight: 700; }
+    .mock-podium-score { font-size: 11px; color: var(--primary-dark); font-weight: 700; }
+
+    /* wachtkamer (leerling doet mee) */
+    .mock-lobby {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
+      border-radius: 20px; padding: 26px 24px; color: #fff;
+    }
+    .mock-lobby::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.14) 1.5px, transparent 1.5px);
+      background-size: 22px 22px; pointer-events: none;
+    }
+    .mock-lobby::after {
+      content: ''; position: absolute; top: -90px; right: -70px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .mock-lobby-title { position: relative; font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .mock-lobby-title img { height: 1.1em; width: auto; }
+    .mock-lobby-step { position: relative; margin-bottom: 18px; }
+    .mock-lobby-step:last-child { margin-bottom: 0; }
+    .mock-lobby-step-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.92); margin-bottom: 10px;
+    }
+    .mock-lobby-step-num {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; color: #fff;
+    }
+    .mock-join-pill {
+      position: relative; display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
+      border-radius: 9999px; padding: 10px 16px; max-width: 100%;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #fff;
+      overflow-wrap: anywhere;
+    }
+    .mock-code-display { display: flex; gap: 6px; }
+    .mock-code-digit { width: 30px; height: 38px; border-radius: 9px; background: rgba(255,255,255,0.16); border: 1.5px solid rgba(255,255,255,0.35); display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; }
+
+    .cta-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white; text-decoration: none;
+      border: none; border-radius: var(--r-pill);
+      padding: 16px 32px;
+      font-family: inherit; font-size: 17px; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(78,142,243,0.38); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #f2f4f4;
+      border-radius: 64px 64px 0 0;
+      padding: 40px var(--pad);
+    }
+    .footer-inner {
+      max-width: 1184px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo { height: 40px; width: auto; }
+    .footer-copy { font-size: 15px; color: var(--muted); }
+
+    @media (max-width: 680px) {
+      :root { --pad: 20px; }
+      .role-grid { grid-template-columns: 1fr; }
+      .title { font-size: 30px; }
+      .card { padding: 32px 24px; }
+      .cta-row { justify-content: stretch; }
+      .cta-btn { width: 100%; justify-content: center; }
+      .voorbeeld-row { grid-template-columns: 1fr; gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ═══════════════════════════════════════════════════ -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="/Dashboard">
+        <div class="logo-mark">KvM</div>
+        <div>
+          <div class="logo-name">Klaar voor Middelbaar</div>
+          <div class="logo-role">Docentenportaal</div>
+        </div>
+      </a>
+
+      <nav class="breadcrumb">
+        <a class="bc-link" href="/Dashboard">Dashboard</a>
+        <span class="bc-sep">/</span>
+        <span class="bc-current">Uitleg Open boek quiz</span>
+      </nav>
+
+      <a class="back-btn" href="/Dashboard">← Terug naar dashboard</a>
+    </div>
+  </header>
+
+  <!-- ══ MAIN ═════════════════════════════════════════════════════ -->
+  <main class="main">
+    <div class="card">
+      <h1 class="title"><img src="/Afbeeldingen/emojis nieuw/vulpen.png" alt="">Uitleg Open boek quiz</h1>
+
+      <p class="intro">
+        Bij de open boek quiz beantwoorden leerlingen in hun eigen tempo waar/niet-waar-vragen. Ze mogen hun aantekeningen erbij gebruiken. Zodra iedereen klaar is, bekijk je samen de resultaten.
+      </p>
+
+      <div class="role-grid">
+        <div class="role-card leerling">
+          <div class="role-label">Leerling</div>
+          <div class="role-text">De leerling vult de sessiecode en zijn of haar voornaam in, en beantwoordt daarna alle vragen op eigen tempo met 'waar' of 'niet waar'. Aantekeningen erbij gebruiken mag.</div>
+        </div>
+        <div class="role-card docent">
+          <div class="role-label">Docent</div>
+          <div class="role-text">Je deelt de link en code met je klas. Je ziet live wie er nog mee bezig is en wie klaar is, en bekijkt de resultaten zodra de eerste leerlingen hebben ingeleverd.</div>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>De leerling doet mee met de quiz</h3>
+          <p>De leerling pakt de laptop (of telefoon) erbij, gaat naar de link en vult de sessiecode en zijn of haar voornaam in.</p>
+        </div>
+        <div class="mock-lobby">
+          <div class="mock-lobby-title"><img src="/Afbeeldingen/emojis nieuw/vulpen.png" alt="">Open boek quiz</div>
+          <div class="mock-lobby-step">
+            <div class="mock-lobby-step-label"><span class="mock-lobby-step-num">1</span> Ga naar de link</div>
+            <div class="mock-join-pill">groep8.klaarvoormiddelbaar.nl/les7/quiz</div>
+          </div>
+          <div class="mock-lobby-step">
+            <div class="mock-lobby-step-label"><span class="mock-lobby-step-num">2</span> Vul de sessiecode in</div>
+            <div class="mock-code-display">
+              <div class="mock-code-digit">4</div><div class="mock-code-digit">1</div><div class="mock-code-digit">9</div><div class="mock-code-digit">2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="mock-card">
+          <div class="mock-badge">Vraag 3 van 12</div>
+          <div class="mock-title">Er waren tussen 230 miljoen en 6 miljoen jaar geleden dino's op aarde.</div>
+          <div class="mock-opties">
+            <div class="mock-optie-btn actief"><span class="mock-optie-bol"></span> Waar</div>
+            <div class="mock-optie-btn">Niet waar</div>
+          </div>
+        </div>
+        <div class="voorbeeld-text">
+          <h3>De leerling beantwoordt de stellingen</h3>
+          <p>Elke vraag is een waar/niet-waar-stelling. De leerling mag zijn aantekeningen erbij gebruiken om de vragen te beantwoorden en bepaalt zelf het tempo.</p>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>Jij ziet live wie er bezig is en wie klaar is</h3>
+          <p>Zodra een leerling zijn quiz inlevert, verschuift die van 'bezig' naar 'afgerond'. Zo zie je in één oogopslag wanneer je klassikaal verder kunt.</p>
+        </div>
+        <div class="mock-card">
+          <div class="mock-badge">Leerlingen</div>
+          <div class="mock-kolommen">
+            <div class="mock-groep geel">
+              <div class="mock-groep-titel">Bezig · 6</div>
+              <div class="mock-chip"><div class="mock-chip-avatar">DA</div>Daan</div>
+              <div class="mock-chip"><div class="mock-chip-avatar">BR</div>Bram</div>
+            </div>
+            <div class="mock-groep groen">
+              <div class="mock-groep-titel">Afgerond · 14</div>
+              <div class="mock-chip"><div class="mock-chip-avatar">SA</div>Sanne</div>
+              <div class="mock-chip"><div class="mock-chip-avatar">LO</div>Lotte</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="mock-card">
+          <div class="mock-badge">Resultaten</div>
+          <div class="mock-podium">
+            <div class="mock-podium-spot"><div class="mock-podium-medal">🥈</div><div class="mock-podium-naam">Lotte</div><div class="mock-podium-score">11/12</div></div>
+            <div class="mock-podium-spot eerste"><div class="mock-podium-medal">🥇</div><div class="mock-podium-naam">Sanne</div><div class="mock-podium-score">12/12</div></div>
+            <div class="mock-podium-spot"><div class="mock-podium-medal">🥉</div><div class="mock-podium-naam">Daan</div><div class="mock-podium-score">10/12</div></div>
+          </div>
+        </div>
+        <div class="voorbeeld-text">
+          <h3>Jullie bekijken de resultaten</h3>
+          <p>Zodra de eerste leerlingen hebben ingeleverd, bekijk je de ranglijst en per vraag hoeveel leerlingen het goed hadden. Een mooi moment om lastige vragen samen na te bespreken.</p>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="cta-btn" href="/les7/docent/quiz">Naar Open boek quiz →</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══ FOOTER ═══════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar" class="footer-logo">
+      <p class="footer-copy">© 2026 Klaar voor Middelbaar</p>
+    </div>
+  </footer>
+
+</body>
+</html>

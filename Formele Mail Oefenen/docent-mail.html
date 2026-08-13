@@ -86,37 +86,50 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-card div:last-child { color: var(--muted); font-size: 16px; }
 
-  .link-kaart {
+  .lobby-hero {
     background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
-    border-radius: var(--r-card); padding: 56px 260px 56px 44px; color: white;
-    position: relative; margin-bottom: 32px;
+    border-radius: var(--r-card); padding: 52px 280px 52px 56px; color: white; min-height: 300px;
+    position: relative; overflow: hidden; margin-bottom: 32px;
+    display: flex; flex-direction: column; justify-content: center;
   }
-  .link-kaart::after {
+  .lobby-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
+    background-size: 26px 26px; border-radius: inherit; pointer-events: none;
+  }
+  .lobby-hero::after {
     content: ''; position: absolute; width: 360px; height: 360px; border-radius: 50%;
     background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%);
     top: -140px; right: -100px; pointer-events: none;
   }
-  .link-jay {
-    position: absolute; right: 28px; top: 50%; transform: translateY(-50%) scaleX(-1);
-    height: 180px; width: auto; opacity: 0.95; pointer-events: none;
+  .lobby-jay {
+    position: absolute; right: 28px; bottom: 0; transform: scaleX(-1);
+    height: 220px; width: auto; opacity: 0.96; pointer-events: none;
   }
-  .link-eyebrow {
-    position: relative; font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase;
-    color: rgba(255,255,255,0.78); margin-bottom: 10px;
+  .lobby-title { position: relative; font-size: 30px; font-weight: 700; margin-bottom: 24px; }
+  .lobby-step-label {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.92); margin-bottom: 14px;
   }
-  .link-title { position: relative; font-size: 26px; font-weight: 700; margin-bottom: 22px; }
-  .link-rij { position: relative; display: flex; gap: 12px; flex-wrap: wrap; max-width: 560px; }
-  .link-input {
-    flex: 1 1 380px; min-width: 0; background: rgba(255,255,255,0.92); border: none; border-radius: var(--r-pill);
-    padding: 14px 22px; font-family: inherit; font-size: 14px; font-weight: 700; color: var(--dark);
+
+  .join-pill {
+    position: relative; display: inline-flex; align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
+    border-radius: var(--r-pill); padding: 18px 28px;
+    font-family: inherit; color: white; cursor: pointer; max-width: 100%;
+    transition: background 0.18s, border-color 0.18s, transform 0.12s;
   }
-  .btn-kopieer {
-    background: white; color: var(--primary-dark); border: none; border-radius: var(--r-pill);
-    padding: 14px 26px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
-    transition: transform 0.2s, background 0.2s; white-space: nowrap;
+  .join-pill:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); }
+  .join-pill:active { transform: scale(0.97); }
+  .join-pill:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+  .join-pill-tekst {
+    font-family: inherit; font-size: 15px; font-weight: 700;
+    letter-spacing: 0.1px; overflow-wrap: anywhere; text-align: left;
   }
-  .btn-kopieer:hover { transform: translateY(-2px); }
-  .btn-kopieer.gekopieerd { background: var(--green); color: white; }
+  .join-pill-icon { display: flex; flex-shrink: 0; color: rgba(255,255,255,0.85); transition: color 0.18s; }
+  .join-pill-icon svg { width: 20px; height: 20px; }
+  .join-pill.gekopieerd { background: rgba(16,163,127,0.32); border-color: rgba(16,163,127,0.6); }
+  .join-pill.gekopieerd .join-pill-icon { color: #baf3d9; }
 
   .inzendingen-panel {
     background: white; border: 1px solid var(--border); border-radius: var(--r-card);
@@ -219,10 +232,10 @@
 
   @media (max-width: 720px) {
     .header-inner, .main { padding-left: 24px; padding-right: 24px; }
-    .link-kaart { padding: 32px 24px; }
+    .lobby-hero { padding: 32px 24px; min-height: 0; }
+    .lobby-title { font-size: 24px; }
     .inzendingen-panel { padding: 32px 24px; }
-    .link-jay { display: none; }
-    .link-rij { max-width: none; }
+    .lobby-jay { display: none; }
     .detail-mail-body { padding: 22px 20px 24px; }
   }
 </style>
@@ -330,17 +343,43 @@
     app.innerHTML = `<div class="view"><div class="loading-card"><div>${escapeHtml(bericht)}</div></div></div>`;
   }
 
+  const ICOON_KOPIEER = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="10" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M13 7V5.5A2.5 2.5 0 0 0 10.5 3H5.5A2.5 2.5 0 0 0 3 5.5v5A2.5 2.5 0 0 0 5.5 13H7" stroke="currentColor" stroke-width="1.6"/></svg>`;
+  const ICOON_GEKOPIEERD = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.5L8 14.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  let kopieerTimeoutId = null;
+
+  function kopieerJoinLink(url) {
+    try { navigator.clipboard.writeText(url); } catch (fout) {}
+
+    const pill = document.getElementById('join-pill');
+    const tekst = document.getElementById('join-pill-tekst');
+    const icoon = document.getElementById('join-pill-icon');
+    if (!pill || !tekst || !icoon) return;
+
+    const origineleTekst = tekst.textContent;
+    pill.classList.add('gekopieerd');
+    tekst.textContent = 'Gekopieerd naar klembord';
+    icoon.innerHTML = ICOON_GEKOPIEERD;
+
+    if (kopieerTimeoutId) clearTimeout(kopieerTimeoutId);
+    kopieerTimeoutId = setTimeout(() => {
+      pill.classList.remove('gekopieerd');
+      tekst.textContent = origineleTekst;
+      icoon.innerHTML = ICOON_KOPIEER;
+    }, 1800);
+  }
+
   function renderApp() {
     const studentUrl = `https://groep8.klaarvoormiddelbaar.nl/formeel/${volgnummer}`;
     app.innerHTML = `
       <div class="view">
-        <div class="link-kaart">
-          <div class="link-title">Deel deze link met je klas</div>
-          <div class="link-rij">
-            <input class="link-input" id="link-input" readonly value="${studentUrl}">
-            <button class="btn-kopieer" id="kopieer-btn" type="button">Kopiëren</button>
-          </div>
-          <img class="link-jay" src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay">
+        <div class="lobby-hero">
+          <div class="lobby-title">Deel deze link met je klas</div>
+          <div class="lobby-step-label">Ga naar de link</div>
+          <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink('${studentUrl}')">
+            <span class="join-pill-tekst" id="join-pill-tekst">${escapeHtml(studentUrl.replace(/^https?:\/\//, ''))}</span>
+            <span class="join-pill-icon" id="join-pill-icon">${ICOON_KOPIEER}</span>
+          </button>
+          <img class="lobby-jay" src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay">
         </div>
 
         <div class="inzendingen-panel">
@@ -354,30 +393,6 @@
         </div>
       </div>
     `;
-
-    document.getElementById('kopieer-btn').addEventListener('click', () => {
-      const input = document.getElementById('link-input');
-      const btn = document.getElementById('kopieer-btn');
-      const toonGekopieerd = () => {
-        btn.textContent = 'Gekopieerd!';
-        btn.classList.add('gekopieerd');
-        setTimeout(() => { btn.textContent = 'Kopiëren'; btn.classList.remove('gekopieerd'); }, 1800);
-      };
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(studentUrl).then(toonGekopieerd).catch(() => {
-          input.focus();
-          input.select();
-          document.execCommand('copy');
-          toonGekopieerd();
-        });
-      } else {
-        input.focus();
-        input.select();
-        document.execCommand('copy');
-        toonGekopieerd();
-      }
-    });
   }
 
   async function laadInzendingen() {
