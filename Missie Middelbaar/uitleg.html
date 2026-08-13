@@ -235,6 +235,39 @@
     .mock-mission-status.starten { background: var(--primary-soft); color: var(--primary-dark); }
     .mock-mission-status.vergrendeld { background: #eef0f2; color: var(--muted); }
 
+    /* missie-info knopjes met hover-uitleg */
+    .missie-info-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .missie-info-btn {
+      position: relative;
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #f4f6f8; border: 1px solid var(--border); border-radius: 9999px;
+      padding: 7px 14px 7px 10px; font-size: 12px; font-weight: 700; color: var(--dark);
+    }
+    .missie-info-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+    .missie-info-btn.blauw .missie-info-dot  { background: var(--primary-dark); }
+    .missie-info-btn.paars .missie-info-dot  { background: var(--paars); }
+    .missie-info-btn.oranje .missie-info-dot { background: var(--oranje); }
+    .missie-tooltip {
+      position: absolute; bottom: calc(100% + 10px); left: 50%;
+      transform: translateX(-50%) translateY(4px);
+      width: 230px; background: var(--dark); color: #fff;
+      font-size: 12px; font-weight: 400; line-height: 1.5; text-align: left;
+      padding: 12px 14px; border-radius: 12px;
+      box-shadow: 0 14px 28px -8px rgba(0,0,0,.35);
+      opacity: 0; visibility: hidden; pointer-events: none;
+      transition: opacity 0.15s, transform 0.15s;
+      z-index: 20;
+    }
+    .missie-tooltip::after {
+      content: ''; position: absolute; top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent; border-top-color: var(--dark);
+    }
+    .missie-info-btn:hover .missie-tooltip,
+    .missie-info-btn:focus-visible .missie-tooltip {
+      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+    }
+
     /* live voortgang */
     .mock-group-card { background: #f4f6f8; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
     .mock-group-card:last-child { margin-bottom: 0; }
@@ -394,6 +427,20 @@
         <div class="voorbeeld-text">
           <h3>De leerling kiest een missie</h3>
           <p>Leerlingen doorlopen de drie missies in volgorde: pas als de vorige missie is afgerond, gaat de volgende open.</p>
+          <div class="missie-info-row">
+            <div class="missie-info-btn blauw" tabindex="0">
+              <span class="missie-info-dot"></span>Math with Menno
+              <div class="missie-tooltip">Leerlingen oefenen rekenopgaven en reflecteren op uitlegvideo's: hoe duidelijk waren ze, en bij welke vakken zouden ze dit gebruiken?</div>
+            </div>
+            <div class="missie-info-btn paars" tabindex="0">
+              <span class="missie-info-dot"></span>Online oefenwebsites
+              <div class="missie-tooltip">Leerlingen vergelijken vier voorbeeldwebsites, rangschikken welke het prettigst werkt en beschrijven waar een goede oefenwebsite aan moet voldoen.</div>
+            </div>
+            <div class="missie-info-btn oranje" tabindex="0">
+              <span class="missie-info-dot"></span>Jay I
+              <div class="missie-tooltip">Leerlingen chatten met AI-leercoach Jay I over een theoriepagina, doorlopen een checklist en reflecteren op het gebruik van AI bij het leren.</div>
+            </div>
+          </div>
         </div>
       </div>
 
