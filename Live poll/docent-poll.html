@@ -763,11 +763,10 @@
     // ── Wachtkamer ────────────────────────────────────────────────────────────
     function toonWachtkamer() {
       huidigView = 'lobby';
-      const lesNum = lesId.replace('poll-les-', '');
       app.innerHTML = `
         <div class="view">
           <div class="lobby-hero" style="padding-right:280px;">
-            <div class="lobby-title">PollParty les ${lesNum}</div>
+            <div class="lobby-title">PollParty</div>
 
             <div class="lobby-step">
               <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
