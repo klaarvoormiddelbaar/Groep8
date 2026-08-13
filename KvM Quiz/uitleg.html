@@ -210,6 +210,7 @@
     .mock-quiz-bar-fill { height: 100%; border-radius: 9999px; }
 
     /* klassement */
+    .mock-board-stack { display: flex; flex-direction: column; gap: 16px; }
     .mock-board-row { display: flex; align-items: center; gap: 12px; padding: 11px 4px; border-bottom: 1px solid var(--border); }
     .mock-board-row:last-child { border-bottom: none; }
     .mock-rank {
@@ -370,51 +371,46 @@
 
       <div class="voorbeeld-row">
         <div class="voorbeeld-text">
-          <h3>Na elke vraag: de tussenstand</h3>
-          <p>Na iedere vraag verschijnt de tussenstand in beeld, zodat de klas ziet wie op dat moment voorstaat.</p>
+          <h3>Tussenstand en eindstand</h3>
+          <p>Na iedere vraag verschijnt de tussenstand in beeld, zodat de klas ziet wie op dat moment voorstaat. Na de laatste vraag verschijnt de volledige eindstand met de winnaar van de klas — een leuk moment om de quiz mee af te sluiten.</p>
         </div>
-        <div class="mock-card">
-          <div class="mock-badge">Tussenstand · Na vraag 2 van 6</div>
-          <div class="mock-board-row">
-            <span class="mock-rank gold">1</span>
-            <div class="mock-board-name">Sanne</div>
-            <div class="mock-board-points">480 punten</div>
+        <div class="mock-board-stack">
+          <div class="mock-card">
+            <div class="mock-badge">Tussenstand · Na vraag 2 van 6</div>
+            <div class="mock-board-row">
+              <span class="mock-rank gold">1</span>
+              <div class="mock-board-name">Sanne</div>
+              <div class="mock-board-points">480 punten</div>
+            </div>
+            <div class="mock-board-row">
+              <span class="mock-rank silver">2</span>
+              <div class="mock-board-name">Daan</div>
+              <div class="mock-board-points">410 punten</div>
+            </div>
+            <div class="mock-board-row">
+              <span class="mock-rank bronze">3</span>
+              <div class="mock-board-name">Mila</div>
+              <div class="mock-board-points">375 punten</div>
+            </div>
           </div>
-          <div class="mock-board-row">
-            <span class="mock-rank silver">2</span>
-            <div class="mock-board-name">Daan</div>
-            <div class="mock-board-points">410 punten</div>
+          <div class="mock-card">
+            <div class="mock-badge closed">🏆 Eindstand</div>
+            <div class="mock-board-row">
+              <span class="mock-rank gold">1</span>
+              <div class="mock-board-name">Sanne <img src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
+              <div class="mock-board-points">860 punten</div>
+            </div>
+            <div class="mock-board-row">
+              <span class="mock-rank silver">2</span>
+              <div class="mock-board-name">Daan</div>
+              <div class="mock-board-points">790 punten</div>
+            </div>
+            <div class="mock-board-row">
+              <span class="mock-rank bronze">3</span>
+              <div class="mock-board-name">Mila</div>
+              <div class="mock-board-points">705 punten</div>
+            </div>
           </div>
-          <div class="mock-board-row">
-            <span class="mock-rank bronze">3</span>
-            <div class="mock-board-name">Mila</div>
-            <div class="mock-board-points">375 punten</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="voorbeeld-row">
-        <div class="mock-card">
-          <div class="mock-badge closed">🏆 Eindstand</div>
-          <div class="mock-board-row">
-            <span class="mock-rank gold">1</span>
-            <div class="mock-board-name">Sanne <img src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""></div>
-            <div class="mock-board-points">860 punten</div>
-          </div>
-          <div class="mock-board-row">
-            <span class="mock-rank silver">2</span>
-            <div class="mock-board-name">Daan</div>
-            <div class="mock-board-points">790 punten</div>
-          </div>
-          <div class="mock-board-row">
-            <span class="mock-rank bronze">3</span>
-            <div class="mock-board-name">Mila</div>
-            <div class="mock-board-points">705 punten</div>
-          </div>
-        </div>
-        <div class="voorbeeld-text">
-          <h3>Aan het einde: de eindstand</h3>
-          <p>Na de laatste vraag verschijnt de volledige eindstand met de winnaar van de klas. Een leuk moment om de quiz mee af te sluiten.</p>
         </div>
       </div>
 
