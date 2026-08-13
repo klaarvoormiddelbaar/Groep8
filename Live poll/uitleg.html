@@ -224,6 +224,46 @@
     .mock-donut-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
     .mock-donut-label { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
 
+    /* wachtkamer (leerling doet mee) */
+    .mock-lobby {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
+      border-radius: 20px; padding: 26px 24px; color: #fff;
+    }
+    .mock-lobby::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.14) 1.5px, transparent 1.5px);
+      background-size: 22px 22px; pointer-events: none;
+    }
+    .mock-lobby::after {
+      content: ''; position: absolute; top: -90px; right: -70px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .mock-lobby-title { position: relative; font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .mock-lobby-title img { height: 1.1em; width: auto; }
+    .mock-lobby-step { position: relative; margin-bottom: 18px; }
+    .mock-lobby-step:last-child { margin-bottom: 0; }
+    .mock-lobby-step-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.92); margin-bottom: 10px;
+    }
+    .mock-lobby-step-num {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; color: #fff;
+    }
+    .mock-lobby-step-text { position: relative; font-size: 12.5px; color: rgba(255,255,255,0.85); line-height: 1.5; }
+    .mock-join-pill {
+      position: relative; display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
+      border-radius: 9999px; padding: 10px 16px; max-width: 100%;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #fff;
+      overflow-wrap: anywhere;
+    }
+
     .stappen-list { margin-bottom: 36px; }
     .stap-row { position: relative; padding-left: 46px; padding-bottom: 22px; }
     .stap-row:last-child { padding-bottom: 0; }
@@ -326,9 +366,22 @@
 
       <div class="voorbeeld-row">
         <div class="voorbeeld-text">
-          <h3>Jij opent de eerste stelling</h3>
-          <p>Jij bepaalt het tempo: bij elke stelling die je opent, zie je live hoeveel leerlingen al hebben gestemd.</p>
+          <h3>De leerling doet mee</h3>
+          <p>De leerling pakt de laptop (of telefoon) erbij en opent PollParty via de link op het scherm.</p>
         </div>
+        <div class="mock-lobby">
+          <div class="mock-lobby-title"><img src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt="">PollParty</div>
+          <div class="mock-lobby-step">
+            <div class="mock-lobby-step-label"><span class="mock-lobby-step-num">1</span> Ga naar de link</div>
+            <div class="mock-join-pill">groep8.klaarvoormiddelbaar.nl/les1/poll</div>
+          </div>
+          <div class="mock-lobby-step">
+            <div class="mock-lobby-step-label"><span class="mock-lobby-step-num">2</span> Beantwoord de stellingen zodra de poll begint</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
         <div class="mock-card mock-card-center">
           <div class="mock-badge">Stelling 1 van 7</div>
           <div class="mock-donut">
@@ -337,9 +390,17 @@
           </div>
           <div class="mock-donut-label">leerlingen hebben<br>gestemd</div>
         </div>
+        <div class="voorbeeld-text">
+          <h3>Jij opent de eerste stelling</h3>
+          <p>Jij bepaalt het tempo: bij elke stelling die je opent, zie je live hoeveel leerlingen al hebben gestemd.</p>
+        </div>
       </div>
 
       <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>De leerling beantwoordt de stelling</h3>
+          <p>Leerlingen zien op hun eigen laptop (of telefoon) een stelling met vijf antwoordopties, van 'helemaal mee oneens' tot 'helemaal mee eens'.</p>
+        </div>
         <div class="mock-card">
           <div class="mock-badge">Geef jouw mening</div>
           <div class="mock-title">Ik zou morgen al willen beginnen in de brugklas.</div>
@@ -351,17 +412,9 @@
             <div class="mock-option"><span class="mock-num s5">5</span>Helemaal mee eens</div>
           </div>
         </div>
-        <div class="voorbeeld-text">
-          <h3>De leerling beantwoordt de stelling</h3>
-          <p>Leerlingen zien op hun eigen laptop (of telefoon) een stelling met vijf antwoordopties, van 'helemaal mee oneens' tot 'helemaal mee eens'.</p>
-        </div>
       </div>
 
       <div class="voorbeeld-row">
-        <div class="voorbeeld-text">
-          <h3>Jullie bespreken de resultaten klassikaal</h3>
-          <p>Zodra de stemmen gesloten zijn, zie jij direct de resultaten. Een mooi startpunt voor een kort gesprek met de klas.</p>
-        </div>
         <div class="mock-card">
           <div class="mock-results-head">
             <div class="mock-badge closed">✓ Stemmen gesloten · Stelling 1</div>
@@ -402,6 +455,10 @@
             <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#2f9e78; width:27%;"></div></div>
             <div class="mock-result-count">6<span>27%</span></div>
           </div>
+        </div>
+        <div class="voorbeeld-text">
+          <h3>Jullie bespreken de resultaten klassikaal</h3>
+          <p>Zodra de stemmen gesloten zijn, zie jij direct de resultaten. Een mooi startpunt voor een kort gesprek met de klas.</p>
         </div>
       </div>
 
