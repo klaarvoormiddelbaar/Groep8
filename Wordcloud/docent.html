@@ -71,48 +71,57 @@
     .page-titel { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
     .page-sub   { font-size: 15px; color: var(--muted); margin-bottom: 28px; }
 
-    .link-kaart {
+    .lobby-hero {
       background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
-      border-radius: var(--r-card); padding: 32px 36px; color: white;
+      border-radius: var(--r-card); padding: 52px 56px; color: white; min-height: 340px;
       position: relative; overflow: hidden; margin-bottom: 28px;
-      display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+      display: flex; flex-direction: column; justify-content: center;
     }
-    .link-kaart::before {
+    .lobby-hero::before {
       content: ''; position: absolute; inset: 0;
       background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
       background-size: 26px 26px; border-radius: inherit; pointer-events: none;
     }
-    .link-kaart::after {
-      content: ''; position: absolute; top: -140px; right: -80px;
-      width: 320px; height: 320px; border-radius: 50%;
+    .lobby-hero::after {
+      content: ''; position: absolute; top: -140px; right: -100px;
+      width: 360px; height: 360px; border-radius: 50%;
       background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
       pointer-events: none;
     }
-    .link-tekst { position: relative; min-width: 220px; }
-    .link-titel { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-    .link-url-rij {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 12px; padding: 10px 16px;
-    }
-    .link-url {
-      font-family: 'JetBrains Mono', monospace; font-weight: 600;
-      font-size: 15px; color: white; word-break: break-all;
-    }
-    .link-sub { position: relative; font-size: 14px; color: rgba(255,255,255,0.82); margin-top: 10px; }
+    .lobby-title { position: relative; font-size: 34px; font-weight: 700; margin-bottom: 30px; }
 
-    .btn-kopieer {
-      position: relative; flex-shrink: 0;
-      display: inline-flex; align-items: center; gap: 10px;
-      background: white; color: var(--primary-dark);
-      border: none; border-radius: var(--r-pill); cursor: pointer;
-      font-family: inherit; font-size: 15px; font-weight: 700;
-      padding: 14px 26px;
-      box-shadow: 0 10px 20px rgba(10,30,70,0.25);
-      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
+    .lobby-step { position: relative; margin-bottom: 26px; }
+    .lobby-step:last-child { margin-bottom: 0; }
+    .lobby-step-label {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 24px; font-weight: 700; letter-spacing: 0.1px; text-transform: none;
+      color: rgba(255,255,255,0.92); margin-bottom: 14px;
     }
-    .btn-kopieer:hover { transform: translateY(-2px); box-shadow: 0 14px 26px rgba(10,30,70,0.30); }
-    .btn-kopieer.gekopieerd { background: var(--groen); color: white; }
+    .lobby-step-num {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: white;
+    }
+
+    .join-pill {
+      position: relative; display: inline-flex; align-items: center; gap: 16px;
+      background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
+      border-radius: var(--r-pill); padding: 18px 28px;
+      font-family: inherit; color: white; cursor: pointer; max-width: 100%;
+      transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    }
+    .join-pill:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); }
+    .join-pill:active { transform: scale(0.97); }
+    .join-pill:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+    .join-pill-tekst {
+      font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700;
+      letter-spacing: 0.2px; overflow-wrap: anywhere; text-align: left;
+    }
+    .join-pill-icon { display: flex; flex-shrink: 0; color: rgba(255,255,255,0.85); transition: color 0.18s; }
+    .join-pill-icon svg { width: 22px; height: 22px; }
+    .join-pill.gekopieerd { background: rgba(16,163,127,0.32); border-color: rgba(16,163,127,0.6); }
+    .join-pill.gekopieerd .join-pill-icon { color: #baf3d9; }
 
     .btn-resultaten, .btn-ghost {
       display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0;
@@ -164,16 +173,31 @@
     }
     @keyframes woordKomt { from { opacity: 0; scale: 0.35; filter: blur(3px); } to { opacity: 1; scale: 1; filter: blur(0); } }
 
-    .deelnemers-kaart { background: #fafbfc; border: 1px solid var(--border); border-radius: 20px; padding: 20px 22px; margin-bottom: 24px; }
-    .deelnemers-titel { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-    .deelnemers-namen { display: flex; flex-wrap: wrap; gap: 8px; }
-    .deelnemers-leeg { color: var(--muted); font-size: 14px; }
-    .deelnemer-pill {
-      display: inline-block;
-      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
-      color: var(--primary-dark); font-size: 13px; font-weight: 700;
-      border-radius: var(--r-pill); padding: 6px 14px;
+    .panel {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+      box-shadow: var(--shadow-card); padding: 36px 40px; margin-bottom: 24px;
     }
+    .panel-head   { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+    .panel-title  { font-size: 20px; font-weight: 700; }
+    .panel-badge  {
+      font-size: 14px; font-weight: 700; color: var(--primary);
+      background: var(--primary-soft); border-radius: var(--r-pill); padding: 7px 16px;
+    }
+    .deelnemers-grid { display: flex; flex-wrap: wrap; gap: 12px; min-height: 56px; }
+    .d-chip {
+      display: flex; align-items: center; gap: 10px;
+      background: #f7f8f9; border: 1px solid var(--border); border-radius: var(--r-pill);
+      padding: 8px 18px 8px 8px;
+      animation: fadeUp 0.4s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    .d-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--groen), var(--groen-dark));
+      color: white; font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .d-naam { font-size: 15px; font-weight: 700; }
+    .leeg { color: var(--muted); font-size: 15px; padding: 12px 4px; }
 
     .moderatie-label { font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
     .moderatie-lijst { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 14px; }
@@ -260,16 +284,29 @@
     let deelnemers = [];
     let deelnemersKanaal = null;
 
-    function kopieerLink() {
-      navigator.clipboard.writeText(leerlingLink).then(() => {
-        const btn = document.getElementById('btn-kopieer');
-        const tekst = document.getElementById('btn-kopieer-tekst');
-        if (!btn || !tekst) return;
-        const vorige = tekst.textContent;
-        btn.classList.add('gekopieerd');
-        tekst.textContent = 'Gekopieerd!';
-        setTimeout(() => { btn.classList.remove('gekopieerd'); tekst.textContent = vorige; }, 1800);
-      });
+    const ICOON_KOPIEER = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="10" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M13 7V5.5A2.5 2.5 0 0 0 10.5 3H5.5A2.5 2.5 0 0 0 3 5.5v5A2.5 2.5 0 0 0 5.5 13H7" stroke="currentColor" stroke-width="1.6"/></svg>`;
+    const ICOON_GEKOPIEERD = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.5L8 14.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    let kopieerTimeoutId = null;
+
+    function kopieerJoinLink(url) {
+      try { navigator.clipboard.writeText(url); } catch (fout) {}
+
+      const pill = document.getElementById('join-pill');
+      const tekst = document.getElementById('join-pill-tekst');
+      const icoon = document.getElementById('join-pill-icon');
+      if (!pill || !tekst || !icoon) return;
+
+      const origineleTekst = tekst.textContent;
+      pill.classList.add('gekopieerd');
+      tekst.textContent = 'Gekopieerd naar klembord';
+      icoon.innerHTML = ICOON_GEKOPIEERD;
+
+      if (kopieerTimeoutId) clearTimeout(kopieerTimeoutId);
+      kopieerTimeoutId = setTimeout(() => {
+        pill.classList.remove('gekopieerd');
+        tekst.textContent = origineleTekst;
+        icoon.innerHTML = ICOON_KOPIEER;
+      }, 1800);
     }
 
     // ── Link & sessie ────────────────────────────────────────────────────────
@@ -356,14 +393,19 @@
     }
 
     function ververDeelnemers() {
-      const el = document.getElementById('deelnemersLijst');
-      if (!el) return;
+      const g = document.getElementById('d-grid');
+      const badge = document.getElementById('teller-badge');
+      if (badge) badge.textContent = `${deelnemers.length} ${deelnemers.length === 1 ? 'leerling' : 'leerlingen'}`;
+      if (!g) return;
       if (deelnemers.length === 0) {
-        el.innerHTML = '<div class="deelnemers-leeg">Wachten op de eerste deelnemer!</div>';
+        g.innerHTML = `<div class="leeg">Als leerlingen de link openen, verschijnen ze hier live!</div>`;
         return;
       }
-      el.innerHTML = `<div class="deelnemers-titel">${deelnemers.length} leerling${deelnemers.length !== 1 ? 'en' : ''} doen mee</div>
-        <div class="deelnemers-namen">${deelnemers.map(d => `<span class="deelnemer-pill">${escapeHtml(d.naam)}</span>`).join('')}</div>`;
+      g.innerHTML = deelnemers.map(d => `
+        <div class="d-chip">
+          <div class="d-avatar">${escapeHtml(d.naam.slice(0, 1).toUpperCase())}</div>
+          <div class="d-naam">${escapeHtml(d.naam)}</div>
+        </div>`).join('');
     }
 
     function abonneerOpWoorden(faseIdx) {
@@ -485,31 +527,31 @@
       if (sessie.status === 'afgelopen')  return toonAfgerond();
     }
 
-    function linkKaartHtml() {
-      return `
-        <div class="link-kaart">
-          <div class="link-tekst">
-            <div class="link-titel">Kopieer leerlinglink</div>
-            <div class="link-url-rij">
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
-              <span class="link-url">${escapeHtml(leerlingLink.replace(/^https?:\/\//, ''))}</span>
-            </div>
-            <div class="link-sub">Deel deze link met je leerlingen.</div>
-          </div>
-          <button class="btn-kopieer" id="btn-kopieer" onclick="kopieerLink()">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span id="btn-kopieer-tekst">Kopieer leerlinglink</span>
-          </button>
-        </div>`;
-    }
-
     function toonWachtkamer() {
       document.getElementById('app').innerHTML = `
         <div class="page-titel">Woordenwolk — Docentendashboard</div>
         <div class="page-sub">Deel de link met je klas. Geen sessiecode nodig, iedereen gebruikt jouw vaste link.</div>
-        ${linkKaartHtml()}
-        <div class="deelnemers-kaart" id="deelnemersLijst">
-          <div class="deelnemers-leeg">Wachten op de eerste deelnemer!</div>
+        <div class="lobby-hero">
+          <div class="lobby-title"><img src="/Afbeeldingen/emojis nieuw/lamp.png" alt="" style="height:1em;width:auto;object-fit:contain;vertical-align:-0.12em;margin-right:10px">Woordenwolk</div>
+          <div class="lobby-step">
+            <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
+            <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink('${leerlingLink}')">
+              <span class="join-pill-tekst" id="join-pill-tekst">${escapeHtml(leerlingLink.replace(/^https?:\/\//, ''))}</span>
+              <span class="join-pill-icon" id="join-pill-icon">${ICOON_KOPIEER}</span>
+            </button>
+          </div>
+          <div class="lobby-step">
+            <div class="lobby-step-label"><span class="lobby-step-num">2</span> Typ tips in zodra jij de eerste vraag start</div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Deelnemers</div>
+            <div class="panel-badge" id="teller-badge">0 leerlingen</div>
+          </div>
+          <div class="deelnemers-grid" id="d-grid">
+            <div class="leeg">Als leerlingen de link openen, verschijnen ze hier live!</div>
+          </div>
         </div>
         <div class="knoppen-rij">
           <button class="btn-resultaten" onclick="startSessie()">Start →</button>

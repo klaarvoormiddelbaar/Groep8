@@ -98,49 +98,58 @@
     }
     .btn-resultaten:hover { background: var(--groen-dark); transform: translateY(-2px); box-shadow: 0 14px 20px -3px rgba(16,163,127,.34); }
 
-    /* ── LEERLINGLINK KAART ── */
-    .link-kaart {
+    /* ── LOBBY (leerlinglink) ── */
+    .lobby-hero {
       background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
-      border-radius: var(--r-card); padding: 32px 36px; color: white;
+      border-radius: var(--r-card); padding: 52px 56px; color: white; min-height: 340px;
       position: relative; overflow: hidden; margin-bottom: 28px;
-      display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
+      display: flex; flex-direction: column; justify-content: center;
     }
-    .link-kaart::before {
+    .lobby-hero::before {
       content: ''; position: absolute; inset: 0;
       background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
       background-size: 26px 26px; border-radius: inherit; pointer-events: none;
     }
-    .link-kaart::after {
-      content: ''; position: absolute; top: -140px; right: -80px;
-      width: 320px; height: 320px; border-radius: 50%;
+    .lobby-hero::after {
+      content: ''; position: absolute; top: -140px; right: -100px;
+      width: 360px; height: 360px; border-radius: 50%;
       background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
       pointer-events: none;
     }
-    .link-tekst { position: relative; min-width: 220px; }
-    .link-titel { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
-    .link-url-rij {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 12px; padding: 10px 16px;
-    }
-    .link-url {
-      font-family: 'JetBrains Mono', monospace; font-weight: 600;
-      font-size: 15px; color: white; word-break: break-all;
-    }
-    .link-sub { position: relative; font-size: 14px; color: rgba(255,255,255,0.82); margin-top: 10px; }
+    .lobby-title { position: relative; font-size: 34px; font-weight: 700; margin-bottom: 30px; }
 
-    .btn-kopieer {
-      position: relative; flex-shrink: 0;
-      display: inline-flex; align-items: center; gap: 10px;
-      background: white; color: var(--primary-dark);
-      border: none; border-radius: var(--r-pill); cursor: pointer;
-      font-family: inherit; font-size: 15px; font-weight: 700;
-      padding: 14px 26px;
-      box-shadow: 0 10px 20px rgba(10,30,70,0.25);
-      transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s, background 0.15s;
+    .lobby-step { position: relative; margin-bottom: 26px; }
+    .lobby-step:last-child { margin-bottom: 0; }
+    .lobby-step-label {
+      display: flex; align-items: center; gap: 12px;
+      font-size: 24px; font-weight: 700; letter-spacing: 0.1px; text-transform: none;
+      color: rgba(255,255,255,0.92); margin-bottom: 14px;
     }
-    .btn-kopieer:hover { transform: translateY(-2px); box-shadow: 0 14px 26px rgba(10,30,70,0.30); }
-    .btn-kopieer.gekopieerd { background: var(--groen); color: white; }
+    .lobby-step-num {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: white;
+    }
+
+    .join-pill {
+      position: relative; display: inline-flex; align-items: center; gap: 16px;
+      background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
+      border-radius: var(--r-pill); padding: 18px 28px;
+      font-family: inherit; color: white; cursor: pointer; max-width: 100%;
+      transition: background 0.18s, border-color 0.18s, transform 0.12s;
+    }
+    .join-pill:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); }
+    .join-pill:active { transform: scale(0.97); }
+    .join-pill:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+    .join-pill-tekst {
+      font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700;
+      letter-spacing: 0.2px; overflow-wrap: anywhere; text-align: left;
+    }
+    .join-pill-icon { display: flex; flex-shrink: 0; color: rgba(255,255,255,0.85); transition: color 0.18s; }
+    .join-pill-icon svg { width: 22px; height: 22px; }
+    .join-pill.gekopieerd { background: rgba(16,163,127,0.32); border-color: rgba(16,163,127,0.6); }
+    .join-pill.gekopieerd .join-pill-icon { color: #baf3d9; }
 
     /* ── FILTERS ── */
     .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
@@ -254,7 +263,9 @@
 
     @media (max-width: 640px) {
       .main { padding: 28px 18px 80px; }
-      .link-kaart { padding: 26px 22px; }
+      .lobby-hero { padding: 32px 26px; min-height: 0; }
+      .lobby-title { font-size: 26px; }
+      .lobby-step-label { font-size: 19px; }
       .header-inner { padding: 0 18px; }
     }
   </style>
@@ -279,19 +290,20 @@
     <div class="page-titel">Missie Middelbaar — Docentendashboard</div>
     <div class="page-sub">Volg de groepjes live tijdens de les. Geen sessiecode nodig, iedereen gebruikt dezelfde link.</div>
 
-    <div class="link-kaart">
-      <div class="link-tekst">
-        <div class="link-titel">Kopieer leerlinglink</div>
-        <div class="link-url-rij">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="white" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="white" stroke-width="1.4" stroke-linecap="round"/></svg>
-          <span class="link-url" id="link-url">…</span>
-        </div>
-        <div class="link-sub">Deel deze link met je leerlingen.</div>
+    <div class="lobby-hero">
+      <div class="lobby-title"><img src="/Afbeeldingen/emojis nieuw/raket.png" alt="" style="height:1em;width:auto;object-fit:contain;vertical-align:-0.12em;margin-right:10px">Missie Middelbaar</div>
+
+      <div class="lobby-step">
+        <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
+        <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink(leerlingLink)">
+          <span class="join-pill-tekst" id="join-pill-tekst">…</span>
+          <span class="join-pill-icon" id="join-pill-icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="10" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M13 7V5.5A2.5 2.5 0 0 0 10.5 3H5.5A2.5 2.5 0 0 0 3 5.5v5A2.5 2.5 0 0 0 5.5 13H7" stroke="currentColor" stroke-width="1.6"/></svg></span>
+        </button>
       </div>
-      <button class="btn-kopieer" id="btn-kopieer" onclick="kopieerLink()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        <span id="btn-kopieer-tekst">Kopieer leerlinglink</span>
-      </button>
+
+      <div class="lobby-step">
+        <div class="lobby-step-label"><span class="lobby-step-num">2</span> Vul jullie voornamen in met je groepje</div>
+      </div>
     </div>
 
     <div class="filters" id="filters"></div>
@@ -334,15 +346,29 @@
     // ── Leerlinglink ─────────────────────────────────────────────────────────
     let leerlingLink = '';
 
-    function kopieerLink() {
-      navigator.clipboard.writeText(leerlingLink).then(() => {
-        const btn = document.getElementById('btn-kopieer');
-        const tekst = document.getElementById('btn-kopieer-tekst');
-        const vorige = tekst.textContent;
-        btn.classList.add('gekopieerd');
-        tekst.textContent = 'Gekopieerd!';
-        setTimeout(() => { btn.classList.remove('gekopieerd'); tekst.textContent = vorige; }, 1800);
-      });
+    const ICOON_KOPIEER = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="10" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M13 7V5.5A2.5 2.5 0 0 0 10.5 3H5.5A2.5 2.5 0 0 0 3 5.5v5A2.5 2.5 0 0 0 5.5 13H7" stroke="currentColor" stroke-width="1.6"/></svg>`;
+    const ICOON_GEKOPIEERD = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.5L8 14.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    let kopieerTimeoutId = null;
+
+    function kopieerJoinLink(url) {
+      try { navigator.clipboard.writeText(url); } catch (fout) {}
+
+      const pill = document.getElementById('join-pill');
+      const tekst = document.getElementById('join-pill-tekst');
+      const icoon = document.getElementById('join-pill-icon');
+      if (!pill || !tekst || !icoon) return;
+
+      const origineleTekst = tekst.textContent;
+      pill.classList.add('gekopieerd');
+      tekst.textContent = 'Gekopieerd naar klembord';
+      icoon.innerHTML = ICOON_GEKOPIEERD;
+
+      if (kopieerTimeoutId) clearTimeout(kopieerTimeoutId);
+      kopieerTimeoutId = setTimeout(() => {
+        pill.classList.remove('gekopieerd');
+        tekst.textContent = origineleTekst;
+        icoon.innerHTML = ICOON_KOPIEER;
+      }, 1800);
     }
 
     // ── Status & voortgang afgeleid uit echte voortgangsvelden ──────────────
@@ -623,7 +649,7 @@
       linkId = link.id;
 
       leerlingLink = `https://groep8.klaarvoormiddelbaar.nl/missie/${link.volgnummer}`;
-      document.getElementById('link-url').textContent = leerlingLink.replace(/^https?:\/\//, '');
+      document.getElementById('join-pill-tekst').textContent = leerlingLink.replace(/^https?:\/\//, '');
 
       render();
       laadGroepjes();
