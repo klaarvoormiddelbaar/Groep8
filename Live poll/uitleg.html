@@ -210,10 +210,16 @@
 
     .mock-card-center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
     .mock-donut {
-      width: 104px; height: 104px; border-radius: 50%; border: 12px solid #eef0f2;
+      position: relative;
+      width: 104px; height: 104px; border-radius: 50%;
+      background: conic-gradient(var(--primary) 0% 64%, #eef0f2 64% 100%);
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       margin-bottom: 16px;
     }
+    .mock-donut::before {
+      content: ''; position: absolute; inset: 12px; border-radius: 50%; background: #fff;
+    }
+    .mock-donut-num, .mock-donut-sub { position: relative; z-index: 1; }
     .mock-donut-num { font-size: 24px; font-weight: 700; color: var(--dark); line-height: 1; }
     .mock-donut-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
     .mock-donut-label { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
@@ -325,18 +331,14 @@
         </div>
         <div class="mock-card mock-card-center">
           <div class="mock-donut">
-            <div class="mock-donut-num">0</div>
-            <div class="mock-donut-sub">van 1</div>
+            <div class="mock-donut-num">14</div>
+            <div class="mock-donut-sub">van 22</div>
           </div>
           <div class="mock-donut-label">leerlingen hebben<br>gestemd</div>
         </div>
       </div>
 
       <div class="voorbeeld-row">
-        <div class="voorbeeld-text">
-          <h3>Wat de leerling ziet</h3>
-          <p>Leerlingen krijgen op hun eigen telefoon of laptop een stelling te zien, met vijf antwoordopties van 'helemaal mee oneens' tot 'helemaal mee eens'. Ze kiezen anoniem het antwoord dat het beste bij ze past.</p>
-        </div>
         <div class="mock-card">
           <div class="mock-badge">Geef jouw mening</div>
           <div class="mock-title">Ik zou morgen al willen beginnen in de brugklas.</div>
@@ -348,9 +350,17 @@
             <div class="mock-option"><span class="mock-num s5">5</span>Helemaal mee eens</div>
           </div>
         </div>
+        <div class="voorbeeld-text">
+          <h3>Wat de leerling ziet</h3>
+          <p>Leerlingen krijgen op hun eigen telefoon of laptop een stelling te zien, met vijf antwoordopties van 'helemaal mee oneens' tot 'helemaal mee eens'. Ze kiezen anoniem het antwoord dat het beste bij ze past.</p>
+        </div>
       </div>
 
       <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>Wat jij als docent ziet</h3>
+          <p>Zodra de stemmen gesloten zijn, zie jij direct de resultaten: hoeveel leerlingen per antwoord kozen, de percentages per stelling en het klassengemiddelde. Een mooi startpunt voor een kort gesprek met de klas.</p>
+        </div>
         <div class="mock-card">
           <div class="mock-results-head">
             <div class="mock-badge closed">✓ Stemmen gesloten · Stelling 1</div>
@@ -391,10 +401,6 @@
             <div class="mock-result-bar-track"><div class="mock-result-bar-fill" style="background:#2f9e78; width:27%;"></div></div>
             <div class="mock-result-count">6<span>27%</span></div>
           </div>
-        </div>
-        <div class="voorbeeld-text">
-          <h3>Wat jij als docent ziet</h3>
-          <p>Zodra de stemmen gesloten zijn, zie jij direct de resultaten: hoeveel leerlingen per antwoord kozen, de percentages per stelling en het klassengemiddelde. Een mooi startpunt voor een kort gesprek met de klas.</p>
         </div>
       </div>
 
