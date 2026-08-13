@@ -270,7 +270,11 @@
       box-shadow: 0 8px 16px -6px rgba(0,0,0,.25);
     }
     .missie-info-panel-titel { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
-    .missie-info-panel-tekst { font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+    .missie-info-panel-tekst {
+      font-size: 12.5px; line-height: 1.55; color: var(--muted);
+      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
     /* lightbox */
     .missie-lightbox {
