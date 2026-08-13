@@ -235,38 +235,38 @@
     .mock-mission-status.starten { background: var(--primary-soft); color: var(--primary-dark); }
     .mock-mission-status.vergrendeld { background: #eef0f2; color: var(--muted); }
 
-    /* missie-info knopjes met hover-uitleg */
+    /* missie-info knopjes + uitklap-uitleg */
     .missie-info-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
     .missie-info-btn {
-      position: relative;
       display: inline-flex; align-items: center; gap: 7px;
-      background: #f4f6f8; border: 1px solid var(--border); border-radius: 9999px;
+      background: #f4f6f8; border: 1.5px solid transparent; border-radius: 9999px;
       padding: 7px 14px 7px 10px; font-size: 12px; font-weight: 700; color: var(--dark);
+      cursor: pointer; font-family: inherit; transition: background 0.15s, border-color 0.15s;
     }
+    .missie-info-btn:hover { background: #eef0f2; }
     .missie-info-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
     .missie-info-btn.blauw .missie-info-dot  { background: var(--primary-dark); }
     .missie-info-btn.paars .missie-info-dot  { background: var(--paars); }
     .missie-info-btn.oranje .missie-info-dot { background: var(--oranje); }
-    .missie-tooltip {
-      position: absolute; bottom: calc(100% + 10px); left: 50%;
-      transform: translateX(-50%) translateY(4px);
-      width: 230px; background: var(--dark); color: #fff;
-      font-size: 12px; font-weight: 400; line-height: 1.5; text-align: left;
-      padding: 12px 14px; border-radius: 12px;
-      box-shadow: 0 14px 28px -8px rgba(0,0,0,.35);
-      opacity: 0; visibility: hidden; pointer-events: none;
-      transition: opacity 0.15s, transform 0.15s;
-      z-index: 20;
+    .missie-info-btn.blauw.actief  { background: var(--primary-soft); border-color: rgba(78,142,243,.35); }
+    .missie-info-btn.paars.actief  { background: var(--paars-soft); border-color: rgba(124,58,237,.35); }
+    .missie-info-btn.oranje.actief { background: var(--oranje-soft); border-color: rgba(245,158,11,.35); }
+
+    .missie-info-panel {
+      display: none;
+      grid-template-columns: 160px 1fr;
+      gap: 20px; align-items: center;
+      margin-top: 16px; padding: 16px;
+      background: #f8f9fb; border: 1px solid var(--border); border-radius: 16px;
+      animation: fadeUp 0.3s cubic-bezier(0.22,1,0.36,1) both;
     }
-    .missie-tooltip::after {
-      content: ''; position: absolute; top: 100%; left: 50%;
-      transform: translateX(-50%);
-      border: 6px solid transparent; border-top-color: var(--dark);
+    .missie-info-panel.actief { display: grid; }
+    .missie-info-panel img {
+      width: 100%; height: 110px; object-fit: cover; border-radius: 12px;
+      box-shadow: 0 8px 16px -6px rgba(0,0,0,.25);
     }
-    .missie-info-btn:hover .missie-tooltip,
-    .missie-info-btn:focus-visible .missie-tooltip {
-      opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
-    }
+    .missie-info-panel-titel { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+    .missie-info-panel-tekst { font-size: 12.5px; line-height: 1.55; color: var(--muted); }
 
     /* live voortgang */
     .mock-group-card { background: #f4f6f8; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
@@ -424,17 +424,36 @@
           <h3>De leerling voltooit de missies</h3>
           <p>Leerlingen doorlopen de drie missies in volgorde: pas als de vorige missie is afgerond, gaat de volgende open.</p>
           <div class="missie-info-row">
-            <div class="missie-info-btn blauw" tabindex="0">
+            <button type="button" class="missie-info-btn blauw actief" onclick="toonMissieInfo(this, 1)">
               <span class="missie-info-dot"></span>Math with Menno
-              <div class="missie-tooltip">Leerlingen oefenen rekenopgaven en reflecteren op uitlegvideo's: hoe duidelijk waren ze, en bij welke vakken zouden ze dit gebruiken?</div>
-            </div>
-            <div class="missie-info-btn paars" tabindex="0">
+            </button>
+            <button type="button" class="missie-info-btn paars" onclick="toonMissieInfo(this, 2)">
               <span class="missie-info-dot"></span>Online oefenwebsites
-              <div class="missie-tooltip">Leerlingen vergelijken vier voorbeeldwebsites, rangschikken welke het prettigst werkt en beschrijven waar een goede oefenwebsite aan moet voldoen.</div>
-            </div>
-            <div class="missie-info-btn oranje" tabindex="0">
+            </button>
+            <button type="button" class="missie-info-btn oranje" onclick="toonMissieInfo(this, 3)">
               <span class="missie-info-dot"></span>Jay I
-              <div class="missie-tooltip">Leerlingen chatten met AI-leercoach Jay I over een theoriepagina, doorlopen een checklist en reflecteren op het gebruik van AI bij het leren.</div>
+            </button>
+          </div>
+
+          <div class="missie-info-panel actief" id="missie-info-1">
+            <img src="/Missie%20Middelbaar/uitleg-missie-1.png" alt="Math with Menno legt een rekenonderwerp uit op het whiteboard">
+            <div>
+              <div class="missie-info-panel-titel">Math with Menno</div>
+              <div class="missie-info-panel-tekst">Leerlingen bekijken een korte uitlegvideo over een rekenonderwerp uit het werkboek en reflecteren daarna op hoe duidelijk de uitleg was.</div>
+            </div>
+          </div>
+          <div class="missie-info-panel" id="missie-info-2">
+            <img src="/Missie%20Middelbaar/uitleg-missie-2.png" alt="Overzicht van de missie 'Ik wil extra oefenen' met vier oefenwebsites">
+            <div>
+              <div class="missie-info-panel-titel">Online oefenwebsites</div>
+              <div class="missie-info-panel-tekst">Leerlingen verkennen vier voorbeeldwebsites om thuis gratis op te oefenen, en rangschikken welke website voor hen het prettigst werkt.</div>
+            </div>
+          </div>
+          <div class="missie-info-panel" id="missie-info-3">
+            <img src="/Missie%20Middelbaar/uitleg-missie-3.png" alt="Chatgesprek met AI-leercoach Jay I over een theoriepagina">
+            <div>
+              <div class="missie-info-panel-titel">Jay I</div>
+              <div class="missie-info-panel-tekst">Leerlingen chatten met AI-leercoach Jay I, die alleen helpt bij vragen over de theoriepagina, en doorlopen daarbij een checklist met stappen.</div>
             </div>
           </div>
         </div>
@@ -513,5 +532,13 @@
     </div>
   </footer>
 
+  <script>
+    function toonMissieInfo(btn, nummer) {
+      document.querySelectorAll('.missie-info-btn').forEach(el => el.classList.remove('actief'));
+      document.querySelectorAll('.missie-info-panel').forEach(el => el.classList.remove('actief'));
+      btn.classList.add('actief');
+      document.getElementById('missie-info-' + nummer).classList.add('actief');
+    }
+  </script>
 </body>
 </html>
