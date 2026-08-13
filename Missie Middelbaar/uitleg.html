@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uitleg Missie Middelbaar — Klaar voor Middelbaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --page-bg:    #f2f6fd;
+      --card-bg:    #ffffff;
+      --border:     #eceeee;
+      --primary:    #72a8f9;
+      --primary-dark: #4e8ef3;
+      --primary-soft: rgba(78,142,243,0.10);
+      --paars:      #7c3aed;
+      --paars-dark: #6d28d9;
+      --paars-soft: rgba(124,58,237,0.10);
+      --oranje:     #f59e0b;
+      --oranje-dark: #d97706;
+      --oranje-soft: rgba(245,158,11,0.12);
+      --green:      #10a37f;
+      --green-soft: rgba(16,163,127,0.08);
+      --dark:       #191c1d;
+      --muted:      #6d747a;
+      --shadow-card: 0 20px 25px -5px rgba(0,0,0,.10), 0 8px 10px -6px rgba(0,0,0,.10);
+      --max-w:      1040px;
+      --pad:        48px;
+      --r-card:     28px;
+      --r-pill:     9999px;
+    }
+
+    body {
+      font-family: 'Inria Sans', Georgia, serif;
+      color: var(--dark);
+      min-height: 100vh;
+      background-color: var(--page-bg);
+      background-image:
+        radial-gradient(rgba(78,142,243,0.06) 1.5px, transparent 1.5px),
+        radial-gradient(ellipse at 108% -8%,  rgba(114,168,249,0.24) 0%, transparent 52%),
+        radial-gradient(ellipse at -8%   8%,  rgba(156,196,238,0.20) 0%, transparent 48%),
+        radial-gradient(ellipse at 50%  40%,  rgba(255,255,255,0.68) 0%, transparent 58%);
+      background-size: 28px 28px, 100% 100%, 100% 100%, 100% 100%;
+      background-attachment: scroll, fixed, fixed, fixed;
+      display: flex; flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(242,246,253,0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    }
+    .header-inner {
+      max-width: 1184px; margin: 0 auto;
+      padding: 0 var(--pad); height: 72px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-mark {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      border-radius: 11px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 13px; font-weight: 700;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+      flex-shrink: 0;
+    }
+    .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
+    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    .bc-link { color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; }
+    .bc-link:hover { color: var(--primary); }
+    .bc-sep { color: rgba(109,116,122,0.4); }
+    .bc-current { color: var(--primary); font-weight: 700; }
+    .back-btn {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--primary-soft);
+      border: 1px solid rgba(78,142,243,0.20);
+      border-radius: var(--r-pill);
+      padding: 8px 18px;
+      font-family: inherit; font-size: 14px; font-weight: 700;
+      color: var(--primary); cursor: pointer; text-decoration: none;
+      transition: background 0.18s, box-shadow 0.18s;
+      white-space: nowrap;
+    }
+    .back-btn:hover {
+      background: rgba(78,142,243,0.16);
+      box-shadow: 0 4px 12px rgba(78,142,243,0.15);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      flex: 1;
+      max-width: var(--max-w); margin: 0 auto;
+      padding: 56px var(--pad) 96px;
+      width: 100%;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      box-shadow: var(--shadow-card);
+      padding: 48px;
+      animation: fadeUp 0.5s cubic-bezier(0.22,1,0.36,1) both;
+    }
+
+    .title {
+      font-size: 40px; font-weight: 700; line-height: 1.1;
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .title img { height: 1.05em; width: auto; }
+
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 56px; }
+    .role-card {
+      border-radius: 18px;
+      padding: 22px 24px;
+    }
+    .role-card.leerling {
+      background: linear-gradient(135deg, rgba(78,142,243,0.08) 0%, rgba(78,142,243,0.02) 100%);
+      border: 1px solid rgba(78,142,243,0.28);
+    }
+    .role-card.docent {
+      background: linear-gradient(135deg, rgba(16,163,127,0.08) 0%, rgba(16,163,127,0.02) 100%);
+      border: 1px solid rgba(16,163,127,0.28);
+    }
+    .role-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; margin-bottom: 8px;
+    }
+    .role-card.leerling .role-label { color: var(--primary-dark); }
+    .role-card.docent .role-label { color: var(--green); }
+    .role-text { font-size: 14.5px; line-height: 1.6; color: var(--dark); }
+
+    /* ── VOORBEELD (statische mockups) ── */
+    .voorbeeld-row { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; margin-bottom: 56px; }
+    .voorbeeld-row:last-of-type { margin-bottom: 40px; }
+    .voorbeeld-text h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .voorbeeld-text p { font-size: 14px; line-height: 1.65; color: var(--muted); }
+
+    .mock-card {
+      position: relative;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 14px 28px -10px rgba(0,0,0,.14);
+      padding: 26px 24px 22px;
+      overflow: hidden;
+    }
+    .mock-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+      background: linear-gradient(90deg, var(--primary-dark) 0%, #4fd1c5 55%, var(--green) 100%);
+    }
+    .mock-card-center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .mock-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--primary-soft); color: var(--primary-dark);
+      font-size: 10px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 9999px; margin-bottom: 14px;
+    }
+    .mock-badge.closed { background: var(--green-soft); color: var(--green); }
+
+    /* wachtkamer (leerling doet mee) */
+    .mock-lobby {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
+      border-radius: 20px; padding: 26px 24px; color: #fff;
+    }
+    .mock-lobby::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.14) 1.5px, transparent 1.5px);
+      background-size: 22px 22px; pointer-events: none;
+    }
+    .mock-lobby::after {
+      content: ''; position: absolute; top: -90px; right: -70px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .mock-lobby-title { position: relative; font-size: 18px; font-weight: 700; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .mock-lobby-title img { height: 1.1em; width: auto; }
+    .mock-lobby-step { position: relative; margin-bottom: 18px; }
+    .mock-lobby-step:last-child { margin-bottom: 0; }
+    .mock-lobby-step-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.92); margin-bottom: 10px;
+    }
+    .mock-lobby-step-num {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      font-family: 'JetBrains Mono', monospace; font-size: 9.5px; font-weight: 700; color: #fff;
+    }
+    .mock-join-pill {
+      position: relative; display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
+      border-radius: 9999px; padding: 10px 16px; max-width: 100%;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: #fff;
+      overflow-wrap: anywhere;
+    }
+
+    /* missies kiezen */
+    .mock-mission-list { display: flex; flex-direction: column; gap: 10px; }
+    .mock-mission-row {
+      display: flex; align-items: center; gap: 12px;
+      background: #f4f6f8; border-radius: 14px; padding: 12px 14px;
+    }
+    .mock-mission-row.locked { opacity: .55; }
+    .mock-mission-dot {
+      width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 14px; font-weight: 700;
+    }
+    .mock-mission-dot.blauw  { background: var(--primary-dark); }
+    .mock-mission-dot.paars  { background: var(--paars); }
+    .mock-mission-dot.oranje { background: var(--oranje); }
+    .mock-mission-info { flex: 1; min-width: 0; }
+    .mock-mission-titel { font-size: 12.5px; font-weight: 700; color: var(--dark); }
+    .mock-mission-tool { font-size: 11px; color: var(--muted); }
+    .mock-mission-status {
+      font-size: 10px; font-weight: 700; padding: 5px 10px;
+      border-radius: 9999px; white-space: nowrap; flex-shrink: 0;
+    }
+    .mock-mission-status.starten { background: var(--primary-soft); color: var(--primary-dark); }
+    .mock-mission-status.vergrendeld { background: #eef0f2; color: var(--muted); }
+
+    /* live voortgang */
+    .mock-group-card { background: #f4f6f8; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
+    .mock-group-card:last-child { margin-bottom: 0; }
+    .mock-group-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px; }
+    .mock-group-names { font-size: 13px; font-weight: 700; color: var(--dark); }
+    .mock-group-badge { font-size: 9px; font-weight: 700; padding: 4px 9px; border-radius: 9999px; white-space: nowrap; }
+    .mock-group-missie { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+    .mock-group-bar-track { height: 6px; border-radius: 9999px; background: #e3e7ec; overflow: hidden; margin-bottom: 6px; }
+    .mock-group-bar-fill { height: 100%; border-radius: 9999px; }
+    .mock-group-foot { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+
+    /* resultaten */
+    .mock-donut {
+      position: relative;
+      width: 104px; height: 104px; border-radius: 50%;
+      background: conic-gradient(var(--green) 0% 100%, #eef0f2 100% 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      margin-bottom: 16px;
+    }
+    .mock-donut::before {
+      content: ''; position: absolute; inset: 12px; border-radius: 50%; background: #fff;
+    }
+    .mock-donut-num, .mock-donut-sub { position: relative; z-index: 1; }
+    .mock-donut-num { font-size: 24px; font-weight: 700; color: var(--dark); line-height: 1; }
+    .mock-donut-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .mock-donut-label { font-size: 12.5px; color: var(--muted); line-height: 1.4; }
+
+    .cta-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white; text-decoration: none;
+      border: none; border-radius: var(--r-pill);
+      padding: 16px 32px;
+      font-family: inherit; font-size: 17px; font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(78,142,243,0.30);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(78,142,243,0.38); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #f2f4f4;
+      border-radius: 64px 64px 0 0;
+      padding: 40px var(--pad);
+    }
+    .footer-inner {
+      max-width: 1184px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-logo { height: 40px; width: auto; }
+    .footer-copy { font-size: 15px; color: var(--muted); }
+
+    @media (max-width: 680px) {
+      :root { --pad: 20px; }
+      .role-grid { grid-template-columns: 1fr; }
+      .title { font-size: 30px; }
+      .card { padding: 32px 24px; }
+      .cta-row { justify-content: stretch; }
+      .cta-btn { width: 100%; justify-content: center; }
+      .voorbeeld-row { grid-template-columns: 1fr; gap: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ══ HEADER ═══════════════════════════════════════════════════ -->
+  <header class="header">
+    <div class="header-inner">
+      <a class="logo" href="/Dashboard">
+        <div class="logo-mark">KvM</div>
+        <div>
+          <div class="logo-name">Klaar voor Middelbaar</div>
+          <div class="logo-role">Docentenportaal</div>
+        </div>
+      </a>
+
+      <nav class="breadcrumb">
+        <a class="bc-link" href="/Dashboard">Dashboard</a>
+        <span class="bc-sep">/</span>
+        <span class="bc-current">Uitleg Missie Middelbaar</span>
+      </nav>
+
+      <a class="back-btn" href="/Dashboard">← Terug naar dashboard</a>
+    </div>
+  </header>
+
+  <!-- ══ MAIN ═════════════════════════════════════════════════════ -->
+  <main class="main">
+    <div class="card">
+      <h1 class="title"><img src="/Afbeeldingen/emojis nieuw/raket.png" alt="">Uitleg Missie Middelbaar</h1>
+
+      <div class="role-grid">
+        <div class="role-card leerling">
+          <div class="role-label">Leerling</div>
+          <div class="role-text">De leerling doorloopt in een groepje van 1 tot 6 drie missies: uitleg, oefenen en een AI-leercoach. Bij elke missie horen ook een paar reflectievragen.</div>
+        </div>
+        <div class="role-card docent">
+          <div class="role-label">Docent</div>
+          <div class="role-text">Je deelt één link met de klas en volgt live de voortgang van alle groepjes. Aan het einde bespreek je de resultaten klassikaal.</div>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>De leerling doet mee</h3>
+          <p>De leerling pakt de laptop (of telefoon) erbij en opent Missie Middelbaar via de link op het scherm.</p>
+        </div>
+        <div class="mock-lobby">
+          <div class="mock-lobby-title"><img src="/Afbeeldingen/emojis nieuw/raket.png" alt="">Missie Middelbaar</div>
+          <div class="mock-lobby-step">
+            <div class="mock-lobby-step-label"><span class="mock-lobby-step-num">1</span> Ga naar de link</div>
+            <div class="mock-join-pill">groep8.klaarvoormiddelbaar.nl/missie/xxxx</div>
+          </div>
+          <div class="mock-lobby-step">
+            <div class="mock-lobby-step-label"><span class="mock-lobby-step-num">2</span> Vul jullie voornamen in met je groepje</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="mock-card">
+          <div class="mock-badge">Kies je missie</div>
+          <div class="mock-mission-list">
+            <div class="mock-mission-row">
+              <div class="mock-mission-dot blauw">1</div>
+              <div class="mock-mission-info">
+                <div class="mock-mission-titel">Ik begrijp de uitleg niet</div>
+                <div class="mock-mission-tool">Math with Menno</div>
+              </div>
+              <div class="mock-mission-status starten">Starten</div>
+            </div>
+            <div class="mock-mission-row locked">
+              <div class="mock-mission-dot paars">2</div>
+              <div class="mock-mission-info">
+                <div class="mock-mission-titel">Ik wil extra oefenen</div>
+                <div class="mock-mission-tool">Online oefenwebsites</div>
+              </div>
+              <div class="mock-mission-status vergrendeld">Vergrendeld</div>
+            </div>
+            <div class="mock-mission-row locked">
+              <div class="mock-mission-dot oranje">3</div>
+              <div class="mock-mission-info">
+                <div class="mock-mission-titel">Ik wil een leercoach</div>
+                <div class="mock-mission-tool">Jay I</div>
+              </div>
+              <div class="mock-mission-status vergrendeld">Vergrendeld</div>
+            </div>
+          </div>
+        </div>
+        <div class="voorbeeld-text">
+          <h3>De leerling kiest een missie</h3>
+          <p>Leerlingen doorlopen de drie missies in volgorde: pas als de vorige missie is afgerond, gaat de volgende open.</p>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>Jij volgt de voortgang live</h3>
+          <p>Op jouw scherm zie je per groepje welke missie ze doen en hoe ver ze zijn, live bijgewerkt terwijl ze werken.</p>
+        </div>
+        <div class="mock-card">
+          <div class="mock-badge">Live voortgang</div>
+          <div class="mock-group-card">
+            <div class="mock-group-top">
+              <div class="mock-group-names">Sanne, Daan</div>
+              <div class="mock-group-badge" style="background:var(--paars-soft); color:var(--paars-dark);">Bezig met Missie 2</div>
+            </div>
+            <div class="mock-group-missie">Online oefenwebsites</div>
+            <div class="mock-group-bar-track"><div class="mock-group-bar-fill" style="background:var(--paars); width:66%;"></div></div>
+            <div class="mock-group-foot"><span>3 min geleden</span><span>66%</span></div>
+          </div>
+          <div class="mock-group-card">
+            <div class="mock-group-top">
+              <div class="mock-group-names">Mila, Finn, Sem</div>
+              <div class="mock-group-badge" style="background:var(--primary-soft); color:var(--primary-dark);">Bezig met Missie 1</div>
+            </div>
+            <div class="mock-group-missie">Math with Menno</div>
+            <div class="mock-group-bar-track"><div class="mock-group-bar-fill" style="background:var(--primary-dark); width:33%;"></div></div>
+            <div class="mock-group-foot"><span>1 min geleden</span><span>33%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="voorbeeld-row">
+        <div class="mock-card mock-card-center">
+          <div class="mock-badge closed">✓ Afgerond</div>
+          <div class="mock-donut">
+            <div class="mock-donut-num">8</div>
+            <div class="mock-donut-sub">van 8</div>
+          </div>
+          <div class="mock-donut-label">groepjes klaar</div>
+        </div>
+        <div class="voorbeeld-text">
+          <h3>Jullie bespreken de resultaten</h3>
+          <p>Wanneer alle groepjes klaar zijn, bekijk je samen de resultaten: welk hulpmiddel het beste werkte en wat leerlingen ervan vonden.</p>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="cta-btn" href="/les3/docent/missie">Naar Missie Middelbaar →</a>
+      </div>
+    </div>
+  </main>
+
+  <!-- ══ FOOTER ═══════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar" class="footer-logo">
+      <p class="footer-copy">© 2026 Klaar voor Middelbaar</p>
+    </div>
+  </footer>
+
+</body>
+</html>
