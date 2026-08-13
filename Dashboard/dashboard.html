@@ -423,8 +423,6 @@
       transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
     }
     .hero-cta-live:hover { transform: translateY(-3px); box-shadow: 0 18px 34px rgba(0,0,0,0.22); }
-    .hero-cta-live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; animation: liveDotPulse 1.6s infinite; flex-shrink: 0; }
-    @keyframes liveDotPulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.78); } }
 
     .tip-box {
       background: #fef9e9; border: 1.5px solid #f8d760; border-radius: 16px;
@@ -879,7 +877,7 @@
                 <img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/lamp.png" alt=""> Tips en tops
               </a>` : ''}
               <a class="hero-cta-live" href="${liveSessieUrl}" target="_blank" rel="noopener">
-                <span class="hero-cta-live-dot"></span> Start live quiz
+                <img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="" style="height:1.5em;width:auto;object-fit:contain;vertical-align:-0.3em;margin-left:-8px;margin-right:-4px"> Start KvM Kwiz
               </a>
               ${L.n !== 8 && L.n !== 4 ? `
               <a class="hero-cta-live" href="${livePollUrl}" target="_blank" rel="noopener"
