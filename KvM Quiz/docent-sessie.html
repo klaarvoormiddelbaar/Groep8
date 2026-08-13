@@ -120,6 +120,11 @@
       border-radius: var(--r-card); padding: 52px 56px; color: white;
       position: relative; overflow: hidden; margin-bottom: 32px;
     }
+    .lobby-card::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
+      background-size: 26px 26px; border-radius: inherit; pointer-events: none;
+    }
     .lobby-card::after {
       content: ''; position: absolute; width: 360px; height: 360px; border-radius: 50%;
       background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%);
@@ -482,7 +487,7 @@
       app.innerHTML = `
         <div class="view">
           <div class="lobby-card" style="padding-right:280px;">
-            <div class="lobby-title"><img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">KvM Quiz les ${lesNum}</div>
+            <div class="lobby-title"><img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">KvM Kwiz les ${lesNum}</div>
 
             <div class="lobby-step">
               <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
