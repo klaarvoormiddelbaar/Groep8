@@ -45,54 +45,60 @@
 
     .main { max-width: var(--max-w); margin: 0 auto; padding: 24px 24px 80px; }
 
-    .link-kaart {
+    .lobby-hero {
       background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
       border-radius: var(--r-card); padding: 44px 48px; color: white;
       position: relative; overflow: hidden; margin-bottom: 24px;
     }
-    .link-kaart::before {
+    .lobby-hero::before {
       content: ''; position: absolute; inset: 0;
       background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
       background-size: 26px 26px; border-radius: inherit; pointer-events: none;
     }
-    .link-kaart::after {
+    .lobby-hero::after {
       content: ''; position: absolute; top: -140px; right: -100px;
       width: 360px; height: 360px; border-radius: 50%;
       background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
       pointer-events: none;
     }
-    .link-titel {
+    .lobby-title {
       position: relative; font-size: 26px; font-weight: 700;
-      margin-bottom: 22px; max-width: 460px; line-height: 1.3;
+      margin-bottom: 26px; max-width: 460px; line-height: 1.3;
+      display: flex; align-items: center; gap: 12px;
     }
+    .lobby-title img { height: 1em; width: auto; }
 
-    .browser-venster {
-      position: relative; background: white; border-radius: 16px;
-      box-shadow: 0 24px 44px rgba(10,30,70,0.35);
-      overflow: hidden; width: 100%;
-    }
-    .browser-chrome {
-      display: flex; align-items: center; gap: 7px;
-      padding: 11px 14px; background: #eef0f3; border-bottom: 1px solid #e2e5e9;
-    }
-    .chrome-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-    .chrome-dot.rood   { background: #ef4444; }
-    .chrome-dot.amber  { background: #f59e0b; }
-    .chrome-dot.groen  { background: #10b981; }
-    .browser-adres {
+    .lobby-step { position: relative; margin-bottom: 20px; }
+    .lobby-step:last-child { margin-bottom: 0; }
+    .lobby-step-label {
       display: flex; align-items: center; gap: 10px;
-      padding: 18px 20px;
+      font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.92); margin-bottom: 14px;
     }
-    .browser-adres svg { flex-shrink: 0; color: #9aa0a6; }
-    .browser-url {
-      font-family: 'JetBrains Mono', monospace; font-weight: 600;
-      font-size: 19px; color: var(--dark); word-break: break-all; line-height: 1.3;
+    .lobby-step-num {
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; color: white;
     }
 
-    .link-vervolg {
-      position: relative; font-size: 15px; color: rgba(255,255,255,0.86);
-      margin-top: 18px;
+    .join-pill {
+      position: relative; display: inline-flex; align-items: center; gap: 16px;
+      background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
+      border-radius: var(--r-pill); padding: 16px 26px;
+      font-family: inherit; color: white; cursor: pointer; max-width: 100%;
+      transition: background 0.18s, border-color 0.18s, transform 0.12s;
     }
+    .join-pill:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); }
+    .join-pill:active { transform: scale(0.97); }
+    .join-pill:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+    .join-pill-tekst {
+      font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700;
+      letter-spacing: 0.1px; overflow-wrap: anywhere; text-align: left;
+    }
+    .join-pill-icon { display: flex; flex-shrink: 0; color: rgba(255,255,255,0.85); transition: color 0.18s; }
+    .join-pill-icon svg { width: 20px; height: 20px; }
+    .join-pill.gekopieerd { background: rgba(16,163,127,0.32); border-color: rgba(16,163,127,0.6); }
+    .join-pill.gekopieerd .join-pill-icon { color: #baf3d9; }
 
     .status-kaart {
       background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
@@ -125,7 +131,7 @@
     .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
 
     @media (max-width: 480px) {
-      .link-kaart, .status-kaart { padding: 28px 24px; }
+      .lobby-hero, .status-kaart { padding: 28px 24px; }
     }
   </style>
 </head>
@@ -135,20 +141,18 @@
   </div>
 
   <main class="main">
-    <div class="link-kaart" id="link-kaart" style="display:none">
-      <div class="link-titel">Ga op je laptop naar deze link:</div>
-      <div class="browser-venster">
-        <div class="browser-chrome">
-          <span class="chrome-dot rood"></span>
-          <span class="chrome-dot amber"></span>
-          <span class="chrome-dot groen"></span>
-        </div>
-        <div class="browser-adres">
-          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="3" y="7" width="10" height="7" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 7V4.8A2.5 2.5 0 0 1 10.5 4.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-          <span class="browser-url" id="link-url">…</span>
-        </div>
+    <div class="lobby-hero" id="link-kaart" style="display:none">
+      <div class="lobby-title"><img src="/Afbeeldingen/emojis nieuw/lamp.png" alt="">Tips en Tops</div>
+      <div class="lobby-step">
+        <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
+        <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink(leerlingLink)">
+          <span class="join-pill-tekst" id="link-url">…</span>
+          <span class="join-pill-icon" id="join-pill-icon"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="10" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M13 7V5.5A2.5 2.5 0 0 0 10.5 3H5.5A2.5 2.5 0 0 0 3 5.5v5A2.5 2.5 0 0 0 5.5 13H7" stroke="currentColor" stroke-width="1.6"/></svg></span>
+        </button>
       </div>
-      <div class="link-vervolg">Vul daar de enquête in.</div>
+      <div class="lobby-step">
+        <div class="lobby-step-label"><span class="lobby-step-num">2</span> Vul daar de enquête in</div>
+      </div>
     </div>
 
     <div class="status-kaart">
@@ -166,6 +170,32 @@
   <script src="/Tips%20en%20Tops/tips-en-tops-config.js"></script>
   <script>
     let leerkrachtId = null;
+    let leerlingLink = '';
+
+    const ICOON_KOPIEER = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="7" width="10" height="10" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M13 7V5.5A2.5 2.5 0 0 0 10.5 3H5.5A2.5 2.5 0 0 0 3 5.5v5A2.5 2.5 0 0 0 5.5 13H7" stroke="currentColor" stroke-width="1.6"/></svg>`;
+    const ICOON_GEKOPIEERD = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.5L8 14.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    let kopieerTimeoutId = null;
+
+    function kopieerJoinLink(url) {
+      try { navigator.clipboard.writeText(url); } catch (fout) {}
+
+      const pill = document.getElementById('join-pill');
+      const tekst = document.getElementById('link-url');
+      const icoon = document.getElementById('join-pill-icon');
+      if (!pill || !tekst || !icoon) return;
+
+      const origineleTekst = tekst.textContent;
+      pill.classList.add('gekopieerd');
+      tekst.textContent = 'Gekopieerd naar klembord';
+      icoon.innerHTML = ICOON_GEKOPIEERD;
+
+      if (kopieerTimeoutId) clearTimeout(kopieerTimeoutId);
+      kopieerTimeoutId = setTimeout(() => {
+        pill.classList.remove('gekopieerd');
+        tekst.textContent = origineleTekst;
+        icoon.innerHTML = ICOON_KOPIEER;
+      }, 1800);
+    }
 
     async function haalOfMaakLink() {
       const { data: bestaand } = await db
@@ -188,6 +218,7 @@
       if (!code) return;
 
       const url = `groep8.klaarvoormiddelbaar.nl/feedback/${code}`;
+      leerlingLink = `https://${url}`;
       document.getElementById('link-url').textContent = url;
       document.getElementById('link-kaart').style.display = 'block';
     }
