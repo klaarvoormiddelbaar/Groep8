@@ -294,6 +294,24 @@
       min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
 
+    /* Jay I chatmockup (missie 3) */
+    .mock-jay-chat { display: flex; flex-direction: column; width: 100%; height: 100%; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: #fff; }
+    .mock-jay-header { display: flex; align-items: center; gap: 5px; padding: 6px 8px; background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%); flex-shrink: 0; }
+    .mock-jay-avatar { width: 14px; height: 14px; border-radius: 50%; background: rgba(255,255,255,.3); flex-shrink: 0; }
+    .mock-jay-name { color: #fff; font-size: 8.5px; font-weight: 700; }
+    .mock-jay-badge { margin-left: auto; background: rgba(255,255,255,.22); color: #fff; font-size: 6px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; padding: 2px 5px; border-radius: 9999px; }
+    .mock-jay-body { flex: 1; min-height: 0; padding: 6px 7px; background: #f8f9fb; overflow: hidden; }
+    .mock-jay-bubble {
+      background: #fff; border: 1px solid var(--border); border-radius: 9px; padding: 5px 7px;
+      font-size: 7px; line-height: 1.3; color: var(--dark);
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .mock-jay-quick { display: none; gap: 4px; padding: 0 8px 6px; flex-wrap: wrap; }
+    .mock-jay-pill { background: var(--primary-soft); color: var(--primary-dark); font-size: 6.5px; font-weight: 700; padding: 3px 7px; border-radius: 9999px; }
+    .mock-jay-inputrow { display: flex; align-items: center; gap: 5px; padding: 5px 7px; border-top: 1px solid var(--border); flex-shrink: 0; }
+    .mock-jay-inputfield { flex: 1; background: #f4f6f8; border-radius: 9999px; padding: 4px 8px; font-size: 6.5px; color: var(--muted); }
+    .mock-jay-send { width: 14px; height: 14px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
     /* lightbox */
     .missie-lightbox {
       display: none; position: fixed; inset: 0; z-index: 500;
@@ -318,6 +336,18 @@
     .missie-lightbox-visual .mock-website-chip { padding: 16px; border-radius: 14px; }
     .missie-lightbox-visual .mock-website-badge { width: 36px; height: 36px; border-radius: 10px; font-size: 12px; }
     .missie-lightbox-visual .mock-website-name { font-size: 13.5px; white-space: normal; text-overflow: clip; }
+    .missie-lightbox-visual .mock-jay-header { padding: 14px 16px; gap: 10px; }
+    .missie-lightbox-visual .mock-jay-avatar { width: 30px; height: 30px; }
+    .missie-lightbox-visual .mock-jay-name { font-size: 15px; }
+    .missie-lightbox-visual .mock-jay-badge { font-size: 9.5px; padding: 3px 9px; }
+    .missie-lightbox-visual .mock-jay-body { padding: 14px 16px; }
+    .missie-lightbox-visual .mock-jay-bubble { font-size: 12.5px; padding: 12px 14px; border-radius: 12px; }
+    .missie-lightbox-visual .mock-jay-quick { display: flex; padding: 0 16px 12px; gap: 6px; }
+    .missie-lightbox-visual .mock-jay-bubble { -webkit-line-clamp: unset; }
+    .missie-lightbox-visual .mock-jay-pill { font-size: 10.5px; padding: 5px 11px; }
+    .missie-lightbox-visual .mock-jay-inputrow { padding: 12px 16px; gap: 8px; }
+    .missie-lightbox-visual .mock-jay-inputfield { font-size: 11px; padding: 9px 14px; }
+    .missie-lightbox-visual .mock-jay-send { width: 26px; height: 26px; }
     .missie-lightbox-titel { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 12px; }
     .missie-lightbox-tekst { font-size: 15px; line-height: 1.65; color: var(--muted); }
     .missie-lightbox-close {
@@ -521,12 +551,30 @@
             </div>
             <div>
               <div class="missie-info-panel-titel">Online oefenwebsites</div>
-              <div class="missie-info-panel-tekst">Leerlingen ontdekken vier gratis oefenwebsites en vergelijken deze met elkaar. We hebben bewust gekozen voor gratis websites, zodat iedereen er in het kader van kansengelijkheid ook thuis gebruik van kan maken. Zo ontdekken leerlingen dat je op internet veel handige websites kunt vinden om zelfstandig te oefenen. Natuurlijk zijn er ook goede betaalde alternatieven, zoals StudyGo. Deze kun je tijdens de les eventueel kort benoemen als extra mogelijkheid.</div>
+              <div class="missie-info-panel-tekst">Leerlingen ontdekken vier gratis oefenwebsites en vergelijken deze met elkaar. We hebben bewust gekozen voor gratis websites, zodat iedereen er in het kader van kansengelijkheid ook thuis gebruik van kan maken. Er zijn ook goede betaalde alternatieven, zoals StudyGo. Deze kun je tijdens de les eventueel kort benoemen als extra mogelijkheid.</div>
             </div>
           </div>
           <div class="missie-info-panel" id="missie-info-3" onclick="toonLightbox(3)">
             <div class="missie-info-visual">
-              <img src="/Missie%20Middelbaar/uitleg-missie-3.png" alt="Chatgesprek met AI-leercoach Jay I over een theoriepagina">
+              <div class="mock-jay-chat">
+                <div class="mock-jay-header">
+                  <span class="mock-jay-avatar"></span>
+                  <span class="mock-jay-name">Jay I</span>
+                  <span class="mock-jay-badge">Leercoach</span>
+                </div>
+                <div class="mock-jay-body">
+                  <div class="mock-jay-bubble">Hoi! Ik ben Jay I, jouw leercoach. Ik help je de theoriepagina beter te begrijpen.</div>
+                </div>
+                <div class="mock-jay-quick">
+                  <span class="mock-jay-pill">Samenvatten</span>
+                  <span class="mock-jay-pill">Tijdlijn</span>
+                  <span class="mock-jay-pill">Oefenvragen</span>
+                </div>
+                <div class="mock-jay-inputrow">
+                  <span class="mock-jay-inputfield">Typ hier je vraag...</span>
+                  <span class="mock-jay-send"></span>
+                </div>
+              </div>
             </div>
             <div>
               <div class="missie-info-panel-titel">Jay I</div>
