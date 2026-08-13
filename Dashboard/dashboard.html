@@ -850,7 +850,10 @@
       document.getElementById('bc-current').textContent = `Les ${L.n}: ${L.title}`;
 
       const liveSessieUrl = `/KvM%20Quiz/docent-sessie.html?les=les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
-      const livePollUrl   = `/Live%20poll/docent-poll.html?les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
+      const livePollParams = `les=poll-les-${L.n}&titel=${encodeURIComponent(L.title)}&naam=${encodeURIComponent(profiel.naam || 'Docent')}`;
+      const livePollUrl   = L.n === 1
+        ? `/Live%20poll/uitleg.html?${livePollParams}`
+        : `/Live%20poll/docent-poll.html?${livePollParams}`;
 
       const dv = document.getElementById('detail-view');
       dv.innerHTML = `

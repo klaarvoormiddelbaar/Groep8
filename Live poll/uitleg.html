@@ -406,7 +406,7 @@
       </div>
 
       <div class="cta-row">
-        <a class="cta-btn" href="/les1/docent/poll">Naar PollParty →</a>
+        <a class="cta-btn" id="cta-poll" href="/Live%20poll/docent-poll.html?les=poll-les-1">Naar PollParty →</a>
       </div>
     </div>
   </main>
@@ -419,5 +419,11 @@
     </div>
   </footer>
 
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    if (params.toString()) {
+      document.getElementById('cta-poll').href = `/Live%20poll/docent-poll.html?${params.toString()}`;
+    }
+  </script>
 </body>
 </html>
