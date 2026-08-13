@@ -208,16 +208,7 @@
     .mock-result-count { width: 34px; text-align: right; font-size: 11px; font-weight: 700; color: var(--dark); display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
     .mock-result-count span { font-size: 9px; font-weight: 400; color: var(--muted); }
 
-    .mock-options-inline { display: flex; flex-wrap: wrap; gap: 8px; }
-    .mock-option-inline {
-      display: flex; align-items: center; gap: 8px;
-      background: #f4f6f8; border-radius: 12px; padding: 9px 13px;
-      font-size: 12px; font-weight: 700; color: var(--dark);
-    }
-
-    .mock-pair { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 36px; }
-    .mock-pair .mock-card:first-child { flex: 1.6 1 280px; }
-    .mock-pair .mock-card:last-child { flex: 1 1 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .mock-card-center { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
     .mock-donut {
       width: 104px; height: 104px; border-radius: 50%; border: 12px solid #eef0f2;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -327,23 +318,12 @@
         </div>
       </div>
 
-      <div class="voorbeeld-intro">
-        <h3>De docent start de stelling</h3>
-        <p>Jij start de eerste stelling; deze verschijnt direct op jouw scherm. Rechts zie je live hoeveel leerlingen al hebben gestemd.</p>
-      </div>
-      <div class="mock-pair">
-        <div class="mock-card">
-          <div class="mock-badge">Stelling 1</div>
-          <div class="mock-title">Ik zou morgen al willen beginnen in de brugklas.</div>
-          <div class="mock-options-inline">
-            <div class="mock-option-inline"><span class="mock-num s1">1</span>Helemaal mee oneens</div>
-            <div class="mock-option-inline"><span class="mock-num s2">2</span>Mee oneens</div>
-            <div class="mock-option-inline"><span class="mock-num s3">3</span>Neutraal</div>
-            <div class="mock-option-inline"><span class="mock-num s4">4</span>Mee eens</div>
-            <div class="mock-option-inline"><span class="mock-num s5">5</span>Helemaal mee eens</div>
-          </div>
+      <div class="voorbeeld-row">
+        <div class="voorbeeld-text">
+          <h3>De docent start de stelling</h3>
+          <p>Jij start de eerste stelling; je ziet live hoeveel leerlingen al hebben gestemd.</p>
         </div>
-        <div class="mock-card">
+        <div class="mock-card mock-card-center">
           <div class="mock-donut">
             <div class="mock-donut-num">0</div>
             <div class="mock-donut-sub">van 1</div>
