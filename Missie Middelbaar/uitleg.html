@@ -261,12 +261,14 @@
       animation: fadeUp 0.3s cubic-bezier(0.22,1,0.36,1) both;
     }
     .missie-info-panel.actief { display: grid; }
+    .missie-info-panel {
+      cursor: zoom-in; transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .missie-info-panel:hover { transform: translateY(-2px); box-shadow: 0 10px 22px -8px rgba(0,0,0,.18); }
     .missie-info-panel img {
       width: 100%; height: 110px; object-fit: cover; border-radius: 12px;
       box-shadow: 0 8px 16px -6px rgba(0,0,0,.25);
-      cursor: zoom-in; transition: transform 0.15s, box-shadow 0.15s;
     }
-    .missie-info-panel img:hover { transform: scale(1.03); box-shadow: 0 10px 22px -6px rgba(0,0,0,.32); }
     .missie-info-panel-titel { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
     .missie-info-panel-tekst { font-size: 12.5px; line-height: 1.55; color: var(--muted); }
 
@@ -278,11 +280,20 @@
       cursor: zoom-out;
     }
     .missie-lightbox.actief { display: flex; }
-    .missie-lightbox img {
-      max-width: 100%; max-height: 100%; border-radius: 16px;
+    .missie-lightbox-card {
+      position: relative; cursor: default;
+      display: grid; grid-template-columns: 340px 1fr; gap: 32px; align-items: center;
+      width: 100%; max-width: 780px;
+      background: #fff; border-radius: 24px; padding: 36px;
       box-shadow: 0 30px 60px -12px rgba(0,0,0,.5);
       animation: fadeUp 0.2s cubic-bezier(0.22,1,0.36,1) both;
     }
+    .missie-lightbox-card img {
+      width: 100%; height: 260px; object-fit: cover; border-radius: 16px;
+      box-shadow: 0 10px 24px -8px rgba(0,0,0,.3);
+    }
+    .missie-lightbox-titel { font-size: 20px; font-weight: 700; color: var(--dark); margin-bottom: 12px; }
+    .missie-lightbox-tekst { font-size: 15px; line-height: 1.65; color: var(--muted); }
     .missie-lightbox-close {
       position: absolute; top: 24px; right: 28px;
       width: 40px; height: 40px; border-radius: 50%;
@@ -292,6 +303,10 @@
       cursor: pointer;
     }
     .missie-lightbox-close:hover { background: rgba(255,255,255,0.2); }
+    @media (max-width: 680px) {
+      .missie-lightbox-card { grid-template-columns: 1fr; padding: 24px; }
+      .missie-lightbox-card img { height: 180px; }
+    }
 
     /* live voortgang */
     .mock-group-card { background: #f4f6f8; border-radius: 14px; padding: 14px 16px; margin-bottom: 10px; }
@@ -389,8 +404,8 @@
 
       <div class="role-grid">
         <div class="role-card leerling">
-          <div class="role-label">Leerling</div>
-          <div class="role-text">De leerling doorloopt in tweetallen drie missies: een uitlegvideo kijken, oefenwebsites bezoeken en een AI-leercoach gebruiken. Bij elke missie horen ook een paar reflectievragen.</div>
+          <div class="role-label">Leerlingen</div>
+          <div class="role-text">De leerlingen doorlopen in tweetallen drie missies: een uitlegvideo kijken, oefenwebsites bezoeken en een AI-leercoach gebruiken. Bij elke missie horen ook een paar reflectievragen.</div>
         </div>
         <div class="role-card docent">
           <div class="role-label">Docent</div>
@@ -460,22 +475,22 @@
             </button>
           </div>
 
-          <div class="missie-info-panel actief" id="missie-info-1">
-            <img src="/Missie%20Middelbaar/uitleg-missie-1.png" alt="Math with Menno legt een rekenonderwerp uit op het whiteboard" onclick="toonLightbox(this.src)">
+          <div class="missie-info-panel actief" id="missie-info-1" onclick="toonLightbox(1)">
+            <img src="/Missie%20Middelbaar/uitleg-missie-1.png" alt="Math with Menno legt een rekenonderwerp uit op het whiteboard">
             <div>
               <div class="missie-info-panel-titel">Math with Menno</div>
               <div class="missie-info-panel-tekst">Leerlingen bekijken een korte uitlegvideo over een rekenonderwerp uit het werkboek en reflecteren daarna op hoe duidelijk de uitleg was.</div>
             </div>
           </div>
-          <div class="missie-info-panel" id="missie-info-2">
-            <img src="/Missie%20Middelbaar/uitleg-missie-2.png" alt="Overzicht van de missie 'Ik wil extra oefenen' met vier oefenwebsites" onclick="toonLightbox(this.src)">
+          <div class="missie-info-panel" id="missie-info-2" onclick="toonLightbox(2)">
+            <img src="/Missie%20Middelbaar/uitleg-missie-2.png" alt="Overzicht van de missie 'Ik wil extra oefenen' met vier oefenwebsites">
             <div>
               <div class="missie-info-panel-titel">Online oefenwebsites</div>
               <div class="missie-info-panel-tekst">Leerlingen verkennen vier voorbeeldwebsites om thuis gratis op te oefenen, en rangschikken welke website voor hen het prettigst werkt.</div>
             </div>
           </div>
-          <div class="missie-info-panel" id="missie-info-3">
-            <img src="/Missie%20Middelbaar/uitleg-missie-3.png" alt="Chatgesprek met AI-leercoach Jay I over een theoriepagina" onclick="toonLightbox(this.src)">
+          <div class="missie-info-panel" id="missie-info-3" onclick="toonLightbox(3)">
+            <img src="/Missie%20Middelbaar/uitleg-missie-3.png" alt="Chatgesprek met AI-leercoach Jay I over een theoriepagina">
             <div>
               <div class="missie-info-panel-titel">Jay I</div>
               <div class="missie-info-panel-tekst">Leerlingen chatten met AI-leercoach Jay I, die alleen helpt bij vragen over de theoriepagina, en doorlopen daarbij een checklist met stappen.</div>
@@ -558,8 +573,14 @@
   </footer>
 
   <div class="missie-lightbox" id="missie-lightbox" onclick="verbergLightbox()">
-    <div class="missie-lightbox-close" aria-label="Sluiten">✕</div>
-    <img src="" alt="" id="missie-lightbox-img">
+    <div class="missie-lightbox-card" onclick="event.stopPropagation()">
+      <div class="missie-lightbox-close" onclick="verbergLightbox()" aria-label="Sluiten">✕</div>
+      <img src="" alt="" id="missie-lightbox-img">
+      <div>
+        <div class="missie-lightbox-titel" id="missie-lightbox-titel"></div>
+        <div class="missie-lightbox-tekst" id="missie-lightbox-tekst"></div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -569,8 +590,12 @@
       btn.classList.add('actief');
       document.getElementById('missie-info-' + nummer).classList.add('actief');
     }
-    function toonLightbox(src) {
-      document.getElementById('missie-lightbox-img').src = src;
+    function toonLightbox(nummer) {
+      const paneel = document.getElementById('missie-info-' + nummer);
+      document.getElementById('missie-lightbox-img').src = paneel.querySelector('img').src;
+      document.getElementById('missie-lightbox-img').alt = paneel.querySelector('img').alt;
+      document.getElementById('missie-lightbox-titel').textContent = paneel.querySelector('.missie-info-panel-titel').textContent;
+      document.getElementById('missie-lightbox-tekst').textContent = paneel.querySelector('.missie-info-panel-tekst').textContent;
       document.getElementById('missie-lightbox').classList.add('actief');
     }
     function verbergLightbox() {
