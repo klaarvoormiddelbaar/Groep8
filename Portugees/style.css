@@ -123,6 +123,29 @@ body {
 .cat-voortgang-tekst { font-size: 12.5px; color: var(--muted); font-weight: 700; }
 .cat-oefen-btn { margin-top: 4px; width: 100%; }
 
+/* ── Woordenlijst (preview vóór het oefenen) ── */
+.lijst-view { animation: fadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+
+.woordenlijst-kaart {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--r-card);
+  box-shadow: var(--shadow-card); padding: 16px 20px; margin-bottom: 24px;
+}
+.woordenlijst-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; }
+.wl-rij {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 4px; border-bottom: 1px solid var(--border);
+}
+.wl-nl { flex: 1; min-width: 0; font-size: 14.5px; font-weight: 700; color: var(--dark); }
+.wl-pijl { color: var(--muted); font-weight: 400; flex-shrink: 0; }
+.wl-pt { flex: 1; min-width: 0; font-size: 14.5px; font-weight: 700; color: var(--primary-dark); text-align: right; }
+
+.lijst-acties { display: flex; justify-content: center; }
+.lijst-acties .btn { min-width: 220px; }
+
+@media (max-width: 640px) {
+  .woordenlijst-grid { grid-template-columns: 1fr; }
+}
+
 /* ── Oefensessie ── */
 .oefen-view { animation: fadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both; }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

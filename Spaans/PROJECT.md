@@ -39,9 +39,10 @@ gegenereerde synoniemen).
 | `matching.js` | Antwoord-classificatie (`correct` / `minor` / `wrong`), los van de UI, puur en testbaar |
 | `storage.js` | Voortgang per woord in `localStorage`, categorie-voortgang, "foute woorden"-box |
 | `category-overview.js` | CategoryOverview-component: categorieën, voortgang, richtingkeuze, mix-optie |
+| `word-list.js` | WoordLijst-component: toont alle woorden van een categorie vóór het oefenen |
 | `study-session.js` | StudySession-component: herhaalqueue, WordCard/AnswerInput/AnswerFeedback/ProgressBar |
 | `session-results.js` | SessionResults-component: eindscherm na een afgeronde sessie |
-| `app.js` | Kleine router die de drie views aan elkaar knoopt |
+| `app.js` | Kleine router die de vier views aan elkaar knoopt (overzicht → woordenlijst → oefensessie → resultaat) |
 | `style.css` | Styling, gebaseerd op de KvM8 StyleGuide-tokens |
 
 ## Herhaalalgoritme

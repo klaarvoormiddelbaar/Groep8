@@ -6,8 +6,15 @@
   function toonOverzicht() {
     Spaans.CategoryOverview.render(app, SPAANS_WOORDEN, {
       onStart(naam, woorden, alleWoorden) {
-        startSessie(naam, woorden, alleWoorden);
+        toonWoordenlijst(naam, woorden, alleWoorden);
       }
+    });
+  }
+
+  function toonWoordenlijst(naam, woorden, alleWoorden) {
+    Spaans.WoordLijst.render(app, naam, woorden, {
+      onTerug: toonOverzicht,
+      onStart() { startSessie(naam, woorden, alleWoorden); }
     });
   }
 

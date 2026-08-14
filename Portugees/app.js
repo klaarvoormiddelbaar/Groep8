@@ -6,8 +6,15 @@
   function toonOverzicht() {
     Portugees.CategoryOverview.render(app, PORTUGEES_WOORDEN, {
       onStart(naam, woorden, alleWoorden) {
-        startSessie(naam, woorden, alleWoorden);
+        toonWoordenlijst(naam, woorden, alleWoorden);
       }
+    });
+  }
+
+  function toonWoordenlijst(naam, woorden, alleWoorden) {
+    Portugees.WoordLijst.render(app, naam, woorden, {
+      onTerug: toonOverzicht,
+      onStart() { startSessie(naam, woorden, alleWoorden); }
     });
   }
 
