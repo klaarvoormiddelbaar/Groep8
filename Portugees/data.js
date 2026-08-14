@@ -8,7 +8,9 @@ const PORTUGEES_WOORDEN = [
       "Olá"
     ],
     "dutchAnswers": [
-      "Hallo"
+      "Hallo",
+      "Hoi",
+      "Dag"
     ]
   },
   {
@@ -56,7 +58,10 @@ const PORTUGEES_WOORDEN = [
       "Tchau"
     ],
     "dutchAnswers": [
-      "Doei"
+      "Doei",
+      "Tot ziens",
+      "Dag",
+      "Ciao"
     ]
   },
   {
@@ -80,7 +85,12 @@ const PORTUGEES_WOORDEN = [
       "Obrigado"
     ],
     "dutchAnswers": [
-      "Bedankt"
+      "Bedankt",
+      "Dankjewel",
+      "Dank je wel",
+      "Dank je",
+      "Dank u",
+      "Dank u wel"
     ]
   },
   {
@@ -92,7 +102,12 @@ const PORTUGEES_WOORDEN = [
       "Obrigada"
     ],
     "dutchAnswers": [
-      "Bedankt"
+      "Bedankt",
+      "Dankjewel",
+      "Dank je wel",
+      "Dank je",
+      "Dank u",
+      "Dank u wel"
     ]
   },
   {
@@ -104,7 +119,8 @@ const PORTUGEES_WOORDEN = [
       "Por favor"
     ],
     "dutchAnswers": [
-      "Alsjeblieft"
+      "Alsjeblieft",
+      "Alstublieft"
     ]
   },
   {
@@ -116,7 +132,8 @@ const PORTUGEES_WOORDEN = [
       "De nada"
     ],
     "dutchAnswers": [
-      "Graag gedaan"
+      "Graag gedaan",
+      "Geen dank"
     ]
   },
   {
@@ -128,7 +145,9 @@ const PORTUGEES_WOORDEN = [
       "Desculpe"
     ],
     "dutchAnswers": [
-      "Sorry"
+      "Sorry",
+      "Excuses",
+      "Excuseer"
     ]
   },
   {
@@ -212,7 +231,8 @@ const PORTUGEES_WOORDEN = [
       "Como você está?"
     ],
     "dutchAnswers": [
-      "Hoe gaat het?"
+      "Hoe gaat het?",
+      "Hoe is het?"
     ]
   },
   {
@@ -224,7 +244,9 @@ const PORTUGEES_WOORDEN = [
       "Estou bem"
     ],
     "dutchAnswers": [
-      "Het gaat goed"
+      "Het gaat goed",
+      "Goed",
+      "Prima"
     ]
   },
   {
@@ -536,7 +558,8 @@ const PORTUGEES_WOORDEN = [
       "Cardápio"
     ],
     "dutchAnswers": [
-      "Menukaart"
+      "Menukaart",
+      "Menu"
     ]
   },
   {
@@ -656,7 +679,8 @@ const PORTUGEES_WOORDEN = [
       "Delicioso"
     ],
     "dutchAnswers": [
-      "Heerlijk"
+      "Heerlijk",
+      "Lekker"
     ]
   },
   {
@@ -728,7 +752,8 @@ const PORTUGEES_WOORDEN = [
       "Aeroporto"
     ],
     "dutchAnswers": [
-      "Luchthaven"
+      "Luchthaven",
+      "Vliegveld"
     ]
   },
   {
@@ -800,7 +825,8 @@ const PORTUGEES_WOORDEN = [
       "Bilhete"
     ],
     "dutchAnswers": [
-      "Kaartje"
+      "Kaartje",
+      "Ticket"
     ]
   },
   {
@@ -860,7 +886,8 @@ const PORTUGEES_WOORDEN = [
       "Reto"
     ],
     "dutchAnswers": [
-      "Rechtdoor"
+      "Rechtdoor",
+      "Rechtuit"
     ]
   },
   {
@@ -872,7 +899,8 @@ const PORTUGEES_WOORDEN = [
       "Perto"
     ],
     "dutchAnswers": [
-      "Dichtbij"
+      "Dichtbij",
+      "Vlakbij"
     ]
   },
   {
@@ -884,7 +912,8 @@ const PORTUGEES_WOORDEN = [
       "Longe"
     ],
     "dutchAnswers": [
-      "Ver weg"
+      "Ver weg",
+      "Ver"
     ]
   },
   {
@@ -1148,7 +1177,8 @@ const PORTUGEES_WOORDEN = [
       "Sujo"
     ],
     "dutchAnswers": [
-      "Vies"
+      "Vies",
+      "Vuil"
     ]
   },
   {
@@ -1184,7 +1214,8 @@ const PORTUGEES_WOORDEN = [
       "Janela"
     ],
     "dutchAnswers": [
-      "Raam"
+      "Raam",
+      "Venster"
     ]
   },
   {
@@ -1244,7 +1275,8 @@ const PORTUGEES_WOORDEN = [
       "Médico"
     ],
     "dutchAnswers": [
-      "Arts"
+      "Arts",
+      "Dokter"
     ]
   },
   {
@@ -1364,7 +1396,8 @@ const PORTUGEES_WOORDEN = [
       "Carteira"
     ],
     "dutchAnswers": [
-      "Portemonnee"
+      "Portemonnee",
+      "Portefeuille"
     ]
   },
   {
@@ -1916,7 +1949,8 @@ const PORTUGEES_WOORDEN = [
       "Perto"
     ],
     "dutchAnswers": [
-      "Dichtbij"
+      "Dichtbij",
+      "Vlakbij"
     ]
   },
   {
@@ -1952,7 +1986,8 @@ const PORTUGEES_WOORDEN = [
       "Dinheiro"
     ],
     "dutchAnswers": [
-      "Contant geld"
+      "Contant geld",
+      "Cash"
     ]
   },
   {
@@ -1964,7 +1999,8 @@ const PORTUGEES_WOORDEN = [
       "Cartão"
     ],
     "dutchAnswers": [
-      "Kaart"
+      "Kaart",
+      "Pinpas"
     ]
   },
   {
@@ -1988,7 +2024,8 @@ const PORTUGEES_WOORDEN = [
       "Sacola"
     ],
     "dutchAnswers": [
-      "Tas"
+      "Tas",
+      "Zak"
     ]
   },
   {
@@ -2060,7 +2097,8 @@ const PORTUGEES_WOORDEN = [
       "Fechado"
     ],
     "dutchAnswers": [
-      "Gesloten"
+      "Gesloten",
+      "Dicht"
     ]
   },
   {
@@ -2120,7 +2158,8 @@ const PORTUGEES_WOORDEN = [
       "Recibo"
     ],
     "dutchAnswers": [
-      "Bon"
+      "Bon",
+      "Bonnetje"
     ]
   },
   {
@@ -2156,7 +2195,8 @@ const PORTUGEES_WOORDEN = [
       "Caixa eletrônico"
     ],
     "dutchAnswers": [
-      "Geldautomaat"
+      "Geldautomaat",
+      "Pinautomaat"
     ]
   },
   {
