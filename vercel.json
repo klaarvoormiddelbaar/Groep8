@@ -92,6 +92,7 @@
     { "source": "/planeten-planner/spel", "destination": "/Planeten Planner/index.html" },
     { "source": "/pp",                    "destination": "/Planeten Planner/uitleg.html" },
     { "source": "/pp/spel",               "destination": "/Planeten Planner/index.html" },
-    { "source": "/spaans", "destination": "/Spaans/index.html" }
+    { "source": "/spaans", "destination": "/Spaans/index.html" },
+    { "source": "/portugees", "destination": "/Portugees/index.html" }
   ]
 }

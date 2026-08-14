@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head><meta charset="UTF-8"><title>matching.js tests</title></head>
+<body>
+<pre id="out" style="font:14px monospace;white-space:pre-wrap;padding:20px;"></pre>
+<script src="/Portugees/matching.js"></script>
+<script>
+  const { classifyAnswer } = window.Portugees.Matching;
+  const out = document.getElementById('out');
+  let pass = 0, fail = 0;
+  function test(naam, userAnswer, accepted, others, verwacht) {
+    const r = classifyAnswer(userAnswer, accepted, others || []);
+    const ok = r.result === verwacht;
+    if (ok) pass++; else fail++;
+    out.textContent += `${ok ? '✅' : '❌'} ${naam}: kreeg "${r.result}" (verwacht "${verwacht}") — input="${userAnswer}"\n`;
+  }
+
+  test('exact goed', 'obrigado', ['obrigado'], [], 'correct');
+  test('hoofdletters', 'Obrigado', ['obrigado'], [], 'correct');
+  test('spaties', '  obrigado  ', ['obrigado'], [], 'correct');
+  test('ontbrekend accent', 'voce', ['você'], [], 'minor');
+  test('ontbrekend accent 2', 'totaal iets anders fout', ['você'], [], 'wrong'); // sanity: irrelevant answer
+  test('een typfout (extra letter)', 'obrigaddo', ['obrigado'], [], 'minor');
+  test('een typfout (ontbrekende letter)', 'obrigad', ['obrigado'], [], 'minor');
+  test('meerdere typfouten (2 vervangen letters, te kort voor coulance)', 'chigor', ['chegar'], [], 'wrong');
+  test('volledig verkeerd antwoord', 'esquerda', ['direita'], [], 'wrong');
+  test('meerdere correcte antwoorden - eerste', 'talvez', ['talvez', 'quem sabe'], [], 'correct');
+  test('meerdere correcte antwoorden - tweede', 'quem sabe', ['talvez', 'quem sabe'], [], 'correct');
+  test('leeg antwoord', '', ['olá'], [], 'wrong');
+  test('veiligheidsnet: ander bestaand woord niet als minor goedkeuren', 'caro', ['carro'], ['caro'], 'wrong');
+  test('café met accent correct', 'café', ['café'], [], 'correct');
+  test('café zonder accent = minor', 'cafe', ['café'], [], 'minor');
+  test('ônibus zonder accent = minor', 'onibus', ['ônibus'], [], 'minor');
+  test('está zonder accent = minor', 'esta', ['está'], [], 'minor');
+  test('difícil zonder accent = minor', 'dificil', ['difícil'], [], 'minor');
+  test('kort woord, extra letter (invoeging) = minor', 'sime', ['sim'], [], 'minor');
+  test('kort woord, letter vervangen blijft ander woord', 'meu', ['mau'], [], 'wrong');
+  test('kort woord, ontbrekende letter (weglating) = minor', 'a', ['ao'], [], 'wrong'); // te kort om coulant te zijn
+  test('gemiddeld woord, letter vervangen te kort voor coulance', 'casa', ['caza'], [], 'wrong');
+  test('langer woord, letter vervangen wel coulant (len>=5)', 'trabalha', ['trabalho'], [], 'minor');
+  test('vraagtekens tellen niet mee', 'como vai', ['como vai?'], [], 'correct');
+  test('uitroeptekens tellen niet mee', 'oi', ['oi!'], [], 'correct');
+  test('leestekens in eigen antwoord tellen ook niet mee', 'tudo bem?', ['tudo bem'], [], 'correct');
+  test('haakjes tellen niet mee', 'bedankt', ['bedankt (man)'], [], 'correct');
+  test('haakjes in eigen antwoord tellen ook niet mee', 'bedankt (man)', ['bedankt'], [], 'correct');
+
+  out.textContent += `\n${pass} geslaagd, ${fail} gefaald\n`;
+  document.title = fail === 0 ? 'ALLE TESTS OK' : (fail + ' TESTS GEFAALD');
+</script>
+</body>
+</html>
