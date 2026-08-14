@@ -20,6 +20,9 @@
       --primary-soft: rgba(78,142,243,0.10);
       --green:      #10a37f;
       --green-soft: rgba(16,163,127,0.08);
+      --ja-groen:      #16a34a;
+      --ja-groen-dark: #15803d;
+      --ja-groen-soft: rgba(22,163,74,0.08);
       --rood:       #e2574c;
       --dark:       #191c1d;
       --muted:      #6d747a;
@@ -194,7 +197,7 @@
       border-radius: 14px; padding: 12px; font-size: 13px; font-weight: 700;
       border: 1.5px solid var(--border); color: var(--muted);
     }
-    .mock-jn-btn.gekozen.ja { background: var(--green-soft); border-color: rgba(16,163,127,.4); color: var(--green); }
+    .mock-jn-btn.gekozen.ja { background: var(--ja-groen-soft); border-color: rgba(22,163,74,.4); color: var(--ja-groen-dark); }
     .mock-slider-rij { display: flex; align-items: center; gap: 12px; }
     .mock-slider-track { flex: 1; height: 7px; border-radius: 9999px; background: linear-gradient(90deg, var(--primary-dark) 0%, var(--primary-dark) 64%, #eef1f5 64%, #eef1f5 100%); position: relative; }
     .mock-slider-thumb { position: absolute; left: 64%; top: 50%; transform: translate(-50%,-50%); width: 18px; height: 18px; border-radius: 50%; background: var(--primary-dark); border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
@@ -204,11 +207,11 @@
     /* resultaat-balken mockup */
     .mock-resultaat-rij { margin-bottom: 12px; }
     .mock-resultaat-kop { display: flex; justify-content: space-between; font-size: 12.5px; font-weight: 700; margin-bottom: 5px; }
-    .mock-resultaat-kop.ja span:last-child { color: var(--green); }
+    .mock-resultaat-kop.ja span:last-child { color: var(--ja-groen-dark); }
     .mock-resultaat-kop.nee span:last-child { color: var(--rood); }
     .mock-balk-track { height: 20px; background: #eef1f5; border-radius: 9999px; overflow: hidden; }
     .mock-balk { height: 100%; border-radius: 9999px; }
-    .mock-balk.ja { width: 64%; background: var(--green); }
+    .mock-balk.ja { width: 64%; background: var(--ja-groen); }
     .mock-balk.nee { width: 36%; background: var(--rood); }
     .mock-top3-label { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 16px 0 8px; }
     .mock-top3-rij {

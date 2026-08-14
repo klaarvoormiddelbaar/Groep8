@@ -21,6 +21,9 @@
       --groen:        #10a37f;
       --groen-dark:   #0c8268;
       --groen-soft:   rgba(16,163,127,0.10);
+      --ja-groen:      #16a34a;
+      --ja-groen-dark: #15803d;
+      --ja-groen-soft: rgba(22,163,74,0.10);
       --rood:         #e2574c;
       --dark:         #191c1d;
       --muted:        #6d747a;
@@ -186,9 +189,9 @@
     .resultaat-pct { font-weight: 700; }
     .balk-track { height: 30px; background: #eef1f5; border-radius: var(--r-pill); overflow: hidden; }
     .balk { height: 100%; border-radius: var(--r-pill); width: 0%; transition: width 0.85s cubic-bezier(0.22,1,0.36,1); }
-    .balk.ja  { background: var(--groen); }
+    .balk.ja  { background: var(--ja-groen); }
     .balk.nee { background: var(--rood); }
-    .resultaat-pct.ja  { color: var(--groen-dark); }
+    .resultaat-pct.ja  { color: var(--ja-groen-dark); }
     .resultaat-pct.nee { color: var(--rood); }
 
     /* Top 3 per stelling */
