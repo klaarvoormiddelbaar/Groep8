@@ -121,10 +121,14 @@
     .intro { font-size: 17px; line-height: 1.65; color: var(--dark); margin-bottom: 16px; }
     .intro:last-of-type { margin-bottom: 32px; }
 
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 56px; }
     .role-card {
       border-radius: 18px;
       padding: 22px 24px;
-      margin-bottom: 56px;
+    }
+    .role-card.leerling {
+      background: linear-gradient(135deg, rgba(78,142,243,0.08) 0%, rgba(78,142,243,0.02) 100%);
+      border: 1px solid rgba(78,142,243,0.28);
     }
     .role-card.docent {
       background: linear-gradient(135deg, rgba(16,163,127,0.08) 0%, rgba(16,163,127,0.02) 100%);
@@ -134,6 +138,7 @@
       font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
       text-transform: uppercase; margin-bottom: 8px;
     }
+    .role-card.leerling .role-label { color: var(--primary-dark); }
     .role-card.docent .role-label { color: var(--green); }
     .role-text { font-size: 14.5px; line-height: 1.6; color: var(--dark); }
 
@@ -280,6 +285,7 @@
 
     @media (max-width: 680px) {
       :root { --pad: 20px; }
+      .role-grid { grid-template-columns: 1fr; }
       .title { font-size: 30px; }
       .card { padding: 32px 24px; }
       .cta-row { justify-content: stretch; }
@@ -316,9 +322,15 @@
     <div class="card">
       <h1 class="title"><img src="/Afbeeldingen/EMOJI%20PACK%20IOS/crystal-ball_1f52e.png" alt=""> Uitleg KlasKompas</h1>
 
-      <div class="role-card docent">
-        <div class="role-label">Docent</div>
-        <div class="role-text">Je doorloopt de stellingen één voor één. Na elke stelling bekijk je samen de resultaten, welke leerling met de voorspelling het meest dichtstbij zat, en start je met de 'gespreksstarter' een kort klassengesprek.</div>
+      <div class="role-grid">
+        <div class="role-card leerling">
+          <div class="role-label">Leerling</div>
+          <div class="role-text">De leerling beantwoordt elke stelling eerst voor zichzelf met ja of nee, en voorspelt daarna met een schuifje hoeveel procent van de klas 'ja' zal antwoorden.</div>
+        </div>
+        <div class="role-card docent">
+          <div class="role-label">Docent</div>
+          <div class="role-text">Je doorloopt de stellingen één voor één. Na elke stelling bekijk je samen de resultaten, welke leerling met de voorspelling het meest dichtstbij zat, en start je met de 'gespreksstarter' een kort klassengesprek.</div>
+        </div>
       </div>
 
       <div class="voorbeeld-row">
