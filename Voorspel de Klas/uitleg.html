@@ -205,11 +205,16 @@
     .mock-balk.ja { width: 64%; background: var(--green); }
     .mock-balk.nee { width: 36%; background: var(--rood); }
     .mock-top3-label { font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); margin: 16px 0 8px; }
-    .mock-top3-rij { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--dark); margin-bottom: 5px; }
+    .mock-top3-rij {
+      display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--dark);
+      border: 1px solid var(--border); border-radius: 12px; padding: 8px 12px; margin-bottom: 6px;
+    }
+    .mock-top3-rij.rang-1 { background: rgba(245,158,11,.08); border-color: rgba(245,158,11,.35); }
+    .mock-top3-rij.rang-2 { background: rgba(156,163,175,.10); border-color: rgba(156,163,175,.35); }
+    .mock-top3-rij.rang-3 { background: rgba(180,83,9,.07); border-color: rgba(180,83,9,.3); }
     .mock-top3-rang {
-      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+      width: 18px; height: 18px; flex-shrink: 0; font-size: 14px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 700; color: white; background: var(--primary);
     }
 
     /* wachtkamer (leerling doet mee) */
@@ -398,8 +403,9 @@
             <div class="mock-balk-track"><div class="mock-balk nee"></div></div>
           </div>
           <div class="mock-top3-label">Wie voorspelde dit het beste?</div>
-          <div class="mock-top3-rij"><div class="mock-top3-rang">1</div>Speler 9 zit er 1% naast</div>
-          <div class="mock-top3-rij"><div class="mock-top3-rang">2</div>Speler 14 zit er 3% naast</div>
+          <div class="mock-top3-rij rang-1"><div class="mock-top3-rang">🥇</div>Speler 9 zit er 1% naast</div>
+          <div class="mock-top3-rij rang-2"><div class="mock-top3-rang">🥈</div>Speler 14 zit er 3% naast</div>
+          <div class="mock-top3-rij rang-3"><div class="mock-top3-rang">🥉</div>Speler 3 zit er 5% naast</div>
         </div>
         <div class="voorbeeld-text">
           <h3>Jullie bespreken het resultaat klassikaal</h3>
