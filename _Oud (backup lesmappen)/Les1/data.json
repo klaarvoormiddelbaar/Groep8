@@ -1,0 +1,72 @@
+{
+  "n": 1,
+  "g1": "#1e4a8a",
+  "g2": "#72a8f9",
+  "emoji": "raket.png",
+  "title": "Klaar voor lancering!",
+  "sub": "Kennismaking + Slim Leren",
+  "duur": "60 min",
+  "tip": "Neem iets mee uit je eigen middelbareschooltijd, zoals een agenda, schoolfoto of rapport. Leerlingen vinden het vaak leuk om hiernaar te kijken en het levert mooie gesprekken op.",
+  "canva": "https://www.canva.com/design/DAHMQP__vlg/W7fTRBX3qAWfYTY2l7oPUA/view?embed",
+  "doelen": [
+    "De leerlingen weten wat zij kunnen verwachten van de brugklas.",
+    "De leerlingen maken kennis met het Klaar voor Middelbaar-programma en weten wat zij de komende lessen gaan leren.",
+    "De leerlingen weten dat 'Slim Leren' meer oplevert dan alleen hard werken."
+  ],
+  "tl": [
+    {
+      "t": "0–2 min",
+      "n": "Start + leerdoelen",
+      "d": "De werkboeken worden uitgedeeld en de leerlingen ontdekken welke onderwerpen vandaag centraal staan."
+    },
+    {
+      "t": "2–10 min",
+      "n": "De Middelbare School Poll",
+      "d": "De poll laat zien wat leerlingen verwachten van de middelbare school en vormt de basis voor een klassengesprek."
+    },
+    {
+      "t": "10–15 min",
+      "n": "Informatie over de middelbare en KvM",
+      "d": "Algemene informatie over de middelbare school en het Klaar voor Middelbaar-programma."
+    },
+    {
+      "t": "15–20 min",
+      "n": "Kennisclip 'Slim leren'",
+      "d": "De kennisclip wordt afgespeeld en de belangrijkste tips worden daarna herhaald."
+    },
+    {
+      "t": "20–40 min",
+      "n": "KvM Slim Leren Spel + antwoordbespreking",
+      "d": "Het eerste duo dat de code kraakt, wint de stressballen. Bespreek daarna samen de antwoorden."
+    },
+    {
+      "t": "40–50 min",
+      "n": "Quiz",
+      "d": "Speel de quiz klassikaal. De winnaar wint een kleine prijs."
+    },
+    {
+      "t": "50–60 min",
+      "n": "Wat hebben we vandaag geleerd + volgende les",
+      "d": "Herhaal kort de belangrijkste inzichten uit de les en blik vooruit op de volgende les. Ruimte voor vragen en uitloop."
+    }
+  ],
+  "mat": [
+    "Kaartjes voor elke leerling",
+    "KvM-poster (bijlage 1)",
+    "Stiften of potloden"
+  ],
+  "benodigdheden": [
+    {
+      "naam": "Werkboek",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Werkboek.png"
+    },
+    {
+      "naam": "Slim Leren spel",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Slim Leren spel.png"
+    },
+    {
+      "naam": "2 stressballen",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Stressballen.png"
+    }
+  ]
+}

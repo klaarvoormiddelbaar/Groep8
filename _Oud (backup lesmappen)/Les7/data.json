@@ -1,0 +1,63 @@
+{
+  "n": 7,
+  "g1": "#831843",
+  "g2": "#db2777",
+  "emoji": "vulpen.png",
+  "title": "Schriftelijke vaardigheden",
+  "sub": "Mailen naar je leerkracht en aantekeningen maken",
+  "duur": "50–60 min",
+  "tip": "Sta tijdens de tussenbespreking van de les: 'Verhaal van de Aarde' uitgebreid stil bij de tips voor aantekeningen maken, zodat leerlingen deze direct kunnen toepassen in het tweede deel van de presentatie.",
+  "canva": "https://www.canva.com/design/DAHMQNCzky4/oRrGSzUaqKyvfqlpNjVUQA/view?embed",
+  "doelen": [
+    "De leerlingen begrijpen het verschil tussen informeel en formeel taalgebruik.",
+    "De leerlingen kunnen een formele e-mail schrijven aan hun leerkracht.",
+    "De leerlingen kunnen op een overzichtelijke manier aantekeningen maken tijdens de les."
+  ],
+  "tl": [
+    {
+      "t": "0–5 min",
+      "n": "Start, terugblik en leerdoelen",
+      "d": "Blik terug op les 6 en bespreek wat leerlingen vandaag gaan leren."
+    },
+    {
+      "t": "5–20 min",
+      "n": "Mailen naar je docent op de middelbare",
+      "d": "Leerlingen schrijven via de digitale opdracht een formele e-mail aan hun wiskundedocent op de middelbare school."
+    },
+    {
+      "t": "20–25 min",
+      "n": "Tips voor goede aantekeningen en uitleg over AK les",
+      "d": "Leg uit hoe je goede aantekeningen maakt. Daarna oefenen de leerlingen dit tijdens een 'echte' aardrijkskundeles uit de brugklas."
+    },
+    {
+      "t": "25–45 min",
+      "n": "AK les inclusief tussenbespreking",
+      "d": "Leerlingen volgen de AK-les en maken aantekeningen. Halverwege een korte tussenbespreking."
+    },
+    {
+      "t": "45–55 min",
+      "n": "Open boek quiz en nabespreken aantekeningen",
+      "d": "Leerlingen toetsen hun kennis met de open boek quiz. Daarna worden de aantekeningen klassikaal besproken."
+    },
+    {
+      "t": "55–60 min",
+      "n": "Uitloop en terugblik",
+      "d": "Terugkijken op wat er is geleerd vandaag, vooruit blikken op les 8 en ruimte voor uitloop."
+    }
+  ],
+  "benodigdheden": [
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    },
+    {
+      "naam": "Werkboek",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+    }
+  ],
+  "mat": [
+    "Devices voor de digitale opdracht",
+    "Werkblad aantekeningen maken (optioneel)",
+    "Toegang tot digitale les"
+  ]
+}

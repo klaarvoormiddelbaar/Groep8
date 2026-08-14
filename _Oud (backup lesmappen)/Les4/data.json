@@ -1,0 +1,81 @@
+{
+  "n": 4,
+  "g1": "#4c1d95",
+  "g2": "#7c3aed",
+  "emoji": "kinderen.png",
+  "title": "Executieve functies",
+  "sub": "Vaardigheden voor school en daarbuiten",
+  "duur": "60 min",
+  "tip": "Sommige leerlingen hebben wat meer tijd nodig om de stellingenlijst eerlijk in te vullen. Geef hen die ruimte. Leerlingen die eerder klaar zijn, kunnen alvast beginnen aan de puzzel achterin het werkboek.",
+  "canva": "https://www.canva.com/design/DAHMQKxptKs/qjWzCnOogT3LeqyhpXxiSw/view?embed",
+  "doelen": [
+    "Leerlingen weten wat executieve functies zijn.",
+    "Leerlingen kennen hun sterkste en minst sterke executieve functies.",
+    "Leerlingen hebben de executieve functies verbeterd met het spel: 'KvM Sterrenstrijd'."
+  ],
+  "tl": [
+    {
+      "t": "0–5 min",
+      "n": "Start en terugblik",
+      "d": "Open de les en blik terug op les 3."
+    },
+    {
+      "t": "5–10 min",
+      "n": "Leerdoelen en kennisclip executieve functies",
+      "d": "Bespreek de leerdoelen van vandaag en bekijk samen de kennisclip over executieve functies."
+    },
+    {
+      "t": "10–20 min",
+      "n": "Stellingenlijst",
+      "d": "Leerlingen vullen een stellingenlijst in en ontdekken zo hun sterkste en minst sterke executieve functies."
+    },
+    {
+      "t": "20–25 min",
+      "n": "Uitleg werkblad van KvM Sterrenstrijd + uitleg spel",
+      "d": "Leg het werkblad van KvM Sterrenstrijd uit en geef uitleg over hoe het spel werkt."
+    },
+    {
+      "t": "25–50 min",
+      "n": "'KvM Sterrenstrijd' spelen",
+      "d": "Leerlingen spelen KvM Sterrenstrijd en oefenen daarmee hun executieve functies."
+    },
+    {
+      "t": "50–55 min",
+      "n": "Het spel opruimen",
+      "d": "Ruim samen het spelmateriaal op."
+    },
+    {
+      "t": "55–60 min",
+      "n": "Bespreken KvM Sterrenstrijd werkblad + vooruitblikken",
+      "d": "Bespreek het werkblad en blik vooruit naar de volgende les."
+    },
+    {
+      "t": "60+ min",
+      "n": "Uitloop",
+      "d": "Als de leerlingen na een half uur nog vol enthousiasme aan het spelen zijn, kan het spel natuurlijk langer worden gespeeld en loopt de les iets uit."
+    }
+  ],
+  "benodigdheden": [
+    {
+      "naam": "Werkboek",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+    },
+    {
+      "naam": "Sterrenstrijd werkblad",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - Werkblad Sterrenstrijd.png"
+    },
+    {
+      "naam": "KvM SterrenStrijd spel",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - KvM SterrenStrijd.png"
+    },
+    {
+      "naam": "Laptop",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+    }
+  ],
+  "mat": [
+    "Scenario-kaarten set 1 (bijlage 5)",
+    "Reflectiekaartjes",
+    "Optioneel: video over sociale situaties"
+  ]
+}
