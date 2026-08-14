@@ -450,7 +450,7 @@
       const lijst = document.getElementById('moderatieLijst');
       if (!lijst) return;
       if (woorden.length === 0) {
-        lijst.innerHTML = '<div class="moderatie-leeg">Nog geen woorden ingestuurd.</div>';
+        lijst.innerHTML = '<div class="moderatie-leeg">Nog geen tips ingestuurd.</div>';
         return;
       }
       lijst.innerHTML = [...woorden]
@@ -513,7 +513,7 @@
       }
       _leeg() {
         if (!this.container.querySelector('.cloud-leeg')) {
-          this.container.innerHTML = '<div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Laat de klas meedoen!</div>';
+          this.container.innerHTML = '<div class="cloud-leeg">Nog geen tips ingestuurd.<br>Laat de klas meedoen!</div>';
           this.els.clear();
         }
       }
@@ -576,13 +576,13 @@
             <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
           </div>
           <div class="fase-vraag">${f.vraag}</div>
-          <div class="live-teller"><span id="woordenGetal">0</span>&nbsp;woorden ingestuurd</div>
+          <div class="live-teller"><span id="woordenGetal">0</span>&nbsp;tips ingestuurd</div>
           <div class="cloud-container" id="cloudContainer">
-            <div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Laat de klas meedoen!</div>
+            <div class="cloud-leeg">Nog geen tips ingestuurd.<br>Laat de klas meedoen!</div>
           </div>
-          <div class="moderatie-label">Ingestuurde woorden (klik op ✕ om te verwijderen)</div>
+          <div class="moderatie-label">Ingestuurde tips (klik op ✕ om te verwijderen)</div>
           <div class="moderatie-lijst" id="moderatieLijst">
-            <div class="moderatie-leeg">Nog geen woorden ingestuurd.</div>
+            <div class="moderatie-leeg">Nog geen tips ingestuurd.</div>
           </div>
           <div class="knoppen-rij">
             <button class="btn-resultaten" onclick="volgendeFase()">${isLaatste ? 'Afronden →' : 'Volgende fase →'}</button>
@@ -616,6 +616,15 @@
         </div>`;
     }
 
+    let heeftGeinterageerd = false;
+    document.addEventListener('click', () => { heeftGeinterageerd = true; }, { once: true });
+    window.onbeforeunload = (e) => {
+      if (heeftGeinterageerd && sessie && ['wachtkamer', 'actief'].includes(sessie.status)) {
+        e.preventDefault();
+        return e.returnValue = '';
+      }
+    };
+
     // ── Opstarten ────────────────────────────────────────────────────────────
     (async () => {
       const { data: { session } } = await db.auth.getSession();
@@ -626,6 +635,10 @@
       if (!link) return;
       linkId = link.id;
       leerlingLink = `https://groep8.klaarvoormiddelbaar.nl/woordwolk/${link.volgnummer}`;
+
+      if (new URLSearchParams(window.location.search).get('nieuw') === '1') {
+        await db.from('woordwolk_sessies').update({ status: 'afgelopen' }).eq('link_id', linkId).neq('status', 'afgelopen');
+      }
 
       sessie = await haalOfMaakSessie();
       if (!sessie) return;

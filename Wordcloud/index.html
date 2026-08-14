@@ -299,7 +299,7 @@
       }
       _leeg() {
         if (!this.container.querySelector('.cloud-leeg')) {
-          this.container.innerHTML = '<div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Jij kunt als eerste!</div>';
+          this.container.innerHTML = '<div class="cloud-leeg">Nog geen tips ingestuurd.<br>Jij kunt als eerste!</div>';
           this.els.clear();
         }
       }
@@ -393,7 +393,7 @@
           </div>
           <div class="fase-vraag">${f.vraag}</div>
           <div class="cloud-container" id="cloudContainer">
-            <div class="cloud-leeg">Nog geen woorden ingestuurd.<br>Jij kunt als eerste!</div>
+            <div class="cloud-leeg">Nog geen tips ingestuurd.<br>Jij kunt als eerste!</div>
           </div>
           ${kanNogInsturen ? `
           <form id="inzendForm" autocomplete="off">
@@ -404,9 +404,9 @@
             </div>
             <button class="btn-verstuur" id="btnVerstuur" type="submit" style="margin-top:12px" disabled>Stuur in →</button>
           </form>
-          <div class="resterend-label">Je kunt nog ${resterend} woord${resterend !== 1 ? 'en' : ''} insturen voor deze fase.</div>
+          <div class="resterend-label">Je kunt nog ${resterend} tip${resterend !== 1 ? 's' : ''} insturen voor deze fase.</div>
           ` : `
-          <div style="text-align:center;padding:8px 0;font-size:16px;font-weight:700;color:var(--groen-dark);">Je hebt je woorden ingestuurd. Wacht op de klas!</div>
+          <div style="text-align:center;padding:8px 0;font-size:16px;font-weight:700;color:var(--groen-dark);">Je hebt je tips ingestuurd. Wacht op de klas!</div>
           `}
           ${mijnWoorden.length > 0 ? `<div class="mijn-woorden">${mijnWoorden.map(w => `<span class="mijn-woord-pill">${escapeHtml(w)}</span>`).join('')}</div>` : ''}
         </div>`;
@@ -462,6 +462,15 @@
           <div>De woordenwolk is afgerond. Bespreek de tips met de klas.</div>
         </div>`;
     }
+
+    let heeftGeinterageerd = false;
+    document.addEventListener('click', () => { heeftGeinterageerd = true; }, { once: true });
+    window.onbeforeunload = (e) => {
+      if (heeftGeinterageerd && sessie && ['wachtkamer', 'actief'].includes(sessie.status)) {
+        e.preventDefault();
+        return e.returnValue = '';
+      }
+    };
 
     (function () {
       const padMatch = window.location.pathname.match(/woordwolk\/(\d+)/i);
