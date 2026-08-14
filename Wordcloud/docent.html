@@ -89,6 +89,7 @@
       pointer-events: none;
     }
     .lobby-title { position: relative; font-size: 34px; font-weight: 700; margin-bottom: 30px; }
+    .view { animation: fadeUp 0.35s cubic-bezier(0.22,1,0.36,1) both; }
 
     .lobby-step { position: relative; margin-bottom: 26px; }
     .lobby-step:last-child { margin-bottom: 0; }
@@ -529,38 +530,50 @@
 
     function toonWachtkamer() {
       document.getElementById('app').innerHTML = `
-        <div class="page-titel">Woordenwolk — Docentendashboard</div>
-        <div class="page-sub">Deel de link met je klas. Geen sessiecode nodig, iedereen gebruikt jouw vaste link.</div>
-        <div class="lobby-hero">
-          <div class="lobby-title"><img src="/Afbeeldingen/EMOJI%20PACK%20IOS/cloud_2601-fe0f.png" alt="" style="height:1em;width:auto;object-fit:contain;vertical-align:-0.12em;margin-right:10px">Woordenwolk</div>
-          <div class="lobby-step">
-            <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
-            <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink('${leerlingLink}')">
-              <span class="join-pill-tekst" id="join-pill-tekst">${escapeHtml(leerlingLink.replace(/^https?:\/\//, ''))}</span>
-              <span class="join-pill-icon" id="join-pill-icon">${ICOON_KOPIEER}</span>
-            </button>
+        <div class="view">
+          <div class="lobby-hero" style="padding-right:280px;">
+            <div class="lobby-title"><img src="/Afbeeldingen/EMOJI%20PACK%20IOS/cloud_2601-fe0f.png" alt="" style="height:1em;width:auto;object-fit:contain;vertical-align:-0.12em;margin-right:10px">Woordwolk</div>
+            <div class="lobby-step">
+              <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
+              <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink('${leerlingLink}')">
+                <span class="join-pill-tekst" id="join-pill-tekst">${escapeHtml(leerlingLink.replace(/^https?:\/\//, ''))}</span>
+                <span class="join-pill-icon" id="join-pill-icon">${ICOON_KOPIEER}</span>
+              </button>
+            </div>
+            <div class="lobby-step">
+              <div class="lobby-step-label"><span class="lobby-step-num">2</span> Typ tips in zodra jij de eerste vraag start</div>
+            </div>
+            <img src="/Afbeeldingen/Jay%20los/Jay%20reading.png" alt="Jay"
+              style="position:absolute; right:68px; top:50%; transform:translateY(-50%) scaleX(-1); height:270px; width:auto; opacity:0.96;">
           </div>
-          <div class="lobby-step">
-            <div class="lobby-step-label"><span class="lobby-step-num">2</span> Typ tips in zodra jij de eerste vraag start</div>
+          <div class="panel">
+            <div class="panel-head">
+              <div class="panel-title">Deelnemers</div>
+              <div class="panel-badge" id="teller-badge">0 leerlingen</div>
+            </div>
+            <div class="deelnemers-grid" id="d-grid">
+              <div class="leeg">Als leerlingen de link openen, verschijnen ze hier live!</div>
+            </div>
           </div>
-        </div>
-        <div class="panel">
-          <div class="panel-head">
-            <div class="panel-title">Deelnemers</div>
-            <div class="panel-badge" id="teller-badge">0 leerlingen</div>
+          <div class="knoppen-rij">
+            <button class="btn-ghost" onclick="bevestigStoppen()">Woordwolk stoppen</button>
+            <button class="btn-resultaten" onclick="startSessie()">Start →</button>
           </div>
-          <div class="deelnemers-grid" id="d-grid">
-            <div class="leeg">Als leerlingen de link openen, verschijnen ze hier live!</div>
-          </div>
-        </div>
-        <div class="knoppen-rij">
-          <button class="btn-resultaten" onclick="startSessie()">Start →</button>
         </div>`;
       ververDeelnemers();
     }
 
     async function startSessie() {
       await db.from('woordwolk_sessies').update({ status: 'actief', huidige_fase_index: 0 }).eq('id', sessie.id);
+    }
+
+    function bevestigStoppen() {
+      if (confirm('Weet je zeker dat je deze Woordwolk wilt stoppen?')) stopSessie();
+    }
+
+    async function stopSessie() {
+      await db.from('woordwolk_sessies').update({ status: 'afgelopen' }).eq('id', sessie.id);
+      toonAfgerond();
     }
 
     function toonFase() {
