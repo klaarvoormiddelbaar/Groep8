@@ -237,6 +237,7 @@
     .afgerond-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,0.78); margin-bottom: 8px; }
     .afgerond-titel { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
     .afgerond-sub { font-size: 15px; color: rgba(255,255,255,0.88); }
+    .afgerond-titel img { height: 1em; width: auto; object-fit: contain; vertical-align: -0.15em; }
   </style>
 </head>
 <body>
@@ -621,8 +622,8 @@
       document.getElementById('app').innerHTML = `
         <div class="afgerond-hero">
           <div class="afgerond-eyebrow">Activiteit afgerond</div>
-          <div class="afgerond-titel">Goed gedaan!</div>
-          <div class="afgerond-sub">Alle 3 fases zijn doorlopen. Bespreek de belangrijkste tips na met de klas.</div>
+          <div class="afgerond-titel">Goed gedaan klas! <img src="/Afbeeldingen/emojis%20nieuw/trofee.png" alt=""></div>
+          <div class="afgerond-sub">${deelnemers.length} ${deelnemers.length === 1 ? 'leerling' : 'leerlingen'} deden mee · alle 3 fases zijn doorlopen. Bespreek de belangrijkste tips na met de klas.</div>
         </div>
         <div class="knoppen-rij">
           <a class="btn-ghost" href="/les5" style="text-decoration:none">← Terug naar Les 5</a>
