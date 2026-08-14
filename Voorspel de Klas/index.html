@@ -23,6 +23,7 @@
       --ja-groen:      #10a37f;
       --ja-groen-dark: #0c8268;
       --ja-groen-soft: rgba(16,163,127,0.08);
+      --ja-groen-bar:  rgba(16,163,127,0.40);
       --nee-rood:      #f0a89e;
       --rood:         #e2574c;
       --rood-soft:    rgba(226,87,76,0.32);
@@ -164,7 +165,7 @@
     .resultaat-pct { font-weight: 700; }
     .balk-track { height: 26px; background: #eef1f5; border-radius: var(--r-pill); overflow: hidden; }
     .balk { height: 100%; border-radius: var(--r-pill); width: 0%; transition: width 0.85s cubic-bezier(0.22,1,0.36,1); }
-    .balk.ja  { background: var(--ja-groen-soft); }
+    .balk.ja  { background: var(--ja-groen-bar); }
     .balk.nee { background: var(--rood-soft); }
     .balk.voorspelling { background: var(--primary); }
     .resultaat-pct.ja  { color: var(--ja-groen-dark); }
