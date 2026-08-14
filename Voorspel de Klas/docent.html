@@ -795,6 +795,10 @@
       linkId = link.id;
       leerlingLink = `https://groep8.klaarvoormiddelbaar.nl/voorspel/${link.volgnummer}`;
 
+      if (new URLSearchParams(window.location.search).get('nieuw') === '1') {
+        await db.from('voorspel_sessies').update({ status: 'afgelopen' }).eq('link_id', linkId).neq('status', 'afgelopen');
+      }
+
       sessie = await haalOfMaakSessie();
       if (!sessie) return;
 
