@@ -6,7 +6,7 @@
 <title>Open boek quiz — Klaar voor Middelbaar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -16,7 +16,7 @@
     --dark: #191c1d; --muted: #6d747a; --border: #eceeee;
     --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
     --shadow-btn-blue: 0 10px 20px rgba(78,142,243,0.30);
-    --max-w: 980px; --pad: 48px; --r-card: 40px; --r-pill: 9999px;
+    --max-w: 1184px; --pad: 48px; --r-card: 40px; --r-pill: 9999px;
   }
 
   body {
@@ -60,53 +60,59 @@
 
   .quiz-hero {
     background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
-    border-radius: var(--r-card); padding: 48px 52px; color: white; position: relative; overflow: hidden; margin-bottom: 28px;
+    border-radius: var(--r-card); padding: 48px 52px; color: white;
+    position: relative; overflow: hidden; margin-bottom: 32px;
+  }
+  .quiz-hero.is-lobby {
+    padding: 52px 280px 52px 56px; min-height: 340px;
+    display: flex; flex-direction: column; justify-content: center;
   }
   .quiz-hero::before {
     content: ''; position: absolute; inset: 0;
     background-image: radial-gradient(rgba(255,255,255,0.12) 1.5px, transparent 1.5px);
     background-size: 26px 26px; border-radius: inherit; pointer-events: none;
   }
-  .quiz-hero::after { content: ''; position: absolute; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%); top: -140px; right: -100px; pointer-events: none; }
-  .quiz-hero-top { position: relative; display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+  .quiz-hero::after { content: ''; position: absolute; width: 360px; height: 360px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); top: -140px; right: -100px; pointer-events: none; }
+  .quiz-hero-top { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; margin-bottom: 30px; }
   .quiz-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(255,255,255,0.78); margin-bottom: 10px; }
-  .quiz-titel { font-size: 32px; font-weight: 700; }
-  .ingeleverd-teller {
-    font-size: 14px; font-weight: 700; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.32);
-    border-radius: var(--r-pill); padding: 9px 18px; white-space: nowrap;
-  }
+  .quiz-titel { font-size: 34px; font-weight: 700; display: flex; align-items: center; gap: 14px; }
+  .quiz-titel img { height: 1em; width: auto; }
   .quiz-sub { position: relative; font-size: 15px; color: rgba(255,255,255,0.86); margin-bottom: 24px; }
+  .quiz-jay {
+    position: absolute; right: 68px; top: 50%; transform: translateY(-50%) scaleX(-1);
+    height: 270px; width: auto; opacity: 0.96; pointer-events: none;
+  }
 
-  .lobby-step { position: relative; margin-bottom: 22px; }
+  .lobby-step { position: relative; margin-bottom: 26px; }
   .lobby-step:last-child { margin-bottom: 0; }
   .lobby-step-label {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.92); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 24px; font-weight: 700; letter-spacing: 0.1px; color: rgba(255,255,255,0.92); margin-bottom: 14px;
   }
   .lobby-step-num {
     display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
-    width: 22px; height: 22px; border-radius: 50%;
+    width: 28px; height: 28px; border-radius: 50%;
     background: rgba(255,255,255,0.22);
-    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700; color: white;
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: white;
   }
   .join-pill {
-    position: relative; display: inline-flex; align-items: center; gap: 14px;
+    position: relative; display: inline-flex; align-items: center; gap: 16px;
     background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.32);
-    border-radius: var(--r-pill); padding: 14px 24px;
+    border-radius: var(--r-pill); padding: 18px 28px;
     font-family: inherit; color: white; cursor: pointer; max-width: 100%;
     transition: background 0.18s, border-color 0.18s, transform 0.12s;
   }
   .join-pill:hover { background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); }
   .join-pill:active { transform: scale(0.97); }
   .join-pill:focus-visible { outline: 2px solid white; outline-offset: 3px; }
-  .join-pill-tekst { font-size: 15px; font-weight: 700; letter-spacing: 0.1px; overflow-wrap: anywhere; text-align: left; }
+  .join-pill-tekst { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; letter-spacing: 0.2px; overflow-wrap: anywhere; text-align: left; }
   .join-pill-icon { display: flex; flex-shrink: 0; color: rgba(255,255,255,0.85); transition: color 0.18s; }
-  .join-pill-icon svg { width: 18px; height: 18px; }
+  .join-pill-icon svg { width: 22px; height: 22px; }
   .join-pill.gekopieerd { background: rgba(16,163,127,0.32); border-color: rgba(16,163,127,0.6); }
   .join-pill.gekopieerd .join-pill-icon { color: #baf3d9; }
 
-  .code-display { position: relative; display: flex; gap: 10px; flex-wrap: wrap; }
-  .code-digit { width: 58px; height: 74px; border-radius: 16px; background: rgba(255,255,255,0.16); border: 1.5px solid rgba(255,255,255,0.35); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; font-size: 34px; font-weight: 700; }
+  .code-display { position: relative; display: flex; gap: 12px; flex-wrap: wrap; }
+  .code-digit { width: 64px; height: 80px; border-radius: 18px; background: rgba(255,255,255,0.16); border: 1.5px solid rgba(255,255,255,0.35); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; font-size: 38px; font-weight: 700; }
   .quiz-hero-acties { position: relative; display: flex; gap: 12px; flex-wrap: wrap; }
   .btn-wit { background: white; color: var(--primary-dark); border: none; }
   .btn-wit:hover { background: #eef4ff; transform: translateY(-2px); }
@@ -220,6 +226,8 @@
   @media (max-width: 720px) {
     .header-inner, .main { padding-left: 24px; padding-right: 24px; }
     .quiz-hero, .panel, .start-card { padding: 32px 28px; }
+    .quiz-hero { min-height: 0; }
+    .quiz-jay { display: none; }
     .code-digit { width: 44px; height: 60px; font-size: 26px; }
     .podium { grid-template-columns: 1fr; }
     .rest-row { flex-wrap: wrap; }
@@ -375,14 +383,8 @@
     const joinUrl = `${window.location.origin}/les${lesNum}/quiz`;
     app.innerHTML = `
       <div class="view">
-        <div class="quiz-hero">
-          <div class="quiz-hero-top">
-            <div>
-              <div class="quiz-eyebrow">Open boek quiz · Les ${lesNum}</div>
-              <div class="quiz-titel">Open boek quiz</div>
-            </div>
-            <div class="ingeleverd-teller" id="ingeleverd-teller">0 / 0 leerlingen</div>
-          </div>
+        <div class="quiz-hero is-lobby">
+          <div class="quiz-titel"><img src="/Afbeeldingen/emojis nieuw/vulpen.png" alt="">Open boek quiz · Les ${lesNum}</div>
           <div class="lobby-step">
             <div class="lobby-step-label"><span class="lobby-step-num">1</span> Ga naar de link</div>
             <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink('${joinUrl}')">
@@ -394,12 +396,16 @@
             <div class="lobby-step-label"><span class="lobby-step-num">2</span> Vul de sessiecode in</div>
             <div class="code-display">${sessie.code.split('').map(c => `<div class="code-digit">${c}</div>`).join('')}</div>
           </div>
+          <img class="quiz-jay" src="/Afbeeldingen/Jay%20los/Jay%20reading.png" alt="Jay">
         </div>
 
         <div class="panel">
           <div class="panel-head">
             <div class="panel-title">Leerlingen</div>
-            <button class="btn-pill btn-ghost" id="btn-resultaten" type="button" disabled>Resultaten bekijken</button>
+            <div style="display:flex; align-items:center; gap:14px;">
+              <div class="panel-count" id="leerlingen-teller">0 leerlingen</div>
+              <button class="btn-pill btn-ghost" id="btn-resultaten" type="button" disabled>Resultaten bekijken</button>
+            </div>
           </div>
           <div id="leerlingen-tabel-wrap"></div>
         </div>
@@ -414,12 +420,12 @@
 
   function ververLeerlingentabel() {
     const wrap = document.getElementById('leerlingen-tabel-wrap');
-    const teller = document.getElementById('ingeleverd-teller');
+    const teller = document.getElementById('leerlingen-teller');
     const resultatenBtn = document.getElementById('btn-resultaten');
     if (!wrap) return;
 
     const lijst = [...deelnemers.values()];
-    teller.textContent = `${aantalIngeleverd()} / ${lijst.length} leerlingen`;
+    teller.textContent = `${lijst.length} ${lijst.length === 1 ? 'leerling' : 'leerlingen'}`;
     resultatenBtn.disabled = aantalIngeleverd() === 0;
 
     if (lijst.length === 0) {
