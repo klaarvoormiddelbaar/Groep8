@@ -98,16 +98,6 @@
     }
     .btn-resultaten:hover { background: var(--groen-dark); transform: translateY(-2px); box-shadow: 0 14px 20px -3px rgba(16,163,127,.34); }
 
-    .btn-terug-les {
-      display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
-      background: var(--primary-soft); border: 1px solid rgba(78,142,243,0.20);
-      border-radius: var(--r-pill); padding: 12px 22px;
-      font-family: inherit; font-size: 15px; font-weight: 700;
-      color: var(--primary-dark); cursor: pointer; text-decoration: none;
-      transition: background 0.18s, box-shadow 0.18s;
-    }
-    .btn-terug-les:hover { background: rgba(78,142,243,0.18); }
-
     /* ── LOBBY (leerlinglink) ── */
     .lobby-hero {
       background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
@@ -322,8 +312,7 @@
 
     <div id="grid-wrapper"></div>
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:28px;gap:16px;flex-wrap:wrap">
-      <a class="btn-terug-les" href="/les3" onclick="terugNaarLes(event)">← Terug naar les 3</a>
+    <div style="display:flex;justify-content:flex-end;margin-top:28px">
       <a class="btn-resultaten" href="/Missie%20Middelbaar/docent-resultaten.html">
         Naar resultaten <span style="transition:transform .2s">→</span>
       </a>
@@ -338,14 +327,6 @@
     const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Sluit dit tabblad (terug naar de presentatie-tab die het opende); lukt dat niet, navigeer dan gewoon door.
-    function terugNaarLes(e) {
-      e.preventDefault();
-      const url = e.currentTarget.href;
-      window.close();
-      setTimeout(() => { window.location.href = url; }, 150);
-    }
 
     const MISSIE_INFO = {
       1: { titel: 'Ik begrijp de uitleg niet', tool: 'Math with Menno',    kleur: 'blauw'  },
