@@ -275,6 +275,14 @@
       return d.innerHTML;
     }
 
+    // Sluit dit tabblad (terug naar de presentatie-tab die het opende); lukt dat niet, navigeer dan gewoon door.
+    function terugNaarLes(e) {
+      e.preventDefault();
+      const url = e.currentTarget.href;
+      window.close();
+      setTimeout(() => { window.location.href = url; }, 150);
+    }
+
     let huidigeGebruiker = null;
     let linkId = null;
     let leerlingLink = '';
@@ -626,7 +634,7 @@
           <div class="afgerond-sub">${deelnemers.length} ${deelnemers.length === 1 ? 'leerling' : 'leerlingen'} deden mee · alle 3 fases zijn doorlopen. Bespreek de belangrijkste tips na met de klas.</div>
         </div>
         <div class="knoppen-rij">
-          <a class="btn-ghost" href="/les5" style="text-decoration:none">← Terug naar Les 5</a>
+          <a class="btn-ghost" href="/les5" style="text-decoration:none" onclick="terugNaarLes(event)">← Terug naar Les 5</a>
         </div>`;
     }
 

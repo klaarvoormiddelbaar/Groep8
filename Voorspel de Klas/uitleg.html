@@ -346,7 +346,7 @@
         <span class="bc-current">Uitleg KlasKompas</span>
       </nav>
 
-      <a class="back-btn" href="/Dashboard">← Terug naar dashboard</a>
+      <a class="back-btn" href="/les5" onclick="terugNaarLes(event)">← Terug naar les 5</a>
     </div>
   </header>
 
@@ -475,5 +475,14 @@
     </div>
   </footer>
 
+  <script>
+    // Sluit dit tabblad (terug naar de presentatie-tab die het opende); lukt dat niet, navigeer dan gewoon door.
+    function terugNaarLes(e) {
+      e.preventDefault();
+      const url = e.currentTarget.href;
+      window.close();
+      setTimeout(() => { window.location.href = url; }, 150);
+    }
+  </script>
 </body>
 </html>

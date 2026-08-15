@@ -351,6 +351,14 @@
     const ICOON_GEKOPIEERD = `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 10.5L8 14.5L16 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
     let kopieerTimeoutId = null;
 
+    // Sluit dit tabblad (terug naar de presentatie-tab die het opende); lukt dat niet, navigeer dan gewoon door.
+    function terugNaarLes(e) {
+      e.preventDefault();
+      const url = e.currentTarget.href;
+      window.close();
+      setTimeout(() => { window.location.href = url; }, 150);
+    }
+
     function kopieerJoinLink(url) {
       try { navigator.clipboard.writeText(url); } catch (fout) {}
 
@@ -847,7 +855,7 @@
             </div>` : ''}
 
           <div class="end-actions">
-            <a class="btn-pill btn-start" href="/Dashboard/">← Terug naar het dashboard</a>
+            <a class="btn-pill btn-start" href="/les${lesId.replace('les-', '')}" onclick="terugNaarLes(event)">← Terug naar les ${lesId.replace('les-', '')}</a>
           </div>
         </div>`;
     }
@@ -860,7 +868,7 @@
             <div class="error-icon"><img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""></div>
             <div class="error-title">Er ging iets mis</div>
             <div class="error-body">${escapeHtml(bericht)}</div>
-            <a class="btn-pill btn-start" href="/Dashboard/">← Terug naar het dashboard</a>
+            <a class="btn-pill btn-start" href="/les${lesId.replace('les-', '')}" onclick="terugNaarLes(event)">← Terug naar les ${lesId.replace('les-', '')}</a>
           </div>
         </div>`;
     }
@@ -872,7 +880,7 @@
             <div class="error-icon"><img class="ei" src="/Afbeeldingen/emojis nieuw/vraagteken.png" alt=""></div>
             <div class="error-title">Quiz wordt nog gemaakt</div>
             <div class="error-body">De quiz voor "${escapeHtml(titel)}" is nog niet beschikbaar. Kom later terug!</div>
-            <a class="btn-pill btn-start" href="/Dashboard/">← Terug naar het dashboard</a>
+            <a class="btn-pill btn-start" href="/les${lesId.replace('les-', '')}" onclick="terugNaarLes(event)">← Terug naar les ${lesId.replace('les-', '')}</a>
           </div>
         </div>`;
     }

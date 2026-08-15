@@ -185,7 +185,7 @@
     <div id="inhoud"><div class="laden-tekst">Resultaten worden geladen…</div></div>
 
     <div style="display:flex;justify-content:flex-end;margin-top:28px">
-      <a class="btn-resultaten" href="/les3">
+      <a class="btn-resultaten" href="/les3" onclick="terugNaarLes(event)">
         ← Terug naar Les 3
       </a>
     </div>
@@ -195,6 +195,14 @@
     const SUPABASE_URL      = 'https://cqcncausbclwvoomqdpy.supabase.co/';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxY25jYXVzYmNsd3Zvb21xZHB5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA3MjE3MDYsImV4cCI6MjA5NjI5NzcwNn0.Yh-5xrjxPW36OOufxbgu8CGiemDofFQ4R59Mmeomlwo';
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Sluit dit tabblad (terug naar de presentatie-tab die het opende); lukt dat niet, navigeer dan gewoon door.
+    function terugNaarLes(e) {
+      e.preventDefault();
+      const url = e.currentTarget.href;
+      window.close();
+      setTimeout(() => { window.location.href = url; }, 150);
+    }
 
     const VAKKEN     = ['Wiskunde','Nederlands','Engels','Frans','Biologie','Aardrijkskunde','Geschiedenis'];
     const CRITERIA    = ['Duidelijke uitleg','Veel oefeningen','Makkelijk zoeken','Mooie vormgeving','Direct feedback op mijn antwoorden','Overzichtelijke website','Werkt snel','Gratis te gebruiken'];

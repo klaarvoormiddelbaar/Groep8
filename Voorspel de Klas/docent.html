@@ -582,7 +582,10 @@
 
     function terugNaarLes5(e) {
       e.preventDefault();
-      beeindigSessie().finally(() => { window.location.href = '/les5'; });
+      beeindigSessie().finally(() => {
+        window.close();
+        setTimeout(() => { window.location.href = '/les5'; }, 150);
+      });
       return false;
     }
 

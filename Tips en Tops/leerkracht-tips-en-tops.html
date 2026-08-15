@@ -164,7 +164,7 @@
     </div>
 
     <div class="cta-row">
-      <a class="cta-btn" href="/les8">Terug naar les 8 →</a>
+      <a class="cta-btn" href="/les8" onclick="terugNaarLes(event)">← Terug naar les 8</a>
     </div>
   </main>
 
@@ -175,6 +175,14 @@
       const d = document.createElement('div');
       d.textContent = String(t);
       return d.innerHTML;
+    }
+
+    // Sluit dit tabblad (terug naar de presentatie-tab die het opende); lukt dat niet, navigeer dan gewoon door.
+    function terugNaarLes(e) {
+      e.preventDefault();
+      const url = e.currentTarget.href;
+      window.close();
+      setTimeout(() => { window.location.href = url; }, 150);
     }
 
     const ALLE_OPTIES = {
