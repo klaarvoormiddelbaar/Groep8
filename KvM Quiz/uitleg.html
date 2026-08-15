@@ -462,7 +462,8 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const lesNum = (params.get('les') || 'les-1').replace('les-', '');
+    const pathMatch = window.location.pathname.match(/\/les(\d+)\//);
+    const lesNum = pathMatch ? pathMatch[1] : (params.get('les') || 'les-1').replace('les-', '');
     params.delete('les');
     const extra = params.toString();
     document.getElementById('cta-quiz').href = `/les${lesNum}/docent/quiz${extra ? '?' + extra : ''}`;

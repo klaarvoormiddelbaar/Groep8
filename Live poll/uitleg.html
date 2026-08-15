@@ -478,7 +478,8 @@
 
   <script>
     const params = new URLSearchParams(window.location.search);
-    const lesNum = (params.get('les') || 'poll-les-1').replace('poll-les-', '');
+    const pathMatch = window.location.pathname.match(/\/les(\d+)\//);
+    const lesNum = pathMatch ? pathMatch[1] : (params.get('les') || 'poll-les-1').replace('poll-les-', '');
     params.delete('les');
     const extra = params.toString();
     document.getElementById('cta-poll').href = `/les${lesNum}/docent/poll${extra ? '?' + extra : ''}`;
