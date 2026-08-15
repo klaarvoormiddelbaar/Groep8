@@ -359,10 +359,10 @@
           <p>De leerling pakt de laptop (of telefoon) erbij en zet de KvM Kwiz klaar via de link en code op het scherm.</p>
         </div>
         <div class="mock-lobby">
-          <div class="mock-lobby-title"><img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="">KvM Kwiz Les 1</div>
+          <div class="mock-lobby-title"><img src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""><span>KvM Kwiz Les <span id="mock-les-nummer">1</span></span></div>
           <div class="mock-lobby-step">
             <div class="mock-lobby-step-label"><span class="mock-lobby-step-num">1</span> Ga naar de link</div>
-            <div class="mock-join-pill">groep8.klaarvoormiddelbaar.nl/les1/quiz</div>
+            <div class="mock-join-pill" id="mock-join-pill">groep8.klaarvoormiddelbaar.nl/les1/quiz</div>
           </div>
           <div class="mock-lobby-step">
             <div class="mock-lobby-step-label"><span class="mock-lobby-step-num">2</span> Vul de code en je voornaam in</div>
@@ -467,6 +467,8 @@
     params.delete('les');
     const extra = params.toString();
     document.getElementById('cta-quiz').href = `/les${lesNum}/docent/quiz${extra ? '?' + extra : ''}`;
+    document.getElementById('mock-les-nummer').textContent = lesNum;
+    document.getElementById('mock-join-pill').textContent = `groep8.klaarvoormiddelbaar.nl/les${lesNum}/quiz`;
   </script>
 </body>
 </html>
