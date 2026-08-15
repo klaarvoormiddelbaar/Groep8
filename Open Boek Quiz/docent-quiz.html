@@ -53,6 +53,20 @@
   .btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn-ghost:disabled:hover { border-color: var(--border); color: var(--dark); }
 
+  .cta-row { display: flex; justify-content: flex-end; margin-top: 28px; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: white; text-decoration: none;
+    border: none; border-radius: var(--r-pill);
+    padding: 16px 32px;
+    font-family: inherit; font-size: 17px; font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-btn-blue);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(78,142,243,0.38); }
+
   .start-card { background: white; border: 1px solid var(--border); border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 64px 48px; text-align: center; }
   .start-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
   .start-title { font-size: 28px; font-weight: 700; margin-bottom: 14px; }
@@ -567,6 +581,10 @@
               </div>
             `).join('')}
           </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="cta-btn" href="/les7">Terug naar les 7 →</a>
         </div>
       </div>
     `;
