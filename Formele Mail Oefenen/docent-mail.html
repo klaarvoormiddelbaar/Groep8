@@ -6,7 +6,7 @@
 <title>Formele e-mail oefenen — Leerkrachtweergave</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -21,7 +21,7 @@
     --border: #eceeee;
     --shadow-card: 0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
     --shadow-btn-blue: 0 10px 20px rgba(78,142,243,0.30);
-    --max-w: 980px;
+    --max-w: 1184px;
     --pad: 48px;
     --r-card: 40px;
     --r-pill: 9999px;
@@ -88,7 +88,7 @@
 
   .lobby-hero {
     background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
-    border-radius: var(--r-card); padding: 52px 280px 52px 56px; color: white; min-height: 300px;
+    border-radius: var(--r-card); padding: 52px 280px 52px 56px; color: white; min-height: 340px;
     position: relative; overflow: hidden; margin-bottom: 32px;
     display: flex; flex-direction: column; justify-content: center;
   }
@@ -99,18 +99,41 @@
   }
   .lobby-hero::after {
     content: ''; position: absolute; width: 360px; height: 360px; border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.16) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
     top: -140px; right: -100px; pointer-events: none;
   }
   .lobby-jay {
-    position: absolute; right: 28px; bottom: 0; transform: scaleX(-1);
-    height: 220px; width: auto; opacity: 0.96; pointer-events: none;
+    position: absolute; right: 68px; top: 50%; transform: translateY(-50%) scaleX(-1);
+    height: 270px; width: auto; opacity: 0.96; pointer-events: none;
   }
-  .lobby-title { position: relative; font-size: 30px; font-weight: 700; margin-bottom: 24px; }
+  .lobby-title { position: relative; font-size: 34px; font-weight: 700; margin-bottom: 30px; }
+  .lobby-step { position: relative; margin-bottom: 26px; }
+  .lobby-step:last-child { margin-bottom: 0; }
   .lobby-step-label {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 15px; font-weight: 700; color: rgba(255,255,255,0.92); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 12px;
+    font-size: 24px; font-weight: 700; letter-spacing: 0.1px;
+    color: rgba(255,255,255,0.92); margin-bottom: 14px;
   }
+  .lobby-step-num {
+    display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 700; color: white;
+  }
+
+  .cta-row { display: flex; justify-content: flex-end; margin-top: 28px; }
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    color: white; text-decoration: none;
+    border: none; border-radius: var(--r-pill);
+    padding: 16px 32px;
+    font-family: inherit; font-size: 17px; font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-btn-blue);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(78,142,243,0.38); }
 
   .join-pill {
     position: relative; display: inline-flex; align-items: center; gap: 16px;
@@ -123,13 +146,42 @@
   .join-pill:active { transform: scale(0.97); }
   .join-pill:focus-visible { outline: 2px solid white; outline-offset: 3px; }
   .join-pill-tekst {
-    font-family: inherit; font-size: 15px; font-weight: 700;
-    letter-spacing: 0.1px; overflow-wrap: anywhere; text-align: left;
+    font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700;
+    letter-spacing: 0.2px; overflow-wrap: anywhere; text-align: left;
   }
   .join-pill-icon { display: flex; flex-shrink: 0; color: rgba(255,255,255,0.85); transition: color 0.18s; }
   .join-pill-icon svg { width: 20px; height: 20px; }
   .join-pill.gekopieerd { background: rgba(16,163,127,0.32); border-color: rgba(16,163,127,0.6); }
   .join-pill.gekopieerd .join-pill-icon { color: #baf3d9; }
+
+  .voorbeeldantwoord-kaart {
+    background: #f7f8f9; border: 1.5px solid var(--border); border-radius: var(--r-card);
+    padding: 22px 26px; margin-top: 28px;
+  }
+  .voorbeeldantwoord-head {
+    width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    background: none; border: none; padding: 0; margin: 0; cursor: pointer;
+    font-family: inherit; text-align: left;
+  }
+  .voorbeeldantwoord-label { font-size: 16px; font-weight: 700; color: var(--dark); }
+  .voorbeeldantwoord-btn {
+    display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
+    background: white; border: 1.5px solid var(--border); border-radius: var(--r-pill);
+    padding: 9px 18px; font-size: 14px; font-weight: 700; color: var(--primary-dark);
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
+  }
+  .voorbeeldantwoord-head:hover .voorbeeldantwoord-btn { border-color: var(--primary); background: var(--primary-soft); }
+  .voorbeeldantwoord-btn svg { width: 14px; height: 14px; transition: transform 0.25s; }
+  .voorbeeldantwoord-kaart.open .voorbeeldantwoord-btn svg { transform: rotate(180deg); }
+  .voorbeeldantwoord-body {
+    max-height: 0; opacity: 0; overflow: hidden;
+    transition: max-height 0.35s ease, opacity 0.25s ease, margin-top 0.35s ease;
+  }
+  .voorbeeldantwoord-kaart.open .voorbeeldantwoord-body { max-height: 520px; opacity: 1; margin-top: 18px; }
+  .voorbeeldantwoord-mailkaart {
+    background: white; border: 1.5px solid var(--border); border-radius: 18px; overflow: hidden;
+  }
+  .voorbeeldantwoord-mailtitel { font-size: 13px; font-weight: 700; color: var(--muted); margin-left: 4px; }
 
   .inzendingen-panel {
     background: white; border: 1px solid var(--border); border-radius: var(--r-card);
@@ -373,12 +425,19 @@
     app.innerHTML = `
       <div class="view">
         <div class="lobby-hero">
-          <div class="lobby-title">Deel deze link met je klas</div>
-          <div class="lobby-step-label">Ga naar de link</div>
-          <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink('${studentUrl}')">
-            <span class="join-pill-tekst" id="join-pill-tekst">${escapeHtml(studentUrl.replace(/^https?:\/\//, ''))}</span>
-            <span class="join-pill-icon" id="join-pill-icon">${ICOON_KOPIEER}</span>
-          </button>
+          <div class="lobby-title"><img src="/Afbeeldingen/emojis nieuw/envelop.png" alt="" style="height:1em;width:auto;object-fit:contain;vertical-align:-0.12em;margin-right:10px"> Formele mail</div>
+
+          <div class="lobby-step">
+            <div class="lobby-step-label"><span class="lobby-step-num">1</span> Deel deze link met je klas</div>
+            <button class="join-pill" type="button" id="join-pill" onclick="kopieerJoinLink('${studentUrl}')">
+              <span class="join-pill-tekst" id="join-pill-tekst">${escapeHtml(studentUrl.replace(/^https?:\/\//, ''))}</span>
+              <span class="join-pill-icon" id="join-pill-icon">${ICOON_KOPIEER}</span>
+            </button>
+          </div>
+
+          <div class="lobby-step">
+            <div class="lobby-step-label"><span class="lobby-step-num">2</span> Bekijk de inzendingen hieronder zodra ze binnenkomen</div>
+          </div>
           <img class="lobby-jay" src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="Jay">
         </div>
 
@@ -391,8 +450,54 @@
             <div class="empty-hint">Zodra leerlingen hun e-mail verzenden, verschijnen ze hier live.</div>
           </div>
         </div>
+
+        <div class="voorbeeldantwoord-kaart" id="voorbeeldantwoord-kaart">
+          <button class="voorbeeldantwoord-head" type="button" id="voorbeeldantwoord-toggle">
+            <span class="voorbeeldantwoord-label">Voorbeeldantwoord</span>
+            <span class="voorbeeldantwoord-btn">
+              <span id="voorbeeldantwoord-btn-tekst">Bekijk</span>
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </button>
+          <div class="voorbeeldantwoord-body">
+            <div class="voorbeeldantwoord-mailkaart">
+              <div class="detail-mail-titelbalk">
+                <span class="detail-mail-dot" style="background:#ef4444"></span>
+                <span class="detail-mail-dot" style="background:#f59e0b"></span>
+                <span class="detail-mail-dot" style="background:#10a37f"></span>
+                <span class="voorbeeldantwoord-mailtitel">Voorbeeld e-mail</span>
+              </div>
+              <div class="detail-mail-body">
+                <div class="detail-mail-veld">
+                  <div class="detail-mail-veld-label">Onderwerp</div>
+                  <div class="detail-mail-veld-waarde">Vraag over hoofdstuk 6, opdracht 4 wiskunde</div>
+                </div>
+                <div class="detail-mail-veld">
+                  <div class="detail-mail-veld-label">E-mail</div>
+                  <div class="detail-mail-bericht">Beste mevrouw Jongmans,
+
+Ik heb een vraag over hoofdstuk 6, opdracht 4 van wiskunde.
+Zou u mij hier dinsdag mee willen helpen?
+
+Ik hoor het graag!
+
+Met vriendelijke groet,
+Ayoub</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <a class="cta-btn" href="/les7">Terug naar les 7 →</a>
+        </div>
       </div>
     `;
+    document.getElementById('voorbeeldantwoord-toggle').addEventListener('click', () => {
+      const open = document.getElementById('voorbeeldantwoord-kaart').classList.toggle('open');
+      document.getElementById('voorbeeldantwoord-btn-tekst').textContent = open ? 'Verberg' : 'Bekijk';
+    });
   }
 
   async function laadInzendingen() {
