@@ -94,10 +94,14 @@
       margin: 0 auto;
       padding: 0 48px;
       height: 72px;
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      justify-content: space-between;
+      gap: 16px;
     }
+    .header-logo { justify-self: start; }
+    .header-breadcrumb { justify-self: center; }
+    .header-right { justify-self: end; }
     .header-logo {
       height: 48px;
       width: auto;
