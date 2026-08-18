@@ -89,6 +89,7 @@
     .breadcrumb * { pointer-events: all; }
     .bc-link { color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; cursor: pointer; }
     .bc-link:hover { color: var(--primary); }
+    .bc-link.bc-alone { color: var(--primary); font-weight: 700; }
     .bc-sep { color: rgba(109,116,122,0.4); }
     .bc-current { color: var(--primary); font-weight: 700; }
     .nav-right { display: flex; align-items: center; gap: 14px; }
@@ -558,7 +559,7 @@
         <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar" style="height:44px;width:auto;object-fit:contain;">
       </div>
       <nav class="breadcrumb">
-        <span class="bc-link">Dashboard</span>
+        <span class="bc-link bc-alone">Dashboard</span>
         <span class="bc-sep" id="bc-sep" style="display:none">/</span>
         <span class="bc-current" id="bc-current" style="display:none"></span>
       </nav>
