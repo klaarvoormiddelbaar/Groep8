@@ -52,9 +52,9 @@
     .header-inner {
       max-width: var(--max-w); margin: 0 auto;
       padding: 0 32px; height: 72px;
-      display: flex; align-items: center; justify-content: space-between; gap: 24px;
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
     }
-    .logo { display: flex; align-items: center; gap: 12px; }
+    .logo { display: flex; align-items: center; gap: 12px; text-decoration: none; justify-self: start; }
     .logo-mark {
       width: 38px; height: 38px; flex-shrink: 0;
       background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
@@ -64,7 +64,11 @@
       box-shadow: 0 10px 20px rgba(78,142,243,0.30);
     }
     .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
-    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; justify-self: center; }
+    .bc-link { color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; }
+    .bc-link:hover { color: var(--primary); }
+    .bc-sep { color: rgba(109,116,122,0.4); }
+    .bc-current { color: var(--primary); font-weight: 700; }
 
     .main { max-width: var(--max-w); margin: 0 auto; padding: 40px 32px 96px; }
 
@@ -244,10 +248,14 @@
 
   <header class="header">
     <div class="header-inner">
-      <div class="logo">
+      <a class="logo" href="/Dashboard">
         <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar" style="height:40px;width:auto;object-fit:contain;">
-        <div class="logo-role">Woordwolk · Docentweergave</div>
-      </div>
+      </a>
+      <nav class="breadcrumb">
+        <a class="bc-link" href="/Dashboard">Dashboard</a>
+        <span class="bc-sep">/</span>
+        <span class="bc-current">Woordwolk</span>
+      </nav>
     </div>
   </header>
 

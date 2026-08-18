@@ -64,13 +64,17 @@
       box-shadow: var(--shadow-btn-blue);
     }
     .logo-name { font-size: 15px; font-weight: 700; color: var(--dark); line-height: 1.15; }
-    .logo-role { font-size: 11px; font-weight: 400; color: var(--muted); }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 14px; justify-self: center; }
+    .bc-link { color: var(--muted); text-decoration: none; font-weight: 400; transition: color 0.2s; }
+    .bc-link:hover { color: var(--primary); }
+    .bc-sep { color: rgba(109,116,122,0.4); }
+    .bc-current { color: var(--primary); font-weight: 700; }
+    .nav-right { display: flex; align-items: center; gap: 14px; justify-self: end; }
     .live-pill {
       display: inline-flex; align-items: center; gap: 7px;
       background: rgba(239,68,68,0.10); border: 1px solid rgba(239,68,68,0.25);
       color: #c0392b; font-size: 13px; font-weight: 700;
       border-radius: var(--r-pill); padding: 7px 16px;
-      justify-self: center;
     }
     .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #ef4444; animation: pulse 1.6s infinite; }
     @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.45; transform:scale(0.8); } }
@@ -80,7 +84,6 @@
       border: 2.5px solid var(--primary);
       display: flex; align-items: center; justify-content: center;
       color: white; font-size: 14px; font-weight: 700;
-      justify-self: end;
     }
 
     /* ── MAIN ── */
@@ -299,12 +302,18 @@
 <body>
   <header class="header">
     <div class="header-inner">
-      <div class="logo">
+      <a class="logo" href="/Dashboard/">
         <img src="/Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar" style="height:40px;width:auto;object-fit:contain;">
-        <div class="logo-role">Live klasquiz · Docentweergave</div>
+      </a>
+      <nav class="breadcrumb">
+        <a class="bc-link" href="/Dashboard/">Dashboard</a>
+        <span class="bc-sep">/</span>
+        <span class="bc-current">KvM Kwiz</span>
+      </nav>
+      <div class="nav-right">
+        <div class="live-pill"><span class="live-dot"></span> Live quiz</div>
+        <div class="avatar" id="docent-avatar" title="">··</div>
       </div>
-      <div class="live-pill"><span class="live-dot"></span> Live quiz</div>
-      <div class="avatar" id="docent-avatar" title="">··</div>
     </div>
   </header>
 
