@@ -127,7 +127,7 @@
   }
   .laptop-base::after{content:''; position:absolute; left:50%; top:2px; transform:translateX(-50%); width:15%; height:3px; background:#a3a8b1; border-radius:3px; box-shadow:0 1px 0 rgba(255,255,255,0.5);}
 
-  .dash-zoom{width:1184px; zoom:0.4409;}
+  .dash-zoom{width:1184px;}
   .dash-header{height:64px; padding:0 32px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #eceeee; background:rgba(247,249,251,0.9);}
   .dash-header img{height:30px; width:auto;}
   .dash-header .dash-crumb{font-size:18px; font-weight:700; color:var(--primary-dark);}
@@ -250,12 +250,11 @@
   .laptop-mock-sm{width:360px; flex:0 0 auto;}
   .laptop-mock-lg{width:500px; flex:0 0 auto;}
   .laptop-mock-lg.lesopbouw-laptop{width:340px;}
-  .laptop-mock-lg.lesopbouw-laptop .lp-zoom{zoom:0.273;}
   .skill-story{margin-top:32px;}
   .skill-story p{font-size:18px; color:var(--muted); line-height:1.7;}
 
   /* Kleine losse lesvoorbeeld-kaart (voor vaardigheden met 1 les) */
-  .lesprev-zoom{width:900px; zoom:0.38;}
+  .lesprev-zoom{width:900px;}
   .lesprev-crumb{display:flex; align-items:center; gap:10px; padding:18px 26px; border-bottom:1px solid #eceeee; font-size:14px; font-weight:700; color:var(--muted); background:rgba(247,249,251,0.9);}
   .lesprev-hero{position:relative; overflow:hidden; margin:22px 26px; border-radius:24px; padding:28px 30px; color:#fff; background:linear-gradient(140deg, var(--h1), var(--h2));}
   .lesprev-hero::before{content:''; position:absolute; top:-30px; right:-20px; width:130px; height:130px; background:rgba(255,255,255,0.12); border-radius:50%; pointer-events:none;}
@@ -266,7 +265,7 @@
   .lesprev-sub{position:relative; z-index:1; font-size:14.5px; opacity:.92;}
 
   /* Volledige lespagina-recreatie (echte klassen 1-op-1 van de docentenhandleiding) voor in de grote laptop */
-  .lp-zoom{width:1184px; zoom:0.39;}
+  .lp-zoom{width:1184px;}
   .lp-page{padding:32px;}
   .lesopbouw-laptop .lp-page{min-height:800px; box-sizing:border-box;}
   .lp-hero{border-radius:28px; padding:52px 56px; position:relative; overflow:hidden; color:#fff; box-shadow:0 12px 32px -8px rgba(0,0,0,0.18); background:linear-gradient(135deg, var(--h1) 0%, var(--h2) 100%);}
@@ -1500,7 +1499,45 @@
 </script>
 <script>
 (function(){
-  // Laptop-mockups proportioneel verkleinen op mobiel met transform:scale() i.p.v. losse CSS-overrides.
+  // STAP 1: interne laptop-inhoud (dashboard/lespagina/lesvoorbeeld) schalen met transform i.p.v. CSS zoom.
+  // zoom veroorzaakt op sommige (mobiele) WebKit-versies een layout/afrondingsbug waarbij flex-rijen met
+  // vaste breedte (zoals de tijdsduur-kolom in de lestijdlijn) over de tekst ernaast heen gaan overlappen.
+  // transform:scale is een pure teken-operatie (net als "een screenshot van de desktop-laptop verkleinen")
+  // en heeft dat probleem niet. Omdat transform de layout-maat niet verandert, moet de hoogte van de
+  // omliggende .laptop-display hierna wel handmatig gelijk gezet worden aan de nieuwe, verkleinde hoogte.
+  var contentRules = [
+    { sel: '.laptop-mock-lg.lesopbouw-laptop .lp-zoom', scale: 0.273 },
+    { sel: '.lp-zoom', scale: 0.39 },
+    { sel: '.dash-zoom', scale: 0.4409 },
+    { sel: '.lesprev-zoom', scale: 0.38 }
+  ];
+  function apply(){
+    var matched = [];
+    contentRules.forEach(function(rule){
+      document.querySelectorAll(rule.sel).forEach(function(el){
+        if(matched.indexOf(el) !== -1) return;
+        matched.push(el);
+        // Meet de natuurlijke (onverkleinde) hoogte: transform kort even resetten zodat een eerdere
+        // toepassing de meting niet beïnvloedt (belangrijk bij de herberekening na het laden van afbeeldingen).
+        el.style.transform = '';
+        var h = el.getBoundingClientRect().height;
+        el.style.transformOrigin = 'top left';
+        el.style.transform = 'scale(' + rule.scale + ')';
+        var display = el.parentElement;
+        if(display && display.classList.contains('laptop-display')){
+          display.style.height = Math.ceil(h * rule.scale) + 'px';
+        }
+      });
+    });
+  }
+
+  apply();
+  window.addEventListener('load', apply);
+})();
+</script>
+<script>
+(function(){
+  // STAP 2: Laptop-mockups (bezel + inhoud samen) proportioneel verkleinen op mobiel met transform:scale() i.p.v. losse CSS-overrides.
   // Zo blijft de HELE laptop (bezel + content + border-radius + schaduw) altijd exact even verhoudingsgelijk
   // aan de desktop-versie, ongeacht viewport-breedte, zonder dat losse eigenschappen los herschaald hoeven te worden.
   var els = document.querySelectorAll('.laptop-mock');
