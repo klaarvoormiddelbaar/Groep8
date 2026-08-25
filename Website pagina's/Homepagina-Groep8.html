@@ -109,8 +109,9 @@
 
   /* LAPTOP MOCKUP — bevat een 1:1 opbouw van het echte dashboard (zelfde klassen/waarden), platte laptop, verkleind met zoom i.p.v. handmatig herschaalde lettergroottes */
   .laptop-mock{position:relative; z-index:1; flex:0 0 auto; width:540px; align-self:center; filter:drop-shadow(0 34px 54px rgba(10,20,40,0.38));}
-  @media(max-width:860px){ .laptop-mock{width:360px; margin-top:12px;} }
-  @media(max-width:420px){ .laptop-mock{width:300px;} }
+  /* Mobiel: hele mockup (incl. bezel/voet) proportioneel verkleinen met zoom i.p.v. alleen de breedte, anders wordt de rand op kleine schermen te dik. */
+  @media(max-width:860px){ .laptop-mock:not(.laptop-mock-lg):not(.laptop-mock-sm){zoom:0.6667; margin-top:12px;} }
+  @media(max-width:420px){ .laptop-mock:not(.laptop-mock-lg):not(.laptop-mock-sm){zoom:0.5556;} }
   .laptop-screen{
     background:#141517;
     border-radius:20px 20px 8px 8px; padding:9px 9px 0; position:relative;
@@ -129,8 +130,7 @@
   .laptop-base::after{content:''; position:absolute; left:50%; top:2px; transform:translateX(-50%); width:15%; height:3px; background:#a3a8b1; border-radius:3px; box-shadow:0 1px 0 rgba(255,255,255,0.5);}
 
   .dash-zoom{width:1184px; zoom:0.4409;}
-  @media(max-width:860px){ .dash-zoom{zoom:0.2889;} }
-  @media(max-width:420px){ .dash-zoom{zoom:0.2382;} }
+  /* Geen aparte mobiele zoom-waarden meer nodig: de outer-zoom op .laptop-mock schaalt deze content al proportioneel mee. */
   .dash-header{height:64px; padding:0 32px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #eceeee; background:rgba(247,249,251,0.9);}
   .dash-header img{height:30px; width:auto;}
   .dash-header .dash-crumb{font-size:18px; font-weight:700; color:var(--primary-dark);}
@@ -251,19 +251,19 @@
   .vaardigheden-band .card-head-emoji{display:none;}
   .skills-disabled .lesson-card[data-skill]{pointer-events:none; cursor:default;}
   .laptop-mock-sm{width:360px; flex:0 0 auto;}
-  @media(max-width:420px){ .laptop-mock-sm{width:280px;} }
+  /* Outer-zoom i.p.v. width, zodat de bezel proportioneel meeschaalt op mobiel. */
+  @media(max-width:420px){ .laptop-mock-sm{zoom:0.7778;} }
   .laptop-mock-lg{width:500px; flex:0 0 auto;}
   @media(max-width:1080px){ .laptop-mock-lg{width:420px;} }
   @media(max-width:420px){ .laptop-mock-lg{width:280px;} }
   .laptop-mock-lg.lesopbouw-laptop{width:340px;}
   .laptop-mock-lg.lesopbouw-laptop .lp-zoom{zoom:0.273;}
-  @media(max-width:420px){ .laptop-mock-lg.lesopbouw-laptop{width:230px;} .laptop-mock-lg.lesopbouw-laptop .lp-zoom{zoom:0.184;} }
   .skill-story{margin-top:32px;}
   .skill-story p{font-size:18px; color:var(--muted); line-height:1.7;}
 
   /* Kleine losse lesvoorbeeld-kaart (voor vaardigheden met 1 les) */
   .lesprev-zoom{width:900px; zoom:0.38;}
-  @media(max-width:420px){ .lesprev-zoom{zoom:0.291;} }
+  /* Schaalt mee via de outer-zoom op .laptop-mock-sm, geen aparte mobiele waarde meer nodig. */
   .lesprev-crumb{display:flex; align-items:center; gap:10px; padding:18px 26px; border-bottom:1px solid #eceeee; font-size:14px; font-weight:700; color:var(--muted); background:rgba(247,249,251,0.9);}
   .lesprev-hero{position:relative; overflow:hidden; margin:22px 26px; border-radius:24px; padding:28px 30px; color:#fff; background:linear-gradient(140deg, var(--h1), var(--h2));}
   .lesprev-hero::before{content:''; position:absolute; top:-30px; right:-20px; width:130px; height:130px; background:rgba(255,255,255,0.12); border-radius:50%; pointer-events:none;}
@@ -343,6 +343,7 @@
   @media(max-width:800px){
     .lesopbouw-photo.is-trio{width:240px; gap:8px;}
     .lesopbouw-photo.is-trio img{height:110px; border-radius:12px;}
+    .lesopbouw-steps{padding:28px 24px; gap:20px;}
   }
   .lesopbouw-photo.active{opacity:1;}
   .lesopbouw-image{min-height:340px;}
@@ -385,7 +386,11 @@
   .testi-track.dragging{scroll-snap-type:none; scroll-behavior:auto; cursor:grabbing;}
   .testi-card{scroll-snap-align:start; flex:0 0 calc((100% - 36px) / 3.15); min-width:240px; opacity:.35; transition:opacity .35s ease;}
   @media(max-width:1040px){ .testi-card{flex:0 0 calc((100% - 18px) / 2.15);} }
-  @media(max-width:700px){ .testi-card{flex:0 0 86%;} }
+  @media(max-width:700px){
+    .testi-slider-wrap{gap:8px;}
+    .testi-arrow{width:34px; height:34px; font-size:16px;}
+    .testi-card{flex:0 0 90%; min-width:0;}
+  }
   .testi-card.in-view{opacity:1;}
   .testi-arrow{flex-shrink:0; width:44px; height:44px; border-radius:50%; border:1px solid var(--border); background:var(--card-bg); box-shadow:var(--shadow-card); display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--primary-dark); cursor:pointer; transition:background .2s, transform .2s;}
   .testi-arrow:hover{background:var(--primary-soft); transform:scale(1.06);}
@@ -462,12 +467,16 @@
     .lesopbouw-image{padding-bottom:150px;min-height:430px;}
     .lesopbouw-material-btn{bottom:14px;}
     .lesopbouw-photo.is-laptop{transform:translate(-50%,-57%);}
-    .lesopbouw-photo.is-laptop .lesopbouw-laptop{width:270px;}
-    .lesopbouw-photo.is-laptop .lesopbouw-laptop .lp-zoom{zoom:.215;}
+    /* Outer-zoom i.p.v. width+losse lp-zoom-waarde, zodat bezel/voet/scherm proportioneel meeschalen. */
+    .lesopbouw-photo.is-laptop .lesopbouw-laptop{zoom:0.7941;}
   }
   @media(max-width:420px){
-    .lesopbouw-photo.is-laptop .lesopbouw-laptop{width:220px;}
-    .lesopbouw-photo.is-laptop .lesopbouw-laptop .lp-zoom{zoom:.175;}
+    .lesopbouw-photo.is-laptop .lesopbouw-laptop{zoom:0.6471;}
+  }
+
+  /* Mobiel: minder zijkant-padding zodat de content dichter bij de rand komt (minder verticaal scrollen nodig). */
+  @media(max-width:700px){
+    :root{--pad:22px;}
   }
 </style>
   <link rel="stylesheet" href="shared-header-footer.css">
@@ -1252,6 +1261,7 @@
   steps.forEach(function(step){
     step.addEventListener('mouseenter', function(){ setActive(step.dataset.step); });
     step.addEventListener('focus', function(){ setActive(step.dataset.step); });
+    step.addEventListener('click', function(){ setActive(step.dataset.step); });
   });
 })();
 
