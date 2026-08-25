@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kerndoelen — Klaar voor Middelbaar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#f7f9fb; --card-bg:#ffffff; --footer-bg:#f2f4f4;
+    --primary:#72a8f9; --primary-dark:#4e8ef3; --primary-soft:rgba(78,142,243,0.10);
+    --green:#10a37f; --green-soft:rgba(16,163,127,0.10);
+    --dark:#191c1d; --muted:#6d747a; --border:#eceeee;
+    --shadow-card:0 10px 24px -8px rgba(25,28,29,0.10);
+    --max-w:960px; --pad:40px; --r-card:28px; --r-pill:9999px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inria Sans', Georgia, serif; color:var(--dark); min-height:100vh;
+    background-color:#f7f9fb;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--max-w); margin:0 auto; padding:0 var(--pad);}
+  @media(max-width:640px){ :root{--pad:20px;} }
+
+  /* NAV */
+  .nav{border-bottom:1px solid var(--border); background:#fff;}
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:0 var(--pad); height:64px; max-width:var(--max-w); margin:0 auto; gap:20px;}
+  .nav-logo img{height:32px; width:auto;}
+  .nav-title{font-size:13.5px; font-weight:700; color:var(--muted);}
+
+  main{max-width:var(--max-w); margin:0 auto; padding:0 var(--pad);}
+  section{padding:40px 0;}
+
+  /* HERO */
+  .hero{width:100vw; margin-left:calc(50% - 50vw); padding:132px max(28px,calc((100vw - var(--max-w))/2)) 112px; color:#fff; background-color:#3b78cf; background-image:linear-gradient(135deg,rgba(26,66,128,.94),rgba(78,142,243,.82)),url('../Afbeeldingen/Website/Klim%20Klinkert.png'); background-position:center,center 38%; background-size:100% 100%,cover; background-repeat:no-repeat; position:relative; overflow:hidden;}
+  .hero-label{display:none;}
+  .hero h1{font-size:clamp(42px,6vw,78px); font-weight:700; line-height:1.02; margin:0 0 24px; max-width:920px;}
+  .hero p{font-size:clamp(20px,2.2vw,29px); line-height:1.5; color:rgba(255,255,255,.92); max-width:920px; margin:0;}
+
+  /* LEGENDA — compact inline */
+  .legend{display:grid; grid-template-columns:auto auto 1fr; row-gap:10px; column-gap:9px; align-items:baseline; padding:22px 24px; background:#fff; border:1px solid var(--border); border-radius:18px; margin-top:28px;}
+  .legend-item{display:contents; font-size:13.5px;}
+  .legend-item .dot{align-self:center;}
+  .legend-item b{font-weight:700; white-space:nowrap;}
+  .legend-item span{color:var(--dark);}
+  .dot{width:10px; height:10px; border-radius:50%; flex-shrink:0;}
+  .dot.green{background:var(--green);} .dot.blue{background:var(--primary-dark);}
+
+  /* JUMP NAV */
+  .jumpnav{display:flex; flex-wrap:wrap; gap:8px;}
+  .jumpnav a{display:inline-flex; align-items:center; gap:7px; background:#fff; border:1.5px solid var(--border); border-radius:var(--r-pill); padding:8px 15px; font-size:13px; font-weight:700; color:var(--dark); text-decoration:none; transition:transform .15s, box-shadow .15s;}
+  .jumpnav a:hover{transform:translateY(-2px); box-shadow:0 6px 14px rgba(0,0,0,0.08);}
+  .jumpnav img{width:14px; height:14px; object-fit:contain;}
+
+  /* LEERGEBIED — eigen kleurblok per vakgebied */
+  .leergebied{border-radius:var(--r-card); padding:26px 26px 28px; margin-top:22px; scroll-margin-top:24px; background:var(--lg-soft); border:1.5px solid var(--lg-border);}
+  .leergebied-head{display:flex; align-items:center; gap:12px; margin-bottom:18px;}
+  .leergebied-ico{width:38px; height:38px; border-radius:11px; background:var(--lg-ico-bg); display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 2px 6px rgba(0,0,0,0.06);}
+  .leergebied-ico img{width:19px; height:19px; object-fit:contain;}
+  .leergebied-head h2{font-size:17.5px; font-weight:700; color:var(--lg-dark);}
+  .leergebied-count{margin-left:auto; font-size:11.5px; color:var(--lg-dark); font-weight:700; background:#fff; padding:5px 12px; border-radius:var(--r-pill);}
+
+  /* ACCORDION KAARTEN */
+  .kd-list{display:flex; flex-direction:column; gap:10px;}
+  .kd-card{background:#fff; border:1px solid rgba(0,0,0,0.05); border-radius:16px; overflow:hidden;}
+  .kd-card summary{list-style:none; cursor:pointer; padding:15px 18px; display:flex; align-items:center; gap:12px;}
+  .kd-card summary::-webkit-details-marker{display:none;}
+  .kd-status-dot{width:9px; height:9px; border-radius:50%; flex-shrink:0;}
+  .kd-summary-text{flex:1; min-width:0; display:flex; align-items:baseline; gap:9px; flex-wrap:wrap;}
+  .kd-code{font-size:11px; font-weight:700; color:var(--lg-dark);}
+  .kd-title{font-size:14.5px; font-weight:700; color:var(--dark);}
+  .kd-status-badge{font-size:11px; font-weight:700; padding:4px 10px; border-radius:var(--r-pill); white-space:nowrap; flex-shrink:0;}
+  .kd-status-badge.green{background:var(--green-soft); color:var(--green);}
+  .kd-status-badge.blue{background:var(--primary-soft); color:var(--primary-dark);}
+  .kd-chevron{width:8px; height:8px; border-right:1.8px solid var(--muted); border-bottom:1.8px solid var(--muted); transform:rotate(-45deg); transition:transform .2s; flex-shrink:0;}
+  .kd-card[open] .kd-chevron{transform:rotate(45deg);}
+  .kd-body{padding:0 18px 18px 18px; border-top:1px solid var(--border); margin-top:1px; padding-top:14px;}
+  .kd-row{display:grid; grid-template-columns:112px 1fr; gap:10px; margin-bottom:12px; font-size:13.5px;}
+  .kd-row:last-child{margin-bottom:0;}
+  @media(max-width:560px){ .kd-row{grid-template-columns:1fr; gap:4px;} }
+  .kd-row-label{font-weight:700; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.3px;}
+  .kd-lessen{display:flex; flex-wrap:wrap; gap:6px;}
+  .kd-les-chip{background:var(--lg-soft); color:var(--lg-dark); font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:var(--r-pill);}
+  .kd-leren-list{list-style:none; display:flex; flex-direction:column; gap:4px;}
+  .kd-leren-list li{padding-left:18px; position:relative; color:var(--dark); line-height:1.5;}
+  .kd-leren-list li::before{content:"✓"; position:absolute; left:0; color:var(--green); font-weight:700;}
+  .kd-verhaal{color:var(--dark); line-height:1.6; font-size:13.5px;}
+
+  /* SAMENVATTING */
+  .sum-table{width:100%; border-collapse:collapse; background:#fff; border:1px solid var(--border); border-radius:16px; overflow:hidden;}
+  .sum-table th, .sum-table td{padding:12px 16px; text-align:left; font-size:13.5px; border-bottom:1px solid var(--border);}
+  .sum-table th{background:#fafbfc; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:.4px; font-weight:700;}
+  .sum-table td.num{font-weight:700; text-align:center; width:120px;}
+  .sum-table th.num{text-align:center;}
+  .sum-table tr:last-child td{border-bottom:none;}
+  .sum-table tr.total td{font-weight:700; background:#fafbfc;}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--border); padding:32px 0; margin-top:16px;}
+  .footer-inner{max-width:var(--max-w); margin:0 auto; padding:0 var(--pad); display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center;}
+  .footer-logo{height:24px; width:auto;}
+  .footer-note{font-size:12px; color:var(--muted); max-width:520px; line-height:1.6;}
+.nav-links{display:flex;gap:28px;align-items:center;color:var(--muted);font-weight:600}.nav-links a{text-decoration:none;color:var(--muted)}.nav-links a:hover{text-decoration:underline}.nav-cta{background:#4e8ef3;color:#fff;padding:12px 22px;border-radius:999px;text-decoration:none;font-weight:700}.nav-group{position:relative}.nav-group summary{list-style:none;cursor:pointer}.nav-group summary::-webkit-details-marker{display:none}.nav-submenu{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);display:grid;gap:4px;min-width:214px;padding:10px;background:linear-gradient(145deg,rgba(255,255,255,.99),rgba(239,246,255,.98));border:1px solid rgba(78,142,243,.28);border-radius:20px;box-shadow:0 16px 34px rgba(30,60,110,.22);z-index:20}.nav-submenu a{color:var(--primary-dark)!important;padding:10px 13px;white-space:nowrap;font-size:15px;font-weight:700;text-decoration:none}.nav-submenu a:hover{color:#fff!important;background:#4e8ef3;text-decoration:none}.nav-group:not([open]) .nav-submenu{display:none}.nav-group:hover .nav-submenu,.nav-group:focus-within .nav-submenu{display:grid!important}</style>
+  <link rel="stylesheet" href="shared-header-footer.css">
+</head>
+<body>
+
+<header class="nav"><div class="nav-inner"><a class="nav-logo" href="Homepagina-Groep8.html"><img src="../Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar"></a><nav class="nav-links"><a href="Homepagina-Groep8.html">Home</a><details class="nav-group"><summary>KvM Groep 8</summary><div class="nav-submenu"><a href="Homepagina-Groep8.html">Programma</a><a href="Kernvaardigheden-Groep8.html">Kernvaardigheden</a><a href="Materialen-Groep8.html">Materialen</a><a href="Kerndoelen-Overzicht.html">Kerndoelen</a><a href="Didactiek-Groep8.html">Didactiek</a></div></details><a href="https://klaarvoormiddelbaar.nl/brugklas">KvM Brugklas</a><a href="https://klaarvoormiddelbaar.nl/over-ons/">Over ons</a></nav><a class="nav-cta" href="Homepagina-Groep8.html#demo">Maak kennis</a></div></header>
+
+<main>
+
+  <div class="hero">
+    <h1>Klaar voor Middelbaar sluit aan op de nieuwe SLO-kerndoelen (2026)</h1>
+    <p>Ons programma ondersteunt een groot aantal officiële kerndoelen binnen onder andere Digitale Geletterdheid, Burgerschap, Mens &amp; Maatschappij en Nederlands. Hieronder ziet u precies welke kerndoelen worden behandeld en in welke lessen dit gebeurt.</p>
+
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="dot green"></span><b>Sterke aansluiting</b><span>belangrijk onderdeel van één of meerdere lessen</span></div>
+    <div class="legend-item"><span class="dot blue"></span><b>Goede aansluiting</b><span>onderdelen komen terug, niet het volledige kerndoel</span></div>
+  </div>
+
+  <section id="jump" style="padding-top:28px; padding-bottom:0;">
+    <div class="jumpnav" id="jumpnav"></div>
+  </section>
+
+  <div id="leergebiedenWrap"></div>
+
+  <section id="demo">
+    <div class="cta-slot">
+      <img class="cta-jay" src="../Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
+      <h2>Klaar voor Middelbaar op jouw school?</h2>
+      <p>Wil je een demo of offerte aanvragen, of heb je gewoon een vraag? Laat het ons weten!</p>
+      <form class="cta-form" action="mailto:contact@klaarvoormiddelbaar.nl" method="post" enctype="text/plain">
+        <label>Naam<input type="text" name="naam" placeholder="Je naam" required></label>
+        <label>School<input type="text" name="school" placeholder="Naam van je school" required></label>
+        <label>E-mailadres<input type="email" name="email" placeholder="naam@school.nl" required></label>
+        <label>Telefoonnummer<input type="tel" name="telefoon" placeholder="06 12345678"></label>
+        <label class="full">Waar kunnen we je mee helpen?<textarea name="bericht" placeholder="Vertel kort waar je interesse in hebt…" required></textarea></label>
+        <button class="hero-cta-live" type="submit">Verstuur aanvraag</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <img class="footer-logo" src="../Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
+    <div class="footer-note">Dit overzicht is opgesteld door Klaar voor Middelbaar als hulpmiddel bij het beoordelen van de aansluiting van het programma op de kerndoelen. Neem voor vragen contact op via contact@klaarvoormiddelbaar.nl.</div>
+  </div>
+</footer>
+
+<script>
+const LEERGEBIEDEN = [
+  {
+    id: 'digitale-geletterdheid',
+    naam: 'Digitale geletterdheid',
+    icon: '../Afbeeldingen/EMOJI%20PACK%20IOS/laptop_1f4bb.png',
+    kleur: { dark:'#2f68c4', soft:'rgba(78,142,243,0.07)', border:'rgba(78,142,243,0.28)', icoBg:'rgba(78,142,243,0.16)' },
+    kerndoelen: [
+      { code:'22A', titel:'Digitale systemen functioneel inzetten', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 1','Les 2','Les 3','Les 5','Les 7','Les 8'],
+        leren:['Digitale systemen functioneel gebruiken','Digitale hulpmiddelen inzetten tijdens het leren','Digitale toepassingen gebruiken voor communicatie','Digitale systemen gebruiken om informatie te verwerken'],
+        verhaal:'In Les 1 maken leerlingen voor het eerst kennis met digitale werkvormen zoals <strong>PollParty</strong>, waarmee zij digitaal vragen beantwoorden en gezamenlijk de resultaten bespreken. In Les 2 gebruiken zij <strong>Planeten Planner</strong>, een digitaal spel waarin zij opdrachten plannen en direct ervaren hoe digitale hulpmiddelen kunnen ondersteunen bij plannen en organiseren.<br><br>In Les 3 staat het functioneel gebruiken van digitale systemen centraal: leerlingen werken met uitlegvideo\'s, online oefenwebsites en <strong>Jay AI</strong> om informatie te verwerken en hun leerproces te ondersteunen. Ook in Les 5, Les 7 en Les 8 gebruiken leerlingen digitale systemen functioneel: zij nemen deel aan digitale woordwolken, beantwoorden vragen via <strong>KlasKompas</strong>, schrijven een <strong>formele e-mail</strong> in de online leeromgeving en vullen een digitale evaluatie in.' },
+      { code:'22B', titel:'Navigeren in het digitale informatie- en medialandschap', status:'blue', statusLabel:'Goede aansluiting',
+        lessen:['Les 3'],
+        leren:['Digitale media en informatiebronnen gebruiken','De bruikbaarheid van digitale bronnen beoordelen','Aangeboden informatie kritisch beoordelen','Digitale hulpmiddelen doelgericht inzetten om informatie te verwerven en te verwerken'],
+        verhaal:'In Les 3 onderzoeken leerlingen bij <strong>Missie Middelbaar</strong> verschillende digitale oefenwebsites die zij ook op de middelbare school kunnen gebruiken. Zij vergelijken meerdere digitale bronnen en beoordelen de bruikbaarheid aan de hand van kenmerken zoals duidelijke uitleg, overzichtelijkheid en directe feedback, en bespreken klassikaal welke bron het meest geschikt is.<br><br>Daarnaast maken leerlingen kennis met <strong>Jay AI</strong>. Zij leren AI doelgericht te gebruiken voor het stellen van vragen en het maken van samenvattingen, en ontdekken tegelijk dat AI ook onjuiste antwoorden kan geven. Zo oefenen zij met het bewust gebruiken van digitale informatiebronnen. Het programma besteedt minder aandacht aan zoekstrategieën en de werking van zoekmachines, waardoor deze onderdelen beperkt aan bod komen.' },
+      { code:'22D', titel:'Artificiële intelligentie', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 3'],
+        leren:['AI bewust en verantwoord gebruiken','AI inzetten als ondersteuning bij het leren','AI kritisch beoordelen','Herkennen dat AI onjuiste informatie kan geven'],
+        verhaal:'In Les 3 maken leerlingen kennis met <strong>Jay AI</strong>, een digitale leercoach die kan helpen bij het beantwoorden van vragen, het maken van samenvattingen, tijdlijnen en oefenopdrachten. Leerlingen ontdekken hoe AI kan worden ingezet als ondersteuning van hun leerproces en wanneer dit een geschikt hulpmiddel is.<br><br>Tijdens de klassikale nabespreking wordt expliciet aandacht besteed aan het kritisch beoordelen van AI: leerlingen leren dat AI hallucinaties kan geven — antwoorden die overtuigend lijken, maar feitelijk onjuist zijn. Hierdoor ontwikkelen zij een kritische houding en leren zij AI verantwoord te gebruiken als aanvulling op andere informatiebronnen, in plaats van deze blind te vertrouwen.' },
+      { code:'24A', titel:'Veilig omgaan met digitale systemen, data en privacy', status:'blue', statusLabel:'Goede aansluiting',
+        lessen:['Les 1','Les 3','Les 5'],
+        leren:['Verantwoord omgaan met digitale systemen','Bewust omgaan met digitale informatie','Veilig gebruikmaken van digitale hulpmiddelen'],
+        verhaal:'In Les 1, Les 3 en Les 5 maken leerlingen gebruik van verschillende digitale leeromgevingen en interactieve toepassingen. Daarbij ervaren zij hoe digitale hulpmiddelen op een verantwoorde manier kunnen worden ingezet binnen het onderwijs.<br><br>Tijdens Les 3 wordt extra aandacht besteed aan het verantwoord gebruiken van <strong>Jay AI</strong>: leerlingen leren dat niet alle digitale informatie automatisch betrouwbaar is en dat antwoorden altijd gecontroleerd moeten worden voordat zij deze gebruiken. Zo ontwikkelen leerlingen een bewuste en veilige houding ten opzichte van digitale systemen en informatie.' },
+      { code:'24B', titel:'Weloverwogen keuzes maken in het gebruik van digitale technologie', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 3','Les 5','Les 8'],
+        leren:['Digitale technologie bewust gebruiken','Passende digitale hulpmiddelen kiezen','Kritisch nadenken over het gebruik van digitale technologie','Reflecteren op het gebruik van digitale hulpmiddelen'],
+        verhaal:'In Les 3 vergelijken leerlingen verschillende digitale hulpmiddelen en onderzoeken zij wanneer een uitlegvideo, oefenwebsite of <strong>Jay AI</strong> het meest geschikt is. Zij maken bewuste keuzes over welk hulpmiddel het beste aansluit bij hun leerdoel en bespreken hun afwegingen klassikaal.<br><br>In Les 5 gebruiken leerlingen digitale werkvormen zoals <strong>Woordwolk</strong> en <strong>KlasKompas</strong> om ervaringen over toetsstress uit te wisselen en gezamenlijk te reflecteren op de resultaten. In Les 8 evalueren leerlingen het programma digitaal en geven zij aan welke digitale werkvormen volgens hen het meest hebben bijgedragen aan hun leerproces.' },
+      { code:'24C', titel:'De invloed van digitale technologie op individu, samenleving en wereld', status:'blue', statusLabel:'Goede aansluiting',
+        lessen:['Les 3','Les 5'],
+        leren:['Reflecteren op de invloed van digitale technologie','De mogelijkheden en beperkingen van digitale technologie herkennen','Bewust omgaan met digitale ontwikkelingen'],
+        verhaal:'In Les 3 bespreken leerlingen hoe digitale technologie een steeds grotere rol speelt binnen het onderwijs. Zij onderzoeken hoe uitlegvideo\'s, online oefenwebsites en <strong>Jay AI</strong> het leren kunnen ondersteunen, maar leren tegelijkertijd dat digitale technologie ook beperkingen heeft — door de bespreking van AI-hallucinaties ervaren zij dat digitale informatie niet altijd juist is.<br><br>In Les 5 gebruiken leerlingen digitale werkvormen om ervaringen rondom toetsstress met elkaar te delen en gezamenlijk te bespreken. Zo ontwikkelen leerlingen inzicht in de invloed van digitale technologie op hun eigen leerproces en het dagelijks leven.' },
+    ]
+  },
+  {
+    id: 'burgerschap',
+    naam: 'Burgerschap',
+    icon: '../Afbeeldingen/emojis%20nieuw/kinderen.png',
+    kleur: { dark:'#0a7358', soft:'rgba(16,163,127,0.07)', border:'rgba(16,163,127,0.24)', icoBg:'rgba(16,163,127,0.14)' },
+    kerndoelen: [
+      { code:'19A', titel:'Sociale en maatschappelijke competenties', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 1','Les 2','Les 4','Les 5','Les 8'],
+        leren:['Samenwerken aan een gezamenlijke opdracht','Rekening houden met anderen en respectvol communiceren','Reflecteren op eigen gedrag en handelen','Verantwoordelijkheid nemen voor eigen keuzes','Omgaan met verschillende meningen en ervaringen','Bijdragen aan een veilige en respectvolle leeromgeving'],
+        verhaal:'In Les 1 leren leerlingen respectvol met elkaar om te gaan door tijdens <strong>PollParty</strong> en klassengesprekken naar elkaar te luisteren, verschillende meningen te accepteren en ervaringen over de overstap naar de middelbare school met elkaar te delen.<br><br>In Les 2 werken leerlingen samen aan het <strong>KvM Planning Stappenplan</strong>. Zij werken samen, houden rekening met anderen, overleggen over verschillende oplossingen en nemen verantwoordelijkheid voor het maken van een gezamenlijke planning.<br><br>In Les 4 reflecteren leerlingen op hun eigen executieve functies en bespreken zij hoe zij zichzelf kunnen verbeteren. Tijdens <strong>KvM SterrenStrijd</strong> leren zij respectvol samen te werken, afspraken te maken, rekening te houden met medeleerlingen en gezamenlijk oplossingen te bedenken.<br><br>In Les 5 voeren leerlingen open gesprekken over toetsstress. Zij leren verschillende perspectieven te herkennen, respectvol om te gaan met ervaringen van anderen, elkaar te ondersteunen en samen na te denken over oplossingen die kunnen helpen bij stressvolle situaties.<br><br>In Les 8 evalueren leerlingen het programma, geven zij elkaar constructieve feedback, reflecteren zij op hun eigen ontwikkeling en denken zij na over hoe zij de geleerde vaardigheden kunnen toepassen tijdens hun overstap naar de middelbare school.' },
+    ]
+  },
+  {
+    id: 'mens-maatschappij',
+    naam: 'Mens & Maatschappij',
+    icon: '../Afbeeldingen/emojis%20nieuw/planeet.png',
+    kleur: { dark:'#6a2fd0', soft:'rgba(124,58,237,0.06)', border:'rgba(124,58,237,0.22)', icoBg:'rgba(124,58,237,0.14)' },
+    kerndoelen: [
+      { code:'27B', titel:'Historische ontwikkelingen plaatsen in de tijd', status:'blue', statusLabel:'Goede aansluiting',
+        lessen:['Les 7 – Het verhaal van de aarde'],
+        leren:['Werken met tijdlijnen','Gebeurtenissen chronologisch plaatsen','Informatie verwerken met behulp van aantekeningen'],
+        verhaal:'Tijdens de les <strong>Het verhaal van de aarde</strong> volgen leerlingen de ontwikkeling van de aarde vanaf het ontstaan van de planeet (4,6 miljard jaar geleden) via de oceanen, het eerste leven en de dinosaurussen tot de eerste mensen en de aarde vandaag. Zij leren gebeurtenissen chronologisch ordenen, werken met grote tijdsperiodes en gebruiken hun aantekeningen om verbanden te leggen tussen verschillende momenten in de geschiedenis.' },
+      { code:'28D', titel:'Sociale en emotionele ontwikkeling', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 1','Les 2','Les 4','Les 5','Les 6','Les 8'],
+        leren:['Reflecteren op zichzelf en hun eigen handelen','Omgaan met gevoelens, spanning en uitdagingen','Eigen kwaliteiten en ontwikkelpunten herkennen','Passende keuzes maken in verschillende situaties','Zelfvertrouwen en veerkracht ontwikkelen'],
+        verhaal:'In Les 1 denken leerlingen na over hun verwachtingen, gevoelens en ervaringen rondom de overstap naar de middelbare school. Tijdens <strong>PollParty</strong> en klassengesprekken leren zij hun gevoelens te verwoorden, naar anderen te luisteren en te ontdekken dat iedereen de overstap anders ervaart.<br><br>In Les 2 en Les 6 leren leerlingen verantwoordelijkheid nemen voor hun eigen planning. Zij maken bewuste keuzes, stellen prioriteiten, verdelen grote taken in kleinere stappen en ervaren hoe een goede planning kan bijdragen aan meer overzicht, minder stress en meer zelfvertrouwen.<br><br>In Les 4 staat zelfreflectie centraal. Leerlingen onderzoeken hun eigen executieve functies, herkennen hun sterke en minder sterke kanten en denken na over hoe zij zichzelf verder kunnen ontwikkelen. Tijdens <strong>KvM SterrenStrijd</strong> oefenen zij met plannen, organiseren, doelen behalen, flexibel handelen, omgaan met tijd en terugblikken op hun eigen handelen.<br><br>In Les 5 leren leerlingen omgaan met spanning en stress. Zij bespreken wat stress is, herkennen signalen van stress bij zichzelf, wisselen ervaringen uit en ontdekken verschillende manieren om met spanning om te gaan. Ook leren zij hoe een goede voorbereiding, voldoende slaap, plannen, hulp vragen en rustig ademhalen kunnen bijdragen aan het voorkomen en verminderen van toetsstress.<br><br>In Les 8 blikken leerlingen terug op hun ontwikkeling tijdens het programma. Zij reflecteren op wat zij hebben geleerd, geven tips en tops en denken na over hoe zij deze vaardigheden kunnen toepassen tijdens hun overstap naar de middelbare school.' },
+    ]
+  },
+  {
+    id: 'nederlands',
+    naam: 'Nederlands',
+    icon: '../Afbeeldingen/emojis%20nieuw/vulpen.png',
+    kleur: { dark:'#c2255c', soft:'rgba(219,39,119,0.06)', border:'rgba(219,39,119,0.24)', icoBg:'rgba(219,39,119,0.14)' },
+    kerndoelen: [
+      { code:'2A', titel:'Teksten begrijpen', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 3','Les 7'],
+        leren:['Luisteren, kijken en lezen met een duidelijk doel','Hoofd- en bijzaken onderscheiden','Informatie begrijpen, selecteren en verwerken','Informatie afleiden uit gesproken en geschreven teksten'],
+        verhaal:'In Les 3 bekijken leerlingen uitlegvideo\'s en verwerken zij de informatie door aansluitende opdrachten te maken en klassikaal te bespreken. Daarnaast onderzoeken zij verschillende digitale oefenwebsites en vergelijken zij de uitleg en bruikbaarheid van deze bronnen.<br><br>In Les 7 staat begrijpend luisteren en verwerken centraal tijdens <strong>Het verhaal van de aarde</strong>. Leerlingen luisteren naar een complete vakles, maken zelfstandig aantekeningen en leren hoofd- en bijzaken onderscheiden. Tijdens de open boek quiz gebruiken zij hun eigen aantekeningen om informatie terug te vinden en toe te passen.' },
+      { code:'3A', titel:'Schrijven afgestemd op doel, publiek en context', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 7','Les 8'],
+        leren:['Schrijven afgestemd op doel, publiek en context','Een tekst logisch opbouwen','Passend taalgebruik gebruiken','Teksten reviseren en verbeteren'],
+        verhaal:'In Les 7 schrijven leerlingen een <strong>formele e-mail</strong> aan een docent. Zij herschrijven een informele e-mail en stemmen hun tekst bewust af op doel, publiek en context, met aandacht voor een duidelijke onderwerpregel, een passende aanhef, een logische opbouw, formeel taalgebruik en een correcte afsluiting.<br><br>Na het schrijven ontvangen leerlingen automatische feedback via een checklist en reviseren zij hun tekst. In Les 8 worden de belangrijkste kenmerken van formeel schrijven nogmaals herhaald tijdens de afsluiting van het programma.' },
+      { code:'3C', titel:'Schrijven om kennis op te bouwen', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 7','Les 8'],
+        leren:['Informatie ordenen','Hoofd- en bijzaken onderscheiden','Belangrijke informatie vastleggen','Schrijven om kennis op te bouwen en te onthouden'],
+        verhaal:'In Les 7 leren leerlingen hoe zij tijdens een les overzichtelijke aantekeningen maken: met kernwoorden, kopjes, witregels en het markeren van belangrijke begrippen en feiten. Tijdens <strong>Het verhaal van de aarde</strong> passen zij dit direct toe, en gebruiken zij hun eigen aantekeningen daarna tijdens een open boek quiz.<br><br>Hierdoor ervaren zij hoe schrijven helpt bij het ordenen van informatie en het beter onthouden van de leerstof. In Les 8 worden deze vaardigheden nogmaals herhaald tijdens de terugblik op het programma.' },
+      { code:'4A', titel:'Gesprekken voeren', status:'blue', statusLabel:'Goede aansluiting',
+        lessen:['Les 1 t/m 8'],
+        leren:['Actief deelnemen aan gesprekken','Luisteren naar anderen','Eigen ervaringen, ideeën en meningen verwoorden','Rekening houden met gesprekspartners'],
+        verhaal:'In alle acht lessen vormen klassengesprekken een belangrijk onderdeel van het programma. Leerlingen beantwoorden stellingen, bespreken ervaringen en reageren op elkaars ideeën — onder andere over de overstap naar de middelbare school, plannen, slim leren, executieve functies en omgaan met toetsstress.<br><br>Tijdens Les 5 bespreken leerlingen gezamenlijk de resultaten van <strong>Woordwolk</strong> en <strong>KlasKompas</strong>, terwijl zij in Les 8 reflecteren op het hele programma tijdens de digitale evaluatie.' },
+      { code:'4B', titel:'Gesprekken voeren om tot begrip te komen', status:'blue', statusLabel:'Goede aansluiting',
+        lessen:['Les 2','Les 3','Les 4','Les 5','Les 8'],
+        leren:['Samen betekenis geven aan informatie','Vragen stellen en doorvragen','Argumenten uitwisselen','Samen tot inzichten en oplossingen komen'],
+        verhaal:'In Les 2 werken leerlingen samen aan het maken van een planning en bespreken zij welke keuzes het meest effectief zijn. In Les 3 vergelijken zij verschillende digitale hulpmiddelen en wisselen zij argumenten uit over welke het meest geschikt zijn.<br><br>In Les 4 reflecteren leerlingen samen op hun executieve functies en bespreken zij hoe <strong>KvM SterrenStrijd</strong> kan bijdragen aan het verbeteren hiervan. Tijdens Les 5 voeren leerlingen klassengesprekken over toetsstress, en ook Les 8 sluit af met gezamenlijke reflectie op het programma.' },
+      { code:'5A', titel:'Reflecteren op taalactiviteiten', status:'blue', statusLabel:'Goede aansluiting',
+        lessen:['Les 7','Les 8'],
+        leren:['Reflecteren op eigen taalgebruik','Eigen teksten verbeteren','Feedback gebruiken om teksten te reviseren'],
+        verhaal:'In Les 7 ontvangen leerlingen na het schrijven van hun <strong>formele e-mail</strong> directe feedback via een digitale checklist. Zij beoordelen hun eigen tekst, ontdekken welke onderdelen nog ontbreken en reviseren hun e-mail door verbeteringen aan te brengen in taalgebruik, opbouw en verzorging.<br><br>Daarnaast vergelijken leerlingen hun eigen aantekeningen met voorbeeldaantekeningen en bespreken zij waarom bepaalde aantekeningen effectiever zijn. In Les 8 worden deze taalvaardigheden nogmaals herhaald tijdens de terugblik op het programma.' },
+      { code:'6B', titel:'Spelling, formulering en interpunctie', status:'blue', statusLabel:'Goede aansluiting',
+        lessen:['Les 7'],
+        leren:['Correcte spelling gebruiken','Passende formuleringen kiezen','Interpunctie en opmaak zorgvuldig toepassen','Teksten verzorgen en verbeteren'],
+        verhaal:'In Les 7 herschrijven leerlingen een informele e-mail naar een <strong>formele e-mail</strong> voor een docent. Daarbij besteden zij expliciet aandacht aan spelling, formulering, leestekens, witregels en een verzorgde opmaak. De digitale checklist controleert verschillende onderdelen van de e-mail, waarna leerlingen hun tekst verbeteren — zo oefenen zij met een zakelijke tekst die aansluit bij een professionele schoolsituatie.' },
+      { code:'7A', titel:'Taalgebruik afstemmen op doel, publiek en context', status:'green', statusLabel:'Sterke aansluiting',
+        lessen:['Les 7','Les 8'],
+        leren:['Taalgebruik aanpassen aan publiek','Rekening houden met de communicatieve context','Passende woorden en formuleringen kiezen','Doelgericht communiceren'],
+        verhaal:'In Les 7 ontdekken leerlingen het verschil tussen informeel en formeel taalgebruik. Door een informeel bericht om te zetten naar een professionele <strong>formele e-mail</strong> leren zij hun taalgebruik af te stemmen op doel, publiek en context: passende formuleringen, een correcte aanhef en afsluiting.<br><br>Tijdens de klassikale bespreking wordt uitgelegd waarom verschillende situaties vragen om verschillend taalgebruik. In Les 8 worden deze afspraken nogmaals herhaald, zodat leerlingen goed voorbereid zijn op schriftelijke communicatie op de middelbare school.' },
+    ]
+  },
+];
+
+function slug(leergebiedId, code){ return leergebiedId + '-' + code.toLowerCase(); }
+
+function renderJumpNav(){
+  const nav = document.getElementById('jumpnav');
+  LEERGEBIEDEN.forEach(lg => {
+    const a = document.createElement('a');
+    a.href = '#' + lg.id;
+    a.innerHTML = `<img src="${lg.icon}" alt="">${lg.naam}`;
+    nav.appendChild(a);
+  });
+}
+
+function renderLeergebieden(){
+  const wrap = document.getElementById('leergebiedenWrap');
+  LEERGEBIEDEN.forEach(lg => {
+    const section = document.createElement('section');
+    section.className = 'leergebied';
+    section.id = lg.id;
+    section.style.setProperty('--lg-dark', lg.kleur.dark);
+    section.style.setProperty('--lg-soft', lg.kleur.soft);
+    section.style.setProperty('--lg-border', lg.kleur.border);
+    section.style.setProperty('--lg-ico-bg', lg.kleur.icoBg);
+
+    const head = document.createElement('div');
+    head.className = 'leergebied-head';
+    head.innerHTML = `<div class="leergebied-ico"><img src="${lg.icon}" alt=""></div><h2>${lg.naam}</h2><span class="leergebied-count">${lg.kerndoelen.length} kerndoelen</span>`;
+    section.appendChild(head);
+
+    const list = document.createElement('div');
+    list.className = 'kd-list';
+
+    lg.kerndoelen.forEach(kd => {
+      const det = document.createElement('details');
+      det.className = 'kd-card';
+      det.id = slug(lg.id, kd.code);
+
+      det.innerHTML = `
+        <summary>
+          <span class="kd-status-dot" style="background:${kd.status === 'green' ? 'var(--green)' : 'var(--primary-dark)'}"></span>
+          <span class="kd-summary-text">
+            <span class="kd-code">${kd.code}</span>
+            <span class="kd-title">${kd.titel}</span>
+          </span>
+          <span class="kd-status-badge ${kd.status}">${kd.statusLabel}</span>
+          <span class="kd-chevron"></span>
+        </summary>
+        <div class="kd-body">
+          <div class="kd-row"><div class="kd-row-label">Binnen KvM</div><div class="kd-lessen">${kd.lessen.map(l => `<span class="kd-les-chip">${l}</span>`).join('')}</div></div>
+          <div class="kd-row"><div class="kd-row-label">Leerlingen leren</div><ul class="kd-leren-list">${kd.leren.map(x => `<li>${x}</li>`).join('')}</ul></div>
+          ${kd.verhaal ? `<div class="kd-row"><div class="kd-row-label">Hoe komt dit terug in KvM?</div><p class="kd-verhaal">${kd.verhaal}</p></div>` : ''}
+        </div>`;
+      list.appendChild(det);
+    });
+
+    section.appendChild(list);
+    wrap.appendChild(section);
+  });
+}
+
+renderJumpNav();
+renderLeergebieden();
+</script>
+
+<script src="shared-chrome.js"></script>
+</body>
+</html>

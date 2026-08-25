@@ -1,0 +1,1508 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Website – Klaar voor Middelbaar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page-bg:#f7f9fb; --card-bg:#ffffff; --footer-bg:#f2f4f4;
+    --primary:#72a8f9; --primary-dark:#4e8ef3; --primary-soft:rgba(78,142,243,0.10);
+    --green:#10a37f; --dark:#191c1d; --muted:#6d747a; --border:#eceeee;
+    --coral:#e8886b; --coral-dark:#dd6f4e;
+    --shadow-card:0 20px 25px -5px rgba(0,0,0,0.10), 0 8px 10px -6px rgba(0,0,0,0.10);
+    --shadow-card-hover:0 32px 48px -8px rgba(0,0,0,0.18), 0 12px 20px -8px rgba(0,0,0,0.10);
+    --shadow-btn-blue:0 10px 20px rgba(78,142,243,0.30);
+    --max-w:1184px; --pad:48px; --outer-w:calc(var(--max-w) + 2*var(--pad)); --r-card:40px; --r-pill:9999px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inria Sans', Georgia, serif; color:var(--dark); min-height:100vh;
+    position:relative; overflow-x:hidden;
+    background-color:#f2f6fd;
+    background-image:
+      radial-gradient(rgba(78,142,243,0.06) 1.5px, transparent 1.5px),
+      radial-gradient(ellipse at 108% -8%,  rgba(114,168,249,0.24) 0%, transparent 52%),
+      radial-gradient(ellipse at -8%   8%,  rgba(156,196,238,0.20) 0%, transparent 48%),
+      radial-gradient(ellipse at 108% 60%,  rgba(16,163,127,0.08)  0%, transparent 42%),
+      radial-gradient(ellipse at -5%  100%, rgba(251,191,36,0.09)  0%, transparent 44%),
+      radial-gradient(ellipse at 50%  40%,  rgba(255,255,255,0.68) 0%, transparent 58%);
+    background-size:28px 28px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:var(--outer-w); margin:0 auto; padding:0 var(--pad);}
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(22px);} to{opacity:1; transform:translateY(0);} }
+
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:9px; padding:14px 28px; border-radius:var(--r-pill); font-family:'Inria Sans', Georgia, serif; font-size:16px; font-weight:700; text-decoration:none; cursor:pointer; border:none; white-space:nowrap; transition:transform .2s cubic-bezier(0.34,1.56,0.64,1), box-shadow .2s;}
+  .btn-primary{background:var(--primary-dark); color:#fff; box-shadow:var(--shadow-btn-blue);}
+  .btn-primary:hover{transform:translateY(-2px); box-shadow:0 14px 26px rgba(78,142,243,0.4);}
+  .btn-ghost{background:var(--card-bg); color:var(--dark); border:1.5px solid var(--border);}
+  .btn-ghost:hover{border-color:var(--primary); color:var(--primary-dark); transform:translateY(-2px);}
+
+  /* NAV — transparant over de hero, wordt solide zodra je voorbij de hero scrolt */
+  .nav{position:sticky; top:0; z-index:200; margin-bottom:-72px; background:transparent; border-bottom:1px solid transparent; box-shadow:none; transition:background .3s ease, border-color .3s ease, box-shadow .3s ease;}
+  .nav.solid{background:rgba(247,249,251,0.88); backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); border-bottom-color:var(--border); box-shadow:0 4px 12px rgba(0,0,0,0.04);}
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:0 var(--pad); height:72px; max-width:var(--outer-w); margin:0 auto; gap:24px;}
+  .nav-logo{display:flex; align-items:center; gap:12px; text-decoration:none; flex-shrink:0;}
+  .nav-logo img{height:52px; width:auto; filter:brightness(0) invert(1); transition:filter .3s ease;}
+  .nav.solid .nav-logo img{filter:none;}
+  .nav-links{display:none; align-items:center; gap:28px; font-size:14.5px;}
+  @media(min-width:820px){ .nav-links{display:flex;} }
+  .nav-links a{text-decoration:none; color:rgba(255,255,255,0.88); transition:color .2s;}
+  .nav-links a:hover{color:#fff;}
+  .nav-links a.active{color:#fff; font-weight:700; text-decoration:underline; text-underline-offset:6px;}
+  .nav.solid .nav-links a{color:var(--muted);}
+  .nav.solid .nav-links a:hover{color:var(--dark);}
+  .nav.solid .nav-links a.active{color:var(--primary-dark); text-decoration:none;}
+  .nav-cta{display:none;}
+  @media(min-width:600px){ .nav-cta{display:inline-flex;} }
+  .nav-cta{background:transparent; border:1.5px solid rgba(255,255,255,0.7); color:#fff; box-shadow:none; transition:background .3s ease, border-color .3s ease, color .3s ease, box-shadow .3s ease, transform .2s;}
+  .nav-cta.is-hidden{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px);}
+  .nav-cta:hover{background:rgba(255,255,255,0.15); transform:translateY(-2px);}
+  .nav.solid .nav-cta{background:var(--primary-dark); border-color:transparent; color:#fff; box-shadow:var(--shadow-btn-blue);}
+  .nav.solid .nav-cta:hover{background:var(--primary-dark); box-shadow:0 14px 26px rgba(78,142,243,0.4);}
+
+  main{max-width:var(--outer-w); margin:0 auto; padding:0 var(--pad); position:relative; z-index:1;}
+  section{padding:64px 0; position:relative;}
+
+  /* Zachte band-achtergronden per sectie, voor duidelijker onderscheid tussen de onderdelen — full-bleed via box-shadow trick */
+  .band-white{background:var(--card-bg); box-shadow:0 0 0 100vmax var(--card-bg); clip-path:inset(0 -100vmax);}
+  .band-blue{background:#eaf2fe; box-shadow:0 0 0 100vmax #eaf2fe; clip-path:inset(0 -100vmax);}
+  .band-cream{background:#fef9e9; box-shadow:0 0 0 100vmax #fef9e9; clip-path:inset(0 -100vmax);}
+  .band-green{background:#e9f9f3; box-shadow:0 0 0 100vmax #e9f9f3; clip-path:inset(0 -100vmax);}
+  #lesperiodes{display:none;}
+  .vaardigheden-band{position:relative;}
+  .vaardigheden-band::before{content:''; position:absolute; top:-156px; left:0; right:0; bottom:0; background:#eaf2fe; box-shadow:0 0 0 100vmax #eaf2fe; clip-path:inset(0 -100vmax); z-index:0;}
+  .vaardigheden-band > *{position:relative; z-index:1;}
+  @media(max-width:700px){ .vaardigheden-band::before{top:-588px;} }
+
+  /* HERO — full-bleed, zelfde blauw en vormgeving als klaarvoormiddelbaar.nl/groep-8/: getint vlak, golvende onderrand, tekst linksonder */
+  .hero-full{
+    position:relative; overflow:hidden; width:100%;
+    padding:128px var(--pad) 140px;
+    color:#fff;
+    background:
+      linear-gradient(135deg, rgba(26,66,128,0.86) 0%, rgba(58,123,213,0.84) 48%, rgba(106,170,248,0.80) 78%, rgba(154,196,251,0.78) 100%),
+      url('https://klaarvoormiddelbaar.nl/wp-content/uploads/2025/03/IMG_2094-scaled.jpg') center/cover no-repeat;
+  }
+  .hero-full::before{content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px); background-size:26px 26px; pointer-events:none; z-index:0;}
+  .hero-full::after{content:''; position:absolute; top:-80px; right:-80px; width:380px; height:380px; background:rgba(255,255,255,0.09); border-radius:50%; pointer-events:none; z-index:0;}
+  .hero-inner{max-width:var(--max-w); margin:0 auto; position:relative; display:flex; align-items:flex-end; gap:40px; z-index:2; min-height:340px;}
+  .deco-c1{position:absolute; top:-60px; left:38%; width:200px; height:200px; background:rgba(255,255,255,0.07); border-radius:50%; pointer-events:none; z-index:0;}
+  .deco-c2{position:absolute; bottom:60px; right:8%; width:280px; height:280px; background:rgba(255,255,255,0.06); border-radius:50%; pointer-events:none; z-index:0;}
+  .hero-content{position:relative; z-index:1; max-width:600px; flex:1 1 auto; padding-bottom:8px;}
+  .hero-label{font-size:12px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase; opacity:.8; margin-bottom:12px; color:#cfe0fb;}
+  .hero-title{font-size:clamp(32px,4.6vw,52px); font-weight:700; line-height:1.08; margin-bottom:16px; text-shadow:0 2px 16px rgba(0,0,0,0.18);}
+  .hero-sub{font-size:23px; opacity:.92; max-width:500px; margin-bottom:26px; line-height:1.5;}
+  .hero-ctas{display:flex; flex-wrap:wrap; gap:14px;}
+  .hero-cta{display:inline-flex; align-items:center; gap:10px; background:rgba(255,255,255,0.20); backdrop-filter:blur(8px); border:1.5px solid rgba(255,255,255,0.50); border-radius:var(--r-pill); padding:13px 28px; font-family:'Inria Sans', Georgia, serif; font-size:18px; font-weight:700; color:#fff; text-decoration:none; cursor:pointer; white-space:nowrap; transition:background .2s, border-color .2s, transform .2s;}
+  .hero-cta:hover{background:rgba(255,255,255,0.32); border-color:rgba(255,255,255,0.75); transform:translateY(-2px);}
+  .hero-cta-live{display:inline-flex; align-items:center; gap:10px; background:var(--coral); border:none; border-radius:var(--r-pill); padding:15px 30px; font-family:'Inria Sans', Georgia, serif; font-size:18px; font-weight:700; color:#fff; text-decoration:none; cursor:pointer; white-space:nowrap; box-shadow:0 14px 28px rgba(221,111,78,0.4); transition:transform .25s cubic-bezier(0.34,1.56,0.64,1), box-shadow .25s, background .2s;}
+  .hero-cta-live:hover{background:var(--coral-dark); transform:translateY(-3px); box-shadow:0 18px 34px rgba(221,111,78,0.5);}
+  .chip-emoji{width:18px; height:18px; object-fit:contain; vertical-align:middle; display:inline-block;}
+  @media(max-width:860px){ .hero-inner{flex-direction:column; text-align:center; align-items:center;} .hero-content{max-width:100%;} .hero-ctas{justify-content:center;} .hero-kim{right:12%; bottom:12px; width:105px; height:105px;} }
+
+  /* LAPTOP MOCKUP — bevat een 1:1 opbouw van het echte dashboard (zelfde klassen/waarden), platte laptop, verkleind met zoom i.p.v. handmatig herschaalde lettergroottes */
+  .laptop-mock{position:relative; z-index:1; flex:0 0 auto; width:540px; align-self:center; filter:drop-shadow(0 34px 54px rgba(10,20,40,0.38));}
+  @media(max-width:860px){ .laptop-mock{width:360px; margin-top:12px;} }
+  @media(max-width:420px){ .laptop-mock{width:300px;} }
+  .laptop-screen{
+    background:#141517;
+    border-radius:20px 20px 8px 8px; padding:9px 9px 0; position:relative;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .laptop-notch{position:absolute; top:3px; left:50%; transform:translateX(-50%); width:16px; height:5px; border-radius:4px; background:#0a0b0c;}
+  .laptop-display{background:#f7f9fb; border-radius:6px; overflow:hidden; position:relative; box-shadow:0 0 0 1px rgba(0,0,0,0.5);}
+  .laptop-display::after{content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(115deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 18%, transparent 36%);}
+  .laptop-hinge{height:2px; background:#0a0b0c; margin:0 6px;}
+  .laptop-base{
+    position:relative; width:calc(100% + 42px); margin-left:-21px; height:16px;
+    background:linear-gradient(180deg,#fafbfc 0%, #dde0e5 55%, #b9bdc5 100%);
+    border-radius:6px 6px 16px 16px;
+    box-shadow:0 8px 16px -4px rgba(0,0,0,0.3);
+  }
+  .laptop-base::after{content:''; position:absolute; left:50%; top:2px; transform:translateX(-50%); width:15%; height:3px; background:#a3a8b1; border-radius:3px; box-shadow:0 1px 0 rgba(255,255,255,0.5);}
+
+  .dash-zoom{width:1184px; zoom:0.4409;}
+  @media(max-width:860px){ .dash-zoom{zoom:0.2889;} }
+  @media(max-width:420px){ .dash-zoom{zoom:0.2382;} }
+  .dash-header{height:64px; padding:0 32px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #eceeee; background:rgba(247,249,251,0.9);}
+  .dash-header img{height:30px; width:auto;}
+  .dash-header .dash-crumb{font-size:16px; font-weight:700; color:var(--primary-dark);}
+  .dash-header .dash-right{display:flex; align-items:center; gap:12px;}
+  .dash-header .dash-avatar{width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--primary-dark),var(--primary)); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center;}
+  .dash-header .dash-logout{width:18px; height:18px; opacity:.5;}
+  .dash-main{padding:40px 32px 0;}
+  .dash-hero{position:relative; overflow:hidden; border-radius:32px; padding:44px 40px; min-height:250px; display:flex; align-items:center;
+    background:
+      radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px),
+      linear-gradient(135deg, rgba(26,66,128,0.86) 0%, rgba(58,123,213,0.84) 55%, rgba(106,170,248,0.80) 100%),
+      url('https://klaarvoormiddelbaar.nl/wp-content/uploads/2025/03/IMG_2094-scaled.jpg') center/cover no-repeat;
+    background-size:20px 20px, 100% 100%, cover;}
+  .dash-hero-content{position:relative; z-index:1; max-width:60%;}
+  .dash-hero-label{font-size:11px; font-weight:700; letter-spacing:1.4px; color:rgba(255,255,255,0.75); text-transform:uppercase; margin-bottom:8px;}
+  .dash-hero-title{font-size:34px; font-weight:700; color:#fff; line-height:1.05; margin-bottom:16px;}
+  .dash-chips{display:flex; gap:8px; flex-wrap:wrap;}
+  .dash-chip{font-size:12px; font-weight:700; color:#fff; background:rgba(255,255,255,0.2); border:1px solid rgba(255,255,255,0.35); border-radius:20px; padding:6px 14px; display:inline-flex; align-items:center; gap:6px;}
+  .dash-chip img{width:14px; height:14px; object-fit:contain;}
+  .dash-jay{position:relative; z-index:1; height:150px; width:auto; object-fit:contain; margin-left:auto; filter:drop-shadow(0 8px 16px rgba(0,0,0,0.25));}
+  .dash-section-head{display:flex; align-items:flex-end; justify-content:space-between; margin:38px 0 22px;}
+  .dash-section-title{font-size:22px; font-weight:700; color:var(--dark); position:relative;}
+  .dash-section-title::after{content:''; position:absolute; left:0; bottom:-4px; width:34px; height:2.5px; background:var(--primary); border-radius:2px;}
+  .dash-section-sub{font-size:12px; color:var(--muted); margin-top:6px;}
+  .dash-section-count{font-size:11px; font-weight:700; color:var(--primary-dark); background:var(--primary-soft); border-radius:20px; padding:5px 14px;}
+  .dash-cards{display:grid; grid-template-columns:repeat(4,1fr); gap:16px; padding-bottom:48px;}
+  .dash-card{border-radius:22px; overflow:hidden; background:#fff; box-shadow:0 4px 14px rgba(0,0,0,0.08);}
+  .dash-card-head{padding:22px 16px; background:linear-gradient(140deg,var(--g1),var(--g2)); display:flex; align-items:flex-start; justify-content:space-between; position:relative; overflow:hidden;}
+  .dash-card-head::before{content:''; position:absolute; top:-24px; right:-24px; width:100px; height:100px; background:rgba(255,255,255,0.14); border-radius:50%; pointer-events:none;}
+  .dash-card-head::after{content:''; position:absolute; bottom:-34px; left:10px; width:76px; height:76px; background:rgba(255,255,255,0.09); border-radius:50%; pointer-events:none;}
+  .dash-card-head > *{position:relative; z-index:1;}
+  .dash-card-badge{font-size:9.5px; font-weight:700; color:#fff; background:rgba(255,255,255,0.28); border-radius:20px; padding:3px 9px; letter-spacing:.5px;}
+  .dash-card-emoji{width:26px; height:26px; object-fit:contain;}
+  .dash-card-body{padding:16px 16px 14px;}
+  .dash-card-title{font-size:13.5px; font-weight:700; color:var(--dark); line-height:1.3; margin-bottom:5px;}
+  .dash-card-desc{font-size:10.5px; color:var(--muted); line-height:1.5;}
+  .dash-card-foot{display:flex; align-items:center; justify-content:space-between; margin-top:10px; padding-top:9px; border-top:1px solid #eceeee;}
+  .dash-card-dur{font-size:10px; color:var(--muted);}
+  .dash-card-cta{font-size:10.5px; font-weight:700; color:var(--g1);}
+
+  /* STAT BAR — verplaatst uit de hero naar een eigen strook net onder de hero */
+  .stat-bar{max-width:1040px; margin:-44px auto 0; position:relative; z-index:3; padding:0 var(--pad); display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media(max-width:700px){ .stat-bar{grid-template-columns:1fr;} }
+  .stat-item{background:#fff; border:1px solid var(--border); border-radius:24px; padding:28px 24px; display:flex; flex-direction:column; align-items:center; text-align:center; box-shadow:var(--shadow-card);}
+  .stat-item img{width:30px; height:30px; object-fit:contain; margin-bottom:10px;}
+  .stat-num{font-size:44px; font-weight:700; color:#3a7bd5; line-height:1.1; margin-bottom:10px;}
+  .stat-label{font-size:16px; color:var(--muted); line-height:1.45; max-width:200px;}
+
+  /* Floating sticky CTA — zelfde als de zwevende 'Maak kennis'-knop op de bestaande site */
+  .floating-cta{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(90px); opacity:0; pointer-events:none; z-index:150; background:var(--coral); color:#fff; font-family:'Inria Sans', Georgia, serif; font-weight:700; font-size:16px; padding:14px 32px; border-radius:var(--r-pill); text-decoration:none; box-shadow:0 16px 32px rgba(0,0,0,0.25); transition:transform .4s cubic-bezier(0.16,1,0.3,1), opacity .3s, box-shadow .2s, background .2s;}
+  .floating-cta.visible{transform:translateX(-50%) translateY(0); opacity:1; pointer-events:auto;}
+  .floating-cta.visible:hover{background:var(--coral-dark); transform:translateX(-50%) translateY(-3px); box-shadow:0 20px 38px rgba(0,0,0,0.3);}
+  @media(max-width:600px){ .floating-cta{padding:12px 22px; font-size:13.5px;} }
+
+  /* Floating WhatsApp-knop rechtsonder */
+  .floating-whatsapp{position:fixed; right:26px; bottom:26px; z-index:150; width:56px; height:56px; border-radius:50%; background:#25D366; display:flex; align-items:center; justify-content:center; box-shadow:0 16px 32px rgba(0,0,0,0.25); transition:transform .2s, box-shadow .2s;}
+  .floating-whatsapp:hover{transform:translateY(-3px); box-shadow:0 20px 38px rgba(0,0,0,0.3);}
+  .floating-whatsapp svg{width:29px; height:29px;}
+  @media(max-width:600px){ .floating-whatsapp{width:48px; height:48px; right:18px; bottom:18px;} .floating-whatsapp svg{width:25px; height:25px;} }
+
+  /* SECTION HEAD */
+  .section-head{display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:28px; flex-wrap:wrap; gap:16px; animation:fadeUp 0.5s 0.1s cubic-bezier(0.22,1,0.36,1) both;}
+  .section-head.center{display:block; text-align:center;}
+  .section-title{font-size:clamp(24px,3vw,28px); font-weight:700; color:var(--dark); position:relative; display:inline-block;}
+  .section-title::after{content:''; position:absolute; left:0; bottom:-5px; width:48px; height:3px; background:linear-gradient(90deg, var(--primary), rgba(114,168,249,0)); border-radius:2px;}
+  .section-head.center .section-title::after{left:50%; transform:translateX(-50%);}
+  .section-sub{font-size:16px; color:var(--muted); margin-top:14px; max-width:560px;}
+  .section-head.center .section-sub{margin-left:auto; margin-right:auto;}
+  .section-count{font-size:13px; font-weight:700; color:var(--primary); background:var(--primary-soft); border:1px solid rgba(78,142,243,0.20); border-radius:var(--r-pill); padding:8px 18px; white-space:nowrap;}
+
+  /* PROBLEEM / INTRO */
+  .problem-grid{display:grid; grid-template-columns:1fr; gap:16px;}
+  @media(min-width:700px){ .problem-grid{grid-template-columns:repeat(2,1fr);} }
+  .problem-card{background:var(--card-bg); border:1px solid var(--border); border-radius:24px; padding:24px 26px; display:flex; gap:16px; align-items:flex-start; box-shadow:var(--shadow-card); transition:transform .25s, box-shadow .25s;}
+  .problem-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-card-hover);}
+  .problem-ico{width:44px; height:44px; border-radius:14px; background:var(--primary-soft); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .problem-ico img{width:22px; height:22px;}
+  .problem-card h3{font-size:16px; font-weight:700; margin-bottom:4px;}
+  .problem-card p{font-size:16px; color:var(--muted); line-height:1.6;}
+
+  /* KERNVAARDIGHEDEN GRID — zelfde kaart-taal als het Dashboard */
+  .lessons-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px;}
+  @media(min-width:700px){ .lessons-grid{grid-template-columns:repeat(3,1fr);} }
+  @media(max-width:640px){
+    .lessons-grid{grid-template-columns:1fr;}
+    .lessons-grid:not(.expanded) .lesson-card:nth-child(n+3){display:none;}
+  }
+  .vaardigheden-more{display:none; margin:24px auto 0;}
+  @media(max-width:640px){ .vaardigheden-more{display:inline-flex;} }
+  .lesson-card{border-radius:var(--r-card); overflow:hidden; background:var(--card-bg); border:1px solid rgba(0,0,0,0.06); display:flex; flex-direction:column; box-shadow:0 4px 16px rgba(0,0,0,0.07); transition:transform .30s cubic-bezier(0.34,1.56,0.64,1), box-shadow .30s ease;}
+  .lesson-card:hover{transform:translateY(-8px) scale(1.02); box-shadow:var(--shadow-card-hover);}
+  .card-head{padding:24px 22px 20px; position:relative; overflow:hidden; background:linear-gradient(140deg, var(--ch-g1), var(--ch-g2)); min-height:110px; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+  .card-head::before{content:''; position:absolute; top:-28px; right:-28px; width:110px; height:110px; background:rgba(255,255,255,0.13); border-radius:50%; pointer-events:none;}
+  .card-head::after{content:''; position:absolute; bottom:-36px; left:10px; width:80px; height:80px; background:rgba(255,255,255,0.08); border-radius:50%; pointer-events:none;}
+  .card-head-top{display:flex; align-items:flex-start; justify-content:space-between; position:relative; z-index:1;}
+  .card-num-badge{background:rgba(255,255,255,0.25); border:1px solid rgba(255,255,255,0.45); border-radius:var(--r-pill); padding:4px 12px; font-size:11px; font-weight:700; color:#fff; letter-spacing:1px; text-transform:uppercase;}
+  .card-head-emoji{width:44px; height:44px; object-fit:contain; filter:drop-shadow(0 3px 8px rgba(0,0,0,0.20)); transition:transform .30s cubic-bezier(0.34,1.56,0.64,1);}
+  .lesson-card:hover .card-head-emoji{transform:scale(1.2) rotate(-5deg);}
+  .card-body{padding:20px 20px 18px; display:flex; flex-direction:column; flex:1; gap:6px;}
+  .card-title{font-size:16px; font-weight:700; color:var(--dark); line-height:1.3;}.lesson-card[data-skill="plannen"] .card-title{color:#065f46}.lesson-card[data-skill="leren"] .card-title{color:#92400e}.lesson-card[data-skill="toetsen"] .card-title{color:#7f1d1d}.lesson-card[data-skill="digitaal"] .card-title{color:#831843}.lesson-card[data-skill="sociaal"] .card-title{color:#0c4a6e}.lesson-card[data-skill="kern"] .card-title{color:#4c1d95}
+  .card-desc{font-size:16px; color:var(--muted); line-height:1.6; flex:1;}
+  .lesson-card{cursor:pointer;}
+  .lesson-card.active{box-shadow:0 0 0 3px var(--primary), var(--shadow-card-hover);}
+
+  /* Klik-detail: groot pop-up venster met laptop(s) + verhaaltje */
+  .skill-detail{position:fixed; inset:0; z-index:300; display:flex; align-items:center; justify-content:center; padding:32px; background:rgba(15,23,42,0.58); backdrop-filter:blur(4px); opacity:0; visibility:hidden; transition:opacity .3s ease, visibility 0s linear .3s; overflow-y:auto;}
+  .skill-detail.open{opacity:1; visibility:visible; transition:opacity .3s ease;}
+  .skill-detail-inner{background:var(--card-bg); border-radius:var(--r-card); padding:48px; max-width:1180px; width:100%; max-height:88vh; overflow-y:auto; position:relative; box-shadow:0 40px 90px -20px rgba(0,0,0,0.45); transform:scale(0.94) translateY(14px); transition:transform .4s cubic-bezier(0.16,1,0.3,1);}
+  .skill-detail.open .skill-detail-inner{transform:scale(1) translateY(0);}
+  @media(max-width:700px){ .skill-detail{padding:0;} .skill-detail-inner{max-height:100vh; height:100%; border-radius:0; padding:28px 18px;} }
+  .skill-detail-close{position:absolute; top:18px; right:18px; width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--card-bg); color:var(--muted); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .2s, color .2s; z-index:5;}
+  .skill-detail-close:hover{background:#f2f4f6; color:var(--dark);}
+  .skill-group{display:flex; flex-direction:column;}
+  .skill-group[hidden]{display:none;}
+  .skill-laptops{display:flex; gap:28px; justify-content:center; flex-wrap:wrap; align-items:flex-start;}
+  /* Tijdelijk verborgen tot de definitieve lesbeelden en teksten klaar zijn. */
+  .skill-detail .skill-laptops,.skill-detail .skill-story{display:none;}
+  .vaardigheden-band .card-head-emoji{display:none;}
+  .skills-disabled .lesson-card[data-skill]{pointer-events:none; cursor:default;}
+  .laptop-mock-sm{width:360px; flex:0 0 auto;}
+  @media(max-width:420px){ .laptop-mock-sm{width:280px;} }
+  .laptop-mock-lg{width:500px; flex:0 0 auto;}
+  @media(max-width:1080px){ .laptop-mock-lg{width:420px;} }
+  @media(max-width:420px){ .laptop-mock-lg{width:280px;} }
+  .laptop-mock-lg.lesopbouw-laptop{width:340px;}
+  .laptop-mock-lg.lesopbouw-laptop .lp-zoom{zoom:0.273;}
+  @media(max-width:420px){ .laptop-mock-lg.lesopbouw-laptop{width:230px;} .laptop-mock-lg.lesopbouw-laptop .lp-zoom{zoom:0.184;} }
+  .skill-story{margin-top:32px;}
+  .skill-story p{font-size:16px; color:var(--muted); line-height:1.7;}
+
+  /* Kleine losse lesvoorbeeld-kaart (voor vaardigheden met 1 les) */
+  .lesprev-zoom{width:900px; zoom:0.38;}
+  @media(max-width:420px){ .lesprev-zoom{zoom:0.291;} }
+  .lesprev-crumb{display:flex; align-items:center; gap:10px; padding:18px 26px; border-bottom:1px solid #eceeee; font-size:14px; font-weight:700; color:var(--muted); background:rgba(247,249,251,0.9);}
+  .lesprev-hero{position:relative; overflow:hidden; margin:22px 26px; border-radius:24px; padding:28px 30px; color:#fff; background:linear-gradient(140deg, var(--h1), var(--h2));}
+  .lesprev-hero::before{content:''; position:absolute; top:-30px; right:-20px; width:130px; height:130px; background:rgba(255,255,255,0.12); border-radius:50%; pointer-events:none;}
+  .lesprev-badges{display:flex; gap:10px; position:relative; z-index:1; margin-bottom:14px;}
+  .lesprev-badges span{background:rgba(255,255,255,0.20); border:1px solid rgba(255,255,255,0.4); border-radius:var(--r-pill); padding:5px 14px; font-size:12.5px; font-weight:700; letter-spacing:.5px;}
+  .lesprev-title{position:relative; z-index:1; display:flex; align-items:center; gap:12px; font-size:26px; font-weight:700; margin-bottom:8px;}
+  .lesprev-title img{width:32px; height:32px; object-fit:contain;}
+  .lesprev-sub{position:relative; z-index:1; font-size:14.5px; opacity:.92;}
+
+  /* Volledige lespagina-recreatie (echte klassen 1-op-1 van de docentenhandleiding) voor in de grote laptop */
+  .lp-zoom{width:1184px; zoom:0.39;}
+  @media(max-width:1080px){ .lp-zoom{zoom:0.328;} }
+  @media(max-width:420px){ .lp-zoom{zoom:0.219;} }
+  .lp-page{padding:32px;}
+  .lesopbouw-laptop .lp-page{min-height:800px; box-sizing:border-box;}
+  .lp-hero{border-radius:28px; padding:52px 56px; position:relative; overflow:hidden; color:#fff; box-shadow:0 12px 32px -8px rgba(0,0,0,0.18); background:linear-gradient(135deg, var(--h1) 0%, var(--h2) 100%);}
+  .lp-hero::before{content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.14) 1.5px, transparent 1.5px); background-size:26px 26px; pointer-events:none;}
+  .lp-hero::after{content:''; position:absolute; top:-80px; right:-80px; width:360px; height:360px; background:rgba(255,255,255,0.08); border-radius:50%; pointer-events:none;}
+  .lp-hero-content{position:relative; z-index:1; max-width:760px;}
+  .lp-hero-badges{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+  .lp-hero-badge{display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,0.18); border:1px solid rgba(255,255,255,0.30); border-radius:var(--r-pill); padding:6px 14px; font-size:12px; font-weight:700; letter-spacing:.8px; text-transform:uppercase;}
+  .lp-hero-title{font-size:44px; font-weight:700; line-height:1.06; margin-bottom:10px; display:flex; align-items:center; gap:12px; text-shadow:0 2px 16px rgba(0,0,0,0.12);}
+  .lp-hero-title img{height:1.2em; flex-shrink:0;}
+  .lp-hero-sub{font-size:18px; font-weight:400; opacity:.85; margin-bottom:24px; line-height:1.5;}
+  .lp-hero-btns{display:flex; gap:12px; flex-wrap:wrap; position:relative; z-index:2;}
+  .lp-hero-btn{display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.18); border:1.5px solid rgba(255,255,255,0.45); border-radius:var(--r-pill); padding:11px 24px; font-size:14px; font-weight:700; color:#fff; white-space:nowrap;}
+  .lp-hero-btn img{height:1.3em; width:auto; object-fit:contain;}
+  .lp-hero-help{width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.18); border:1.5px solid rgba(255,255,255,0.45); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0;}
+  .lp-tip-card{background:linear-gradient(135deg, rgba(16,163,127,0.08) 0%, rgba(16,163,127,0.02) 100%); border:1px solid rgba(16,163,127,0.28); border-radius:28px; padding:28px 32px; display:flex; gap:18px; align-items:flex-start; margin-top:24px; box-shadow:var(--shadow-card);}
+  .lp-tip-icon img{width:32px; height:32px; object-fit:contain;}
+  .lp-tip-label{font-size:16px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--green); margin-bottom:6px;}
+  .lp-tip-body{font-size:16px; line-height:1.6; color:var(--dark);}
+  .lp-content-card{background:var(--card-bg); border:1px solid var(--border); border-radius:28px; padding:32px; margin-top:24px; box-shadow:var(--shadow-card);}
+  .lp-cc-title{font-size:16px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--muted); margin-bottom:20px;}
+  .lp-tl-row{display:flex; gap:16px; margin-bottom:18px; padding-bottom:18px; border-bottom:1px solid var(--border);}
+  .lp-tl-row:last-child{margin-bottom:0; padding-bottom:0; border-bottom:none;}
+  .lp-tl-time{font-size:11px; font-weight:700; color:var(--primary); background:var(--primary-soft); border-radius:8px; padding:4px 6px; white-space:nowrap; flex-shrink:0; height:fit-content; margin-top:2px; width:70px; text-align:center;}
+  .lp-tl-name{font-size:16px; font-weight:700; margin-bottom:4px;}
+  .lp-tl-desc{font-size:14px; color:var(--muted); line-height:1.5;}
+  /* Quiz-eindscherm (docentenportaal) — 1-op-1 stijl van KvM Kwiz */
+  .end-hero{position:relative; overflow:hidden; background:linear-gradient(135deg, #134e4a 0%, #0f766e 55%, #14b8a6 100%); border-radius:var(--r-card); padding:36px 40px; color:#fff; margin-bottom:24px;}
+  .end-hero-content{position:relative; z-index:1; max-width:70%;}
+  .end-hero-jay{position:absolute; right:20px; top:50%; transform:translateY(-50%) scaleX(-1); height:160px; width:auto; z-index:1; filter:drop-shadow(0 12px 20px rgba(0,0,0,0.3));}
+  .end-eyebrow{font-size:13px; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:rgba(255,255,255,0.78); margin-bottom:8px;}
+  .end-title{font-size:28px; font-weight:700; margin-bottom:6px;}
+  .end-sub{font-size:16px; color:rgba(255,255,255,0.88);}
+  .podium{display:grid; grid-template-columns:repeat(3,1fr); gap:20px; align-items:end;}
+  .podium-spot{background:var(--card-bg); border:1px solid var(--border); border-radius:24px 24px 0 0; box-shadow:var(--shadow-card); padding:22px 18px 0; text-align:center; display:flex; flex-direction:column; align-items:center;}
+  .podium-1{border:1px solid #f8d760; border-bottom:none; box-shadow:0 24px 36px -8px rgba(248,215,96,0.35);}
+  .podium-medal{margin-bottom:10px; display:flex; align-items:center; justify-content:center;}
+  .podium-rank-circle{width:44px; height:44px; border-radius:50%; color:#fff; font-size:18px; font-weight:700; display:flex; align-items:center; justify-content:center; margin:0 auto;}
+  .podium-naam{font-size:18px; font-weight:700; margin-bottom:4px;}
+  .podium-score{font-size:14px; font-weight:700; color:var(--primary); margin-bottom:20px;}
+  .podium-riser{width:100%;}
+  .rest-list{background:var(--card-bg); border:1px solid var(--border); border-radius:24px; box-shadow:var(--shadow-card); padding:10px; margin-top:22px;}
+  .rest-row{display:flex; align-items:center; gap:16px; padding:12px 18px; border-radius:14px;}
+  .rest-row:nth-child(odd){background:#f7f8f9;}
+  .rest-rank{width:26px; height:26px; border-radius:50%; background:var(--primary-soft); color:var(--primary-dark); font-size:13px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .rest-naam{flex:1; font-size:16px; font-weight:700;}
+  .rest-score{font-size:14px; font-weight:700; color:var(--primary);}
+
+  /* VOORDELEN */
+  .voordelen-grid{display:grid; grid-template-columns:1fr; gap:20px;}
+  @media(min-width:820px){ .voordelen-grid{grid-template-columns:repeat(3,1fr);} }
+
+  /* HOE ZIET EEN LES ERUIT */
+  .lesopbouw-card{display:grid; grid-template-columns:1fr 1.2fr; border-radius:var(--r-card); overflow:hidden; box-shadow:var(--shadow-card); background:var(--card-bg); min-height:458px;}
+  @media(max-width:800px){ .lesopbouw-card{grid-template-columns:1fr;} }
+  .lesopbouw-image{position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; padding:40px 40px 92px; min-height:280px; background:linear-gradient(135deg, rgba(26,66,128,0.94) 0%, rgba(58,123,213,0.92) 48%, rgba(106,170,248,0.88) 100%);}
+  .lesopbouw-image::before{content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px); background-size:26px 26px; pointer-events:none; z-index:0;}
+  .lesopbouw-photo{position:absolute; z-index:1; max-width:65%; max-height:75%; width:auto; height:auto; object-fit:contain; border-radius:18px; box-shadow:0 20px 40px rgba(0,0,0,0.35); opacity:0; transition:opacity .35s ease; pointer-events:none;}
+  .lesopbouw-photo.is-illustration{max-width:65%; border-radius:0; box-shadow:none; filter:drop-shadow(0 20px 30px rgba(0,0,0,0.25));}
+  .lesopbouw-photo.is-laptop{max-width:none; max-height:none; top:50%; left:50%; transform:translate(-50%,-50%); filter:drop-shadow(0 20px 34px rgba(0,0,0,0.30));}
+  .lesopbouw-photo.is-trio{max-width:none; max-height:none; top:50%; left:50%; transform:translate(-50%,-50%); display:grid; grid-template-columns:repeat(2,1fr); gap:12px; width:340px;}
+  .lesopbouw-photo.is-trio img{width:100%; height:154px; object-fit:cover; border-radius:14px; box-shadow:0 16px 30px rgba(0,0,0,0.28); display:block;}
+  .lesopbouw-photo.is-trio img:nth-child(3){grid-column:1 / -1;}
+  @media(max-width:800px){
+    .lesopbouw-photo.is-trio{width:240px; gap:8px;}
+    .lesopbouw-photo.is-trio img{height:110px; border-radius:12px;}
+  }
+  .lesopbouw-photo.active{opacity:1;}
+  .lesopbouw-image{min-height:340px;}
+  .lesopbouw-cta{position:absolute; bottom:28px; left:50%; transform:translateX(-50%); z-index:2; white-space:nowrap;}
+  .lesopbouw-cta:hover{transform:translateX(-50%) translateY(-2px);}
+  .lesopbouw-steps{padding:44px; display:flex; flex-direction:column; gap:26px; background:linear-gradient(135deg,#fff 0%,#eaf2fe 100%);}
+  .lesopbouw-step{display:flex; gap:18px; align-items:flex-start; cursor:pointer; opacity:.42; transition:opacity .25s ease;}
+  .lesopbouw-step.active{opacity:1;}
+  .lesopbouw-num{flex-shrink:0; width:30px; height:30px; border-radius:50%; background:#eceeee; color:var(--muted); font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center; margin-top:2px; transition:background .25s ease, color .25s ease;}
+  .lesopbouw-step.active .lesopbouw-num{background:var(--primary-dark); color:#fff;}
+  .lesopbouw-step-title{font-weight:700; font-size:17px; color:var(--muted); transition:color .25s ease;}
+  .lesopbouw-step.active .lesopbouw-step-title{color:var(--dark);}
+  .lesopbouw-step-descwrap{display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s ease;}
+  .lesopbouw-step.active .lesopbouw-step-descwrap{grid-template-rows:1fr;}
+  .lesopbouw-step-desc{overflow:hidden; font-size:16px; color:var(--muted); line-height:1.6; padding-top:6px;}
+  .voordeel-card{background:var(--card-bg); border:1px solid var(--border); border-radius:28px; padding:30px 26px; box-shadow:var(--shadow-card); transition:transform .25s, box-shadow .25s;}
+  .voordeel-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-card-hover);}
+  .voordeel-emoji{font-size:32px; text-align:center; margin-bottom:12px;}
+  .voordeel-emoji img{width:36px; height:36px; object-fit:contain; margin:0 auto;}
+  .voordeel-card .tag{font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--primary-dark); margin-bottom:10px; text-align:center;}
+  .voordeel-card h3{font-size:19px; font-weight:700; margin-bottom:14px;}
+  .voordeel-card ul{list-style:none; display:flex; flex-direction:column; gap:10px;}
+  .voordeel-card li{font-size:16px; color:var(--muted); padding-left:24px; position:relative; line-height:1.5;}
+  .voordeel-card li::before{content:"✓"; position:absolute; left:0; color:var(--primary-dark); font-weight:700;}
+
+  /* LESPERIODES */
+  .periode-grid{display:grid; grid-template-columns:1fr; gap:18px; max-width:760px; margin:0 auto;}
+  @media(min-width:640px){ .periode-grid{grid-template-columns:repeat(2,1fr);} }
+  .periode-card{background:var(--card-bg); border:1px solid var(--border); border-radius:24px; padding:26px 28px; box-shadow:var(--shadow-card); display:flex; align-items:center; gap:18px;}
+  .periode-ico{width:52px; height:52px; border-radius:16px; background:var(--primary-soft); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .periode-ico img{width:26px; height:26px;}
+  .periode-title{font-size:15.5px; font-weight:700; margin-bottom:4px;}
+  .periode-sub{font-size:13px; color:var(--muted);}
+  .periode-badge{display:inline-block; margin-top:8px; font-size:12px; font-weight:700; color:var(--primary-dark); background:var(--primary-soft); border-radius:var(--r-pill); padding:4px 12px;}
+
+  /* TESTIMONIALS */
+  .testi-slider-wrap{display:flex; align-items:center; gap:12px;}
+  .testi-track{position:relative; display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-behavior:smooth; padding:4px 2px 10px; scrollbar-width:none; cursor:grab; -webkit-user-select:none; user-select:none;}
+  .testi-track::-webkit-scrollbar{display:none;}
+  .testi-track.dragging{scroll-snap-type:none; scroll-behavior:auto; cursor:grabbing;}
+  .testi-card{scroll-snap-align:start; flex:0 0 calc((100% - 36px) / 3.15); min-width:240px; opacity:.35; transition:opacity .35s ease;}
+  @media(max-width:1040px){ .testi-card{flex:0 0 calc((100% - 18px) / 2.15);} }
+  @media(max-width:700px){ .testi-card{flex:0 0 86%;} }
+  .testi-card.in-view{opacity:1;}
+  .testi-arrow{flex-shrink:0; width:44px; height:44px; border-radius:50%; border:1px solid var(--border); background:var(--card-bg); box-shadow:var(--shadow-card); display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--primary-dark); cursor:pointer; transition:background .2s, transform .2s;}
+  .testi-arrow:hover{background:var(--primary-soft); transform:scale(1.06);}
+  .testi-card{background:linear-gradient(145deg,#fff 0%,#fff 42%,#e3efff 100%); border:1px solid var(--border); border-radius:24px; padding:24px; display:flex; flex-direction:column; gap:14px; box-shadow:var(--shadow-card); pointer-events:none;}
+  .testi-top{display:flex; align-items:center; gap:12px; order:3; margin-top:auto;}
+  .testi-avatar{width:44px; height:44px; border-radius:50%; background:linear-gradient(140deg, var(--tc1), var(--tc2)); color:#fff; font-weight:700; font-size:14.5px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .testi-naam{font-size:16px; font-weight:700; color:var(--dark);}
+  .testi-functie{font-size:12px; color:var(--muted); line-height:1.4;}
+  .testi-school{font-size:12px; color:var(--muted); line-height:1.4;}
+  .testi-quote{font-size:24px; color:var(--tc2); line-height:1; font-weight:700; order:1;}
+  .testi-card p{font-size:16px; font-style:italic; line-height:1.6; order:2;}
+
+  /* PRIJS */
+  .prijs-wrap{display:grid; grid-template-columns:repeat(2,1fr); gap:28px; max-width:880px; margin:0 auto; align-items:stretch;}
+  @media(max-width:760px){ .prijs-wrap{grid-template-columns:1fr; max-width:460px;} }
+  .prijs-card{background:linear-gradient(135deg, rgba(26,66,128,0.94) 0%, rgba(58,123,213,0.92) 48%, rgba(106,170,248,0.88) 100%); position:relative; overflow:hidden; color:#fff; border-radius:var(--r-card); padding:44px 40px; max-width:460px; width:100%; text-align:center; box-shadow:0 28px 60px -12px rgba(58,123,213,0.45); display:flex; flex-direction:column;}
+  .prijs-card ul{flex:1;}
+  .prijs-card::before{content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px); background-size:26px 26px; pointer-events:none;}
+  .prijs-card > *{position:relative; z-index:1;}
+  .prijs-card .tag{font-size:20px; font-weight:700; text-transform:none; letter-spacing:0; opacity:.85; margin-bottom:14px;}
+  .prijs-card .bedrag{font-size:46px; font-weight:700; margin-bottom:2px;}
+  .prijs-card .bedrag span{font-size:16px; font-weight:400; opacity:.85;}
+  .prijs-card .sub{font-size:16px; font-weight:700; opacity:.85; margin-bottom:22px;}
+  .prijs-card ul{list-style:none; text-align:left; display:flex; flex-direction:column; gap:10px; margin-bottom:26px;}
+  .prijs-card li{font-size:16px; padding-left:24px; position:relative;}
+  .prijs-card li::before{content:"✓"; position:absolute; left:0; font-weight:700;}
+  .prijs-card .info-icon{display:inline-flex; align-items:center; justify-content:center; width:16px; height:16px; margin-left:6px; border:1.5px solid #fff; border-radius:50%; font-size:11px; font-weight:700; line-height:1; color:#fff; vertical-align:1px;}
+  .info-preview{position:fixed; z-index:500; width:340px; padding:12px; border:1px solid rgba(58,123,213,.18); border-radius:20px; background:#fff; box-shadow:0 20px 46px rgba(20,50,100,.3); pointer-events:none; opacity:0; transform:translateY(6px) scale(.96); transition:opacity .18s ease, transform .18s ease;}
+  .info-preview.is-visible{opacity:1; transform:translateY(0) scale(1);}
+  .info-preview img{display:block; width:100%; height:230px; object-fit:contain; background:#f3f7fd; border-radius:13px;}
+  .info-preview span{display:block; margin:7px 2px 1px; color:var(--dark); font-size:12px; font-weight:700; line-height:1.2;}
+
+  /* SUBSIDIES */
+  .subsidie-list{display:grid; grid-template-columns:1fr; gap:12px; max-width:680px; margin:0 auto;}
+  @media(min-width:640px){ .subsidie-list{grid-template-columns:repeat(2,1fr);} }
+  .subsidie-item{background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px 20px; font-size:14px; font-weight:700; text-decoration:none; display:flex; align-items:center; justify-content:space-between; gap:10px; transition:border-color .15s, transform .15s; box-shadow:var(--shadow-card);}
+  .subsidie-item:hover{border-color:var(--primary); color:var(--primary-dark); transform:translateY(-2px);}
+
+  /* CTA SLOT */
+  #demo{scroll-margin-top:72px; background:linear-gradient(180deg,#fff 0%,#f7f9fb 62%,var(--footer-bg) 100%); width:100vw; margin-left:calc(50% - 50vw); padding:32px var(--pad) 88px;}
+  .cta-slot{width:100%; max-width:1180px; margin:0 auto; background:linear-gradient(135deg, rgba(26,66,128,0.94) 0%, rgba(58,123,213,0.92) 48%, rgba(106,170,248,0.88) 100%); border-radius:var(--r-card); padding:32px var(--pad) 56px; text-align:center; color:#fff; position:relative; overflow:hidden; box-shadow:0 28px 60px -12px rgba(58,123,213,0.45);}
+  #demo{scroll-margin-top:72px;}
+  .cta-slot::before{content:''; position:absolute; inset:0; background-image:radial-gradient(rgba(255,255,255,0.16) 1.5px, transparent 1.5px); background-size:26px 26px; pointer-events:none;}
+  .cta-slot .cta-jay{position:relative; z-index:1; width:180px; height:auto; margin:0 auto 12px; filter:brightness(0) invert(1) drop-shadow(0 8px 18px rgba(0,0,0,0.18));}
+  .cta-slot h2{position:relative; z-index:1; font-size:clamp(24px,3vw,32px); font-weight:700; margin-bottom:12px;}
+  .cta-slot p{position:relative; z-index:1; opacity:.9; max-width:480px; margin:0 auto 26px; font-size:16px;}
+  .cta-slot .btns{position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:14px; justify-content:center;}
+  .cta-form{position:relative; z-index:1; max-width:680px; margin:24px auto 0; display:grid; grid-template-columns:1fr 1fr; gap:12px; text-align:left;}
+  .cta-form label{display:flex; flex-direction:column; gap:6px; font-size:13px; font-weight:700; color:rgba(255,255,255,.9);}
+  .cta-form label.full{grid-column:1/-1;}
+  .cta-form input,.cta-form textarea{width:100%; border:1px solid rgba(255,255,255,.45); border-radius:12px; background:rgba(255,255,255,.14); color:#fff; padding:12px 14px; font:16px 'Inria Sans',Georgia,serif; outline:none;}
+  .cta-form input::placeholder,.cta-form textarea::placeholder{color:rgba(255,255,255,.72);}
+  .cta-form input:focus,.cta-form textarea:focus{border-color:#fff; background:rgba(255,255,255,.2);}
+  .cta-form textarea{min-height:88px; resize:vertical;}
+  .cta-form button{grid-column:1/-1; justify-self:center; margin-top:6px; border:0; cursor:pointer; font-size:18px;}
+  @media(max-width:620px){.cta-form{grid-template-columns:1fr}.cta-form label.full{grid-column:auto}.cta-form button{grid-column:auto}}
+
+  /* FOOTER */
+  footer{background:var(--footer-bg); border-radius:64px 64px 0 0; padding:40px 0; margin-top:0; position:relative; z-index:1;}
+  .footer-inner{max-width:var(--outer-w); margin:0 auto; padding:0 var(--pad); display:grid; grid-template-columns:1fr; gap:28px; text-align:center;}
+  @media(min-width:780px){ .footer-inner{grid-template-columns:1fr auto 1fr; text-align:left;} }
+  .footer-col:first-child{display:flex; flex-direction:column; align-items:center;}
+  @media(min-width:780px){ .footer-col:first-child{align-items:flex-start;} }
+  .footer-col h4{font-size:12.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin-bottom:12px;}
+  .footer-col p, .footer-col a{font-size:16px; color:var(--muted); text-decoration:none; display:block; margin-bottom:8px; transition:color .2s;}
+  .footer-col a:hover{color:var(--primary-dark);}
+  .footer-logo{height:32px; width:auto; margin-bottom:10px;}
+  .footer-bottom{max-width:var(--outer-w); margin:28px auto 0; padding:20px var(--pad) 0; border-top:1px solid var(--border); font-size:12.5px; color:var(--muted); text-align:center;}
+
+  .placeholder-note{background:#fef9e9; border-bottom:1.5px solid #f8d760; color:#7a5b00; font-size:13px; padding:10px 16px; text-align:center;}
+  .nav-group{position:relative}.nav-group summary{list-style:none;cursor:pointer;color:#fff;font-weight:700;text-decoration:underline;text-underline-offset:6px}.nav.solid .nav-group summary{color:var(--primary-dark)}.nav-group summary::-webkit-details-marker{display:none}.nav-submenu{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);display:grid;gap:4px;min-width:214px;padding:10px;background:linear-gradient(145deg,rgba(255,255,255,.99),rgba(239,246,255,.98));border:1px solid rgba(78,142,243,.28);border-radius:20px;box-shadow:0 16px 34px rgba(30,60,110,.22);z-index:20}.nav-submenu::before{content:"";position:absolute;top:-7px;left:50%;width:14px;height:14px;background:#fff;border-left:1px solid rgba(78,142,243,.22);border-top:1px solid rgba(78,142,243,.22);transform:translateX(-50%) rotate(45deg)}.nav-submenu a{position:relative;color:var(--primary-dark)!important;padding:10px 13px 10px 28px;border-radius:12px;white-space:nowrap;font-size:15px;font-weight:700;text-decoration:none;transition:background .2s ease,color .2s ease,transform .2s ease}.nav-submenu a::before{content:"";position:absolute;left:13px;top:50%;width:6px;height:6px;border-radius:50%;background:#8bb7f8;transform:translateY(-50%)}.nav-submenu a:hover{color:#fff!important;background:#4e8ef3;text-decoration:none;transform:translateX(2px)}.nav-submenu a:hover::before{background:#fff}.nav-group:not([open]) .nav-submenu{display:none}.nav-group:hover .nav-submenu,.nav-group:focus-within .nav-submenu{display:grid!important}
+  .lesopbouw-material-btn{position:absolute;left:50%;bottom:34px;z-index:10;transform:translateX(-50%);display:inline-flex;align-items:center;justify-content:center;width:210px;box-sizing:border-box;padding:11px 16px;border:1px solid rgba(255,255,255,.78);border-radius:999px;background:rgba(255,255,255,.08);color:#fff;text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap;transition:none}.lesopbouw-material-btn:hover,.lesopbouw-material-btn:focus{color:#fff;background:rgba(255,255,255,.08);text-decoration:none;transform:translateX(-50%)}
+  @media(max-width:800px){
+    .lesopbouw-image{padding-bottom:150px;min-height:430px;}
+    .lesopbouw-material-btn{bottom:28px;}
+    .lesopbouw-photo.is-laptop{transform:translate(-50%,-57%);}
+    .lesopbouw-photo.is-laptop .lesopbouw-laptop{width:270px;}
+    .lesopbouw-photo.is-laptop .lesopbouw-laptop .lp-zoom{zoom:.215;}
+  }
+  @media(max-width:420px){
+    .lesopbouw-photo.is-laptop .lesopbouw-laptop{width:220px;}
+    .lesopbouw-photo.is-laptop .lesopbouw-laptop .lp-zoom{zoom:.175;}
+  }
+</style>
+  <link rel="stylesheet" href="shared-header-footer.css">
+</head>
+<body class="skills-disabled">
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <img src="../Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
+    </a>
+    <div class="nav-links">
+      <a href="https://klaarvoormiddelbaar.nl">Home</a>
+      <details class="nav-group"><summary>KvM Groep 8</summary><div class="nav-submenu"><a href="Homepagina-Groep8.html">Programma</a><a href="Kernvaardigheden-Groep8.html">Kernvaardigheden</a><a href="Materialen-Groep8.html">Materialen</a><a href="Kerndoelen-Overzicht.html">Kerndoelen</a><a href="Didactiek-Groep8.html">Didactiek</a></div></details>
+      <a href="https://klaarvoormiddelbaar.nl/brugklas">KvM Brugklas</a>
+      <a href="https://klaarvoormiddelbaar.nl/over-ons/">Over ons</a>
+    </div>
+    <a class="btn btn-primary nav-cta" href="#demo">Maak kennis</a>
+  </div>
+</nav>
+
+<!-- HERO — full-bleed, zelfde opbouw als klaarvoormiddelbaar.nl/groep-8/ -->
+<section class="hero-full">
+  <div class="deco-c1"></div>
+  <div class="deco-c2"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-title">Klaar voor Middelbaar Groep 8</div>
+      <div class="hero-sub">De complete lesmethode voor digitale-, studie- en sociale vaardigheden</div>
+      <div class="hero-ctas">
+        <a class="hero-cta-live" href="#demo">Maak kennis</a>
+        <a class="hero-cta" href="#demo">Vraag een demo aan</a>
+      </div>
+    </div>
+    <div class="laptop-mock">
+      <div class="laptop-screen">
+        <div class="laptop-notch"></div>
+        <div class="laptop-display">
+          <div class="dash-zoom">
+            <div class="dash-header">
+              <img src="../Dashboard/KvM%20logo%20no%20background.png" alt="">
+              <div class="dash-crumb">Dashboard</div>
+              <div class="dash-right"><div class="dash-avatar">N</div><div class="dash-logout"></div></div>
+            </div>
+            <div class="dash-main">
+              <div class="dash-hero">
+                <div class="dash-hero-content">
+                  <div class="dash-hero-label">Docentendashboard</div>
+                  <div class="dash-hero-title">Goedemiddag Niek!</div>
+                  <div class="dash-chips">
+                    <span class="dash-chip"><img src="../Afbeeldingen/emojis%20nieuw/school.png" alt="">De Springstok</span>
+                    <span class="dash-chip"><img src="../Afbeeldingen/emojis%20nieuw/kinderen.png" alt="">Groep 8A</span>
+                    <span class="dash-chip"><img src="../Afbeeldingen/emojis%20nieuw/boeken.png" alt="">8 lessen beschikbaar</span>
+                  </div>
+                </div>
+                <img class="dash-jay" src="../Dashboard/jay-waving.png" alt="">
+              </div>
+              <div class="dash-section-head">
+                <div>
+                  <div class="dash-section-title">Alle lessen</div>
+                  <div class="dash-section-sub">Klik op een les om de docentenhandleiding te openen</div>
+                </div>
+                <div class="dash-section-count">8 lessen</div>
+              </div>
+              <div class="dash-cards">
+                <div class="dash-card" style="--g1:#2f68c4;--g2:#5f9af0;">
+                  <div class="dash-card-head"><span class="dash-card-badge">LES 1</span><img class="dash-card-emoji" src="../Afbeeldingen/emojis%20nieuw/raket.png" alt=""></div>
+                  <div class="dash-card-body">
+                    <div class="dash-card-title">Klaar voor lancering!</div>
+                    <div class="dash-card-desc">Kennismaking + Slim Leren</div>
+                    <div class="dash-card-foot"><span class="dash-card-dur">60 min</span><span class="dash-card-cta">Bekijk les →</span></div>
+                  </div>
+                </div>
+                <div class="dash-card" style="--g1:#0a7358;--g2:#2fae86;">
+                  <div class="dash-card-head"><span class="dash-card-badge">LES 2</span><img class="dash-card-emoji" src="../Afbeeldingen/emojis%20nieuw/lijst.png" alt=""></div>
+                  <div class="dash-card-body">
+                    <div class="dash-card-title">Middelbare schoolweek inplannen</div>
+                    <div class="dash-card-desc">Kennismaken met het 'KvM Planning Stappenplan'</div>
+                    <div class="dash-card-foot"><span class="dash-card-dur">50–60 min</span><span class="dash-card-cta">Bekijk les →</span></div>
+                  </div>
+                </div>
+                <div class="dash-card" style="--g1:#c47606;--g2:#e6a233;">
+                  <div class="dash-card-head"><span class="dash-card-badge">LES 3</span><img class="dash-card-emoji" src="../Afbeeldingen/emojis%20nieuw/boeken.png" alt=""></div>
+                  <div class="dash-card-body">
+                    <div class="dash-card-title">Hulpmiddelen tijdens het leren</div>
+                    <div class="dash-card-desc">Handige digitale tools voor op school</div>
+                    <div class="dash-card-foot"><span class="dash-card-dur">50–60 min</span><span class="dash-card-cta">Bekijk les →</span></div>
+                  </div>
+                </div>
+                <div class="dash-card" style="--g1:#5825b0;--g2:#8a63e0;">
+                  <div class="dash-card-head"><span class="dash-card-badge">LES 4</span><img class="dash-card-emoji" src="../Afbeeldingen/emojis%20nieuw/kinderen.png" alt=""></div>
+                  <div class="dash-card-body">
+                    <div class="dash-card-title">Executieve functies</div>
+                    <div class="dash-card-desc">Vaardigheden voor school en daarbuiten</div>
+                    <div class="dash-card-foot"><span class="dash-card-dur">60 min</span><span class="dash-card-cta">Bekijk les →</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="laptop-hinge"></div>
+      <div class="laptop-base"></div>
+    </div>
+  </div>
+
+</section>
+
+<div class="stat-bar">
+  <div class="stat-item"><img src="../Afbeeldingen/emojis%20nieuw/brein.png" alt=""><div class="stat-num" data-target="6">0</div><div class="stat-label">Kernvaardigheden</div></div>
+  <div class="stat-item"><img src="../Afbeeldingen/emojis%20nieuw/kinderen.png" alt=""><div class="stat-num" data-target="3000" data-suffix="+">0</div><div class="stat-label">Klaar voor Middelbaar-leerlingen</div></div>
+  <div class="stat-item"><img src="../Afbeeldingen/emojis%20nieuw/ster.png" alt=""><div class="stat-num" data-target="8.7" data-decimals="1">0</div><div class="stat-label">Gemiddelde beoordeling door leerlingen</div></div>
+</div>
+
+<a class="floating-cta" href="#demo">Maak kennis</a>
+
+<a class="floating-whatsapp" href="https://wa.me/31633382366" target="_blank" rel="noopener" aria-label="Stuur een WhatsApp-bericht">
+  <svg viewBox="0 0 32 32" fill="#fff" xmlns="http://www.w3.org/2000/svg"><path d="M16.004 3C9.14 3 3.57 8.57 3.57 15.434c0 2.32.633 4.49 1.735 6.35L3 29l7.4-2.264a12.4 12.4 0 0 0 5.6 1.348h.004c6.864 0 12.434-5.57 12.434-12.434C28.438 8.57 22.868 3 16.004 3zm0 22.55h-.003a10.35 10.35 0 0 1-5.276-1.446l-.378-.225-3.916 1.198 1.216-3.812-.246-.392a10.32 10.32 0 0 1-1.585-5.487c0-5.712 4.65-10.362 10.365-10.362 2.768 0 5.37 1.08 7.328 3.04a10.29 10.29 0 0 1 3.036 7.33c0 5.713-4.65 10.363-10.364 10.363zm5.68-7.762c-.31-.156-1.844-.91-2.13-1.014-.286-.104-.494-.156-.702.156-.208.312-.804 1.014-.986 1.222-.182.208-.364.234-.674.078-.31-.156-1.31-.483-2.494-1.54-.922-.822-1.545-1.838-1.727-2.15-.182-.312-.02-.48.137-.636.14-.14.31-.364.466-.546.156-.182.208-.312.312-.52.104-.208.052-.39-.026-.546-.078-.156-.702-1.692-.962-2.318-.253-.61-.51-.527-.702-.537l-.598-.01c-.208 0-.546.078-.832.39-.286.312-1.09 1.066-1.09 2.6 0 1.534 1.116 3.016 1.272 3.224.156.208 2.196 3.354 5.32 4.702.744.321 1.324.513 1.777.657.746.238 1.425.204 1.962.124.599-.09 1.844-.754 2.104-1.482.26-.728.26-1.352.182-1.482-.078-.13-.286-.208-.598-.364z"/></svg>
+</a>
+
+<main>
+
+  <!-- KERNVAARDIGHEDEN -->
+  <section id="vaardigheden" class="vaardigheden-band">
+    <div class="section-head center" style="max-width:900px;margin-left:auto;margin-right:auto;">
+      <div class="section-title">Zes kernvaardigheden, één programma</div>
+      <div class="section-sub" style="max-width:none;">Het curriculum in groep 8 vraagt veel van leerkrachten. Tegelijkertijd zijn ook vaardigheden als plannen, 'leren leren' en omgaan met toetsen en stress onmisbaar voor een goede start op de middelbare school. Daarom ontwikkelden we Klaar voor Middelbaar: acht volledig uitgewerkte, interactieve lessen waarmee leerlingen zelfverzekerd aan de brugklas beginnen.</div>
+    </div>
+    <div class="lessons-grid">
+      <div class="lesson-card" data-skill="plannen" role="button" tabindex="0">
+        <div class="card-head" style="--ch-g1:#065f46;--ch-g2:#10a37f; background:linear-gradient(140deg, rgba(6,95,70,0.92), rgba(16,163,127,0.78)), url('../Afbeeldingen/Website/Plannen.png') center/cover;">
+          <img class="card-head-emoji" src="../Afbeeldingen/emojis%20nieuw/lijst.png" alt="">
+        </div>
+        <div class="card-body">
+          <div class="card-title">Plannen</div>
+          <div class="card-desc">Leerlingen leren aan de hand van de ‘KvM Plagenda’ en ons stappenplan middelbare schoolweken inplannen.</div>
+        </div>
+      </div>
+      <div class="lesson-card" data-skill="leren" role="button" tabindex="0">
+        <div class="card-head" style="--ch-g1:#92400e;--ch-g2:#f59e0b; background:linear-gradient(140deg, rgba(146,64,14,0.92), rgba(245,158,11,0.78)), url('../Afbeeldingen/Website/Slim%20Leren.png') center/cover;">
+          <img class="card-head-emoji" src="../Afbeeldingen/emojis%20nieuw/notitieboek.png" alt="">
+        </div>
+        <div class="card-body">
+          <div class="card-title">Leren leren</div>
+          <div class="card-desc">Slimmer leren met onze leertips, aantekeningen maken en handige hulpmiddelen gebruiken.</div>
+        </div>
+      </div>
+      <div class="lesson-card" data-skill="toetsen" role="button" tabindex="0">
+        <div class="card-head" style="--ch-g1:#7f1d1d;--ch-g2:#e05545; background:linear-gradient(140deg, rgba(127,29,29,0.92), rgba(224,85,69,0.78)), url('../Afbeeldingen/Website/Toets.png') center/cover;">
+          <img class="card-head-emoji" src="../Afbeeldingen/emojis%20nieuw/rugzak.png" alt="">
+        </div>
+        <div class="card-body">
+          <div class="card-title">Omgaan met toetsen en stress</div>
+          <div class="card-desc">Van voorbereiding tot terugkijken: leerlingen leren omgaan met toetsen, spanning en stress.</div>
+        </div>
+      </div>
+      <div class="lesson-card" data-skill="digitaal" role="button" tabindex="0">
+        <div class="card-head" style="--ch-g1:#831843;--ch-g2:#db2777; background:linear-gradient(140deg, rgba(131,24,67,0.92), rgba(219,39,119,0.78)), url('../Afbeeldingen/Website/Digitale geletterdheid.png') center 18%/cover;">
+          <img class="card-head-emoji" src="../Afbeeldingen/emojis%20nieuw/laptop%20onze%20stijl.png" alt="">
+        </div>
+        <div class="card-body">
+          <div class="card-title">Digitale geletterdheid</div>
+          <div class="card-desc">Leerlingen leren verantwoord omgaan met AI, oefenwebsites gebruiken en digitaal communiceren met docenten.</div>
+        </div>
+      </div>
+      <div class="lesson-card" data-skill="sociaal" role="button" tabindex="0">
+        <div class="card-head" style="--ch-g1:#0c4a6e;--ch-g2:#0284c7; background:linear-gradient(140deg, rgba(12,74,110,0.92), rgba(2,132,199,0.78)), url('../Afbeeldingen/Website/Sociale%20vaardigheden.png') center/cover;">
+          <img class="card-head-emoji" src="../Afbeeldingen/emojis%20nieuw/kinderen.png" alt="">
+        </div>
+        <div class="card-body">
+          <div class="card-title">Sociaal sterk</div>
+          <div class="card-desc">Omgaan met nieuwe docenten, klasgenoten en andere situaties die je in de brugklas tegenkomt.</div>
+        </div>
+      </div>
+      <div class="lesson-card" data-skill="kern" role="button" tabindex="0">
+        <div class="card-head" style="--ch-g1:#4c1d95;--ch-g2:#7c3aed; background:linear-gradient(140deg, rgba(76,29,149,0.92), rgba(124,58,237,0.78)), url('../Afbeeldingen/Website/Executieve%20functies.png') center/cover;">
+          <img class="card-head-emoji" src="../Afbeeldingen/emojis%20nieuw/brein.png" alt="">
+        </div>
+        <div class="card-body">
+          <div class="card-title">Executieve functies</div>
+          <div class="card-desc">De rode draad van het programma, die in iedere les op een natuurlijke manier terugkomen.</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="vaardigheden-more btn btn-ghost" id="vaardighedenMore" type="button">Toon alle 6 vaardigheden</button>
+
+    <div class="skill-detail" id="skillDetail">
+      <div class="skill-detail-inner">
+        <button class="skill-detail-close" id="skillDetailClose" aria-label="Sluiten">✕</button>
+
+        <!-- PLANNEN: Les 2 + Les 6, volledige recreatie van de echte lespagina -->
+        <div class="skill-group" data-skill="plannen">
+          <div class="skill-laptops">
+            <div class="laptop-mock laptop-mock-lg">
+              <div class="laptop-screen">
+                <div class="laptop-notch"></div>
+                <div class="laptop-display">
+                  <div class="lp-zoom">
+                    <div class="lp-page">
+                      <div class="lp-hero" style="--h1:#065f46;--h2:#10a37f;">
+                        <div class="lp-hero-content">
+                          <div class="lp-hero-badges"><span class="lp-hero-badge">Les 2 van 8</span><span class="lp-hero-badge">50–60 min</span></div>
+                          <div class="lp-hero-title"><img src="../Afbeeldingen/emojis%20nieuw/lijst.png" alt="">Middelbare schoolweek inplannen</div>
+                          <div class="lp-hero-sub">Kennismaken met het 'KvM Planning Stappenplan'</div>
+                          <div class="lp-hero-btns">
+                            <span class="lp-hero-btn">▶ Starten met de les</span>
+                            <span class="lp-hero-btn"><img src="/Planeten%20Planner/assets/images/planet-tuesday.png" alt="">Planeten Planner</span>
+                            <span class="lp-hero-help">?</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="lp-tip-card">
+                        <div class="lp-tip-icon"><img src="../Afbeeldingen/emojis%20nieuw/lamp.png" alt=""></div>
+                        <div>
+                          <div class="lp-tip-label">Tip voor de leerkracht</div>
+                          <div class="lp-tip-body">Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.</div>
+                        </div>
+                      </div>
+                      <div class="lp-content-card">
+                        <div class="lp-cc-title">Lesverloop</div>
+                        <div class="lp-tl-row"><div class="lp-tl-time">0–5 min</div><div><div class="lp-tl-name">Terugblik</div><div class="lp-tl-desc">Korte herhaling van les 1: wat onthielden leerlingen?</div></div></div>
+                        <div class="lp-tl-row"><div class="lp-tl-time">5–20 min</div><div><div class="lp-tl-name">Uitleg & video</div><div class="lp-tl-desc">Toon en bespreek hoe een dag op de middelbare eruitziet.</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="laptop-hinge"></div>
+              <div class="laptop-base"></div>
+            </div>
+
+            <div class="laptop-mock laptop-mock-lg">
+              <div class="laptop-screen">
+                <div class="laptop-notch"></div>
+                <div class="laptop-display">
+                  <div class="lp-zoom">
+                    <div class="lp-page">
+                      <div class="lp-hero" style="--h1:#0c4a6e;--h2:#0284c7;">
+                        <div class="lp-hero-content">
+                          <div class="lp-hero-badges"><span class="lp-hero-badge">Les 6 van 8</span><span class="lp-hero-badge">50–60 min</span></div>
+                          <div class="lp-hero-title"><img src="../Afbeeldingen/emojis%20nieuw/notitieboek-groen.png" alt="">Drukke schoolweek inplannen</div>
+                          <div class="lp-hero-sub">Een volle week inplannen met het 'KvM Planning Stappenplan'</div>
+                          <div class="lp-hero-btns">
+                            <span class="lp-hero-btn">▶ Starten met de les</span>
+                            <span class="lp-hero-btn"><img src="/Planeten%20Planner/assets/images/planet-tuesday.png" alt="">Planeten Planner</span>
+                            <span class="lp-hero-help">?</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="lp-tip-card">
+                        <div class="lp-tip-icon"><img src="../Afbeeldingen/emojis%20nieuw/lamp.png" alt=""></div>
+                        <div>
+                          <div class="lp-tip-label">Tip voor de leerkracht</div>
+                          <div class="lp-tip-body">Wees alert op leerlingen die significant angstig lijken. Spreek ze na de les apart aan en overleg zo nodig met de intern begeleider.</div>
+                        </div>
+                      </div>
+                      <div class="lp-content-card">
+                        <div class="lp-cc-title">Lesverloop</div>
+                        <div class="lp-tl-row"><div class="lp-tl-time">0–10 min</div><div><div class="lp-tl-name">Check-in</div><div class="lp-tl-desc">Thermometer-check: hoe voel jij je over de middelbare? Schaal 1-10.</div></div></div>
+                        <div class="lp-tl-row"><div class="lp-tl-time">10–28 min</div><div><div class="lp-tl-name">Gesprek</div><div class="lp-tl-desc">Bespreek gevoelens van spanning en opwinding. Wat is het verschil?</div></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="laptop-hinge"></div>
+              <div class="laptop-base"></div>
+            </div>
+          </div>
+          <div class="skill-story"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></div>
+        </div>
+
+        <!-- LEREN: Les 3 + Les 7 (nog eenvoudige versie) -->
+        <div class="skill-group" data-skill="leren" hidden>
+          <div class="skill-laptops">
+            <div class="laptop-mock laptop-mock-sm">
+              <div class="laptop-screen"><div class="laptop-notch"></div><div class="laptop-display">
+                <div class="lesprev-zoom"><div class="lesprev-crumb"><span>Dashboard</span></div>
+                  <div class="lesprev-hero" style="--h1:#92400e;--h2:#f59e0b;">
+                    <div class="lesprev-badges"><span>LES 3 VAN 8</span><span>50–60 MIN</span></div>
+                    <div class="lesprev-title"><img src="../Afbeeldingen/emojis%20nieuw/boeken.png" alt="">Hulpmiddelen tijdens het leren</div>
+                    <div class="lesprev-sub">Handige digitale tools voor op school</div>
+                  </div>
+                </div>
+              </div></div>
+              <div class="laptop-hinge"></div><div class="laptop-base"></div>
+            </div>
+            <div class="laptop-mock laptop-mock-sm">
+              <div class="laptop-screen"><div class="laptop-notch"></div><div class="laptop-display">
+                <div class="lesprev-zoom"><div class="lesprev-crumb"><span>Dashboard</span></div>
+                  <div class="lesprev-hero" style="--h1:#831843;--h2:#db2777;">
+                    <div class="lesprev-badges"><span>LES 7 VAN 8</span><span>50–60 MIN</span></div>
+                    <div class="lesprev-title"><img src="../Afbeeldingen/emojis%20nieuw/vulpen.png" alt="">Schriftelijke vaardigheden</div>
+                    <div class="lesprev-sub">Mailen naar je leerkracht en aantekeningen maken</div>
+                  </div>
+                </div>
+              </div></div>
+              <div class="laptop-hinge"></div><div class="laptop-base"></div>
+            </div>
+          </div>
+          <div class="skill-story"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></div>
+        </div>
+
+        <!-- TOETSEN: Les 5 -->
+        <div class="skill-group" data-skill="toetsen" hidden>
+          <div class="skill-laptops">
+            <div class="laptop-mock laptop-mock-sm">
+              <div class="laptop-screen"><div class="laptop-notch"></div><div class="laptop-display">
+                <div class="lesprev-zoom"><div class="lesprev-crumb"><span>Dashboard</span></div>
+                  <div class="lesprev-hero" style="--h1:#7f1d1d;--h2:#e05545;">
+                    <div class="lesprev-badges"><span>LES 5 VAN 8</span><span>50–60 MIN</span></div>
+                    <div class="lesprev-title"><img src="../Afbeeldingen/emojis%20nieuw/rugzak.png" alt="">Omgaan met toetsen en stress</div>
+                    <div class="lesprev-sub">Zelfverzekerd naar een toets toewerken</div>
+                  </div>
+                </div>
+              </div></div>
+              <div class="laptop-hinge"></div><div class="laptop-base"></div>
+            </div>
+          </div>
+          <div class="skill-story"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></div>
+        </div>
+
+        <!-- DIGITALE GELETTERDHEID: Les 2 + Les 3 -->
+        <div class="skill-group" data-skill="digitaal" hidden>
+          <div class="skill-laptops">
+            <div class="laptop-mock laptop-mock-sm">
+              <div class="laptop-screen"><div class="laptop-notch"></div><div class="laptop-display">
+                <div class="lesprev-zoom"><div class="lesprev-crumb"><span>Dashboard</span></div>
+                  <div class="lesprev-hero" style="--h1:#065f46;--h2:#10a37f;">
+                    <div class="lesprev-badges"><span>LES 2 VAN 8</span><span>50–60 MIN</span></div>
+                    <div class="lesprev-title"><img src="../Afbeeldingen/emojis%20nieuw/lijst.png" alt="">Middelbare schoolweek inplannen</div>
+                    <div class="lesprev-sub">Kennismaken met het 'KvM Planning Stappenplan'</div>
+                  </div>
+                </div>
+              </div></div>
+              <div class="laptop-hinge"></div><div class="laptop-base"></div>
+            </div>
+            <div class="laptop-mock laptop-mock-sm">
+              <div class="laptop-screen"><div class="laptop-notch"></div><div class="laptop-display">
+                <div class="lesprev-zoom"><div class="lesprev-crumb"><span>Dashboard</span></div>
+                  <div class="lesprev-hero" style="--h1:#92400e;--h2:#f59e0b;">
+                    <div class="lesprev-badges"><span>LES 3 VAN 8</span><span>50–60 MIN</span></div>
+                    <div class="lesprev-title"><img src="../Afbeeldingen/emojis%20nieuw/boeken.png" alt="">Hulpmiddelen tijdens het leren</div>
+                    <div class="lesprev-sub">Handige digitale tools voor op school</div>
+                  </div>
+                </div>
+              </div></div>
+              <div class="laptop-hinge"></div><div class="laptop-base"></div>
+            </div>
+          </div>
+          <div class="skill-story"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></div>
+        </div>
+
+        <!-- SOCIAAL: Les 1 -->
+        <div class="skill-group" data-skill="sociaal" hidden>
+          <div class="skill-laptops">
+            <div class="laptop-mock laptop-mock-sm">
+              <div class="laptop-screen"><div class="laptop-notch"></div><div class="laptop-display">
+                <div class="lesprev-zoom"><div class="lesprev-crumb"><span>Dashboard</span></div>
+                  <div class="lesprev-hero" style="--h1:#1e4a8a;--h2:#72a8f9;">
+                    <div class="lesprev-badges"><span>LES 1 VAN 8</span><span>60 MIN</span></div>
+                    <div class="lesprev-title"><img src="../Afbeeldingen/emojis%20nieuw/raket.png" alt="">Klaar voor lancering!</div>
+                    <div class="lesprev-sub">Kennismaking + Slim Leren</div>
+                  </div>
+                </div>
+              </div></div>
+              <div class="laptop-hinge"></div><div class="laptop-base"></div>
+            </div>
+          </div>
+          <div class="skill-story"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></div>
+        </div>
+
+        <!-- KERN: Les 4 -->
+        <div class="skill-group" data-skill="kern" hidden>
+          <div class="skill-laptops">
+            <div class="laptop-mock laptop-mock-sm">
+              <div class="laptop-screen"><div class="laptop-notch"></div><div class="laptop-display">
+                <div class="lesprev-zoom"><div class="lesprev-crumb"><span>Dashboard</span></div>
+                  <div class="lesprev-hero" style="--h1:#4c1d95;--h2:#7c3aed;">
+                    <div class="lesprev-badges"><span>LES 4 VAN 8</span><span>60 MIN</span></div>
+                    <div class="lesprev-title"><img src="../Afbeeldingen/emojis%20nieuw/brein.png" alt="">Executieve functies</div>
+                    <div class="lesprev-sub">Vaardigheden voor school en daarbuiten</div>
+                  </div>
+                </div>
+              </div></div>
+              <div class="laptop-hinge"></div><div class="laptop-base"></div>
+            </div>
+          </div>
+          <div class="skill-story"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOE ZIET EEN LES ERUIT -->
+  <section id="lesopbouw" class="band-white">
+    <div class="section-head center" style="max-width:900px;margin-left:auto;margin-right:auto;">
+      <div class="section-title">Hoe zien de lessen eruit?</div>
+      <div class="section-sub" style="max-width:none;">Elke les is opgebouwd volgens het EDI-model en speelt zich af binnen een interactief ruimtethema. Wij verzorgen de voorbereiding met ons docentenportaal en de materialen; de groep 8-leerkracht of intern begeleider geeft een interactieve les waar leerlingen enthousiast van worden.</div>
+    </div>
+    <div class="lesopbouw-card">
+      <div class="lesopbouw-image">
+        <a class="lesopbouw-material-btn" href="Materialen-Groep8.html">Bekijk onze materialen</a>
+        <div class="lesopbouw-photo is-laptop active" data-step="1">
+          <div class="laptop-mock laptop-mock-lg lesopbouw-laptop">
+            <div class="laptop-screen">
+              <div class="laptop-notch"></div>
+              <div class="laptop-display">
+                <div class="lp-zoom">
+                  <div class="lp-page">
+                    <div class="lp-hero" style="--h1:#065f46;--h2:#10a37f;">
+                      <div class="lp-hero-content">
+                        <div class="lp-hero-badges"><span class="lp-hero-badge">Les 2 van 8</span><span class="lp-hero-badge">50–60 min</span></div>
+                        <div class="lp-hero-title"><img src="../Afbeeldingen/emojis%20nieuw/lijst.png" alt="">Middelbare schoolweek inplannen</div>
+                        <div class="lp-hero-sub">Kennismaken met het 'KvM Planning Stappenplan'</div>
+                        <div class="lp-hero-btns">
+                          <span class="lp-hero-btn">▶ Starten met de les</span>
+                          <span class="lp-hero-btn"><img src="/Planeten%20Planner/assets/images/planet-tuesday.png" alt="">Planeten Planner</span>
+                          <span class="lp-hero-help">?</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="lp-tip-card">
+                      <div class="lp-tip-icon"><img src="../Afbeeldingen/emojis%20nieuw/lamp.png" alt=""></div>
+                      <div>
+                        <div class="lp-tip-label">Tip voor de leerkracht</div>
+                        <div class="lp-tip-body">Nodig eventueel een oud-leerling uit om te vertellen over zijn of haar eerste weken. Dit maakt het concreet en herkenbaar voor de groep.</div>
+                      </div>
+                    </div>
+                    <div class="lp-content-card">
+                      <div class="lp-cc-title">Lesverloop</div>
+                      <div class="lp-tl-row"><div class="lp-tl-time">0–5 min</div><div><div class="lp-tl-name">Terugblik</div><div class="lp-tl-desc">Korte herhaling van les 1: wat onthielden leerlingen?</div></div></div>
+                      <div class="lp-tl-row"><div class="lp-tl-time">5–20 min</div><div><div class="lp-tl-name">Uitleg & video</div><div class="lp-tl-desc">Toon en bespreek hoe een dag op de middelbare eruitziet.</div></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="laptop-hinge"></div>
+            <div class="laptop-base"></div>
+          </div>
+        </div>
+        <img class="lesopbouw-photo" data-step="2" src="../Afbeeldingen/Website/Kim.png" alt="">
+        <img class="lesopbouw-photo" data-step="3" src="../Afbeeldingen/Website/3.%20ontdekken.png" alt="">
+        <div class="lesopbouw-photo is-trio" data-step="4">
+          <img src="../Afbeeldingen/Website/Slim%20Leren%20vierkant.png" alt="">
+          <img src="../Afbeeldingen/Website/DG%20vierkant.png" alt="">
+          <img src="../Afbeeldingen/Website/Plannen.png" alt="">
+        </div>
+        <div class="lesopbouw-photo is-laptop" data-step="5">
+          <div class="laptop-mock laptop-mock-lg lesopbouw-laptop">
+            <div class="laptop-screen">
+              <div class="laptop-notch"></div>
+              <div class="laptop-display">
+                <div class="lp-zoom">
+                  <div class="lp-page">
+                    <div class="end-hero">
+                      <div class="end-hero-content">
+                        <div class="end-eyebrow">Quiz beëindigd</div>
+                        <div class="end-title">Goed gedaan klas! <img src="../Afbeeldingen/emojis%20nieuw/trofee.png" alt="" style="height:1em;vertical-align:-0.12em;"></div>
+                        <div class="end-sub">Eindstand van de KvM Kwiz</div>
+                      </div>
+                      <img class="end-hero-jay" src="../Afbeeldingen/Jay%20los/Jay%20waving.png" alt="">
+                    </div>
+                    <div class="podium">
+                      <div class="podium-spot podium-2">
+                        <div class="podium-medal"><div class="podium-rank-circle" style="background:#c0c0c0;">2</div></div>
+                        <div class="podium-naam">Yousra</div>
+                        <div class="podium-score">840 punten</div>
+                        <div class="podium-riser" style="background:linear-gradient(180deg,#dfe3e8,#c0c0c0); height:56px;"></div>
+                      </div>
+                      <div class="podium-spot podium-1">
+                        <div class="podium-medal"><img src="../Afbeeldingen/emojis%20nieuw/trofee.png" alt="" style="height:42px;width:auto;"></div>
+                        <div class="podium-naam">Milly</div>
+                        <div class="podium-score">960 punten</div>
+                        <div class="podium-riser" style="background:linear-gradient(180deg,#ffe28a,#f8d760); height:88px;"></div>
+                      </div>
+                      <div class="podium-spot podium-3">
+                        <div class="podium-medal"><div class="podium-rank-circle" style="background:#cd7f32;">3</div></div>
+                        <div class="podium-naam">Jens</div>
+                        <div class="podium-score">790 punten</div>
+                        <div class="podium-riser" style="background:linear-gradient(180deg,#e3a361,#cd7f32); height:32px;"></div>
+                      </div>
+                    </div>
+                    <div class="rest-list">
+                      <div class="rest-row"><div class="rest-rank">4</div><div class="rest-naam">Sem</div><div class="rest-score">760 punten</div></div>
+                      <div class="rest-row"><div class="rest-rank">5</div><div class="rest-naam">Noor</div><div class="rest-score">735 punten</div></div>
+                      <div class="rest-row"><div class="rest-rank">6</div><div class="rest-naam">Daan</div><div class="rest-score">710 punten</div></div>
+                      <div class="rest-row"><div class="rest-rank">7</div><div class="rest-naam">Liam</div><div class="rest-score">690 punten</div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="laptop-hinge"></div>
+            <div class="laptop-base"></div>
+          </div>
+        </div>
+      </div>
+      <div class="lesopbouw-steps">
+        <div class="lesopbouw-step active" data-step="1">
+          <div class="lesopbouw-num">1</div>
+          <div>
+            <div class="lesopbouw-step-title">🛰️ Expeditie voorbereiden</div>
+            <div class="lesopbouw-step-descwrap"><div class="lesopbouw-step-desc">De leerkracht bereidt de les eenvoudig en kort voor met de kant-en-klare docentenhandleiding, inclusief tijdsindicatie, leerdoelen en praktische tips. Daarnaast leggen we via een korte instructievideo in enkele minuten uit wat er die les gaat gebeuren.</div></div>
+          </div>
+        </div>
+        <div class="lesopbouw-step" data-step="2">
+          <div class="lesopbouw-num">2</div>
+          <div>
+            <div class="lesopbouw-step-title">🚀 Lancering</div>
+            <div class="lesopbouw-step-descwrap"><div class="lesopbouw-step-desc">We beginnen met een korte terugblik op de vorige les, zodat leerlingen niet met een leeg hoofd starten. Daarna volgt een introductie die meteen duidelijk maakt waar de les over gaat.</div></div>
+          </div>
+        </div>
+        <div class="lesopbouw-step" data-step="3">
+          <div class="lesopbouw-num">3</div>
+          <div>
+            <div class="lesopbouw-step-title">🪐 Ontdekken</div>
+            <div class="lesopbouw-step-descwrap"><div class="lesopbouw-step-desc">De nieuwe stof wordt uitgelegd door de leerkracht of door Jay, het vaste personage binnen Klaar voor Middelbaar. Met behulp van een presentatie of een korte kennisclip maken we nieuwe onderwerpen begrijpelijk en herkenbaar.</div></div>
+          </div>
+        </div>
+        <div class="lesopbouw-step" data-step="4">
+          <div class="lesopbouw-num">4</div>
+          <div>
+            <div class="lesopbouw-step-title">🌍 Missie uitvoeren</div>
+            <div class="lesopbouw-step-descwrap"><div class="lesopbouw-step-desc">Na een duidelijke uitleg en een gezamenlijk voorbeeld gaan leerlingen zelfstandig of samen aan de slag. Met afwisselende werkvormen, zoals het werkboek, online opdrachten, spellen en games, blijft iedere leerling actief betrokken.</div></div>
+          </div>
+        </div>
+        <div class="lesopbouw-step" data-step="5">
+          <div class="lesopbouw-num">5</div>
+          <div>
+            <div class="lesopbouw-step-title">🏁 Terug op het ruimtestation</div>
+            <div class="lesopbouw-step-descwrap"><div class="lesopbouw-step-desc">De les wordt afgesloten met een korte KvM Kwiz om te checken wat is blijven hangen, gevolgd door een gezamenlijke terugblik in de klas. Zo weet iedereen precies wat de volgende expeditie wordt.</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:36px;">
+      <a class="btn btn-primary" id="lesopbouwDemoCta" style="font-size:18px;" href="#demo">Meer zien? Vraag een demo aan!</a>
+    </div>
+  </section>
+
+  <!-- VOORDELEN -->
+  <section id="voordelen" class="band-blue">
+    <div class="section-head center" style="max-width:640px;margin-left:auto;margin-right:auto;">
+      <div class="section-title">Wat levert Klaar voor Middelbaar op voor jouw school?</div>
+    </div>
+    <div class="voordelen-grid">
+      <div class="voordeel-card">
+        <div class="voordeel-emoji"><img src="../Afbeeldingen/EMOJI%20PACK%20IOS/man-teacher-light-skin-tone_1f468-1f3fb-200d-1f3eb.png" alt=""></div>
+        <div class="tag">Voor de leerkracht</div>
+        <h3>Kant-en-klaar lesmateriaal</h3>
+        <ul>
+          <li>Acht uitgewerkte lessen van ongeveer een uur, direct inzetbaar</li>
+          <li>Meer tijd voor de klas, minder tijd aan voorbereiding</li>
+          <li>Flexibel in te passen binnen het lesprogramma</li>
+        </ul>
+      </div>
+      <div class="voordeel-card">
+        <div class="voordeel-emoji"><img src="../Afbeeldingen/emojis%20nieuw/rugzak.png" alt=""></div>
+        <div class="tag">Voor leerlingen</div>
+        <h3>Zelfverzekerd naar de brugklas</h3>
+        <ul>
+          <li>Leuke en afwisselende lessen voor een zelfverzekerde start van de brugklas</li>
+          <li>Zes praktische vaardigheden die direct van pas komen op de middelbare school</li>
+          <li>Gevarieerd programma met een werkboek, online opdrachten, quizzes, spellen en games</li>
+        </ul>
+      </div>
+      <div class="voordeel-card">
+        <div class="voordeel-emoji"><img src="../Afbeeldingen/emojis%20nieuw/school.png" alt=""></div>
+        <div class="tag">Voor de school</div>
+        <h3>Alles voor een goede overstap</h3>
+        <ul>
+          <li>Structurele aanpak voor studie-, digitale- en sociale vaardigheden</li>
+          <li>Sluit aan bij diverse <a class="kerndoelen-link" href="Kerndoelen-Overzicht.html">kerndoelen</a></li>
+          <li>Ouders worden actief betrokken</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- LESPERIODES -->
+  <section id="lesperiodes" class="band-white">
+    <div class="section-head center" style="max-width:640px;margin-left:auto;margin-right:auto;">
+      <div class="section-title">Lesperiodes</div>
+      <div class="section-sub">Klaar voor Middelbaar wordt in vaste periodes ingepland — met een beperkt aantal plekken per periode.</div>
+    </div>
+    <div class="periode-grid">
+      <div class="periode-card">
+        <div class="periode-ico"><img src="../Afbeeldingen/emojis%20nieuw/planeet.png" alt=""></div>
+        <div>
+          <div class="periode-title">September – december</div>
+          <div class="periode-sub">Schooljaar 2026/2027</div>
+          <div class="periode-badge">3 plekken beschikbaar</div>
+        </div>
+      </div>
+      <div class="periode-card">
+        <div class="periode-ico"><img src="../Afbeeldingen/emojis%20nieuw/raket.png" alt=""></div>
+        <div>
+          <div class="periode-title">Maart – juni</div>
+          <div class="periode-sub">Schooljaar 2026/2027</div>
+          <div class="periode-badge">4 plekken beschikbaar</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRAKTIJK -->
+  <section id="praktijk" class="band-white">
+    <div class="section-head center" style="max-width:640px;margin-left:auto;margin-right:auto;">
+      <div class="section-title">In de praktijk</div>
+      <div class="section-sub">Wat leerkrachten en leerlingen teruggeven</div>
+    </div>
+    <div class="testi-slider-wrap">
+      <button class="testi-arrow testi-arrow-prev" id="testiPrev" type="button" aria-label="Vorige">‹</button>
+      <div class="testi-track" id="testiTrack">
+        <div class="testi-card" id="dennis-review" style="--tc1:#92400e;--tc2:#f59e0b;">
+          <div class="testi-top">
+            <div class="testi-avatar">DB</div>
+            <div>
+              <div class="testi-naam">Dennis van den Bogaardt</div>
+              <div class="testi-functie">Leerkracht groep 8</div>
+              <div class="testi-school">Basisschool Uniek</div>
+            </div>
+          </div>
+          <div class="testi-quote">"</div>
+          <p>De onderwerpen waren relevant voor de overgang. De lessen waren goed voorbereid, duidelijk en behielden de aandacht van de leerlingen.</p>
+        </div>
+        <div class="testi-card" style="--tc1:#065f46;--tc2:#10a37f;">
+          <div class="testi-top">
+            <div class="testi-avatar">EP</div>
+            <div>
+              <div class="testi-naam">Ethel Pfeijffer</div>
+              <div class="testi-functie">Leerkracht groep 8</div>
+              <div class="testi-school">OBS De Wending</div>
+            </div>
+          </div>
+          <div class="testi-quote">"</div>
+          <p>Het programma gaf leerlingen inzicht in de structuur van het voortgezet onderwijs en handige tools voor effectief leren.</p>
+        </div>
+        <div class="testi-card" style="--tc1:#7f1d1d;--tc2:#e05545;">
+          <div class="testi-top">
+            <div class="testi-avatar">AV</div>
+            <div>
+              <div class="testi-naam">Angélique Verhouwen</div>
+              <div class="testi-functie">Leerkracht groep 8</div>
+              <div class="testi-school">Basisschool Het Talent</div>
+            </div>
+          </div>
+          <div class="testi-quote">"</div>
+          <p>Klaar voor Middelbaar bereidt leerlingen op een leuke, interactieve wijze voor. Alle vo-onderdelen komen aan bod.</p>
+        </div>
+        <div class="testi-card" style="--tc1:#831843;--tc2:#db2777;">
+          <div class="testi-top">
+            <div class="testi-avatar">L</div>
+            <div>
+              <div class="testi-naam">Leerling</div>
+              <div class="testi-school">OBS De Noordster</div>
+            </div>
+          </div>
+          <div class="testi-quote">"</div>
+          <p>Dankzij het programma ben ik niet meer zo gestrest. Ik kan nu veel effectiever leren.</p>
+        </div>
+        <div class="testi-card" style="--tc1:#0c4a6e;--tc2:#0284c7;">
+          <div class="testi-top">
+            <div class="testi-avatar">MG</div>
+            <div>
+              <div class="testi-naam">Melissa Gerritsen</div>
+              <div class="testi-functie">Docent en initiatiefnemer Juniorcollege</div>
+              <div class="testi-school">Markland Oudenbosch</div>
+            </div>
+          </div>
+          <div class="testi-quote">"</div>
+          <p>Uitstekende voorbereiding met goed gestructureerde lessen en passende werkvormen.</p>
+        </div>
+        <div class="testi-card" style="--tc1:#4c1d95;--tc2:#7c3aed;">
+          <div class="testi-top">
+            <div class="testi-avatar">IG</div>
+            <div>
+              <div class="testi-naam">Ilona van Gastel</div>
+              <div class="testi-functie">Leerkracht groep 8</div>
+              <div class="testi-school">OBS De Wending</div>
+            </div>
+          </div>
+          <div class="testi-quote">"</div>
+          <p>Heldere lesopbouw, korte communicatielijnen en een zeer professionele voorbereiding.</p>
+        </div>
+      </div>
+      <button class="testi-arrow testi-arrow-next" id="testiNext" type="button" aria-label="Volgende">›</button>
+    </div>
+  </section>
+
+  <!-- TARIEVEN -->
+  <section id="offerte" class="band-blue">
+    <div class="section-head center" style="max-width:640px;margin-left:auto;margin-right:auto;">
+      <div class="section-title">Tarieven</div>
+      <div class="section-sub">Een helder programma met een vaste investering per klas.</div>
+    </div>
+    <div class="prijs-wrap">
+      <div class="prijs-card">
+        <div class="tag">Spelmateriaal</div>
+        <div class="bedrag">€ 495<span>,-</span></div>
+        <div class="sub">Eenmalig</div>
+        <ul>
+          <li>6× bordspel KvM RuimteRace <span class="info-icon" data-image="Afbeeldingen/benodigdheden lessen/Les 8 - RuimteRace.png" data-label="KvM RuimteRace" aria-label="Meer informatie">i</span></li>
+          <li>6× bordspel KvM SterrenStrijd <span class="info-icon" data-image="Afbeeldingen/benodigdheden lessen/Les 4 - KvM SterrenStrijd.png" data-label="KvM SterrenStrijd" aria-label="Meer informatie">i</span></li>
+          <li>12× kaartspel KvM Kraak de Code <span class="info-icon" data-image="Afbeeldingen/benodigdheden lessen/Les 1 - Slim Leren spel.png" data-label="KvM Kraak de Code" aria-label="Meer informatie">i</span></li>
+          <li>Voldoende spelmateriaal voor alle lessen</li>
+          <li>Eenmalige aanschaf, jarenlang te gebruiken</li>
+        </ul>
+      </div>
+      <div class="prijs-card">
+        <div class="tag">Klassikaal programma</div>
+        <div class="bedrag">€ 995<span>,- per klas</span></div>
+        <div class="sub">Jaarlijks</div>
+        <ul>
+          <li>Toegang tot het docentenportaal <span class="info-icon" data-image="Afbeeldingen/Website/laptop docentenportaal.png" data-label="Docentenportaal" aria-label="Meer informatie">i</span></li>
+          <li>Acht volledig uitgewerkte lessen</li>
+          <li>Handleiding en instructievideo bij iedere les</li>
+          <li>Werkboek voor iedere leerling <span class="info-icon" data-image="Afbeeldingen/benodigdheden lessen/Werkboek.png" data-label="Werkboek" aria-label="Meer informatie">i</span></li>
+          <li>Survivalgids voor iedere leerling <span class="info-icon" data-image="Afbeeldingen/benodigdheden lessen/Les 8 - Samenvattingenboekje.png" data-label="Survivalgids" aria-label="Meer informatie">i</span></li>
+          <li>Toegang tot alle online opdrachten, quizzes, spellen en games <span class="info-icon" data-image="Afbeeldingen/Website/laptop online spellen.png" data-label="Online opdrachten en games" aria-label="Meer informatie">i</span></li>
+          <li>Certificaat voor iedere leerling <span class="info-icon" data-image="Afbeeldingen/Benodigdheden lessen/Les 8 - Certificaat.png" data-label="Certificaat" aria-label="Meer informatie">i</span></li>
+        </ul>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;margin:44px auto 0;">
+      <a class="btn btn-primary" style="min-width:300px;padding:16px 28px;background:#fff;color:var(--primary-dark);text-align:center;font-size:18px;" href="#demo">Vraag een offerte aan</a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="demo">
+    <div class="cta-slot">
+      <img class="cta-jay" src="../Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
+      <h2>Klaar voor Middelbaar op jouw school?</h2>
+      <p>Wil je een demo of offerte aanvragen, of heb je gewoon een vraag? Laat het ons weten!</p>
+      <form class="cta-form" action="mailto:contact@klaarvoormiddelbaar.nl" method="post" enctype="text/plain">
+        <label>Naam<input type="text" name="naam" placeholder="Je naam" required></label>
+        <label>School<input type="text" name="school" placeholder="Naam van je school" required></label>
+        <label>E-mailadres<input type="email" name="email" placeholder="naam@school.nl" required></label>
+        <label>Telefoonnummer<input type="tel" name="telefoon" placeholder="06 12345678"></label>
+        <label class="full">Waar kunnen we je mee helpen?<textarea name="bericht" placeholder="Vertel kort waar je interesse in hebt…" required></textarea></label>
+        <button class="hero-cta-live" type="submit">Verstuur aanvraag</button>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <img class="footer-logo" src="../Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
+      <p>Stationslaan 69 C13<br>4815 GW Breda, Nederland</p>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="mailto:contact@klaarvoormiddelbaar.nl">contact@klaarvoormiddelbaar.nl</a>
+      <a href="tel:+31633382366">+31 6 33382366</a>
+    </div>
+    <div class="footer-col">
+      <h4>Meer info</h4>
+      <a href="https://klaarvoormiddelbaar.nl/wp-content/uploads/2024/07/Privacyverklaring-Klaar-voor-Middelbaar.pdf" target="_blank" rel="noopener">Privacybeleid</a>
+      <a href="https://klaarvoormiddelbaar.nl/wp-content/uploads/2025/11/Algemene-Voorwaarden-Klaar-voor-Middelbaar-1.pdf" target="_blank" rel="noopener">Algemene voorwaarden</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 Klaar voor Middelbaar. Alle rechten voorbehouden.</div>
+</footer>
+
+<script>
+(function(){
+  var steps = document.querySelectorAll('.lesopbouw-step[data-step]');
+  var photos = document.querySelectorAll('.lesopbouw-photo[data-step]');
+  if(!steps.length || !photos.length) return;
+  function setActive(stepNum){
+    steps.forEach(function(s){ s.classList.toggle('active', s.dataset.step === stepNum); });
+    photos.forEach(function(p){ p.classList.toggle('active', p.dataset.step === stepNum); });
+  }
+  steps.forEach(function(step){
+    step.addEventListener('mouseenter', function(){ setActive(step.dataset.step); });
+    step.addEventListener('focus', function(){ setActive(step.dataset.step); });
+  });
+})();
+
+(function(){
+  var nav = document.querySelector('.nav');
+  if(!nav) return;
+  function updateNav(){
+    if(window.scrollY > 60){ nav.classList.add('solid'); }
+    else { nav.classList.remove('solid'); }
+  }
+  updateNav();
+  window.addEventListener('scroll', updateNav, {passive:true});
+})();
+
+(function(){
+  var demoCta = document.getElementById('lesopbouwDemoCta');
+  var navCta = document.querySelector('.floating-cta');
+  if(!demoCta || !navCta || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function(entries){
+    navCta.classList.toggle('is-hidden', entries[0].isIntersecting);
+  }, {threshold:0.2}).observe(demoCta);
+})();
+
+(function(){
+  var cta = document.querySelector('.floating-cta');
+  var heroCta = document.querySelector('.hero-full .hero-cta-live');
+  var demoCta = document.getElementById('demo');
+  if(!cta || !heroCta || !('IntersectionObserver' in window)) return;
+
+  var pastHero = false;
+  var demoInView = false;
+
+  function update(){
+    cta.classList.toggle('visible', pastHero && !demoInView);
+  }
+
+  var heroIo = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      pastHero = entry.boundingClientRect.bottom <= 0;
+      update();
+    });
+  }, {threshold:0});
+  heroIo.observe(heroCta);
+
+  if(demoCta){
+    var demoIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        demoInView = entry.isIntersecting;
+        update();
+      });
+    }, {threshold:0});
+    demoIo.observe(demoCta);
+  }
+})();
+
+(function(){
+  var moreBtn = document.getElementById('vaardighedenMore');
+  var grid = document.querySelector('.lessons-grid');
+  if(moreBtn && grid){
+    moreBtn.addEventListener('click', function(){
+      grid.classList.add('expanded');
+      moreBtn.style.display = 'none';
+    });
+  }
+})();
+
+(function(){
+  var cards = document.querySelectorAll('.lesson-card[data-skill]');
+  var detail = document.getElementById('skillDetail');
+  var closeBtn = document.getElementById('skillDetailClose');
+  var groups = document.querySelectorAll('.skill-group[data-skill]');
+  if(!cards.length || !detail || document.body.classList.contains('skills-disabled')) return;
+
+  function openSkill(skill, card){
+    groups.forEach(function(g){ g.hidden = (g.dataset.skill !== skill); });
+    cards.forEach(function(c){ c.classList.toggle('active', c === card); });
+    detail.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSkill(){
+    detail.classList.remove('open');
+    cards.forEach(function(c){ c.classList.remove('active'); });
+    document.body.style.overflow = '';
+  }
+
+  cards.forEach(function(card){
+    card.addEventListener('click', function(){ openSkill(card.dataset.skill, card); });
+    card.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openSkill(card.dataset.skill, card); }
+    });
+  });
+
+  if(closeBtn){ closeBtn.addEventListener('click', closeSkill); }
+  detail.addEventListener('click', function(e){ if(e.target === detail){ closeSkill(); } });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && detail.classList.contains('open')){ closeSkill(); }
+  });
+})();
+
+(function(){
+  var track = document.getElementById('testiTrack');
+  var prevBtn = document.getElementById('testiPrev');
+  var nextBtn = document.getElementById('testiNext');
+  if(!track || !prevBtn || !nextBtn) return;
+
+  var realCards = Array.from(track.children);
+  var n = realCards.length;
+  if(!n) return;
+
+  // Put Dennis first in the source track before cloning, so every viewport starts there.
+  var dennis = track.querySelector('#dennis-review');
+  if(dennis) track.insertBefore(dennis, track.firstElementChild);
+  realCards = Array.from(track.children);
+  realCards.sort(function(a,b){
+    var aDennis = /Dennis van den Bogaardt/i.test(a.textContent);
+    var bDennis = /Dennis van den Bogaardt/i.test(b.textContent);
+    return Number(bDennis) - Number(aDennis);
+  }).forEach(function(card){ track.appendChild(card); });
+  realCards = Array.from(track.children);
+
+  var prependFrag = document.createDocumentFragment();
+  var appendFrag = document.createDocumentFragment();
+  realCards.forEach(function(c){ prependFrag.appendChild(c.cloneNode(true)); });
+  realCards.forEach(function(c){ appendFrag.appendChild(c.cloneNode(true)); });
+  track.insertBefore(prependFrag, track.firstChild);
+  track.appendChild(appendFrag);
+
+  var allCards = Array.from(track.children);
+  var realStart = allCards[n];
+  var appendStart = allCards[2 * n];
+
+  function setWidth(){ return appendStart.offsetLeft - realStart.offsetLeft; }
+
+  function goToStart(){
+    /* Align the first real card (Dennis) with the track viewport, including mobile layouts. */
+    track.scrollLeft += realStart.getBoundingClientRect().left - track.getBoundingClientRect().left;
+  }
+  goToStart();
+  requestAnimationFrame(goToStart);
+  setTimeout(goToStart,120);
+  window.addEventListener('load', goToStart);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(goToStart); }
+
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        entry.target.classList.toggle('in-view', entry.intersectionRatio >= 0.95);
+      });
+    }, {root: track, threshold: [0, 0.5, 0.95, 1]});
+    allCards.forEach(function(c){ io.observe(c); });
+  } else {
+    allCards.forEach(function(c){ c.classList.add('in-view'); });
+  }
+
+  var isDragging = false, dragStartX = 0, dragStartScroll = 0;
+
+  var wrapPending = false;
+  function wrapIfNeeded(){
+    if(wrapPending) return;
+    var w = setWidth();
+    if(w <= 0) return;
+    if(track.scrollLeft < realStart.offsetLeft - w * 0.5){
+      wrapPending = true;
+      requestAnimationFrame(function(){ track.scrollLeft += w; wrapPending = false; });
+    } else if(track.scrollLeft > appendStart.offsetLeft + w * 0.5){
+      wrapPending = true;
+      requestAnimationFrame(function(){ track.scrollLeft -= w; wrapPending = false; });
+    }
+  }
+  track.addEventListener('scroll', function(){
+    if(!isDragging) wrapIfNeeded();
+  }, {passive:true});
+
+  function step(dir){
+    var cardWidth = realCards[0].getBoundingClientRect().width;
+    var gap = 18;
+    track.scrollBy({left: dir * (cardWidth + gap), behavior:'smooth'});
+  }
+  prevBtn.addEventListener('click', function(){ step(-1); });
+  nextBtn.addEventListener('click', function(){ step(1); });
+
+  track.addEventListener('mousedown', function(e){
+    isDragging = true;
+    dragStartX = e.pageX;
+    dragStartScroll = track.scrollLeft;
+    track.classList.add('dragging');
+  });
+  function endDrag(){
+    isDragging = false;
+    track.classList.remove('dragging');
+    wrapIfNeeded();
+    var cardWidth = realCards[0].getBoundingClientRect().width + 18;
+    var nearest = Math.round(track.scrollLeft / cardWidth) * cardWidth;
+    track.scrollTo({left: nearest, behavior:'smooth'});
+  }
+  window.addEventListener('mousemove', function(e){
+    if(!isDragging) return;
+    if(e.buttons === 0){ endDrag(); return; }
+    track.scrollLeft = dragStartScroll - (e.pageX - dragStartX);
+  });
+  window.addEventListener('mouseup', function(){
+    if(!isDragging) return;
+    endDrag();
+  });
+  track.addEventListener('dragstart', function(e){ e.preventDefault(); });
+})();
+
+(function(){
+  var nums = document.querySelectorAll('.stat-num[data-target]');
+  if(!nums.length) return;
+  function format(val, decimals, suffix){
+    var str = decimals ? val.toFixed(decimals).replace('.', ',') : Math.round(val).toLocaleString('nl-NL');
+    return str + (suffix || '');
+  }
+  function animate(el){
+    var target = parseFloat(el.dataset.target);
+    var decimals = parseInt(el.dataset.decimals || '0', 10);
+    var suffix = el.dataset.suffix || '';
+    var duration = 1200;
+    var start = performance.now();
+    function step(now){
+      var p = Math.min((now - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = format(target * eased, decimals, suffix);
+      if(p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        animate(entry.target);
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.4});
+  nums.forEach(function(el){ io.observe(el); });
+})();
+</script>
+<script>
+(function(){
+  var icons=document.querySelectorAll('.info-icon[data-image]');
+  var pop=document.createElement('div'); pop.className='info-preview';
+  pop.innerHTML='<img alt=""><span></span>'; document.body.appendChild(pop);
+  var img=pop.querySelector('img'), label=pop.querySelector('span');
+  function show(icon){ var r=icon.getBoundingClientRect(); img.src=icon.dataset.image; label.textContent=icon.dataset.label||''; pop.classList.add('is-visible'); var left=Math.min(Math.max(12,r.left-150),window.innerWidth-364); var top=r.bottom+12; if(top+290>window.innerHeight) top=r.top-300; pop.style.left=left+'px'; pop.style.top=top+'px'; }
+  icons.forEach(function(icon){ icon.addEventListener('mouseenter',function(){show(icon);}); icon.addEventListener('mouseleave',function(){pop.classList.remove('is-visible');}); icon.addEventListener('focus',function(){show(icon);}); icon.addEventListener('blur',function(){pop.classList.remove('is-visible');}); icon.addEventListener('click',function(e){e.stopPropagation(); show(icon);}); });
+})();
+</script>
+
+<script src="shared-chrome.js"></script>
+</body>
+</html>
