@@ -106,6 +106,9 @@
   .hero-cta-live:hover{background:var(--coral-dark); transform:translateY(-3px); box-shadow:0 18px 34px rgba(221,111,78,0.5);}
   .chip-emoji{width:18px; height:18px; object-fit:contain; vertical-align:middle; display:inline-block;}
   @media(max-width:860px){ .hero-inner{flex-direction:column; text-align:center; align-items:center;} .hero-content{max-width:100%;} .hero-ctas{justify-content:center;} .hero-kim{right:12%; bottom:12px; width:105px; height:105px;} }
+  /* Mobiel: vaste PNG i.p.v. de geschaalde laptop-mockup (betrouwbaarder op kleine schermen dan JS transform:scale). */
+  .hero-laptop-mobile-img{display:none;}
+  @media(max-width:860px){ .hero-laptop-mock{display:none;} .hero-laptop-mobile-img{display:block; width:min(78vw,340px); height:auto;} }
 
   /* LAPTOP MOCKUP — bevat een 1:1 opbouw van het echte dashboard (zelfde klassen/waarden), platte laptop, verkleind met zoom i.p.v. handmatig herschaalde lettergroottes */
   /* Vaste desktop-afmetingen; op mobiel wordt de HELE laptop (bezel + content) proportioneel verkleind via JS transform:scale(), zodat de verhoudingen exact gelijk blijven aan desktop. Zie script onderaan de pagina. */
@@ -334,6 +337,14 @@
     .lesopbouw-photo.is-trio img{height:110px; border-radius:12px;}
     .lesopbouw-steps{padding:28px 24px; gap:20px;}
   }
+  /* Mobiel: vaste PNG i.p.v. de geschaalde laptop-mockup (betrouwbaarder op kleine schermen dan JS transform:scale). */
+  .lesopbouw-mobile-laptop-img{display:none;}
+  @media(max-width:800px){
+    .laptop-mock.lesopbouw-laptop{display:none;}
+    .lesopbouw-mobile-laptop-img{display:block; width:min(72vw,300px); height:auto;}
+    /* De PNG heeft al een ingebakken schaduw, dus de losse drop-shadow van de wrapper (bedoeld voor de div-mockup) uitzetten om dubbele schaduw te voorkomen. */
+    .lesopbouw-photo.is-laptop{filter:none;}
+  }
   .lesopbouw-photo.active{opacity:1;}
   .lesopbouw-image{min-height:340px;}
   .lesopbouw-cta{position:absolute; bottom:28px; left:50%; transform:translateX(-50%); z-index:2; white-space:nowrap;}
@@ -496,7 +507,7 @@
         <a class="hero-cta" href="#demo">Vraag een demo aan</a>
       </div>
     </div>
-    <div class="laptop-mock">
+    <div class="laptop-mock hero-laptop-mock">
       <div class="laptop-screen">
         <div class="laptop-notch"></div>
         <div class="laptop-display">
@@ -567,6 +578,7 @@
       <div class="laptop-hinge"></div>
       <div class="laptop-base"></div>
     </div>
+    <img class="hero-laptop-mobile-img" src="Afbeeldingen/Website/laptop%20mobiel%20hero.png" alt="Docentendashboard van Klaar voor Middelbaar">
   </div>
 
 </section>
@@ -905,6 +917,7 @@
             <div class="laptop-hinge"></div>
             <div class="laptop-base"></div>
           </div>
+          <img class="lesopbouw-mobile-laptop-img" src="Afbeeldingen/Website/laptop%20mobiel%20stap%201.png" alt="Middelbare schoolweek inplannen">
         </div>
         <img class="lesopbouw-photo" data-step="2" src="Afbeeldingen/Website/Kim.png" alt="">
         <img class="lesopbouw-photo" data-step="3" src="Afbeeldingen/Website/3.%20ontdekken.png" alt="">
@@ -961,6 +974,7 @@
             <div class="laptop-hinge"></div>
             <div class="laptop-base"></div>
           </div>
+          <img class="lesopbouw-mobile-laptop-img" src="Afbeeldingen/Website/laptop%20mobiel%20quiz.png" alt="Eindstand van de KvM Kwiz">
         </div>
       </div>
       <div class="lesopbouw-steps">
@@ -1533,6 +1547,9 @@
 
   apply();
   window.addEventListener('load', apply);
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(apply);
+  }
 })();
 </script>
 <script>
@@ -1566,15 +1583,17 @@
 
   function apply(){
     els.forEach(function(el){
-      if(el.dataset.naturalH === undefined){
-        el.dataset.naturalH = el.getBoundingClientRect().height;
-      }
-      var scale = scaleFor(el);
       var isAbsolute = !!el.closest('.lesopbouw-photo');
+      // Meet de natuurlijke (onverkleinde) hoogte ELKE keer opnieuw (transform/margin kort resetten),
+      // net als STAP 1 hierboven. Vaste caching in dataset zou de hoogte permanent vastzetten op het
+      // moment van de allereerste meting, terwijl die op dat moment nog fout kan zijn (bv. vóór het
+      // laden/wisselen van het webfont) — met een blijvend verkeerde margin-compensatie tot gevolg.
+      el.style.transform = '';
+      el.style.transformOrigin = '';
+      el.style.marginBottom = '';
+      var h = el.getBoundingClientRect().height;
+      var scale = scaleFor(el);
       if(scale >= 1){
-        el.style.transform = '';
-        el.style.transformOrigin = '';
-        el.style.marginBottom = '';
         return;
       }
       if(isAbsolute){
@@ -1582,11 +1601,9 @@
         // geen ruimte-compensatie nodig omdat deze laptop de layout van de pagina niet beïnvloedt.
         el.style.transformOrigin = 'center center';
         el.style.transform = 'scale(' + scale + ')';
-        el.style.marginBottom = '';
       } else {
         // Normale flex-flow item -> vanaf de bovenkant schalen en de vrijgekomen ruimte eronder terugclaimen
         // met een negatieve margin, zodat er geen lege ruimte overblijft.
-        var h = parseFloat(el.dataset.naturalH) || 0;
         el.style.transformOrigin = 'top center';
         el.style.transform = 'scale(' + scale + ')';
         el.style.marginBottom = (-(h * (1 - scale))) + 'px';
@@ -1596,6 +1613,9 @@
 
   apply();
   window.addEventListener('load', apply);
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(apply);
+  }
   var resizeTimer;
   window.addEventListener('resize', function(){
     clearTimeout(resizeTimer);
