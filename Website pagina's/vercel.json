@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/Homepagina-Groep8.html" }
+    { "source": "/", "destination": "/Homepagina-Groep8.html" },
+    { "source": "/groep-8", "destination": "/Homepagina-Groep8.html" }
   ]
 }
