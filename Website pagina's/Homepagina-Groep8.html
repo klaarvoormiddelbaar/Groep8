@@ -341,10 +341,11 @@
   .lesopbouw-mobile-laptop-img{display:none;}
   @media(max-width:800px){
     .laptop-mock.lesopbouw-laptop{display:none;}
-    .lesopbouw-mobile-laptop-img{display:block; width:min(72vw,300px); height:auto;}
+    .lesopbouw-mobile-laptop-img{display:block; width:auto; height:auto; max-width:90vw; max-height:290px;}
     /* De PNG heeft al een ingebakken schaduw, dus de losse drop-shadow van de wrapper (bedoeld voor de div-mockup) uitzetten om dubbele schaduw te voorkomen. */
     .lesopbouw-photo.is-laptop{filter:none;}
   }
+  @media(max-width:420px){ .lesopbouw-mobile-laptop-img{max-height:230px;} }
   .lesopbouw-photo.active{opacity:1;}
   .lesopbouw-image{min-height:340px;}
   .lesopbouw-cta{position:absolute; bottom:28px; left:50%; transform:translateX(-50%); z-index:2; white-space:nowrap;}
