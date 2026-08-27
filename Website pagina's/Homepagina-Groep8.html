@@ -349,6 +349,8 @@
   @media(max-width:420px){ .lesopbouw-mobile-laptop-img{max-height:207px;} }
   .lesopbouw-photo.active{opacity:1;}
   .lesopbouw-image{min-height:340px;}
+  /* Desktop: vaste hoogte i.p.v. grid-stretch, zodat de knop niet verspringt als de stap-tekst rechts (met wisselende lengte) de grid-rij anders laat groeien. */
+  @media(min-width:801px){ .lesopbouw-image{height:458px;} }
   .lesopbouw-cta{position:absolute; bottom:28px; left:50%; transform:translateX(-50%); z-index:2; white-space:nowrap;}
   .lesopbouw-cta:hover{transform:translateX(-50%) translateY(-2px);}
   .lesopbouw-steps{padding:44px; display:flex; flex-direction:column; gap:26px; background:linear-gradient(135deg,#fff 0%,#eaf2fe 100%);}
@@ -470,7 +472,7 @@
   .lesopbouw-material-btn{position:absolute;left:50%;bottom:18px;z-index:10;transform:translateX(-50%);display:inline-flex;align-items:center;justify-content:center;width:210px;box-sizing:border-box;padding:11px 16px;border:1px solid rgba(255,255,255,.78);border-radius:999px;background:rgba(255,255,255,.08);color:#fff;text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap;transition:none}.lesopbouw-material-btn:hover,.lesopbouw-material-btn:focus{color:#fff;background:rgba(255,255,255,.08);text-decoration:none;transform:translateX(-50%)}
   @media(max-width:800px){
     .lesopbouw-image{padding-bottom:150px;min-height:430px;}
-    .lesopbouw-material-btn{bottom:14px;}
+    .lesopbouw-material-btn{bottom:26px;}
     .lesopbouw-photo.is-laptop{transform:translate(-50%,-57%);}
   }
 
