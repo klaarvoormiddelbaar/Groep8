@@ -1,9 +1,11 @@
 {
   "redirects": [
-    { "source": "/groep-8/", "destination": "/groep-8", "permanent": false }
+    { "source": "/groep-8/", "destination": "/groep-8", "permanent": false },
+    { "source": "/brugklas/", "destination": "/brugklas", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/", "destination": "/Homepagina-Groep8.html" },
-    { "source": "/groep-8", "destination": "/Homepagina-Groep8.html" }
+    { "source": "/", "destination": "/Homepagina.html" },
+    { "source": "/groep-8", "destination": "/Homepagina-Groep8.html" },
+    { "source": "/brugklas", "destination": "/brugklas/index.html" }
   ]
 }
