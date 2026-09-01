@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Klaar voor Middelbaar</title>
+  <meta name="description" content="Klaar voor Middelbaar helpt leerlingen in groep 8 en de brugklas met studievaardigheden, digitale geletterdheid en sociaal-emotionele vaardigheden.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared-header-footer.css?v=2">
+  <style>
+    :root {
+      --blue: #4e8ef3;
+      --blue-light: #72a8f9;
+      --blue-dark: #214f91;
+      --coral: #e8886b;
+      --coral-dark: #dd6f4e;
+      --ink: #191c1d;
+      --muted: #6f7781;
+      --wash: #eef5ff;
+      --white: #fff;
+      --page-bg:#f7f9fb; --card-bg:#fff; --footer-bg:#f2f4f4;
+      --primary:#72a8f9; --primary-dark:#4e8ef3; --border:#eceeee;
+      --shadow-card:0 20px 25px -5px rgba(0,0,0,.10),0 8px 10px -6px rgba(0,0,0,.10);
+      --max-w:1184px; --pad:48px; --outer-w:calc(var(--max-w) + 2*var(--pad));
+      --radius: 38px; --r-card:40px; --r-pill:9999px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Inria Sans", Arial, sans-serif;
+      color: var(--ink);
+      background: #fff;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      padding: 96px var(--pad) 100px;
+      color: #fff;
+      background:
+        linear-gradient(135deg, rgba(26, 66, 128, .91), rgba(58, 123, 213, .86) 52%, rgba(114, 168, 249, .80)),
+        url("Afbeeldingen/Website/IMG_2094-scaled.jpg") center calc(44% - 30px) / cover no-repeat;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,255,255,.22) 2.2px, transparent 2.5px);
+      background-size: 36px 36px;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      right: -155px;
+      top: -180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.10);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      text-align: center;
+    }
+    .eyebrow { margin: 0 0 12px; font-size: 12px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; }
+    h1 { max-width: 680px; margin: 0; font-size: clamp(32px,4.6vw,52px); line-height: 1.08; letter-spacing: normal; }
+    .hero-copy { max-width: 600px; margin: 16px auto 0; font-size: 23px; line-height: 1.5; }
+    .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; width: 100%; margin-top: 26px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      min-width: 252px;
+      padding: 0 28px;
+      border: 2px solid transparent;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 700;
+      transition: transform .2s ease, background .2s ease, color .2s ease;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button-coral { background: var(--coral); color: #fff; box-shadow: 0 14px 30px rgba(51,49,83,.20); }
+    .button-coral:hover { background: var(--coral-dark); }
+    .button-ghost {
+      min-height: auto;
+      padding: 13px 28px;
+      color: #fff;
+      border: 1.5px solid rgba(255,255,255,.50);
+      background: rgba(255,255,255,.20);
+      backdrop-filter: blur(8px);
+      font-family: 'Inria Sans', Georgia, serif;
+      white-space: nowrap;
+      transition: background .2s, border-color .2s, transform .2s;
+    }
+    .button-ghost:hover {
+      color: #fff;
+      border-color: rgba(255,255,255,.75);
+      background: rgba(255,255,255,.32);
+    }
+
+    .stat-bar{max-width:1040px;margin:-44px auto 0;position:relative;z-index:3;padding:0 var(--pad);display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+    .stat-item{background:#fff;border:1px solid var(--border);border-radius:24px;padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center;box-shadow:var(--shadow-card)}
+    .stat-item img{width:30px;height:30px;object-fit:contain;margin-bottom:10px}
+    .stat-num{font-size:44px;font-weight:700;color:#3a7bd5;line-height:1.1;margin-bottom:10px}
+    .stat-label{font-size:18px;color:var(--muted);line-height:1.45;max-width:210px}
+
+    .intro { padding: 64px var(--pad); text-align: center; background: #fff; }
+    .intro h2 { margin: 0 0 18px; font-size: clamp(24px,3vw,28px); line-height: 1.15; }
+    .intro p { max-width: 760px; margin: 0 auto; color: var(--muted); font-size: 18px; line-height: 1.6; }
+    .title-rule { display: block; width: 76px; height: 5px; margin: 24px auto 0; border-radius: 10px; background: linear-gradient(90deg, var(--blue), rgba(78,142,243,0)); }
+
+    .skills-section { padding: 0 var(--pad) 76px; background: #fff; }
+    .skills-grid {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
+    }
+    .skill-card {
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: var(--r-card);
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0,0,0,.07);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s ease;
+    }
+    .skill-card:hover {
+      transform: translateY(-7px) scale(1.015);
+      box-shadow: 0 20px 30px -12px rgba(33,79,145,.22);
+    }
+    .skill-image {
+      position: relative;
+      min-height: 150px;
+      overflow: hidden;
+      background-position: center;
+      background-size: cover;
+    }
+    .skill-image::before,
+    .skill-image::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,.12);
+      pointer-events: none;
+    }
+    .skill-image::before { width: 120px; height: 120px; top: -34px; right: -28px; }
+    .skill-image::after { width: 86px; height: 86px; bottom: -42px; left: 18px; background: rgba(255,255,255,.08); }
+    .skill-title { padding: 22px 24px 24px; font-size: 20px; font-weight: 700; line-height: 1.25; text-align: center; }
+    .skill-card.plannen .skill-title { color: #065f46; }
+    .skill-card.leren .skill-title { color: #92400e; }
+    .skill-card.toetsen .skill-title { color: #7f1d1d; }
+    .skill-card.digitaal .skill-title { color: #831843; }
+    .skill-card.sociaal .skill-title { color: #0c4a6e; }
+    .skill-card.executief .skill-title { color: #4c1d95; }
+
+    .program { padding: 76px var(--pad); }
+    .program.group8 { background: var(--wash); }
+    .program.brugklas { background: #fff; }
+    .program-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr);
+      align-items: center;
+      gap: clamp(48px, 7vw, 110px);
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+    .program.brugklas .program-visual { order: 2; }
+    .program.brugklas .program-copy { order: 1; }
+    .program-visual { position: relative; }
+    .program-visual::after {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      right: -24px;
+      top: -24px;
+      border-radius: 50%;
+      background: rgba(114,168,249,.19);
+      pointer-events: none;
+    }
+    .program-visual img {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      aspect-ratio: 1.35 / 1;
+      object-fit: cover;
+      border-radius: var(--radius);
+      box-shadow: 0 24px 55px rgba(45,73,118,.16);
+    }
+    .program.brugklas .program-visual img { object-position: center; }
+    .label { margin: 0 0 12px; color: var(--blue); font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .program h2 { margin: 0 0 18px; font-size: clamp(24px,3vw,28px); line-height: 1.15; }
+    .program-copy > p:not(.label) { margin: 0; color: var(--muted); font-size: 18px; line-height: 1.6; }
+    .text-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 24px; color: var(--blue); font-size: 18px; font-weight: 700; }
+    .text-link::after { content: "→"; font-size: 24px; transition: transform .2s ease; }
+    .text-link:hover::after { transform: translateX(5px); }
+
+    #demo{scroll-margin-top:72px;background:linear-gradient(180deg,#fff 0%,#f7f9fb 62%,var(--footer-bg) 100%);width:100vw;margin-left:calc(50% - 50vw);padding:32px var(--pad) 88px}
+    .cta-slot{width:100%;max-width:1180px;margin:0 auto;background:linear-gradient(135deg,rgba(26,66,128,.94) 0%,rgba(58,123,213,.92) 48%,rgba(106,170,248,.88) 100%);border-radius:var(--r-card);padding:32px var(--pad) 56px;text-align:center;color:#fff;position:relative;overflow:hidden;box-shadow:0 28px 60px -12px rgba(58,123,213,.45)}
+    .cta-slot::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.16) 1.5px,transparent 1.5px);background-size:26px 26px;pointer-events:none}
+    .cta-slot .cta-jay{position:relative;z-index:1;width:180px;height:auto;margin:0 auto 12px;filter:brightness(0) invert(1) drop-shadow(0 8px 18px rgba(0,0,0,.18))}
+    .cta-slot h2{position:relative;z-index:1;font-size:clamp(24px,3vw,32px);font-weight:700;margin:0 0 12px}
+    .cta-slot p{position:relative;z-index:1;opacity:.9;max-width:480px;margin:0 auto 26px;font-size:18px}
+    .cta-form{position:relative;z-index:1;max-width:680px;margin:24px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:12px;text-align:left}
+    .cta-form label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:rgba(255,255,255,.9)}
+    .cta-form label.full{grid-column:1/-1}
+    .cta-form input,.cta-form textarea{width:100%;border:1px solid rgba(255,255,255,.45);border-radius:12px;background:rgba(255,255,255,.14);color:#fff;padding:12px 14px;font:16px 'Inria Sans',Georgia,serif;outline:none}
+    .cta-form input::placeholder,.cta-form textarea::placeholder{color:rgba(255,255,255,.72)}
+    .cta-form input:focus,.cta-form textarea:focus{border-color:#fff;background:rgba(255,255,255,.2)}
+    .cta-form textarea{min-height:88px;resize:vertical}
+    .cta-form button{grid-column:1/-1;justify-self:center;margin-top:6px;border:0;cursor:pointer;font-size:18px}
+    .hero-cta-live{display:inline-flex;align-items:center;justify-content:center;background:var(--coral);border:none;border-radius:var(--r-pill);padding:15px 30px;font-family:'Inria Sans',Georgia,serif;font-size:18px;font-weight:700;color:#fff;white-space:nowrap;box-shadow:0 14px 28px rgba(221,111,78,.4);transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,background .2s}
+    .hero-cta-live:hover{background:var(--coral-dark);transform:translateY(-3px);box-shadow:0 18px 34px rgba(221,111,78,.5)}
+
+    @media (max-width: 850px) {
+      :root{--pad:24px}
+      .hero { padding: 112px var(--pad) 112px; }
+      .hero-inner { min-height: 320px; }
+      h1 { font-size: clamp(36px,10vw,52px); }
+      .hero-copy { font-size: 19px; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .button{min-width:0}
+      .stat-bar{grid-template-columns:1fr;margin:-34px auto 0;padding:0 var(--pad)}
+      .skills-section { padding-bottom: 62px; }
+      .skills-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+      .skill-image { min-height: 122px; }
+      .skill-title { padding: 18px 18px 20px; font-size: 18px; }
+      .program { padding: 62px 24px; }
+      .program-inner { grid-template-columns: 1fr; gap: 38px; }
+      .program.brugklas .program-visual, .program.brugklas .program-copy { order: initial; }
+      .program-copy { text-align: left; }
+      .program-visual img { aspect-ratio: 1.25 / 1; }
+    }
+    @media (max-width: 520px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .skill-image { min-height: 145px; }
+    }
+    @media (max-width: 620px) {
+      .cta-form { grid-template-columns: 1fr; }
+      .cta-form label.full { grid-column: auto; }
+      .cta-form button { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Klaar voor Middelbaar</h1>
+      <p class="hero-copy">Sterk van start op de middelbare school? Wij staan voor je klaar!</p>
+      <div class="hero-actions">
+        <a class="button button-ghost" href="Homepagina-Groep8.html">Bekijk het groep 8-programma</a>
+        <a class="button button-ghost" href="Brugklas.html">Bekijk het brugklasprogramma</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stat-bar" aria-label="Klaar voor Middelbaar in cijfers">
+    <div class="stat-item">
+      <img src="Afbeeldingen/emojis%20nieuw/brein.png" alt="">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Kernvaardigheden</div>
+    </div>
+    <div class="stat-item">
+      <img src="Afbeeldingen/emojis%20nieuw/kinderen.png" alt="">
+      <div class="stat-num">3.000+</div>
+      <div class="stat-label">Klaar voor Middelbaar-leerlingen</div>
+    </div>
+    <div class="stat-item">
+      <img src="Afbeeldingen/emojis%20nieuw/ster.png" alt="">
+      <div class="stat-num">8,7</div>
+      <div class="stat-label">Gemiddelde beoordeling door leerlingen</div>
+    </div>
+  </section>
+
+  <main id="programma">
+    <section class="intro" id="over-ons">
+      <h2>Een zelfverzekerde start in de brugklas?</h2>
+      <p>Ontdek onze kant-en-klare programma's voor de basis- en middelbare school, waarin leerlingen spelenderwijs kennismaken met alle essentiële vaardigheden!</p>
+      <span class="title-rule" aria-hidden="true"></span>
+    </section>
+
+    <section class="skills-section" aria-label="Zes kernvaardigheden">
+      <div class="skills-grid">
+        <article class="skill-card plannen">
+          <div class="skill-image" style="background-image:linear-gradient(140deg,rgba(6,95,70,.92),rgba(16,163,127,.78)),url('Afbeeldingen/Website/Plannen.png')"></div>
+          <div class="skill-title">Plannen</div>
+        </article>
+        <article class="skill-card leren">
+          <div class="skill-image" style="background-image:linear-gradient(140deg,rgba(146,64,14,.92),rgba(245,158,11,.78)),url('Afbeeldingen/Website/Slim%20Leren.png')"></div>
+          <div class="skill-title">Leren leren</div>
+        </article>
+        <article class="skill-card toetsen">
+          <div class="skill-image" style="background-image:linear-gradient(140deg,rgba(127,29,29,.92),rgba(224,85,69,.78)),url('Afbeeldingen/Website/Toets.png')"></div>
+          <div class="skill-title">Omgaan met toetsen en stress</div>
+        </article>
+        <article class="skill-card digitaal">
+          <div class="skill-image" style="background-image:linear-gradient(140deg,rgba(131,24,67,.92),rgba(219,39,119,.78)),url('Afbeeldingen/Website/Digitale%20geletterdheid.png');background-position:center 18%"></div>
+          <div class="skill-title">Digitale geletterdheid</div>
+        </article>
+        <article class="skill-card sociaal">
+          <div class="skill-image" style="background-image:linear-gradient(140deg,rgba(12,74,110,.92),rgba(2,132,199,.78)),url('Afbeeldingen/Website/Sociale%20vaardigheden.png')"></div>
+          <div class="skill-title">Sociaal sterk</div>
+        </article>
+        <article class="skill-card executief">
+          <div class="skill-image" style="background-image:linear-gradient(140deg,rgba(76,29,149,.92),rgba(124,58,237,.78)),url('Afbeeldingen/Website/Executieve%20functies.png')"></div>
+          <div class="skill-title">Executieve functies</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="program group8">
+      <div class="program-inner">
+        <div class="program-visual">
+          <img src="Afbeeldingen/Website/Kim.png" alt="Een leerkracht geeft een les van Klaar voor Middelbaar aan groep 8">
+        </div>
+        <div class="program-copy">
+          <p class="label">Voor de overstap</p>
+          <h2>Klaar voor Middelbaar Groep 8</h2>
+          <p>Klaar voor Middelbaar Groep 8 is een interactief lesprogramma waarin leerlingen werken aan essentiële vaardigheden voor op de middelbare school. Door middel van (online) opdrachten, kennisclips, spellen en quizzes bereiden zij zich stap voor stap voor op een zelfverzekerde start in het voortgezet onderwijs.</p>
+          <a class="text-link" href="Homepagina-Groep8.html">Bekijk het programma voor groep 8</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="program brugklas">
+      <div class="program-inner">
+        <div class="program-visual">
+          <img src="Afbeeldingen/Brugklas/IMG_6892.jpg" alt="Brugklasleerlingen werken met de digitale lesmethode van Klaar voor Middelbaar">
+        </div>
+        <div class="program-copy">
+          <p class="label">Na de overstap</p>
+          <h2>Klaar voor Middelbaar Brugklas</h2>
+          <p>Klaar voor Middelbaar Brugklas is een digitale leeromgeving waarin leerlingen werken met vijf eilanden, elk gericht op een essentiële vaardigheid zoals plannen, leren leren en omgaan met stress. Het programma is interactief en praktisch opgebouwd en kan eenvoudig worden ingezet tijdens mentor- of studieuren, zodat brugklassers stap voor stap werken aan meer structuur, zelfvertrouwen en zelfstandigheid.</p>
+          <a class="text-link" href="Brugklas.html">Bekijk het brugklasprogramma</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="demo">
+      <div class="cta-slot">
+        <img class="cta-jay" src="Dashboard/KvM%20logo%20no%20background.png" alt="Klaar voor Middelbaar">
+        <h2>Klaar voor Middelbaar op jouw school?</h2>
+        <p>Wil je een demo of offerte aanvragen, of heb je gewoon een vraag? Laat het ons weten!</p>
+        <form class="cta-form" action="mailto:contact@klaarvoormiddelbaar.nl" method="post" enctype="text/plain">
+          <label>Naam<input type="text" name="naam" placeholder="Je naam" required></label>
+          <label>School<input type="text" name="school" placeholder="Naam van je school" required></label>
+          <label>E-mailadres<input type="email" name="email" placeholder="naam@school.nl" required></label>
+          <label>Telefoonnummer<input type="tel" name="telefoon" placeholder="06 12345678"></label>
+          <label class="full">Waar kunnen we je mee helpen?<textarea name="bericht" placeholder="Vertel kort waar je interesse in hebt…" required></textarea></label>
+          <button class="hero-cta-live" type="submit">Verstuur aanvraag</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="shared-chrome.js?v=2"></script>
+</body>
+</html>
