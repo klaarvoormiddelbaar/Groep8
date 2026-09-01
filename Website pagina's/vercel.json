@@ -4,7 +4,8 @@
     { "source": "/groep-8/", "destination": "/groep8", "permanent": true },
     { "source": "/groep8/", "destination": "/groep8", "permanent": false },
     { "source": "/Homepagina-Groep8.html", "destination": "/groep8", "permanent": true },
-    { "source": "/brugklas/", "destination": "/brugklas", "permanent": false }
+    { "source": "/brugklas/", "destination": "/brugklas", "permanent": true },
+    { "source": "/brugklas/index.html", "destination": "/brugklas", "permanent": true }
   ],
   "rewrites": [
     { "source": "/", "destination": "/Homepagina.html" },

@@ -10,7 +10,7 @@
   function footer(){return '<footer><div class="footer-inner"><div class="footer-col"><img class="footer-logo" src="'+page('Dashboard/KvM%20logo%20no%20background.png')+'" alt="Klaar voor Middelbaar"></div><div class="footer-col"><h4>Meer info</h4><a href="https://klaarvoormiddelbaar.nl/wp-content/uploads/2024/07/Privacyverklaring-Klaar-voor-Middelbaar.pdf" target="_blank" rel="noopener">Privacybeleid</a><a href="https://klaarvoormiddelbaar.nl/wp-content/uploads/2025/11/Algemene-Voorwaarden-Klaar-voor-Middelbaar-1.pdf" target="_blank" rel="noopener">Algemene voorwaarden</a></div><div class="footer-col"><h4>Contact</h4><a href="mailto:contact@klaarvoormiddelbaar.nl">contact@klaarvoormiddelbaar.nl</a><a href="tel:+31633382366">+31 6 33382366</a></div><div class="footer-col"><h4>Adres</h4><p>Haarlemmerweg 55-3<br>1051 KP Amsterdam</p></div></div><div class="footer-bottom">© 2026 Klaar voor Middelbaar. Alle rechten voorbehouden.</div></footer>';}
   function apply(){
     if(window.location.protocol!=='file:'){
-      document.querySelectorAll('a[href$="brugklas/index.html"]').forEach(function(link){link.setAttribute('href','/brugklas')});
+      document.querySelectorAll('a[href$="brugklas/index.html"],a[href="/brugklas/"],a[href="/brugklas"]').forEach(function(link){link.setAttribute('href','/brugklas')});
       document.querySelectorAll('a[href*="Homepagina-Groep8.html"]').forEach(function(link){var hash=link.hash||'';link.setAttribute('href','/groep8'+hash)});
     }
     document.querySelectorAll('header.nav, nav.nav').forEach(function(el){el.remove()});
