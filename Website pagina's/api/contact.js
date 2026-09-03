@@ -14,7 +14,7 @@ function escapeHtml(value) {
   })[character]);
 }
 
-module.exports = async function contact(req, res) {
+export default async function contact(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ success: false, message: 'Methode niet toegestaan.' });
@@ -34,7 +34,12 @@ module.exports = async function contact(req, res) {
     return res.status(503).json({ success: false, message: 'De mailservice is nog niet ingesteld.' });
   }
 
-  const body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  let body;
+  try {
+    body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+  } catch {
+    return res.status(400).json({ success: false, message: 'Ongeldige aanvraag.' });
+  }
   if (clean(body.website, 200)) {
     return res.status(200).json({ success: true });
   }
