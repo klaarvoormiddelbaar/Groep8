@@ -172,6 +172,21 @@
     .skill-card.digitaal .skill-title { color: #831843; }
     .skill-card.sociaal .skill-title { color: #0c4a6e; }
     .skill-card.executief .skill-title { color: #4c1d95; }
+    .vaardigheden-more {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      margin: 24px auto 0;
+      padding: 14px 28px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      background: var(--card-bg);
+      color: var(--ink);
+      font: 700 18px "Inria Sans", Arial, sans-serif;
+      cursor: pointer;
+      transition: transform .2s cubic-bezier(.34,1.56,.64,1), border-color .2s, color .2s;
+    }
+    .vaardigheden-more:hover { border-color: var(--primary); color: var(--primary-dark); transform: translateY(-2px); }
 
     .program { padding: 76px var(--pad); }
     .program.group8 { background: var(--wash); }
@@ -255,6 +270,10 @@
       .skills-grid { grid-template-columns: 1fr; }
       .skill-image { min-height: 145px; }
     }
+    @media (max-width: 640px) {
+      .skills-grid:not(.expanded) .skill-card:nth-child(n+3) { display: none; }
+      .vaardigheden-more { display: inline-flex; }
+    }
     @media (max-width: 620px) {
       .cta-form { grid-template-columns: 1fr; }
       .cta-form label.full { grid-column: auto; }
@@ -326,6 +345,7 @@
           <div class="skill-title">Executieve functies</div>
         </article>
       </div>
+      <button class="vaardigheden-more" id="vaardighedenMore" type="button" aria-expanded="false">Toon alle 6 vaardigheden</button>
     </section>
 
     <section class="program group8">
@@ -374,5 +394,18 @@
   </main>
 
   <script src="shared-chrome.js?v=14"></script>
+  <script>
+    (function () {
+      var moreBtn = document.getElementById('vaardighedenMore');
+      var grid = document.querySelector('.skills-grid');
+      if (moreBtn && grid) {
+        moreBtn.addEventListener('click', function () {
+          grid.classList.add('expanded');
+          moreBtn.setAttribute('aria-expanded', 'true');
+          moreBtn.style.display = 'none';
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
