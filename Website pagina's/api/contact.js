@@ -1,4 +1,17 @@
+export const config = { runtime: 'edge' };
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const ALLOWED_ORIGINS = new Set([
+  'https://klaarvoormiddelbaar.nl',
+  'https://www.klaarvoormiddelbaar.nl'
+]);
+
+function json(data, status = 200) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { 'Content-Type': 'application/json; charset=utf-8' }
+  });
+}
 
 function clean(value, maxLength) {
   return String(value || '').trim().slice(0, maxLength);
@@ -6,43 +19,33 @@ function clean(value, maxLength) {
 
 function escapeHtml(value) {
   return value.replace(/[&<>"']/g, (character) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;',
-    "'": '&#039;'
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
   })[character]);
 }
 
-export default async function contact(req, res) {
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ success: false, message: 'Methode niet toegestaan.' });
+export default async function contact(request) {
+  if (request.method !== 'POST') {
+    return json({ success: false, message: 'Methode niet toegestaan.' }, 405);
   }
 
-  const origin = req.headers.origin;
-  const allowedOrigins = new Set([
-    'https://klaarvoormiddelbaar.nl',
-    'https://www.klaarvoormiddelbaar.nl'
-  ]);
-  if (origin && !allowedOrigins.has(origin)) {
-    return res.status(403).json({ success: false, message: 'Ongeldige herkomst.' });
+  const origin = request.headers.get('origin');
+  if (origin && !ALLOWED_ORIGINS.has(origin)) {
+    return json({ success: false, message: 'Ongeldige herkomst.' }, 403);
   }
 
   if (!process.env.RESEND_API_KEY) {
     console.error('RESEND_API_KEY ontbreekt.');
-    return res.status(503).json({ success: false, message: 'De mailservice is nog niet ingesteld.' });
+    return json({ success: false, message: 'De mailservice is nog niet ingesteld.' }, 503);
   }
 
   let body;
   try {
-    body = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : (req.body || {});
+    body = await request.json();
   } catch {
-    return res.status(400).json({ success: false, message: 'Ongeldige aanvraag.' });
+    return json({ success: false, message: 'Ongeldige aanvraag.' }, 400);
   }
-  if (clean(body.website, 200)) {
-    return res.status(200).json({ success: true });
-  }
+
+  if (clean(body.website, 200)) return json({ success: true });
 
   const naam = clean(body.naam, 100);
   const school = clean(body.school, 150);
@@ -51,7 +54,7 @@ export default async function contact(req, res) {
   const bericht = clean(body.bericht, 4000);
 
   if (!naam || !school || !EMAIL_PATTERN.test(email) || !bericht) {
-    return res.status(400).json({ success: false, message: 'Controleer de verplichte velden.' });
+    return json({ success: false, message: 'Controleer de verplichte velden.' }, 400);
   }
 
   const from = process.env.CONTACT_FROM_EMAIL || 'Klaar voor Middelbaar <contact@klaarvoormiddelbaar.nl>';
@@ -84,12 +87,12 @@ export default async function contact(req, res) {
 
     if (!response.ok) {
       console.error('Resend weigerde de e-mail:', response.status, await response.text());
-      return res.status(502).json({ success: false, message: 'De e-mail kon niet worden verzonden.' });
+      return json({ success: false, message: 'De e-mail kon niet worden verzonden.' }, 502);
     }
 
-    return res.status(200).json({ success: true });
+    return json({ success: true });
   } catch (error) {
     console.error('Contactformulier mislukt:', error);
-    return res.status(502).json({ success: false, message: 'De e-mail kon niet worden verzonden.' });
+    return json({ success: false, message: 'De e-mail kon niet worden verzonden.' }, 502);
   }
-};
+}
