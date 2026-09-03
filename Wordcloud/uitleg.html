@@ -260,7 +260,15 @@
       overflow-wrap: anywhere;
     }
 
-    .cta-row { display: flex; justify-content: flex-end; margin-top: 8px; }
+    .cta-sticky {
+      position: sticky; bottom: 0; z-index: 150;
+      display: flex; justify-content: center;
+      padding: 18px 0 22px;
+      margin-top: 8px;
+      background: var(--card-bg);
+      box-shadow: 0 -1px 0 var(--border);
+    }
+    .cta-sticky-inner { width: 100%; display: flex; justify-content: center; }
     .cta-btn {
       display: inline-flex; align-items: center; gap: 10px;
       background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
@@ -301,7 +309,7 @@
       .role-grid { grid-template-columns: 1fr; }
       .title { font-size: 30px; }
       .card { padding: 32px 24px; }
-      .cta-row { justify-content: stretch; }
+      .cta-sticky-inner { justify-content: stretch; }
       .cta-btn { width: 100%; justify-content: center; }
       .voorbeeld-row { grid-template-columns: 1fr; gap: 18px; }
     }
@@ -409,8 +417,10 @@
         </div>
       </div>
 
-      <div class="cta-row">
-        <a class="cta-btn" href="/les5/docent/woordwolk?nieuw=1">Naar Woordwolk →</a>
+      <div class="cta-sticky">
+        <div class="cta-sticky-inner">
+          <a class="cta-btn" href="/les5/docent/woordwolk?nieuw=1">Naar Woordwolk →</a>
+        </div>
       </div>
     </div>
   </main>

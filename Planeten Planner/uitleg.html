@@ -184,7 +184,15 @@
       color: white; font-size: 18px; cursor: pointer;
     }
 
-    .cta-row { display: flex; justify-content: flex-end; margin-top: 24px; }
+    .cta-sticky {
+      position: sticky; bottom: 0; z-index: 150;
+      display: flex; justify-content: center;
+      padding: 18px 0 22px;
+      margin-top: 24px;
+      background: var(--card-bg);
+      box-shadow: 0 -1px 0 var(--border);
+    }
+    .cta-sticky-inner { width: 100%; display: flex; justify-content: center; }
     .cta-btn {
       display: inline-flex; align-items: center; gap: 10px;
       background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
@@ -225,7 +233,7 @@
       .lessen-grid { grid-template-columns: 1fr; }
       .title { font-size: 30px; }
       .card { padding: 32px 24px; }
-      .cta-row { justify-content: stretch; }
+      .cta-sticky-inner { justify-content: stretch; }
       .cta-btn { width: 100%; justify-content: center; }
     }
   </style>
@@ -285,8 +293,10 @@
         <p class="highscore-text">Deze poster zit in de docenten starter kit. Hang 'm vooral op in de klas en vul namen en scores in met een whiteboardmarker, zo blijft de highscore makkelijk uit te wissen en aan te passen.</p>
       </button>
 
-      <div class="cta-row">
-        <a class="cta-btn" href="/planeten-planner/spel">Naar het spel →</a>
+      <div class="cta-sticky">
+        <div class="cta-sticky-inner">
+          <a class="cta-btn" href="/planeten-planner/spel">Naar het spel →</a>
+        </div>
       </div>
     </div>
   </main>
