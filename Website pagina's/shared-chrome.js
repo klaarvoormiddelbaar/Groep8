@@ -10,7 +10,7 @@
   function brugklasPage(){return window.location.protocol==='file:'?page('brugklas/index.html'):'/brugklas';}
   function contactPage(){return window.location.protocol==='file:'?page('contact/index.html'):'/contact';}
   function setupContactForms(){
-    document.querySelectorAll('form[action^="https://formsubmit.co/"]').forEach(function(form){
+    document.querySelectorAll('form[action="/api/contact"]').forEach(function(form){
       if(form.dataset.secureFormReady==='true')return;
       form.dataset.secureFormReady='true';
       form.addEventListener('submit',function(event){
@@ -21,10 +21,11 @@
         var oldMessage=form.querySelector('.form-message');
         if(oldMessage)oldMessage.remove();
         if(button){button.disabled=true;button.textContent='Even versturen…'}
-        fetch(form.action.replace('formsubmit.co/','formsubmit.co/ajax/'),{
+        var fields=Object.fromEntries(new FormData(form).entries());
+        fetch(form.action,{
           method:'POST',
-          body:new FormData(form),
-          headers:{Accept:'application/json'}
+          body:JSON.stringify(fields),
+          headers:{Accept:'application/json','Content-Type':'application/json'}
         }).then(function(response){
           if(!response.ok)throw new Error('Verzenden mislukt');
           return response.json();
