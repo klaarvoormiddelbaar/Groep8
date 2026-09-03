@@ -29,7 +29,7 @@
           if(!response.ok)throw new Error('Verzenden mislukt');
           return response.json();
         }).then(function(result){
-          if(result.success===false)throw new Error('Verzenden mislukt');
+          if(String(result.success).toLowerCase()!=='true')throw new Error(result.message||'Verzenden mislukt');
           form.innerHTML='<div class="form-success" role="status"><span class="form-success__icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span><div><h3>Bedankt voor je bericht!</h3><p>We hebben je aanvraag goed ontvangen en nemen zo snel mogelijk contact met je op.</p></div></div>';
         }).catch(function(){
           var message=document.createElement('p');
