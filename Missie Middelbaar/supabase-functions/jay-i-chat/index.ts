@@ -1,7 +1,11 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
+// Alleen de eigen lessite mag dit chatbotje aanroepen — anders kan elke willekeurige
+// website ter wereld deze functie inladen en op onze kosten Anthropic-credits verbruiken.
+const TOEGESTANE_HERKOMST = 'https://groep8.klaarvoormiddelbaar.nl';
+
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': TOEGESTANE_HERKOMST,
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
