@@ -1,10 +1,5 @@
-# Niet nodig voor de groep8-portaal deployment (Root Directory = repo-root,
-# dus zonder deze uitsluitingen worden deze mappen onnodig meegedeployed).
-#
-# Website pagina's/ is een apart Vercel-project (klaarvoormiddelbaar-website,
-# eigen vercel.json/package.json, eigen Root Directory) en wordt niet door
-# het groep8-portaal gebruikt of gelinkt.
-Website pagina's/
+# Deze repository wordt door meerdere Vercel-projecten gebruikt.
+# Sluit Website pagina's/ hier niet uit: dat is de root van de publieke website.
 
 # Backup/oude lesmappen, niet meer gelinkt vanuit het portaal.
 _Oud (backup lesmappen)/
