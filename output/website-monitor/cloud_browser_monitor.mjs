@@ -31,6 +31,23 @@ try {
     const text = await page.locator('body').innerText();
     if (text.length < 200 || /Vercel Security Checkpoint|404|niet gevonden/i.test(text)) throw new Error(`Opdrachtpagina niet goed geladen: ${path}`);
   }
+} catch (error) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const recipient = process.env.MONITOR_EMAIL;
+  if (apiKey && recipient) {
+    const message = String(error?.message || error);
+    await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json', 'User-Agent': 'klaarvoormiddelbaar-website-monitor/1.0' },
+      body: JSON.stringify({
+        from: 'Klaar voor Middelbaar <contact@klaarvoormiddelbaar.nl>',
+        to: [recipient],
+        subject: `FOUTMELDING – ${message.match(/Opdrachtpagina niet goed geladen: (.+)$/)?.[1] || 'ingelogde controle'}`,
+        text: `De ingelogde controle vond een probleem.\n\n${message}`
+      })
+    });
+  }
+  throw error;
 } finally {
   await browser.close();
 }
