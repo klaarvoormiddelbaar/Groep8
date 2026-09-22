@@ -1,4 +1,4 @@
-import json, os, pathlib, re, urllib.error, urllib.parse, urllib.request
+import datetime, json, os, pathlib, re, urllib.error, urllib.parse, urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 BASE = 'https://www.klaarvoormiddelbaar.nl'
@@ -36,6 +36,11 @@ if problems:
     for item in problems:
         lines += [item['url'], f"Status: {item['status']} | Titel: {item['title']}", '']
 else:
+    # During the verification week, send a daily healthy-result mail so the
+    # recipient can confirm delivery. Starting Monday 28 September 2026,
+    # healthy runs stay silent again; failures continue to send immediately.
+    if datetime.date.today() > datetime.date(2026, 9, 25):
+        raise SystemExit(0)
     subject = 'CONTROLE GESLAAGD – Klaar voor Middelbaar'
     lines = [f'Automatische controle geslaagd voor {len(results)} basispagina’s.', '', 'Gecontroleerd:', *[r['url'] for r in results]]
 
