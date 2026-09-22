@@ -1,6 +1,8 @@
 name: Website monitor
 
 on:
+  push:
+    branches: [main]
   schedule:
     # 08:00 CEST (april–oktober) and 08:00 CET (november–maart).
     - cron: '0 6 * 4-10 1-5'
