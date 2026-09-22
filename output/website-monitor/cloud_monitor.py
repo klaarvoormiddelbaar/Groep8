@@ -1,4 +1,4 @@
-import json, os, pathlib, re, urllib.error, urllib.request
+import json, os, pathlib, re, urllib.error, urllib.parse, urllib.request
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 BASE = 'https://www.klaarvoormiddelbaar.nl'
