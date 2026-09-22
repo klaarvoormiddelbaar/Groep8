@@ -1,0 +1,22 @@
+name: Website monitor
+
+on:
+  schedule:
+    - cron: '0 6 * * 1-5'
+  workflow_dispatch:
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Controleer website
+        env:
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
+          MONITOR_EMAIL: contact@klaarvoormiddelbaar.nl
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: python3 output/website-monitor/cloud_monitor.py
