@@ -53,6 +53,8 @@ try:
     with urllib.request.urlopen(request, timeout=25) as response:
         if response.status >= 300:
             raise SystemExit(f'Mailservice gaf HTTP {response.status}')
+        confirmation = response.read().decode(errors='replace')
+        print(f'Resend accepteerde de mail: {confirmation}')
 except urllib.error.HTTPError as exc:
     detail = exc.read().decode(errors='replace')[:500]
     raise SystemExit(f'Mailservice gaf HTTP {exc.code}: {detail}')
