@@ -54,19 +54,23 @@
   "benodigdheden": [
     {
       "naam": "KvM RuimteRace",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - RuimteRace.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - RuimteRace.png",
+      "beschrijving": "De leerlingen testen alles wat ze hebben geleerd nog één keer met het bordspel KvM RuimteRace. In de starter kit zitten 7 bordspellen. Dit spel kan worden gespeeld met 4 (voorkeur) tot 6 personen."
     },
     {
       "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png",
+      "beschrijving": "De leerlingen gebruiken de laptop om de tips en tops over het programma in te vullen, zodat wij het programma kunnen blijven verbeteren. Deze kun je ook klassikaal bespreken."
     },
     {
-      "naam": "Samenvattingen",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Samenvattingenboekje.png"
+      "naam": "Survivalgids",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Samenvattingenboekje.png",
+      "beschrijving": "Omdat de middelbare school pas over een paar maanden begint, hebben we alle handige tips en tricks gebundeld in een survivalgids. Deze krijgen de leerlingen mee."
     },
     {
       "naam": "Certificaat",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Certificaat.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 8 - Certificaat.png",
+      "beschrijving": "De leerlingen ontvangen een certificaat waar ze hun naam en handtekening op zetten. Dan zijn ze helemaal Klaar voor Middelbaar!"
     }
   ]
 }

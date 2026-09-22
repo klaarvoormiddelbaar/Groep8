@@ -58,23 +58,28 @@
   "benodigdheden": [
     {
       "naam": "Werkboek",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Werkboek.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Werkboek.png",
+      "beschrijving": "In deze les worden de werkboeken uitgedeeld, schrijven de leerlingen hun naam op en wordt dit gebruikt om tot het goede antwoord te komen tijdens het spel 'Kraak de Code'."
     },
     {
       "naam": "Slim Leren spel",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Slim Leren spel.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Slim Leren spel.png",
+      "beschrijving": "Met dit spel beantwoorden leerlingen vragen over hoe ze slim kunnen leren, verzamelen ze letters en vormen ze uiteindelijk de oplossing. De winnaars krijgen een stressbal. In de starter kit zit 14x het kaartspel 'Kraak de Code', genoeg om met 28 leerlingen in tweetallen te spelen. Mochten er meer leerlingen meedoen, kunnen er ook groepjes van 3 worden gemaakt."
     },
     {
       "naam": "2 stressballen",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Stressballen.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 1 - Stressballen.png",
+      "beschrijving": "Dit is de prijs voor het winnende team. Mocht er een team zijn met 3 personen in plaats van 2 vanwege oneven aantallen, zit er een extra stressbal in de doos."
     },
     {
       "naam": "Wisbordje",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png",
+      "beschrijving": "Na de kennisclip 'Slim leren' herhalen de leerlingen op hun wisbordje de belangrijkste tips."
     },
     {
       "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png",
+      "beschrijving": "Alle leerlingen maken op een laptop de PollParty opdracht en de quiz. De uitleg van deze oefeningen staat bij de knoppen."
     }
   ]
 }

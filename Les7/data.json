@@ -48,15 +48,18 @@
   "benodigdheden": [
     {
       "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png",
+      "beschrijving": "De leerlingen gaan een informele mail herschrijven naar een formele mail. Deze mails worden gecheckt door het systeem, maar het is belangrijk dat je het ook klassikaal bespreekt. Ook gebruiken ze de laptop voor de quiz. Deze keer is de quiz een open boek quiz die te maken heeft met de opdracht in het werkboek."
     },
     {
       "naam": "Werkboek",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png",
+      "beschrijving": "De leerlingen gaan a.d.h.v. goede tips aantekeningen maken tijdens een les over de aarde."
     },
     {
       "naam": "Wisbordje",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png",
+      "beschrijving": "Bij de uitleg over aantekeningen maken schrijven de leerlingen op hun wisbordje op wat daarbij belangrijk is, voordat ze dit toepassen tijdens de echte AK-les."
     }
   ],
   "mat": [

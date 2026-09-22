@@ -53,11 +53,13 @@
   "benodigdheden": [
     {
       "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png",
+      "beschrijving": "De leerlingen gaan de opdrachten Woordwolk, KlasKompas en de quiz individueel op de laptop doen."
     },
     {
       "naam": "KvM Toets",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 5 - KvM Toets.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 5 - KvM Toets.png",
+      "beschrijving": "De leerlingen krijgen een toets waarbij de laatste vraag de crux is. Het gaat dus niet om de toets zelf, maar om het feit dat je al een paar keer hebt benadrukt dat je eerst de hele toets moet scannen en daarna pas moet beginnen, in plaats van er als een kip zonder kop doorheen te gaan."
     }
   ],
   "mat": [

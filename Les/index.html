@@ -420,9 +420,18 @@
     }
     .lightbox-card-footer {
       padding: 14px 18px;
+      border-top: 1px solid var(--border);
+    }
+    .lightbox-name {
       font-size: 15px; font-weight: 700; color: var(--dark);
       text-align: center;
-      border-top: 1px solid var(--border);
+    }
+    .lightbox-desc {
+      font-size: 16px; color: var(--muted); line-height: 1.6;
+      text-align: center; margin-top: 8px;
+    }
+    .lightbox-desc a {
+      color: var(--primary); font-weight: 700; text-decoration: underline;
     }
 
     /* Tip */
@@ -669,7 +678,10 @@
   <div class="lightbox" id="lightbox" onclick="closeLightbox()">
     <div class="lightbox-card" onclick="event.stopPropagation()">
       <img id="lightbox-img" src="" alt="">
-      <div class="lightbox-card-footer" id="lightbox-name"></div>
+      <div class="lightbox-card-footer">
+        <div class="lightbox-name" id="lightbox-name"></div>
+        <div class="lightbox-desc" id="lightbox-desc"></div>
+      </div>
     </div>
   </div>
 
@@ -817,7 +829,7 @@
                   <div class="mat-carousel-track">
                     <div class="mat-carousel-inner" id="mat-inner">
                       ${L.benodigdheden.map(b => `
-                        <div class="mat-product-card" onclick="openLightbox('${b.afbeelding}','${b.naam}')">
+                        <div class="mat-product-card" data-img="${escAttr(b.afbeelding)}" data-naam="${escAttr(b.naam)}" data-beschrijving="${escAttr(b.beschrijving || '')}" onclick="openLightboxFromCard(this)">
                           <div class="mat-product-img-area">
                             <img src="${b.afbeelding}" alt="${b.naam}" loading="lazy">
                           </div>
@@ -901,10 +913,19 @@
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
-    function openLightbox(src, naam) {
+    function escAttr(s) {
+      return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    }
+    function openLightbox(src, naam, beschrijving) {
       document.getElementById('lightbox-img').src = src;
       document.getElementById('lightbox-name').textContent = naam;
+      const descEl = document.getElementById('lightbox-desc');
+      descEl.innerHTML = beschrijving || '';
+      descEl.style.display = beschrijving ? '' : 'none';
       document.getElementById('lightbox').classList.add('open');
+    }
+    function openLightboxFromCard(el) {
+      openLightbox(el.dataset.img, el.dataset.naam, el.dataset.beschrijving);
     }
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('open');

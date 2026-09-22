@@ -58,19 +58,13 @@
   "benodigdheden": [
     {
       "naam": "Werkboek",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
-    },
-    {
-      "naam": "Sterrenstrijd werkblad",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - Werkblad Sterrenstrijd.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png",
+      "beschrijving": "De leerlingen gaan zelfstandig stellingen over executieve functies beoordelen met 1 t/m 5 (helemaal mee oneens tot helemaal mee eens). Hieruit komen hun sterkste en minst sterke executieve functie naar voren. Tijdens het spel 'SterrenStrijd' gaan de leerlingen focussen op hun minst sterke executieve functie. Waarom SterrenStrijd helpt bij het verbeteren van deze executieve functie, schrijven ze op in het werkboek en bespreek je klassikaal."
     },
     {
       "naam": "KvM SterrenStrijd spel",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - KvM SterrenStrijd.png"
-    },
-    {
-      "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 4 - KvM SterrenStrijd.png",
+      "beschrijving": "In de starter kit zit 7x het spel SterrenStrijd. Het wordt in viertallen gespeeld en dekt alle 6 executieve functies die wij behandelen. Leerlingen moeten proberen zo veel mogelijk van hun SterrenStenen kwijt te raken. Degene die aan het einde van het spel het minste aantal vierkantjes over heeft, wint."
     }
   ],
   "mat": [

@@ -47,8 +47,14 @@
   ],
   "benodigdheden": [
     {
+      "naam": "Wisbordje",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png",
+      "beschrijving": "De leerlingen herhalen op hun wisbordje de Slim Leren-tips die ze van Jay hebben gekregen."
+    },
+    {
       "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png",
+      "beschrijving": "Hierop voltooien ze de 3 missies in Missie Middelbaar. Jij kunt in het docentenportaal de voortgang van de leerlingen bekijken."
     }
   ],
   "mat": []

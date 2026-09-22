@@ -53,19 +53,23 @@
   "benodigdheden": [
     {
       "naam": "Wisbordje",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png",
+      "beschrijving": "Bij de herhaling van de theorie schrijven de leerlingen op hun wisbordje waarom plannen op de middelbare school zo belangrijk is."
     },
     {
       "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png",
+      "beschrijving": "De leerlingen die klaar zijn met de planning kunnen hun hand opsteken, jij kunt als leerkracht de planningen controleren en daarna kunnen ze de game 'Planeten Planner' spelen op de laptop. Voor deze game is aan het einde van de les sowieso nog een aantal minuten beschikbaar gesteld."
     },
     {
       "naam": "Werkboek",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png",
+      "beschrijving": "In deze les gaan de leerlingen zelfstandig a.d.h.v. het KvM Planning Stappenplan een drukke middelbare schoolweek inplannen in hun werkboek."
     },
     {
       "naam": "Planeten Planner Highscores",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Highscore.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Highscore.png",
+      "beschrijving": "Vul na het spelen van 'Planeten Planner' de nieuwe namen en scores aan op het scorebord."
     }
   ]
 }

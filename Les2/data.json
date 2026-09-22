@@ -59,19 +59,23 @@
   "benodigdheden": [
     {
       "naam": "Wisbordje",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png",
+      "beschrijving": "Met het wisbordje gaan de leerlingen kijken wat er goed en niet goed is aan de planning van Jay."
     },
     {
       "naam": "Laptop",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Laptop.png",
+      "beschrijving": "De leerlingen die klaar zijn met de planning kunnen hun hand opsteken, jij kunt als leerkracht de planningen controleren en daarna kunnen ze de game 'Planeten Planner' spelen op de laptop. Voor deze game is aan het einde van de les sowieso nog een aantal minuten beschikbaar gesteld."
     },
     {
       "naam": "Werkboek",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Werkboek.png",
+      "beschrijving": "In deze les gaan de leerlingen in tweetallen a.d.h.v. het KvM Planning Stappenplan een middelbare schoolweek inplannen in hun werkboek."
     },
     {
       "naam": "Planeten Planner Highscores",
-      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Highscore.png"
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Highscore.png",
+      "beschrijving": "Hang dit scorebord op in de klas en vul aan het einde van het spel 'Planeten Planner' de namen en scores van de top 3 in met een zwarte marker. Laat het vooral hangen, zodat je 'm in les 6 weer kunt bijwerken. De leerlingen kunnen het spel tussendoor ook nog spelen via deze <a href=\"/planeten-planner/spel\" target=\"_blank\" rel=\"noopener\">link</a>."
     }
   ]
 }
