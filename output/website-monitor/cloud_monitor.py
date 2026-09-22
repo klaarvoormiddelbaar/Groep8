@@ -44,6 +44,10 @@ if not api_key:
     raise SystemExit('RESEND_API_KEY ontbreekt als GitHub Secret; mail niet verzonden.')
 payload = json.dumps({'from': 'Klaar voor Middelbaar <contact@klaarvoormiddelbaar.nl>', 'to': [os.environ['MONITOR_EMAIL']], 'subject': subject, 'text': '\n'.join(lines)}).encode()
 request = urllib.request.Request('https://api.resend.com/emails', data=payload, headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json'}, method='POST')
-with urllib.request.urlopen(request, timeout=25) as response:
-    if response.status >= 300:
-        raise SystemExit(f'Mailservice gaf HTTP {response.status}')
+try:
+    with urllib.request.urlopen(request, timeout=25) as response:
+        if response.status >= 300:
+            raise SystemExit(f'Mailservice gaf HTTP {response.status}')
+except urllib.error.HTTPError as exc:
+    detail = exc.read().decode(errors='replace')[:500]
+    raise SystemExit(f'Mailservice gaf HTTP {exc.code}: {detail}')
