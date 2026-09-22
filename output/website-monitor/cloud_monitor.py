@@ -7,6 +7,17 @@ urls = [BASE + p for p in ('/', '/groep8', '/brugklas', '/contact')]
 urls += [PORTAL + p for p in ('/Inlogpagina/', '/Dashboard/')]
 urls += [f'{PORTAL}/les{i}' for i in range(1, 9)]
 
+if os.environ.get('TEST_FAILURE', '').lower() == 'true':
+    api_key = os.environ.get('RESEND_API_KEY')
+    recipient = os.environ.get('MONITOR_EMAIL')
+    if not api_key or not recipient:
+        raise SystemExit('Testmail kan niet worden verstuurd: Resend-configuratie ontbreekt.')
+    payload = json.dumps({'from': 'Klaar voor Middelbaar <contact@klaarvoormiddelbaar.nl>', 'to': [recipient], 'subject': 'FOUTMELDING – TEST – Missie Middelbaar', 'text': 'Dit is een gesimuleerde storing, geen vastgestelde uitval.\n\nMissie Middelbaar\nhttps://groep8.klaarvoormiddelbaar.nl/les3/docent/missie/uitleg\n\nDe test simuleert dat deze opdrachtpagina niet werkt.'}).encode()
+    request = urllib.request.Request('https://api.resend.com/emails', data=payload, headers={'Authorization': f'Bearer {api_key}', 'Content-Type': 'application/json', 'User-Agent': 'klaarvoormiddelbaar-website-monitor/1.0'}, method='POST')
+    with urllib.request.urlopen(request, timeout=25) as response:
+        print(f'Testmail geaccepteerd door Resend: {response.read().decode(errors="replace")}')
+    raise SystemExit(0)
+
 def get(url):
     headers = {}
     secret = os.environ.get('VERCEL_AUTOMATION_BYPASS_SECRET')
