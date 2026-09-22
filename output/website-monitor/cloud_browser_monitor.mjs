@@ -16,8 +16,8 @@ const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage();
 try {
   await page.goto(`${base}/Inlogpagina/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.getByLabel('E-mailadres', { exact: true }).fill(email);
-  await page.getByLabel('Wachtwoord', { exact: true }).fill(password);
+  await page.locator('#email').fill(email);
+  await page.locator('#password').fill(password);
   await page.getByRole('button', { name: 'Inloggen', exact: true }).click();
   await page.waitForURL(/\/Dashboard\//, { timeout: 30000 });
   const dashboard = await page.locator('body').innerText();
