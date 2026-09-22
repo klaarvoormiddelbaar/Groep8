@@ -7,7 +7,7 @@ urls = [BASE + p for p in ('/', '/groep8', '/brugklas', '/contact')]
 urls += [PORTAL + p for p in ('/Inlogpagina/', '/Dashboard/')]
 urls += [f'{PORTAL}/les{i}' for i in range(1, 9)]
 
-if os.environ.get('TEST_FAILURE', '').lower() == 'true':
+if os.environ.get('GITHUB_EVENT_NAME') == 'workflow_dispatch' or os.environ.get('TEST_FAILURE', '').lower() == 'true':
     api_key = os.environ.get('RESEND_API_KEY')
     recipient = os.environ.get('MONITOR_EMAIL')
     if not api_key or not recipient:
