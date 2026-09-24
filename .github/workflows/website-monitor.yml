@@ -4,9 +4,10 @@ on:
   push:
     branches: [main]
   schedule:
-    # 08:00 CEST (april–oktober) and 08:00 CET (november–maart).
-    - cron: '0 6 * 4-10 1-5'
-    - cron: '0 7 * 1-3,11-12 1-5'
+    # Start at 03:00 local time; this leaves room for GitHub Actions queue
+    # delays so the result is normally ready before the school day.
+    - cron: '0 1 * 4-10 1-5'
+    - cron: '0 2 * 1-3,11-12 1-5'
   workflow_dispatch:
     inputs:
       test_failure:
