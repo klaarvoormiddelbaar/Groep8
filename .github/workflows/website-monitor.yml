@@ -1,6 +1,8 @@
 name: Website monitor
 
 on:
+  push:
+    branches: [main]
   schedule:
     # Start at 03:00 local time; this leaves room for GitHub Actions queue
     # delays so the result is normally ready before the school day.
