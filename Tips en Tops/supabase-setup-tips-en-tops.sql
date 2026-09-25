@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS tips_en_tops_reacties (
   mist_nog               TEXT        NOT NULL,
   leukste_werkvormen     TEXT[]      NOT NULL DEFAULT '{}',
   saaiste_en_suggesties  TEXT        NOT NULL,
+  klaar_voor_middelbaar  SMALLINT    CHECK (klaar_voor_middelbaar BETWEEN 1 AND 5),
   cijfer                 SMALLINT    NOT NULL CHECK (cijfer BETWEEN 1 AND 10),
   ingediend_op           TIMESTAMPTZ NOT NULL DEFAULT now()
 );

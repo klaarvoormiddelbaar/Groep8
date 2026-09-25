@@ -238,6 +238,35 @@
         </div>`;
     }
 
+    // Stelling op de 5-punt schaal (zelfde als PollParty); vaste volgorde 1 → 5.
+    const SCHAAL_LABELS = ['Helemaal mee oneens', 'Mee oneens', 'Neutraal', 'Mee eens', 'Helemaal mee eens'];
+
+    function renderSchaal(titel, reacties, veld) {
+      const beantwoord = reacties.filter(r => r[veld] >= 1 && r[veld] <= 5);
+      if (beantwoord.length === 0) return '';
+      const tellingen = SCHAAL_LABELS.map((_, i) => beantwoord.filter(r => r[veld] === i + 1).length);
+      const max = Math.max(1, ...tellingen);
+      const gemiddeld = beantwoord.reduce((som, r) => som + r[veld], 0) / beantwoord.length;
+
+      return `
+        <div class="sectie">
+          <div class="sectie-titel">${escapeHtml(titel)} <span style="font-weight:400;color:var(--muted)">(gemiddeld ${gemiddeld.toFixed(1)} van 5)</span></div>
+          <div class="chart">
+            ${SCHAAL_LABELS.map((label, i) => `
+              <div class="chart-rij">
+                <div class="chart-rang">${i + 1}</div>
+                <div class="chart-lbl">${label}</div>
+                <div class="balk-track">
+                  <div class="balk" style="width:${Math.max(8, Math.round((tellingen[i] / max) * 100))}%">
+                    <span class="balk-pct">${tellingen[i]}</span>
+                  </div>
+                </div>
+                <div class="chart-cnt">${tellingen[i]} ${tellingen[i] === 1 ? 'leerling' : 'leerlingen'}</div>
+              </div>`).join('')}
+          </div>
+        </div>`;
+    }
+
     function renderOpenVragen(titel, reacties, veld) {
       const antwoorden = reacties.filter(r => r[veld] && r[veld].trim());
       if (antwoorden.length === 0) return '';
@@ -278,7 +307,8 @@
         renderChart('Van welke onderwerpen heb je het meest geleerd?', reacties, 'meeste_aan_gehad'),
         renderOpenVragen('Wat mis je nog in het programma?', reacties, 'mist_nog'),
         renderChart('Welke werkvormen vond je het leukst?', reacties, 'leukste_werkvormen'),
-        renderOpenVragen('Welke werkvormen vond je minder leuk, en wat kunnen we doen om ze leuker te maken?', reacties, 'saaiste_en_suggesties')
+        renderOpenVragen('Welke werkvormen vond je minder leuk, en wat kunnen we doen om ze leuker te maken?', reacties, 'saaiste_en_suggesties'),
+        renderSchaal('Ik ben klaar voor de middelbare school.', reacties, 'klaar_voor_middelbaar')
       ].join('');
     }
 
