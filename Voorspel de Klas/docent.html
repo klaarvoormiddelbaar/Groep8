@@ -784,8 +784,20 @@
         </div>`;
     }
 
+    // Bij een NIEUW scherm (andere stelling, uitslag, tussenstand, eindstand…) beginnen we bovenaan,
+    // anders blijft de scrollpositie van het vorige scherm staan. Een vernieuwing van hetzelfde scherm
+    // (bijv. een nieuw open antwoord in de lijst) laat de scrollpositie ongemoeid.
+    let laatsteScherm = null;
     function render() {
       if (!sessie) return;
+      const scherm = `${sessie.status}:${sessie.huidige_stelling_index}:${sessie.onthuld}`;
+      const nieuwScherm = scherm !== laatsteScherm;
+      laatsteScherm = scherm;
+      const klaar = kiesScherm();
+      if (nieuwScherm) Promise.resolve(klaar).then(() => window.scrollTo(0, 0));
+    }
+
+    function kiesScherm() {
       if (sessie.status === 'wachtkamer')  return toonWachtkamer();
       if (sessie.status === 'actief')      return sessie.onthuld ? toonOnthuld() : toonStelling();
       if (sessie.status === 'tussenstand') return toonTussenstand();

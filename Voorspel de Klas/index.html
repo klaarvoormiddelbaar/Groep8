@@ -316,13 +316,36 @@
         const { data } = await db.from('voorspel_deelnemers').select('id, spelernummer, score').eq('id', opgeslagenDeelnemerId).maybeSingle();
         if (data) { deelnemer = data; return; }
       }
-      const { count } = await db.from('voorspel_deelnemers').select('id', { count: 'exact', head: true }).eq('sessie_id', sessie.id);
-      const spelernummer = (count || 0) + 1;
-      const { data: nieuw, error } = await db.from('voorspel_deelnemers').insert({ sessie_id: sessie.id, spelernummer }).select('id, spelernummer, score').single();
-      if (error || !nieuw) return;
-      deelnemer = nieuw;
-      sessionStorage.setItem('voorspel_sessie_id', sessie.id);
-      sessionStorage.setItem('voorspel_deelnemer_id', deelnemer.id);
+      // Meedoen: bij een haperende verbinding stil nog een paar keer proberen.
+      // (Het definitieve spelernummer kent de database zelf toe, zodat het nooit dubbel is.)
+      for (let poging = 0; poging < 3 && !deelnemer; poging++) {
+        if (poging > 0) await new Promise(r => setTimeout(r, 800 * poging));
+        try {
+          const { count } = await db.from('voorspel_deelnemers').select('id', { count: 'exact', head: true }).eq('sessie_id', sessie.id);
+          const spelernummer = (count || 0) + 1;
+          const { data: nieuw, error } = await db.from('voorspel_deelnemers').insert({ sessie_id: sessie.id, spelernummer }).select('id, spelernummer, score').single();
+          if (!error && nieuw) {
+            deelnemer = nieuw;
+            sessionStorage.setItem('voorspel_sessie_id', sessie.id);
+            sessionStorage.setItem('voorspel_deelnemer_id', deelnemer.id);
+          }
+        } catch (e) { /* volgende poging */ }
+      }
+    }
+
+    function toonMeedoenMislukt() {
+      document.getElementById('spelInhoud').innerHTML = `
+        <div class="status-kaart">
+          <div class="status-kaart-titel">Meedoen lukt even niet</div>
+          <div>Controleer of je internet werkt en probeer het nog een keer.</div>
+          <button class="btn-volgende" style="margin-top:16px" onclick="opnieuwMeedoen()">Opnieuw proberen</button>
+        </div>`;
+      window.scrollTo(0, 0);
+    }
+
+    async function opnieuwMeedoen() {
+      await vindOfMaakDeelnemer();
+      render();
     }
 
     function abonneerOpSessie() {
@@ -406,11 +429,19 @@
       const btn = document.getElementById('btnVerstuur');
       btn.disabled = true;
       try {
-        const { error } = await db.from('voorspel_antwoorden').insert({
-          sessie_id: sessie.id, deelnemer_id: deelnemer.id,
-          stelling_index: idx, antwoord: gekozenAntwoord, voorspelling
-        });
-        if (error) { throw error; }
+        // Bij een haperende verbinding stil nog een paar keer proberen; code 23505 = dit antwoord staat er al.
+        let opgeslagen = false, laatsteFout = null;
+        for (let poging = 0; poging < 3 && !opgeslagen; poging++) {
+          if (poging > 0) await new Promise(r => setTimeout(r, 800 * poging));
+          try {
+            const { error } = await db.from('voorspel_antwoorden').insert({
+              sessie_id: sessie.id, deelnemer_id: deelnemer.id,
+              stelling_index: idx, antwoord: gekozenAntwoord, voorspelling
+            });
+            if (!error || error.code === '23505') opgeslagen = true; else laatsteFout = error;
+          } catch (e) { laatsteFout = e; }
+        }
+        if (!opgeslagen) { throw laatsteFout || new Error('opslaan mislukt'); }
         sessionStorage.setItem('voorspel_beantwoord_' + sessie.id + '_' + idx, '1');
         sessionStorage.setItem('voorspel_gok_' + sessie.id + '_' + idx, String(voorspelling));
         toonWachtOpKlas();
@@ -421,6 +452,7 @@
     }
 
     function toonWachtOpKlas() {
+      window.scrollTo(0, 0);
       document.getElementById('spelInhoud').innerHTML = `
         <div class="status-kaart">
           <div class="status-kaart-titel">Antwoord verstuurd!</div>
@@ -479,6 +511,7 @@
     }
 
     function toonOpenVraagVerstuurd() {
+      window.scrollTo(0, 0);
       document.getElementById('spelInhoud').innerHTML = `
         <div class="status-kaart">
           <div class="status-kaart-titel">Bedankt!</div>
@@ -549,8 +582,19 @@
         ${!isEind ? `<div class="status-kaart"><div>Wacht tot je leerkracht verdergaat.</div></div>` : ''}`;
     }
 
+    // Bij een NIEUW scherm beginnen we bovenaan (anders blijft de scrollpositie van het vorige scherm staan).
+    let laatsteScherm = null;
     function render() {
       if (!sessie) return;
+      if (!deelnemer) return toonMeedoenMislukt();
+      const scherm = `${sessie.status}:${sessie.huidige_stelling_index}:${sessie.onthuld}`;
+      const nieuwScherm = scherm !== laatsteScherm;
+      laatsteScherm = scherm;
+      const klaar = kiesScherm();
+      if (nieuwScherm) Promise.resolve(klaar).then(() => window.scrollTo(0, 0));
+    }
+
+    function kiesScherm() {
       if (sessie.status === 'wachtkamer') return toonWachtkamer();
       if (sessie.status === 'actief') {
         if (sessie.onthuld) return toonOnthuld();
