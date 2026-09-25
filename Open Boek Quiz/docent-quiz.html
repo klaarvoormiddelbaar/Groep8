@@ -70,6 +70,15 @@
     transition: transform 0.2s, box-shadow 0.2s;
   }
   .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(78,142,243,0.38); }
+  /* Sticky, gecentreerde actieknop: blijft onderaan in beeld tijdens het scrollen */
+  .cta-sticky {
+    position: sticky; bottom: 0; z-index: 150;
+    display: flex; justify-content: center;
+    padding: 18px 0 22px; margin-top: 24px;
+    background: rgba(248,250,250,0.94); backdrop-filter: blur(10px);
+    box-shadow: 0 -1px 0 var(--border);
+  }
+  .cta-sticky-inner { width: 100%; display: flex; justify-content: center; }
 
   .start-card { background: white; border: 1px solid var(--border); border-radius: var(--r-card); box-shadow: var(--shadow-card); padding: 64px 48px; text-align: center; }
   .start-eyebrow { font-size: 13px; font-weight: 700; letter-spacing: 1.4px; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
@@ -440,7 +449,8 @@
     `;
     document.getElementById('btn-resultaten').addEventListener('click', async () => {
       await db.from('quiz_sessions').update({ status: 'resultaten' }).eq('id', sessie.id);
-      toonResultaten();
+      resultatenStap = 'score';
+      toonResultaten(true);
     });
     ververLeerlingentabel();
   }
@@ -505,6 +515,7 @@
   }
 
   let vragenAntwoorden = null;
+  let resultatenStap = 'score';   // 'score' (eerst) of 'antwoorden' (na klik op 'Naar antwoorden')
 
   async function laadVragenAntwoorden() {
     if (vragenAntwoorden) return vragenAntwoorden;
@@ -517,8 +528,17 @@
     return vragenAntwoorden;
   }
 
-  async function toonResultaten() {
+  // Stap 1 'score': hero, podium en ranglijst + sticky knop 'Naar antwoorden'.
+  // Stap 2 'antwoorden': de antwoorden om te bespreken. Een live vernieuwing (leerling levert in) houdt de stap vast.
+  async function toonResultaten(naarBoven = false) {
     huidigeView = 'resultaten';
+    const vragen = await laadVragenAntwoorden();
+    if (resultatenStap === 'antwoorden') toonAntwoordenStap(vragen);
+    else toonScoreStap();
+    if (naarBoven) window.scrollTo(0, 0);
+  }
+
+  function toonScoreStap() {
     const ranglijst = [...deelnemers.values()]
       .filter(d => d.status === 'ingeleverd')
       .sort((a, b) => {
@@ -527,9 +547,7 @@
       });
 
     const top3 = ranglijst.slice(0, 3);
-    const rest = ranglijst.slice(3);
     const medals = ['🥇', '🥈', '🥉'];
-    const vragen = await laadVragenAntwoorden();
 
     app.innerHTML = `
       <div class="view">
@@ -569,7 +587,37 @@
           `).join('')}
         </div>
 
-        <div class="panel antwoorden-panel">
+        <div class="cta-sticky">
+          <div class="cta-sticky-inner">
+            <button class="cta-btn" id="btn-naar-antwoorden" type="button">Naar antwoorden →</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('btn-terug').addEventListener('click', toonLobby);
+    document.getElementById('btn-naar-antwoorden').addEventListener('click', () => {
+      resultatenStap = 'antwoorden';
+      toonResultaten(true);
+    });
+  }
+
+  function toonAntwoordenStap(vragen) {
+    app.innerHTML = `
+      <div class="view">
+        <div class="quiz-hero">
+          <div class="quiz-hero-top">
+            <div>
+              <div class="quiz-eyebrow">Open boek quiz · Les ${lesNum}</div>
+              <div class="quiz-titel">Antwoorden</div>
+            </div>
+          </div>
+          <div class="quiz-sub">Bespreek de antwoorden met de klas.</div>
+          <div class="quiz-hero-acties">
+            <button class="btn-pill btn-wit" id="btn-terug-score" type="button" style="padding:13px 26px;font-size:14px;">← Terug naar de score</button>
+          </div>
+        </div>
+
+        <div class="panel antwoorden-panel" style="margin-top:0">
           <div class="panel-head">
             <div class="panel-title">Antwoorden om te bespreken</div>
             <div class="panel-count">${vragen.length} vragen</div>
@@ -601,7 +649,10 @@
         </div>
       </div>
     `;
-    document.getElementById('btn-terug').addEventListener('click', toonLobby);
+    document.getElementById('btn-terug-score').addEventListener('click', () => {
+      resultatenStap = 'score';
+      toonResultaten(true);
+    });
   }
 
   function vragenAantal() {
