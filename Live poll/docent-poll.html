@@ -889,7 +889,7 @@
       const chip = document.getElementById('stem-chip');
       const ring = document.getElementById('ring');
       if (n) n.textContent = aantalStemmen;
-      if (chip) chip.textContent = `<img class="ei" src="/Afbeeldingen/emojis nieuw/envelop.png" alt=""> ${aantalStemmen} van ${deelnemers.size} gestemd`;
+      if (chip) chip.innerHTML = `<img class="ei" src="/Afbeeldingen/emojis nieuw/envelop.png" alt=""> ${aantalStemmen} van ${deelnemers.size} gestemd`;
       if (ring) {
         const pct = deelnemers.size > 0 ? Math.round((aantalStemmen / deelnemers.size) * 100) : 0;
         ring.style.background = `conic-gradient(var(--primary) ${pct}%, #e1e3e3 ${pct}%)`;

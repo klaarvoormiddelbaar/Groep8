@@ -552,24 +552,40 @@
       });
       const bericht = document.getElementById('status-bericht');
       if (bericht) {
-        bericht.textContent = `Jouw stem (${score}) is ontvangen! Wacht op je juf of meester voor de resultaten.`;
+        bericht.textContent = `Je stem (${score}) wordt verstuurd…`;
         setTimeout(() => bericht.classList.add('zichtbaar'), 80);
       }
 
-      // Opslaan in Supabase
-      try {
-        const { error } = await db.from('poll_responses').insert({
-          session_id:    sessie.id,
-          statement_id:  huidigeStelling.id,
-          participant_id: deelnemerId,
-          score
-        });
-        if (error && !error.message.includes('duplicate')) {
-          console.error('Kon stem niet opslaan:', error.message);
-        }
-      } catch (e) {
-        console.error('Stem opslaan mislukt:', e);
+      // Opslaan in Supabase. Supabase gooit geen fout maar geeft 'error' terug:
+      // zelf controleren en bij haperende wifi stil opnieuw proberen.
+      // Code 23505 = deze stem staat er al (eerdere poging kwam toch aan).
+      const stellingBijStem = huidigeStelling.id;
+      let opgeslagen = false;
+      for (let poging = 0; poging < 3 && !opgeslagen; poging++) {
+        if (poging > 0) await new Promise(r => setTimeout(r, 800 * poging));
+        try {
+          const { error } = await db.from('poll_responses').insert({
+            session_id:    sessie.id,
+            statement_id:  stellingBijStem,
+            participant_id: deelnemerId,
+            score
+          });
+          if (!error || error.code === '23505') opgeslagen = true;
+        } catch (e) {}
       }
+
+      if (!opgeslagen) {
+        if (huidigeStelling && huidigeStelling.id === stellingBijStem && huidigeStelling.status === 'active') {
+          mijnStem = null;
+          document.querySelectorAll('.schaal-btn').forEach(b => {
+            b.disabled = false; b.classList.remove('gekozen', 'vervaagd');
+          });
+          if (bericht) bericht.textContent = 'Je stem is niet aangekomen. Controleer je internet en kies nog een keer.';
+        }
+        return;
+      }
+
+      if (bericht) bericht.textContent = `Jouw stem (${score}) is ontvangen! Wacht op je juf of meester voor de resultaten.`;
 
       // Na korte delay naar gestemd-scherm
       setTimeout(() => toonGestemd(), 900);
