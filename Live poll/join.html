@@ -201,17 +201,17 @@
         feedback.textContent = 'Je wordt aangemeld…';
 
         try {
-          const { data: deelnemer, error: meldFout } = await db
+          // Het deelnemer-id maken we zelf: leerlingen mogen deelnemers niet meer teruglezen
+          const deelnemerId = crypto.randomUUID();
+          const { error: meldFout } = await db
             .from('participants')
-            .insert({ session_id: sessie.id, naam })
-            .select()
-            .single();
+            .insert({ id: deelnemerId, session_id: sessie.id, naam });
 
           if (meldFout) throw new Error(meldFout.message);
 
           const url = new URL('/Live%20poll/leerling-poll.html', window.location.origin);
           url.searchParams.set('sessie', sessie.id);
-          url.searchParams.set('deelnemer', deelnemer.id);
+          url.searchParams.set('deelnemer', deelnemerId);
           window.location.href = url.href;
         } catch (fout) {
           feedback.className = 'feedback fout';

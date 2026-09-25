@@ -409,8 +409,7 @@
       if (se || !s) { toonFout('Kon de poll niet laden. Vraag je juf of meester om de link opnieuw.'); return; }
       sessie = s;
 
-      const { data: d, error: de } = await db
-        .from('participants').select().eq('id', deelnemerId).maybeSingle();
+      const { data: d, error: de } = await db.rpc('deelnemer_lezen', { p_id: deelnemerId });
       if (de || !d) { toonFout('Kon je deelnemer-informatie niet laden.'); return; }
       deelnemer = d;
 

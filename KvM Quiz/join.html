@@ -186,17 +186,17 @@
 
         toonFeedback('bezig', 'Je wordt aangemeld…');
 
-        const { data: deelnemer, error: meldFout } = await db
+        // Het deelnemer-id maken we zelf: leerlingen mogen deelnemers niet meer teruglezen
+        const deelnemerId = crypto.randomUUID();
+        const { error: meldFout } = await db
           .from('participants')
-          .insert({ session_id: sessie.id, naam })
-          .select()
-          .single();
+          .insert({ id: deelnemerId, session_id: sessie.id, naam });
 
         if (meldFout) throw new Error(meldFout.message);
 
         const url = new URL('/KvM%20Quiz/leerling-sessie.html', window.location.origin);
         url.searchParams.set('code', code);
-        url.searchParams.set('deelnemer', deelnemer.id);
+        url.searchParams.set('deelnemer', deelnemerId);
         window.location.href = url.href;
       } catch (fout) {
         toonFeedback('fout', 'Er ging iets mis bij het meedoen: ' + fout.message);

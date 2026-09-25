@@ -226,8 +226,7 @@
       }
       sessie = sessieData;
 
-      const { data: deelnemerData, error: deelnemerFout } = await db
-        .from('participants').select('*').eq('id', deelnemerId).maybeSingle();
+      const { data: deelnemerData, error: deelnemerFout } = await db.rpc('deelnemer_lezen', { p_id: deelnemerId });
 
       if (deelnemerFout || !deelnemerData) {
         toonFout('We konden je niet meer terugvinden in deze quiz. Ga terug en doe opnieuw mee.');
@@ -235,13 +234,12 @@
       }
       eigenDeelnemer = deelnemerData;
 
-      const { data: vragenData } = await db
-        .from('questions').select('*').eq('session_id', sessie.id).order('volgorde');
+      // Vragen komen zonder het goede antwoord binnen; de database rekent de punten uit
+      const { data: vragenData } = await db.rpc('kwiz_vragen_lezen', { p_session_id: sessie.id });
       vragen = vragenData || [];
 
-      const { count } = await db
-        .from('participants').select('id', { count: 'exact', head: true }).eq('session_id', sessie.id);
-      aantalDeelnemers = count || 1;
+      const { data: aantal } = await db.rpc('kwiz_deelnemers_aantal', { p_session_id: sessie.id });
+      aantalDeelnemers = aantal || 1;
 
       abonneerOpSessie();
       abonneerOpDeelnemers();
@@ -261,14 +259,12 @@
     }
 
     function abonneerOpDeelnemers() {
-      db.channel(`leerling-deelnemers-${sessie.id}-${deelnemerId}`)
-        .on('postgres_changes', {
-          event: 'INSERT', schema: 'public', table: 'participants', filter: `session_id=eq.${sessie.id}`
-        }, () => {
-          aantalDeelnemers++;
-          ververDeelnemerAantal();
-        })
-        .subscribe();
+      // Aantal klasgenoten in de wachtkamer: elke 5 seconden opnieuw vragen (alleen zolang de wachtkamer open is)
+      setInterval(async () => {
+        if (huidigeView !== 'wachtkamer' || document.visibilityState !== 'visible') return;
+        const { data } = await db.rpc('kwiz_deelnemers_aantal', { p_session_id: sessie.id });
+        if (typeof data === 'number') { aantalDeelnemers = data; ververDeelnemerAantal(); }
+      }, 5000);
     }
 
     function reageerOpSessieStatus() {
@@ -417,38 +413,34 @@
       const vraagIndexBijInzending = huidigeVraagIndex;
       const vraag = vragen[huidigeVraagIndex];
       const tijdMs = Math.min(vraag.tijdslimiet_seconden * 1000, Date.now() - vraagStartTijd);
-      const isPoll = vraag.goed_index === null || vraag.goed_index === undefined;
-      const isCorrect = !isPoll && optieIndex === vraag.goed_index;
-
-      let punten = 0;
-      if (!isPoll) {
-        const tijdsfractie = Math.max(0, 1 - tijdMs / (vraag.tijdslimiet_seconden * 1000));
-        punten = isCorrect ? Math.round(500 + 500 * tijdsfractie) : 0;
-      }
+      const isPoll = !!vraag.is_poll;
 
       gekozenOptieIndex = optieIndex;
       gekozenIsPoll = isPoll;
-      gekozenPunten = punten;
+      gekozenPunten = 0;
 
       toonVraagStatus('verzonden', '<img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""> Antwoord verzonden — wacht tot de docent doorgaat…');
 
       // Supabase gooit geen fout maar geeft 'error' terug: zelf controleren en bij
       // haperende wifi stil opnieuw proberen. Code 23505 = dit antwoord staat er al
       // (bijv. een eerdere poging kwam toch aan), dat telt als gelukt.
-      let opgeslagen = false, alBeantwoord = false;
+      let opgeslagen = false, alBeantwoord = false, teLaat = false;
       for (let poging = 0; poging < 3 && !opgeslagen; poging++) {
         if (poging > 0) await new Promise(r => setTimeout(r, 800 * poging));
         try {
-          const { error } = await db.from('answers').insert({
-            session_id: sessie.id,
-            question_id: vraag.id,
-            participant_id: eigenDeelnemer.id,
-            optie_index: optieIndex,
-            tijd_ms: tijdMs,
-            punten
+          // De database controleert het antwoord, telt de punten en de score op
+          const { data, error } = await db.rpc('kwiz_antwoord', {
+            p_deelnemer: eigenDeelnemer.id,
+            p_question: vraag.id,
+            p_optie: optieIndex,
+            p_tijd_ms: tijdMs
           });
-          if (!error) opgeslagen = true;
-          else if (error.code === '23505') { opgeslagen = true; alBeantwoord = poging === 0; }
+          if (!error && data && !data.fout) {
+            opgeslagen = true;
+            alBeantwoord = !!data.al_beantwoord && poging === 0;
+            gekozenPunten = data.punten || 0;
+            teLaat = !!data.te_laat;
+          }
         } catch (e) {}
       }
 
@@ -467,21 +459,16 @@
         }
         return;
       }
+      if (teLaat) {
+        gekozenOptieIndex = null;
+        toonVraagStatus('te-laat', '<img class="ei" src="/Afbeeldingen/emojis nieuw/ster.png" alt=""> Net te laat! Deze vraag is al voorbij, dus je antwoord telt niet meer. Succes met de volgende vraag!');
+        return;
+      }
       if (alBeantwoord) {
         toonVraagStatus('verzonden', 'Je had deze vraag al beantwoord. Wacht tot de docent doorgaat…');
         return;
       }
 
-      if (punten > 0) {
-        const nieuweScore = (eigenDeelnemer.score || 0) + punten;
-        for (let poging = 0; poging < 3; poging++) {
-          if (poging > 0) await new Promise(r => setTimeout(r, 800 * poging));
-          try {
-            const { error } = await db.from('participants').update({ score: nieuweScore }).eq('id', eigenDeelnemer.id);
-            if (!error) { eigenDeelnemer.score = nieuweScore; break; }
-          } catch (e) {}
-        }
-      }
     }
 
     // ── Tussenstand ──────────────────────────────────────────────────────────
@@ -490,13 +477,10 @@
       huidigeView = 'tussenstand';
       if (vraagTimerId) { clearInterval(vraagTimerId); vraagTimerId = null; }
 
-      const { data } = await db
-        .from('participants').select('id, naam, score')
-        .eq('session_id', sessie.id).order('score', { ascending: false });
-
-      const stand = data || [];
-      const positie = stand.findIndex(d => d.id === eigenDeelnemer.id) + 1;
-      const eigenScore = stand.find(d => d.id === eigenDeelnemer.id)?.score || 0;
+      const { data: stand } = await db.rpc('kwiz_stand', { p_deelnemer: eigenDeelnemer.id });
+      const positie = stand?.positie || 0;
+      const eigenScore = stand?.score || 0;
+      const totaal = stand?.totaal || 0;
       const medaille = positie === 1
         ? '<img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="" style="height:54px;width:auto;">'
         : `<div style="width:54px;height:54px;border-radius:50%;background:${positie === 2 ? '#c0c0c0' : positie === 3 ? '#cd7f32' : '#9ca3af'};color:white;font-size:22px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">${positie}</div>`;
@@ -506,7 +490,7 @@
           <div class="wachtkamer-view">
             <div class="wk-avatar" style="font-size:38px; background:none; box-shadow:none; width:64px; height:64px;">${medaille}</div>
             <div class="wk-titel">Halverwege!</div>
-            <div class="wk-sub">Je staat op plek <strong>${positie}</strong> van ${stand.length} met <strong>${eigenScore} punten</strong>. Wacht tot je juf of meester verdergaat.</div>
+            <div class="wk-sub">Je staat op plek <strong>${positie}</strong> van ${totaal} met <strong>${eigenScore} punten</strong>. Wacht tot je juf of meester verdergaat.</div>
             <div class="wk-pulse"><span></span><span></span><span></span></div>
           </div>
         </div>`;
@@ -518,13 +502,10 @@
       huidigeView = 'einde';
       if (vraagTimerId) { clearInterval(vraagTimerId); vraagTimerId = null; }
 
-      const { data } = await db
-        .from('participants').select('id, naam, score').eq('session_id', sessie.id).order('score', { ascending: false });
-
-      const lijst = data || [];
-      const positie = lijst.findIndex(d => d.id === eigenDeelnemer.id) + 1;
-      const eigenItem = lijst.find(d => d.id === eigenDeelnemer.id);
-      const eigenScore = eigenItem ? eigenItem.score : (eigenDeelnemer.score || 0);
+      const { data: stand } = await db.rpc('kwiz_stand', { p_deelnemer: eigenDeelnemer.id });
+      const positie = stand?.positie || 0;
+      const eigenScore = stand ? stand.score : (eigenDeelnemer.score || 0);
+      const totaal = stand?.totaal || 0;
       const medaille = positie === 1
         ? '<img src="/Afbeeldingen/emojis nieuw/trofee.png" alt="" style="height:54px;width:auto;">'
         : `<div style="width:54px;height:54px;border-radius:50%;background:${positie === 2 ? '#c0c0c0' : positie === 3 ? '#cd7f32' : '#9ca3af'};color:white;font-size:22px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;">${positie}</div>`;
@@ -536,7 +517,7 @@
             <div class="eind-titel">Bedankt voor het meedoen, ${escapeHtml(eigenDeelnemer.naam)}!</div>
             <div class="eind-sub">De quiz is afgelopen. Hier is hoe je het hebt gedaan:</div>
             <div class="score-chip-groot">Score: <span>${eigenScore}</span></div>
-            ${positie > 0 ? `<div class="eind-positie">Je eindigde op plek ${positie} van ${lijst.length}.</div>` : ''}
+            ${positie > 0 ? `<div class="eind-positie">Je eindigde op plek ${positie} van ${totaal}.</div>` : ''}
             <div class="eind-afsluiting">Goed gedaan! Tot de volgende les. <img class="ei" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""></div>
           </div>
         </div>`;
