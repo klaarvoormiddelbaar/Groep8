@@ -320,7 +320,7 @@
       const tekst = namen.length <= 3
         ? namen.join(' & ')
         : namen.slice(0, 2).join(', ') + ' en ' + (namen.length - 2) + ' anderen';
-      badge.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> ${tekst}`;
+      badge.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> ${tekst.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}`;
     }
 
     toonNamen(namen);
@@ -393,26 +393,16 @@
 
     // Initieel laden
     async function laadGroep() {
-      const { data, error } = await db
-        .from('missie_groepjes')
-        .select('*')
-        .eq('id', groepId)
-        .single();
+      const { data, error } = await db.rpc('missie_groep_lezen', { p_id: groepId });
       if (!error && data) {
         toonNamen(data.namen);
         updateKaarten(data);
       }
     }
 
-    // Realtime updates
-    db.channel('groep-' + groepId)
-      .on('postgres_changes', {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'missie_groepjes',
-        filter: `id=eq.${groepId}`
-      }, payload => updateKaarten(payload.new))
-      .subscribe();
+    // Voortgang blijft actueel (bijvoorbeeld als de docent iets aanpast): elke 10 seconden en zodra het tabblad weer actief is
+    setInterval(laadGroep, 10000);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) laadGroep(); });
 
     laadGroep();
     setTimeout(() => document.getElementById('missies').classList.add('kaarten-klaar'), 700);

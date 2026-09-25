@@ -427,15 +427,11 @@
       btn.classList.add('laden');
 
       try {
-        const { data, error } = await db
-          .from('missie_groepjes')
-          .insert({ namen, missie_huidig: 1, link_id: linkId })
-          .select('id')
-          .single();
+        const { data, error } = await db.rpc('missie_groep_aanmaken', { p_link_id: linkId, p_namen: namen });
 
-        if (error) throw error;
+        if (error || !data) throw error || new Error('geen groepje aangemaakt');
 
-        sessionStorage.setItem('missie_groep_id', data.id);
+        sessionStorage.setItem('missie_groep_id', data);
         sessionStorage.setItem('missie_namen', JSON.stringify(namen));
         window.location.href = '/Missie%20Middelbaar/overzicht.html';
       } catch (e) {

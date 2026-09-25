@@ -1296,16 +1296,7 @@
 
       verbergOpslaanFout();
       try {
-        // Eerst de bestaande antwoorden ophalen; lukt dat niet, dan NIET opslaan
-        // (anders zou missie 1 overschreven worden met een lege lijst).
-        const huidig = await metHerhaling(() => db
-          .from('missie_groepjes')
-          .select('antwoorden')
-          .eq('id', groepId)
-          .single(), 1); // ophalen: de Supabase-bibliotheek probeert zelf al opnieuw
-
         const antwoorden = {
-          ...(huidig?.antwoorden || {}),
           missie2: {
             bekeken_sites:  Array.from(sitesVoltooid).map(i => WEBSITES[i].naam),
             volgorde:       volgorde.map(i => WEBSITES[i].naam),
@@ -1318,13 +1309,10 @@
           }
         };
 
-        const bijgewerkt = await metHerhaling(() => db.from('missie_groepjes').update({
-          missie_2_klaar: true,
-          missie_huidig:  3,
-          antwoorden,
-          bijgewerkt_op:  new Date().toISOString()
-        }).eq('id', groepId).select('id'));
-        if (!bijgewerkt || bijgewerkt.length === 0) throw new Error('groepje niet gevonden');
+        const bijgewerkt = await metHerhaling(() => db.rpc('missie_afronden', {
+          p_id: groepId, p_missie: 2, p_antwoorden: antwoorden.missie2
+        }));
+        if (bijgewerkt !== true) throw new Error('groepje niet gevonden');
 
         missieOpgeslagen();
         btn.classList.remove('laden');

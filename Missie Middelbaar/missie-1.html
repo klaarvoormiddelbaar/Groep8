@@ -1550,13 +1550,10 @@
 
       verbergOpslaanFout();
       try {
-        const bijgewerkt = await metHerhaling(() => db.from('missie_groepjes').update({
-          missie_1_klaar: true,
-          missie_huidig: 2,
-          antwoorden,
-          bijgewerkt_op: new Date().toISOString()
-        }).eq('id', groepId).select('id'));
-        if (!bijgewerkt || bijgewerkt.length === 0) throw new Error('groepje niet gevonden');
+        const bijgewerkt = await metHerhaling(() => db.rpc('missie_afronden', {
+          p_id: groepId, p_missie: 1, p_antwoorden: antwoorden.missie1
+        }));
+        if (bijgewerkt !== true) throw new Error('groepje niet gevonden');
 
         missieOpgeslagen();
         btn.classList.remove('laden');
