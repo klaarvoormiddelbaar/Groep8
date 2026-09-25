@@ -164,14 +164,19 @@
 
     /* ── Woordenwolk ── */
     .cloud-container {
-      min-height: 240px; border-radius: 20px; background: #fafbfc; border: 1px solid var(--border);
-      padding: 28px 24px; margin-bottom: 20px;
-      display: flex; flex-wrap: wrap; justify-content: center; align-items: center;
+      /* Vaste hoogte: het vlak groeit niet mee met het aantal woorden (bij veel woorden schalen ze samen kleiner) */
+      height: clamp(360px, 62vh, 660px); overflow: hidden;
+      border-radius: 20px; background: #fafbfc; border: 1px solid var(--border);
+      padding: 24px 24px; margin-bottom: 20px;
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: center; align-content: center;
       gap: 8px 4px;
     }
+    .cloud-container.cloud-probe { position: absolute; left: -99999px; top: 0; height: auto; visibility: hidden; margin: 0; }
+    .cloud-probe .cloud-word { transition: none; animation: none; }
     .cloud-leeg { color: var(--muted); font-size: 15px; text-align: center; line-height: 1.7; }
     .cloud-word {
       display: inline-block; font-weight: 700; line-height: 1.1; cursor: default;
+      font-size: calc(var(--px, 24) * var(--schaal, 1) * 1px);
       transition: font-size 0.7s cubic-bezier(0.22,1,0.36,1), opacity 0.4s ease;
       animation: woordKomt 0.55s cubic-bezier(0.22,1,0.36,1) both;
       padding: 2px 3px;
@@ -236,7 +241,31 @@
 
     .afgerond-hero {
       background: linear-gradient(135deg, #134e4a 0%, #0f766e 55%, #14b8a6 100%);
-      border-radius: var(--r-card); padding: 40px 40px; color: white; margin-bottom: 24px;
+      border-radius: var(--r-card); padding: 40px 48px; color: white; margin-bottom: 24px;
+      position: relative; overflow: hidden; min-height: 240px;
+      display: flex; flex-direction: column; justify-content: center;
+      box-shadow: 0 12px 32px -8px rgba(0,0,0,0.18);
+    }
+    /* Zelfde opbouw als de lesbanner: stippenpatroon, lichte cirkel en Jay die zwaait */
+    .afgerond-hero::before {
+      content: ''; position: absolute; inset: 0; pointer-events: none;
+      background-image: radial-gradient(rgba(255,255,255,0.14) 1.5px, transparent 1.5px);
+      background-size: 26px 26px;
+    }
+    .afgerond-hero::after {
+      content: ''; position: absolute; top: -80px; right: -80px; width: 360px; height: 360px;
+      background: rgba(255,255,255,0.08); border-radius: 50%; pointer-events: none;
+    }
+    .afgerond-hero > div { position: relative; z-index: 1; max-width: calc(100% - 260px); }
+    .afgerond-jay {
+      position: absolute; right: 48px; top: 50%; height: 210px; width: auto; object-fit: contain;
+      pointer-events: none; z-index: 0; filter: drop-shadow(0 8px 24px rgba(0,0,0,0.20));
+      transform: translateY(-50%) scaleX(-1);
+    }
+    @media (max-width: 768px) {
+      .afgerond-jay { display: none; }
+      .afgerond-hero { min-height: 0; padding: 32px 28px; }
+      .afgerond-hero > div { max-width: none; }
     }
     .afgerond-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,0.78); margin-bottom: 8px; }
     .afgerond-titel { font-size: 26px; font-weight: 700; margin-bottom: 8px; }
@@ -423,12 +452,24 @@
         </div>`).join('');
     }
 
+    // Een nieuw woord wordt rechtstreeks uit de live-melding overgenomen (geen nieuwe ophaalronde per woord).
+    // Volledig ophalen gebeurt alleen bij het openen van een fase, na een verwijdering en als vangnet
+    // (een rustige controle, voor het geval een melding is gemist).
+    let woordenSleutel = null, vangnetTimer = null, laadTeller = 0, nieuwSindsLaden = [];
+
     function abonneerOpWoorden(faseIdx) {
       if (woordenKanaal) { db.removeChannel(woordenKanaal); woordenKanaal = null; }
+      clearInterval(vangnetTimer);
+      woordenSleutel = sessie.id + ':' + faseIdx;
+      nieuwSindsLaden = [];
       woordenKanaal = db.channel('docent-woordwolk-woorden-' + sessie.id + '-' + faseIdx)
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'woordwolk_woorden', filter: `sessie_id=eq.${sessie.id}` }, payload => {
-          if (Number(payload.new.fase_index) !== Number(faseIdx)) return;
-          laadWoorden(faseIdx);
+          const nieuw = payload.new;
+          if (Number(nieuw.fase_index) !== Number(faseIdx)) return;
+          if (woorden.some(w => w.id === nieuw.id)) return;
+          woorden.push(nieuw);
+          nieuwSindsLaden.push(nieuw);
+          verwerkNieuweStand();
         })
         .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'woordwolk_woorden', filter: `sessie_id=eq.${sessie.id}` }, () => {
           laadWoorden(faseIdx);
@@ -436,12 +477,25 @@
         .subscribe(status => {
           if (status === 'SUBSCRIBED') laadWoorden(faseIdx);
         });
+      vangnetTimer = setInterval(() => {
+        if (document.visibilityState === 'visible') laadWoorden(faseIdx);
+      }, 30000);
     }
 
     async function laadWoorden(faseIdx) {
+      const mijn = ++laadTeller;
+      nieuwSindsLaden = [];
       const { data, error } = await db.from('woordwolk_woorden').select('*').eq('sessie_id', sessie.id).eq('fase_index', faseIdx).order('aangemaakt_op', { ascending: true });
-      if (error) { console.error('laadWoorden fout:', error); return; }
-      woorden = data || [];
+      if (error) { console.error('laadWoorden fout:', error); return; }   // bij een fout de huidige stand laten staan
+      if (mijn !== laadTeller) return;                                      // een nieuwere ophaalronde is al bezig
+      const opgehaald = data || [];
+      const ids = new Set(opgehaald.map(w => w.id));
+      // woorden die tijdens het ophalen via een melding binnenkwamen niet kwijtraken
+      woorden = [...opgehaald, ...nieuwSindsLaden.filter(w => !ids.has(w.id))];
+      verwerkNieuweStand();
+    }
+
+    function verwerkNieuweStand() {
       verwerkWoorden();
     }
 
@@ -488,43 +542,75 @@
     function strHash(s) { let h = 0; for (let i = 0; i < s.length; i++) h = Math.imul(31, h) + s.charCodeAt(i) | 0; return h; }
 
     class WoordenwolkRenderer {
-      constructor(container) { this.container = container; this.els = new Map(); }
-      _grootte(freq, maxFreq) {
-        if (maxFreq <= 1) return 34;
-        const t = Math.log(1 + freq) / Math.log(1 + maxFreq);
-        return Math.round(16 + t * 48);
+      constructor(container) {
+        this.container = container; this.els = new Map(); this._raf = null;
+        // Het vlak heeft een vaste hoogte; bij te veel woorden schaalt alles samen iets kleiner.
+        if (window.ResizeObserver) new ResizeObserver(() => this._plan()).observe(container);
       }
+      // De grootte hangt alleen af van hoe vaak DIT woord is ingestuurd (niet van de andere
+      // woorden), zodat een nieuw woord de rest niet laat meebewegen.
+      _grootte(freq) { return Math.min(72, Math.round(24 * (1 + 0.4 * Math.log2(freq)))); }
       _kleur(w) { return WOLK_KLEUREN[Math.abs(strHash(w)) % WOLK_KLEUREN.length]; }
       _rotatie(w) { return ((Math.abs(strHash(w)) % 30) - 15); }
-      _marge(w) { const h = strHash(w); return `${(Math.abs(h * 17) % 24) - 12}px ${(Math.abs(h * 7) % 18) + 4}px`; }
+      _marge(w) { const h = strHash(w); return `${(Math.abs(h * 17) % 20) - 10}px ${(Math.abs(h * 7) % 14) + 3}px`; }
       update(freqs) {
         if (freqs.size === 0) { this._leeg(); return; }
         const leegEl = this.container.querySelector('.cloud-leeg');
         if (leegEl) leegEl.remove();
-        const maxF = Math.max(...freqs.values());
         for (const [w, el] of this.els) {
           if (!freqs.has(w)) { el.style.opacity = '0'; el.style.scale = '0.3'; setTimeout(() => el.parentNode && el.remove(), 400); this.els.delete(w); }
         }
+        // Een groot pakket woorden tegelijk (eerste keer laden) verschijnt zonder animatie;
+        // één nieuw woord krijgt wel zijn intree-animatie.
+        const animeer = [...freqs.keys()].filter(w => !this.els.has(w)).length <= 1;
         for (const [w, f] of freqs) {
-          const px = this._grootte(f, maxF);
+          const px = this._grootte(f);
           if (this.els.has(w)) {
             const el = this.els.get(w);
-            el.style.fontSize = px + 'px';
+            el.style.setProperty('--px', px);
             el.title = `${f}× ingediend`;
           } else {
             const el = document.createElement('span');
             el.className = 'cloud-word';
             el.textContent = w;
-            el.style.fontSize = px + 'px';
+            el.style.setProperty('--px', px);
             el.style.color = this._kleur(w);
             el.style.rotate = this._rotatie(w) + 'deg';
             el.style.margin = this._marge(w);
             el.title = `${f}× ingediend`;
-            this.container.appendChild(el);
+            if (animeer) el.addEventListener('animationend', () => { el.style.animation = 'none'; }, { once: true });
+            else el.style.animation = 'none';
+            this.container.appendChild(el);   // nieuwe woorden achteraan; bestaande woorden blijven op hun plek
             this.els.set(w, el);
           }
         }
-        [...this.els.entries()].sort((a, b) => (freqs.get(b[0]) || 0) - (freqs.get(a[0]) || 0)).forEach(([, el]) => this.container.appendChild(el));
+        this._plan();
+      }
+      _plan() { cancelAnimationFrame(this._raf); this._raf = requestAnimationFrame(() => this._pas()); }
+      // Zoekt de grootste schaal (max 1) waarbij alle woorden in het vaste vlak passen,
+      // door onzichtbaar mee te meten; het echte vlak verandert daardoor niet mee.
+      _pas() {
+        const c = this.container;
+        if (!c.isConnected || this.els.size === 0 || !c.clientHeight) return;
+        const probe = document.createElement('div');
+        probe.className = c.className + ' cloud-probe';
+        probe.style.width = c.offsetWidth + 'px';
+        for (const [w, el] of this.els) {
+          const s = document.createElement('span');
+          s.className = 'cloud-word';
+          s.textContent = w;
+          s.style.cssText = `--px:${el.style.getPropertyValue('--px')};margin:${el.style.margin};`;
+          probe.appendChild(s);
+        }
+        document.body.appendChild(probe);
+        let schaal = 1;
+        probe.style.setProperty('--schaal', schaal);
+        while (probe.clientHeight > c.clientHeight && schaal > 0.45) {
+          schaal = Math.max(0.45, schaal * 0.94);
+          probe.style.setProperty('--schaal', schaal);
+        }
+        probe.remove();
+        c.style.setProperty('--schaal', schaal.toFixed(3));
       }
       _leeg() {
         if (!this.container.querySelector('.cloud-leeg')) {
@@ -637,6 +723,7 @@
           <div class="afgerond-eyebrow">Activiteit afgerond</div>
           <div class="afgerond-titel">Goed gedaan klas! <img src="/Afbeeldingen/emojis%20nieuw/trofee.png" alt=""></div>
           <div class="afgerond-sub">${deelnemers.length} ${deelnemers.length === 1 ? 'leerling' : 'leerlingen'} deden mee · alle 3 fases zijn doorlopen. Bespreek de belangrijkste tips na met de klas.</div>
+          <img class="afgerond-jay" src="/Afbeeldingen/Jay%20los/Jay%20waving.png" alt="" aria-hidden="true">
         </div>
         <div class="knoppen-rij">
           <a class="btn-ghost" href="/les5" style="text-decoration:none" onclick="terugNaarLes(event)">← Terug naar Les 5</a>
