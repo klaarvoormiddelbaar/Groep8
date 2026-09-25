@@ -240,6 +240,9 @@
   .resultaat-trofee svg { width: 30px; height: 30px; }
   .resultaat-titel { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
   .resultaat-compliment { font-size: 14px; color: var(--mid); margin-bottom: 22px; line-height: 1.5; }
+  .resultaat-status { font-size: 13.5px; font-weight: 700; margin: -8px 0 16px; line-height: 1.5; color: var(--mid); }
+  .resultaat-status.goed { color: var(--green); }
+  .resultaat-status.fout { color: #b91c1c; }
   .btn-sluiten { background: var(--blue); border: none; border-radius: var(--r-pill); padding: 13px 30px; font-family: inherit; font-size: 15px; font-weight: 700; color: white; cursor: pointer; width: 100%; transition: background 0.15s; }
   .btn-sluiten:hover { background: var(--blue-dk); }
   .btn-sluiten:disabled { background: var(--border); color: var(--mid); cursor: not-allowed; }
@@ -402,6 +405,8 @@
     <div class="resultaat-trofee"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#10a37f" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="resultaat-titel">E-mail gecontroleerd!</div>
     <div class="resultaat-compliment" id="resultaat-compliment"></div>
+    <div class="resultaat-status" id="resultaat-status" role="status"></div>
+    <button class="btn-sluiten" id="resultaat-opnieuw" type="button" style="display:none">Opnieuw versturen</button>
   </div>
 </div>
 
@@ -564,12 +569,51 @@ Laterrrr,
   let leerlingNaam = '';
   let linkId = null;
 
-  if (volgnummer) {
-    db.rpc('resolve_mail_link', { p_volgnummer: Number(volgnummer) })
-      .then(({ data, error }) => {
-        if (error) { console.error('Kon link niet opzoeken:', error.message); return; }
-        if (data) linkId = data;
-      });
+  const wacht = ms => new Promise(r => setTimeout(r, ms));
+
+  // De klaslink opzoeken; bij een haperende verbinding stil nog een paar keer proberen.
+  async function zoekLink() {
+    if (!volgnummer || linkId) return linkId;
+    for (let poging = 0; poging < 3 && !linkId; poging++) {
+      if (poging > 0) await wacht(800 * poging);
+      try {
+        const { data, error } = await db.rpc('resolve_mail_link', { p_volgnummer: Number(volgnummer) });
+        if (error) { console.error('Kon link niet opzoeken:', error.message); continue; }
+        if (data) linkId = data; else break;      // onbekende link: opnieuw proberen heeft geen zin
+      } catch (e) { console.error('Kon link niet opzoeken:', e); }
+    }
+    return linkId;
+  }
+  zoekLink();
+
+  // De inzending versturen; de leerling ziet of het is aangekomen (en kan opnieuw proberen).
+  async function verstuurInzending(inhoud) {
+    if (!volgnummer) return;                      // oefenen zonder klaslink: niets te versturen
+    const statusEl = document.getElementById('resultaat-status');
+    const opnieuwBtn = document.getElementById('resultaat-opnieuw');
+    opnieuwBtn.style.display = 'none';
+    statusEl.className = 'resultaat-status';
+    statusEl.textContent = 'Bezig met versturen naar je leerkracht…';
+    let gelukt = false;
+    const link = await zoekLink();
+    if (link) {
+      for (let poging = 0; poging < 3 && !gelukt; poging++) {
+        if (poging > 0) await wacht(800 * poging);
+        try {
+          const { error } = await db.from('mail_inzendingen').insert({ link_id: link, ...inhoud });
+          if (error) console.error('Kon inzending niet opslaan:', error.message); else gelukt = true;
+        } catch (e) { console.error('Kon inzending niet opslaan:', e); }
+      }
+    }
+    if (gelukt) {
+      statusEl.className = 'resultaat-status goed';
+      statusEl.textContent = 'Je e-mail is verstuurd naar je leerkracht.';
+    } else {
+      statusEl.className = 'resultaat-status fout';
+      statusEl.textContent = 'Je e-mail is nog niet bij je leerkracht aangekomen. Controleer je internet en probeer het opnieuw.';
+      opnieuwBtn.style.display = '';
+      opnieuwBtn.onclick = () => verstuurInzending(inhoud);
+    }
   }
 
   document.getElementById('verzenden-btn').addEventListener('click', () => {
@@ -577,18 +621,13 @@ Laterrrr,
     document.getElementById('resultaat-compliment').textContent = COMPLIMENT_TEKST;
     document.getElementById('resultaat-overlay').classList.add('open');
 
-    if (linkId) {
-      db.from('mail_inzendingen').insert({
-        link_id: linkId,
-        voornaam: leerlingNaam || 'Onbekend',
-        onderwerp: document.getElementById('onderwerp-input').value.trim(),
-        bericht: document.getElementById('bericht-input').value.trim(),
-        checklist: checks,
-        aantal_goed: CHECKLIST.filter(c => checks[c.id]).length
-      }).then(({ error }) => {
-        if (error) console.error('Kon inzending niet opslaan:', error.message);
-      });
-    }
+    verstuurInzending({
+      voornaam: leerlingNaam || 'Onbekend',
+      onderwerp: document.getElementById('onderwerp-input').value.trim(),
+      bericht: document.getElementById('bericht-input').value.trim(),
+      checklist: checks,
+      aantal_goed: CHECKLIST.filter(c => checks[c.id]).length
+    });
   });
 
   const welkomInput = document.getElementById('welkom-naam-input');
