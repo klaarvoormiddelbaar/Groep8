@@ -105,12 +105,12 @@
 
     .btn-verwijder {
       display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
-      border: 1.5px solid rgba(220,38,38,.35); border-radius: var(--r-pill); cursor: pointer;
-      font-family: inherit; font-size: 14px; font-weight: 700; color: #b91c1c;
+      border: 1.5px solid var(--border); border-radius: var(--r-pill); cursor: pointer;
+      font-family: inherit; font-size: 14px; font-weight: 600; color: var(--muted);
       background: white; padding: 11px 20px; white-space: nowrap;
       transition: background 0.15s, border-color 0.15s;
     }
-    .btn-verwijder:hover { background: #fef2f2; border-color: #dc2626; }
+    .btn-verwijder:hover { background: #fef2f2; border-color: rgba(220,38,38,.45); color: #b91c1c; }
     .btn-verwijder:disabled { opacity: .5; cursor: default; }
 
     /* ── LOBBY (leerlinglink) ── */
@@ -180,8 +180,22 @@
       padding: 1px 8px; font-size: 12px;
     }
     .filter-pil:hover { border-color: var(--primary); color: var(--primary-dark); }
-    .filter-pil.actief { background: var(--dark); border-color: var(--dark); color: white; }
-    .filter-pil.actief .telling { background: rgba(255,255,255,0.18); }
+    .filter-pil::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--fk, var(--muted)); flex-shrink: 0; }
+    .filter-pil.actief { background: var(--fk-soft, rgba(25,28,29,0.08)); border-color: var(--fk, var(--dark)); color: var(--fk-dark, var(--dark)); }
+    .filter-pil.actief .telling { background: rgba(255,255,255,0.7); }
+
+    /* ── SECTIES per missie: kleurblokken die bij elkaar staan ── */
+    .sectie-kop {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 15px; font-weight: 700; color: var(--kleur-dark);
+      margin: 30px 2px 14px;
+    }
+    .groepjes-sectie:first-child .sectie-kop { margin-top: 4px; }
+    .sectie-stip { width: 12px; height: 12px; border-radius: 50%; background: var(--kleur-accent); flex-shrink: 0; }
+    .sectie-telling {
+      font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: var(--r-pill);
+      background: var(--kleur-soft); color: var(--kleur-dark);
+    }
 
     /* ── GROEPJES GRID ── */
     .groepjes-grid {
@@ -190,30 +204,39 @@
     }
 
     .groep-kaart {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-left: 5px solid var(--kleur-accent, var(--primary));
-      border-radius: 20px; box-shadow: var(--shadow-card);
+      background: linear-gradient(var(--kleur-soft), var(--kleur-soft)), var(--card-bg);
+      border: 1.5px solid var(--kleur-rand, var(--border));
+      border-radius: 20px; box-shadow: 0 1px 2px rgba(16,24,40,0.04);
       padding: 20px 22px; cursor: pointer;
       display: flex; flex-direction: column; gap: 12px;
       transition: transform .18s, box-shadow .18s;
       animation: fadeUp .35s cubic-bezier(.22,1,.36,1) both;
     }
-    .groep-kaart:hover { transform: translateY(-4px); box-shadow: 0 28px 38px -8px rgba(0,0,0,.16); }
+    .groep-kaart:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -8px rgba(16,24,40,0.16); }
     @keyframes fadeUp { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
 
     .groep-kop { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
     .groep-namen { font-size: 17px; font-weight: 700; line-height: 1.3; }
+    .groep-acties { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .btn-prullenbak {
+      width: 34px; height: 34px; border-radius: 50%; border: none; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+      background: transparent; color: #a3aab0;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-prullenbak:hover { background: rgba(255,255,255,0.85); color: #6d747a; }
+    .btn-prullenbak:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
     .status-badge {
-      flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;
+      flex-shrink: 0; display: inline-flex; align-items: center;
       font-size: 12px; font-weight: 700; white-space: nowrap;
       border-radius: var(--r-pill); padding: 5px 12px;
-      background: var(--kleur-soft, var(--primary-soft)); color: var(--kleur-dark, var(--primary-dark));
+      background: var(--kleur-dark, var(--primary-dark)); color: #fff;
     }
 
     .groep-missie { font-size: 13.5px; color: var(--muted); }
     .groep-missie strong { color: var(--dark); }
 
-    .voortgang-balk-track { height: 8px; border-radius: var(--r-pill); background: #eef1f5; overflow: hidden; }
+    .voortgang-balk-track { height: 8px; border-radius: var(--r-pill); background: rgba(255,255,255,0.8); overflow: hidden; }
     .voortgang-balk-vulling {
       height: 100%; border-radius: var(--r-pill);
       background: var(--kleur-accent, var(--primary));
@@ -221,7 +244,7 @@
     }
 
     .groep-voet { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: var(--muted); }
-    .groep-voortgang-tekst { font-weight: 700; color: var(--dark); }
+    .groep-voortgang-tekst { font-weight: 700; color: var(--kleur-dark, var(--dark)); }
 
     /* ── LEGE STAAT ── */
     .lege-staat {
@@ -349,10 +372,10 @@
     };
 
     const KLEUR_VAR = {
-      blauw:  { accent: 'var(--primary)',    dark: 'var(--primary-dark)', soft: 'var(--primary-soft)' },
-      paars:  { accent: 'var(--paars)',      dark: 'var(--paars-dark)',   soft: 'var(--paars-soft)'   },
-      oranje: { accent: 'var(--oranje)',     dark: 'var(--oranje-dark)',  soft: 'var(--oranje-soft)'  },
-      groen:  { accent: 'var(--groen)',      dark: 'var(--groen-dark)',  soft: 'var(--groen-soft)'  },
+      blauw:  { accent: 'var(--primary)',    dark: 'var(--primary-dark)', soft: 'var(--primary-soft)', rand: 'rgba(78,142,243,0.34)' },
+      paars:  { accent: 'var(--paars)',      dark: 'var(--paars-dark)',   soft: 'var(--paars-soft)',   rand: 'rgba(124,58,237,0.30)' },
+      oranje: { accent: 'var(--oranje)',     dark: 'var(--oranje-dark)',  soft: 'var(--oranje-soft)',  rand: 'rgba(245,158,11,0.42)' },
+      groen:  { accent: 'var(--groen)',      dark: 'var(--groen-dark)',  soft: 'var(--groen-soft)',   rand: 'rgba(16,163,127,0.34)' },
     };
 
     let groepjes = [];
@@ -424,10 +447,10 @@
     // ── Filters ──────────────────────────────────────────────────────────────
     const FILTER_DEFS = [
       { key: 'alle',    label: 'Alle groepjes' },
-      { key: 'missie1', label: 'Missie 1' },
-      { key: 'missie2', label: 'Missie 2' },
-      { key: 'missie3', label: 'Missie 3' },
-      { key: 'klaar',   label: 'Klaar' },
+      { key: 'missie1', label: 'Missie 1', kleur: 'blauw' },
+      { key: 'missie2', label: 'Missie 2', kleur: 'paars' },
+      { key: 'missie3', label: 'Missie 3', kleur: 'oranje' },
+      { key: 'klaar',   label: 'Klaar',    kleur: 'groen' },
     ];
 
     function tellingVoorFilter(key) {
@@ -437,10 +460,13 @@
 
     function renderFilters() {
       const wrap = document.getElementById('filters');
-      wrap.innerHTML = FILTER_DEFS.map(f => `
-        <button class="filter-pil ${huidigFilter === f.key ? 'actief' : ''}" onclick="zetFilter('${f.key}')">
+      wrap.innerHTML = FILTER_DEFS.map(f => {
+        const k = f.kleur ? KLEUR_VAR[f.kleur] : null;
+        const stijl = k ? ` style="--fk:${k.accent};--fk-soft:${k.soft};--fk-dark:${k.dark}"` : '';
+        return `
+        <button class="filter-pil ${huidigFilter === f.key ? 'actief' : ''}"${stijl} onclick="zetFilter('${f.key}')">
           ${f.label} <span class="telling">${tellingVoorFilter(f.key)}</span>
-        </button>`).join('');
+        </button>`; }).join('');
     }
 
     function zetFilter(key) {
@@ -474,7 +500,26 @@
         return;
       }
 
-      wrap.innerHTML = `<div class="groepjes-grid">${lijst.map(kaartHtml).join('')}</div>`;
+      // Per missie een eigen kleurblok met kop; het minst ver bovenaan (wie hulp nodig heeft het eerst in beeld).
+      // Binnen een blok alfabetisch op namen, zodat de volgorde stil blijft staan terwijl groepjes bezig zijn.
+      const SECTIES = [
+        { fase: 'missie1', kleur: 'blauw',  titel: `Missie 1: ${MISSIE_INFO[1].titel}` },
+        { fase: 'missie2', kleur: 'paars',  titel: `Missie 2: ${MISSIE_INFO[2].titel}` },
+        { fase: 'missie3', kleur: 'oranje', titel: `Missie 3: ${MISSIE_INFO[3].titel}` },
+        { fase: 'klaar',   kleur: 'groen',  titel: 'Alle missies afgerond' },
+      ];
+      const naamSleutel = g => (g.namen || []).join(' ').toLowerCase();
+      wrap.innerHTML = SECTIES.map(sec => {
+        const groep = lijst.filter(g => statusVoorGroep(g).fase === sec.fase)
+          .sort((a, b) => naamSleutel(a).localeCompare(naamSleutel(b), 'nl'));
+        if (groep.length === 0) return '';
+        const k = KLEUR_VAR[sec.kleur];
+        return `
+          <section class="groepjes-sectie" style="--kleur-accent:${k.accent};--kleur-dark:${k.dark};--kleur-soft:${k.soft}">
+            <div class="sectie-kop"><span class="sectie-stip"></span>${escapeHtml(sec.titel)}<span class="sectie-telling">${groep.length}</span></div>
+            <div class="groepjes-grid">${groep.map(kaartHtml).join('')}</div>
+          </section>`;
+      }).join('');
     }
 
     function kaartHtml(g) {
@@ -482,17 +527,19 @@
       const kleur = KLEUR_VAR[status.kleur];
       const voortgang = voortgangVoorGroep(g);
       const namen = (g.namen || []).join(' & ') || 'Naamloos groepje';
-      const missieLabel = status.missieNr
-        ? `<strong>Missie ${status.missieNr}</strong> · ${escapeHtml(MISSIE_INFO[status.missieNr].titel)}`
-        : 'Alle drie de missies afgerond';
 
       return `
-        <div class="groep-kaart" style="--kleur-accent:${kleur.accent};--kleur-dark:${kleur.dark};--kleur-soft:${kleur.soft}" onclick="toonDetail('${g.id}')">
+        <div class="groep-kaart" style="--kleur-accent:${kleur.accent};--kleur-dark:${kleur.dark};--kleur-soft:${kleur.soft};--kleur-rand:${kleur.rand}" onclick="toonDetail('${g.id}')">
           <div class="groep-kop">
             <div class="groep-namen">${escapeHtml(namen)}</div>
-            <div class="status-badge">${escapeHtml(status.label)}</div>
+            <div class="groep-acties">
+              <div class="status-badge">${escapeHtml(status.label)}</div>
+              <button class="btn-prullenbak" type="button" title="Groepje verwijderen" aria-label="Groepje verwijderen"
+                onclick="event.stopPropagation(); verwijderEenGroepje('${g.id}')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+              </button>
+            </div>
           </div>
-          <div class="groep-missie">${missieLabel}</div>
           <div class="voortgang-balk-track"><div class="voortgang-balk-vulling" style="width:${voortgang}%"></div></div>
           <div class="groep-voet">
             <span>${relatieveTijd(g.bijgewerkt_op)}</span>
