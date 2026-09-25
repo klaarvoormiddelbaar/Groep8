@@ -13,7 +13,7 @@ const IMAGE_PATHS = {
   powerupSlowMotion: '/Planeten%20Planner/assets/images/powerup-slowmotion.png',
   powerupExtraLife: '/Planeten%20Planner/assets/images/powerup-life.png',
   powerupDoubleScore: '/Planeten%20Planner/assets/images/powerup-doublescore.png',
-  background: '/Planeten%20Planner/assets/images/background.png',
+  background: '/Planeten%20Planner/assets/images/background.jpg',
   lifeFull: '/Planeten%20Planner/assets/images/life-full.png',
   lifeEmpty: '/Planeten%20Planner/assets/images/life-empty.png',
   planetMonday: '/Planeten%20Planner/assets/images/planet-monday.png',
@@ -24,18 +24,18 @@ const IMAGE_PATHS = {
 
   // Iconen uit de gedeelde iOS-emoji-pack i.p.v. losse Unicode-emoji (StyleGuide-regel:
   // geen systeem-emoji in de interface). Bestaande, ongewijzigde assets — geen ChatGPT-content.
-  iconWarning: '/Afbeeldingen/Emoji%20Pack%20iOS/warning_26a0-fe0f.png',
-  iconCheck: '/Afbeeldingen/Emoji%20Pack%20iOS/check-mark-button_2705.png',
-  iconShield: '/Afbeeldingen/Emoji%20Pack%20iOS/shield_1f6e1-fe0f.png',
-  iconPackage: '/Afbeeldingen/Emoji%20Pack%20iOS/package_1f4e6.png',
-  iconMagnet: '/Afbeeldingen/Emoji%20Pack%20iOS/magnet_1f9f2.png',
-  iconSnail: '/Afbeeldingen/Emoji%20Pack%20iOS/snail_1f40c.png',
-  iconPause: '/Afbeeldingen/Emoji%20Pack%20iOS/pause-button_23f8-fe0f.png',
-  iconSpeaker: '/Afbeeldingen/Emoji%20Pack%20iOS/speaker-medium-volume_1f509.png',
-  iconArrowLeft: '/Afbeeldingen/Emoji%20Pack%20iOS/left-arrow_2b05-fe0f.png',
-  iconArrowRight: '/Afbeeldingen/Emoji%20Pack%20iOS/right-arrow_27a1-fe0f.png',
-  iconSparkles: '/Afbeeldingen/Emoji%20Pack%20iOS/sparkles_2728.png',
-  iconLightbulb: '/Afbeeldingen/Emoji%20Pack%20iOS/light-bulb_1f4a1.png'
+  iconWarning: '/Afbeeldingen/EMOJI%20PACK%20IOS/warning_26a0-fe0f.png',
+  iconCheck: '/Afbeeldingen/EMOJI%20PACK%20IOS/check-mark-button_2705.png',
+  iconShield: '/Afbeeldingen/EMOJI%20PACK%20IOS/shield_1f6e1-fe0f.png',
+  iconPackage: '/Afbeeldingen/EMOJI%20PACK%20IOS/package_1f4e6.png',
+  iconMagnet: '/Afbeeldingen/EMOJI%20PACK%20IOS/magnet_1f9f2.png',
+  iconSnail: '/Afbeeldingen/EMOJI%20PACK%20IOS/snail_1f40c.png',
+  iconPause: '/Afbeeldingen/EMOJI%20PACK%20IOS/pause-button_23f8-fe0f.png',
+  iconSpeaker: '/Afbeeldingen/EMOJI%20PACK%20IOS/speaker-medium-volume_1f509.png',
+  iconArrowLeft: '/Afbeeldingen/EMOJI%20PACK%20IOS/left-arrow_2b05-fe0f.png',
+  iconArrowRight: '/Afbeeldingen/EMOJI%20PACK%20IOS/right-arrow_27a1-fe0f.png',
+  iconSparkles: '/Afbeeldingen/EMOJI%20PACK%20IOS/sparkles_2728.png',
+  iconLightbulb: '/Afbeeldingen/EMOJI%20PACK%20IOS/light-bulb_1f4a1.png'
 };
 
 const images = {};
