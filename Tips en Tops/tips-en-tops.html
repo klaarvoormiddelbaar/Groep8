@@ -465,15 +465,11 @@
 
       if (!code) { toonFout(); return; }
 
-      const { data, error } = await db
-        .from('tips_en_tops_links')
-        .select('leerkracht_id')
-        .eq('code', code)
-        .maybeSingle();
+      const { data, error } = await db.rpc('tips_code_opzoeken', { p_code: code });
 
       if (error || !data) { toonFout(); return; }
 
-      docentId = data.leerkracht_id;
+      docentId = data;
       bouwFormulier();
       document.getElementById('view-laden').style.display = 'none';
       document.getElementById('view-form').style.display = 'block';
