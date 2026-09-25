@@ -196,6 +196,7 @@
     let alAntwoordIngediend = false;
     let aantalDeelnemers = 1;
     let gekozenOptieIndex = null;
+    let onthuldeVraagIndex = -1;
     let gekozenIsPoll = false;
     let gekozenPunten = 0;
     let onthulKanaal = null;
@@ -283,8 +284,18 @@
       onthulKanaal = db.channel(`onthulling-${sessie.id}`)
         .on('broadcast', { event: 'reveal' }, (payload) => {
           const { vraag_index, goed_index } = payload.payload;
-          if (vraag_index !== huidigeVraagIndex || gekozenOptieIndex === null) return;
+          if (vraag_index !== huidigeVraagIndex) return;
+          onthuldeVraagIndex = vraag_index;
           const letters = ['A', 'B', 'C', 'D'];
+          if (gekozenOptieIndex === null) {
+            // Docent heeft de antwoorden laten zien: nog niet geantwoord = niet meer antwoorden
+            if (vraagTimerId) { clearInterval(vraagTimerId); vraagTimerId = null; }
+            alAntwoordIngediend = true;
+            document.querySelectorAll('.optie-knop').forEach(b => b.disabled = true);
+            const isPoll = goed_index === null || goed_index === undefined;
+            toonVraagStatus('te-laat', `<img class="ei" src="/Afbeeldingen/emojis nieuw/ster.png" alt=""> Je juf of meester laat nu de antwoorden zien, dus je kan niet meer antwoorden.${isPoll ? '' : ` Het juiste antwoord was: ${letters[goed_index]}.`} Succes met de volgende vraag!`);
+            return;
+          }
           if (gekozenIsPoll) {
             toonVraagStatus('verzonden', '<img class="ei" src="/Afbeeldingen/emojis nieuw/trofee.png" alt=""> Bedankt voor je stem! Wacht op de volgende vraag.');
           } else if (gekozenOptieIndex === goed_index) {
@@ -421,23 +432,55 @@
 
       toonVraagStatus('verzonden', '<img class="ei" src="/Afbeeldingen/emojis nieuw/vinkje.png" alt=""> Antwoord verzonden — wacht tot de docent doorgaat…');
 
-      try {
-        await db.from('answers').insert({
-          session_id: sessie.id,
-          question_id: vraag.id,
-          participant_id: eigenDeelnemer.id,
-          optie_index: optieIndex,
-          tijd_ms: tijdMs,
-          punten
-        });
+      // Supabase gooit geen fout maar geeft 'error' terug: zelf controleren en bij
+      // haperende wifi stil opnieuw proberen. Code 23505 = dit antwoord staat er al
+      // (bijv. een eerdere poging kwam toch aan), dat telt als gelukt.
+      let opgeslagen = false, alBeantwoord = false;
+      for (let poging = 0; poging < 3 && !opgeslagen; poging++) {
+        if (poging > 0) await new Promise(r => setTimeout(r, 800 * poging));
+        try {
+          const { error } = await db.from('answers').insert({
+            session_id: sessie.id,
+            question_id: vraag.id,
+            participant_id: eigenDeelnemer.id,
+            optie_index: optieIndex,
+            tijd_ms: tijdMs,
+            punten
+          });
+          if (!error) opgeslagen = true;
+          else if (error.code === '23505') { opgeslagen = true; alBeantwoord = poging === 0; }
+        } catch (e) {}
+      }
 
-        if (punten > 0) {
-          const nieuweScore = (eigenDeelnemer.score || 0) + punten;
-          await db.from('participants').update({ score: nieuweScore }).eq('id', eigenDeelnemer.id);
-          eigenDeelnemer.score = nieuweScore;
+      if (!opgeslagen) {
+        const resterendMs = vraag.tijdslimiet_seconden * 1000 - (Date.now() - vraagStartTijd);
+        if (huidigeVraagIndex === vraagIndexBijInzending && onthuldeVraagIndex !== vraagIndexBijInzending && resterendMs > 1000) {
+          // Vraag loopt nog: knoppen weer open zodat de leerling het opnieuw kan proberen
+          alAntwoordIngediend = false;
+          gekozenOptieIndex = null;
+          document.querySelectorAll('.optie-knop').forEach(k => { k.disabled = false; k.classList.remove('gekozen'); });
+          toonVraagStatus('fout', 'Je antwoord is niet aangekomen. Controleer je internet en kies nog een keer.');
+          startAftellen(resterendMs);
+        } else {
+          gekozenOptieIndex = null;
+          toonVraagStatus('fout', 'Je antwoord is helaas niet aangekomen. Controleer je internet voor de volgende vraag.');
         }
-      } catch (fout) {
-        toonVraagStatus('fout', 'Er ging iets mis bij het versturen van je antwoord: ' + fout.message);
+        return;
+      }
+      if (alBeantwoord) {
+        toonVraagStatus('verzonden', 'Je had deze vraag al beantwoord. Wacht tot de docent doorgaat…');
+        return;
+      }
+
+      if (punten > 0) {
+        const nieuweScore = (eigenDeelnemer.score || 0) + punten;
+        for (let poging = 0; poging < 3; poging++) {
+          if (poging > 0) await new Promise(r => setTimeout(r, 800 * poging));
+          try {
+            const { error } = await db.from('participants').update({ score: nieuweScore }).eq('id', eigenDeelnemer.id);
+            if (!error) { eigenDeelnemer.score = nieuweScore; break; }
+          } catch (e) {}
+        }
       }
     }
 
