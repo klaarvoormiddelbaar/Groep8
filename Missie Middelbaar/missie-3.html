@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Missie%20Middelbaar/opslaan.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -864,11 +865,11 @@
            aria-label="Bekijk theoriepagina"
            onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox()">
           <div class="boek-links">
-            <img src="/Missie Middelbaar/Cover ontstaan wo2.png" alt="Cover Ontstaan WO2" draggable="false">
+            <img src="/Missie Middelbaar/Cover ontstaan wo2.jpg" alt="Cover Ontstaan WO2" draggable="false">
           </div>
           <div class="boek-rug"></div>
           <div class="boek-rechts">
-            <img src="/Missie Middelbaar/Jay AI/Ontstaan WO2.png" alt="Theoriepagina WO2" draggable="false">
+            <img src="/Missie Middelbaar/Jay AI/Ontstaan WO2 klein.jpg" alt="Theoriepagina WO2" draggable="false">
             <div class="boek-zoom">
               <div class="boek-zoom-label">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -1726,8 +1727,10 @@
     async function rondAf() {
       const btn = document.getElementById('btnAfronden');
       btn.disabled = true; btn.classList.add('laden');
+      verbergOpslaanFout();
       try {
-        const { data: huidig } = await db.from('missie_groepjes').select('antwoorden').eq('id',groepId).single();
+        // Lukt het ophalen niet, dan NIET opslaan (anders gaan missie 1 en 2 verloren)
+        const huidig = await metHerhaling(() => db.from('missie_groepjes').select('antwoorden').eq('id',groepId).single(), 1); // ophalen: bibliotheek probeert zelf al opnieuw
         const antwoorden = { ...(huidig?.antwoorden||{}), missie3: {
           quiz_score: savedQuizScore,
           checklist_compleet: true,
@@ -1737,12 +1740,15 @@
           v4_stelling: gekozenAiStelling,
           v5_hulpmiddel: gekozenHulpmiddel
         } };
-        await db.from('missie_groepjes').update({ missie_3_klaar: true, missie_huidig: 4, antwoorden, bijgewerkt_op: new Date().toISOString() }).eq('id',groepId);
+        const bijgewerkt = await metHerhaling(() => db.from('missie_groepjes').update({ missie_3_klaar: true, missie_huidig: 4, antwoorden, bijgewerkt_op: new Date().toISOString() }).eq('id',groepId).select('id'));
+        if (!bijgewerkt || bijgewerkt.length === 0) throw new Error('groepje niet gevonden');
+        missieOpgeslagen();
         btn.classList.remove('laden');
         document.getElementById('modalOverlay').classList.add('zichtbaar');
         setTimeout(() => { window.location.href = '/Missie%20Middelbaar/overzicht.html'; }, 3500);
-      } catch(e) { btn.disabled=false; btn.classList.remove('laden'); }
+      } catch(e) { btn.disabled=false; btn.classList.remove('laden'); toonOpslaanFout(btn, e.message === 'groepje niet gevonden' ? 'Jullie groepje is niet meer gevonden. Vraag je juf of meester wat je moet doen.' : undefined); }
     }
+    startConcept(groepId, 3);
   </script>
 </body>
 </html>

@@ -103,6 +103,16 @@
     }
     .btn-resultaten:hover { background: var(--groen-dark); transform: translateY(-2px); box-shadow: 0 14px 20px -3px rgba(16,163,127,.34); }
 
+    .btn-verwijder {
+      display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0;
+      border: 1.5px solid rgba(220,38,38,.35); border-radius: var(--r-pill); cursor: pointer;
+      font-family: inherit; font-size: 14px; font-weight: 700; color: #b91c1c;
+      background: white; padding: 11px 20px; white-space: nowrap;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .btn-verwijder:hover { background: #fef2f2; border-color: #dc2626; }
+    .btn-verwijder:disabled { opacity: .5; cursor: default; }
+
     /* ── LOBBY (leerlinglink) ── */
     .lobby-hero {
       background: linear-gradient(135deg, #1a4280 0%, #3a7bd5 48%, #6aaaf8 78%, #9ac4fb 100%);
@@ -315,7 +325,8 @@
 
     <div id="grid-wrapper"></div>
 
-    <div style="display:flex;justify-content:flex-end;margin-top:28px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:28px">
+      <button class="btn-verwijder" type="button" id="btn-alles-verwijderen" onclick="verwijderAlleGroepjes()">Alle groepjes verwijderen</button>
       <a class="btn-resultaten" href="/Missie%20Middelbaar/docent-resultaten.html">
         Naar resultaten <span style="transition:transform .2s">→</span>
       </a>
@@ -579,6 +590,9 @@
         ${renderMissie1(a.missie1, g.missie_1_klaar, !g.missie_1_klaar)}
         ${renderMissie2(a.missie2, g.missie_2_klaar, g.missie_1_klaar && !g.missie_2_klaar)}
         ${renderMissie3(a.missie3, g.missie_3_klaar, g.missie_2_klaar && !g.missie_3_klaar)}
+        <div style="display:flex;justify-content:flex-end;margin-top:20px">
+          <button class="btn-verwijder" type="button" onclick="verwijderEenGroepje('${g.id}')">Groepje verwijderen</button>
+        </div>
       `;
     }
 
@@ -601,6 +615,40 @@
 
     function verwijderGroepje(id) {
       groepjes = groepjes.filter(g => g.id !== id);
+    }
+
+    // ── Groepjes verwijderen (alleen groepjes van de eigen link, afgedwongen door RLS) ──
+    async function verwijderEenGroepje(id) {
+      const g = groepjes.find(x => x.id === id);
+      const namen = g ? (g.namen || []).join(' & ') : 'dit groepje';
+      if (!confirm(`Weet je zeker dat je het groepje "${namen}" wilt verwijderen? De antwoorden van dit groepje zijn daarna niet meer terug te halen.`)) return;
+      const { data, error } = await db.from('missie_groepjes').delete().eq('id', id).eq('link_id', linkId).select('id');
+      if (error || !data || data.length === 0) {
+        alert('Het groepje kon niet worden verwijderd. Probeer het opnieuw' + (error ? ': ' + error.message : '.'));
+        return;
+      }
+      verwijderGroepje(id);
+      sluitDetail();
+      render();
+    }
+
+    async function verwijderAlleGroepjes() {
+      if (groepjes.length === 0) { alert('Er zijn nog geen groepjes om te verwijderen.'); return; }
+      if (!confirm(`Weet je zeker dat je alle ${groepjes.length} groepjes wilt verwijderen? Doe dit alleen als je met een nieuwe klas begint. De antwoorden zijn daarna niet meer terug te halen.`)) return;
+      const knop = document.getElementById('btn-alles-verwijderen');
+      knop.disabled = true;
+      const { data, error } = await db.from('missie_groepjes').delete().eq('link_id', linkId).select('id');
+      knop.disabled = false;
+      if (error || !data) {
+        alert('De groepjes konden niet worden verwijderd. Probeer het opnieuw' + (error ? ': ' + error.message : '.'));
+        return;
+      }
+      if (data.length === 0 && groepjes.length > 0) {
+        alert('De groepjes konden niet worden verwijderd. Probeer het opnieuw.');
+        return;
+      }
+      data.forEach(r => verwijderGroepje(r.id));
+      render();
     }
 
     function abonneerOpGroepjes() {

@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/Missie%20Middelbaar/opslaan.js"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1293,12 +1294,15 @@
       btn.disabled = true;
       btn.classList.add('laden');
 
+      verbergOpslaanFout();
       try {
-        const { data: huidig } = await db
+        // Eerst de bestaande antwoorden ophalen; lukt dat niet, dan NIET opslaan
+        // (anders zou missie 1 overschreven worden met een lege lijst).
+        const huidig = await metHerhaling(() => db
           .from('missie_groepjes')
           .select('antwoorden')
           .eq('id', groepId)
-          .single();
+          .single(), 1); // ophalen: de Supabase-bibliotheek probeert zelf al opnieuw
 
         const antwoorden = {
           ...(huidig?.antwoorden || {}),
@@ -1314,19 +1318,22 @@
           }
         };
 
-        await db.from('missie_groepjes').update({
+        const bijgewerkt = await metHerhaling(() => db.from('missie_groepjes').update({
           missie_2_klaar: true,
           missie_huidig:  3,
           antwoorden,
           bijgewerkt_op:  new Date().toISOString()
-        }).eq('id', groepId);
+        }).eq('id', groepId).select('id'));
+        if (!bijgewerkt || bijgewerkt.length === 0) throw new Error('groepje niet gevonden');
 
+        missieOpgeslagen();
         btn.classList.remove('laden');
         document.getElementById('modalOverlay').classList.add('zichtbaar');
         setTimeout(() => { window.location.href = '/Missie%20Middelbaar/overzicht.html'; }, 3500);
       } catch (e) {
         btn.disabled = false;
         btn.classList.remove('laden');
+        toonOpslaanFout(btn, e.message === 'groepje niet gevonden' ? 'Jullie groepje is niet meer gevonden. Vraag je juf of meester wat je moet doen.' : undefined);
       }
     }
 
@@ -1341,6 +1348,7 @@
       document.body.style.overflow = '';
     }
     document.addEventListener('keydown', e => { if (e.key === 'Escape') sluitLightbox(); });
+    startConcept(groepId, 2);
   </script>
 </body>
 </html>
