@@ -6,3 +6,9 @@ _Oud (backup lesmappen)/
 
 # Lokale Claude Code settings, niet nodig in de deployment.
 .claude/
+
+# CRM-bouwscripts en leadgegevens, niet publiceren.
+CRM/
+
+# Belastingtest-tools (nep-leerlingen), alleen lokaal gebruiken.
+Loadtest/
