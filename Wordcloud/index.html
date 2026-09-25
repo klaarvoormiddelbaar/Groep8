@@ -263,17 +263,17 @@
       clearInterval(vangnetTimer);
       woordenSleutel = sessie.id + ':' + faseIdx;
       nieuwSindsLaden = [];
-      woordenKanaal = db.channel('leerling-woordwolk-woorden-' + sessie.id + '-' + faseIdx)
-        .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'woordwolk_woorden', filter: `sessie_id=eq.${sessie.id}` }, payload => {
-          const nieuw = payload.new;
-          if (Number(nieuw.fase_index) !== Number(faseIdx)) return;
+      // Live meldingen komen van de database zelf (alleen id, fase en woord: nooit de naam van de leerling)
+      woordenKanaal = db.channel('woordwolk:' + sessie.id)
+        .on('broadcast', { event: 'woord' }, ({ payload: nieuw }) => {
+          if (!nieuw || Number(nieuw.fase_index) !== Number(faseIdx)) return;
           if (woorden.some(w => w.id === nieuw.id)) return;
           woorden.push(nieuw);
           nieuwSindsLaden.push(nieuw);
           verwerkNieuweStand();
         })
-        .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'woordwolk_woorden', filter: `sessie_id=eq.${sessie.id}` }, () => {
-          laadWoorden(faseIdx);
+        .on('broadcast', { event: 'verwijderd' }, ({ payload }) => {
+          if (payload && Number(payload.fase_index) === Number(faseIdx)) laadWoorden(faseIdx);
         })
         .subscribe(status => {
           if (status === 'SUBSCRIBED') laadWoorden(faseIdx);
@@ -286,7 +286,7 @@
     async function laadWoorden(faseIdx) {
       const mijn = ++laadTeller;
       nieuwSindsLaden = [];
-      const { data, error } = await db.from('woordwolk_woorden').select('*').eq('sessie_id', sessie.id).eq('fase_index', faseIdx).order('aangemaakt_op', { ascending: true });
+      const { data, error } = await db.rpc('woordwolk_woorden_lezen', { p_sessie: sessie.id, p_fase: faseIdx });
       if (error) { console.error('laadWoorden fout:', error); return; }   // bij een fout de huidige stand laten staan
       if (mijn !== laadTeller) return;                                      // een nieuwere ophaalronde is al bezig
       const opgehaald = data || [];
