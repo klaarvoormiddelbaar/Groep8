@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proefaccount aanvragen | Klaar voor Middelbaar</title>
+  <meta name="description" content="Vraag een proefaccount aan voor Klaar voor Middelbaar en ontdek het programma voor jouw school.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared-header-footer.css?v=10">
+  <style>
+    :root{--primary:#4e8ef3;--primary-dark:#1a4280;--green:#20a66a;--ink:#182230;--muted:#687383;--footer-bg:#f2f4f4;--pad:32px;--outer-w:1280px;--r-pill:9999px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:'Inria Sans',Georgia,serif;color:var(--ink);background:#fff}.trial-stage{position:relative;overflow:hidden;padding:150px var(--pad) 96px;color:#fff;background:linear-gradient(118deg,rgba(24,65,126,.97),rgba(78,142,243,.88)),url('../Afbeeldingen/Website/IMG_2094-scaled.jpg') center 46%/cover no-repeat}.trial-stage:before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.19) 1.5px,transparent 1.5px);background-size:28px 28px;pointer-events:none}.trial-stage:after{content:'';position:absolute;width:520px;height:520px;border-radius:50%;right:-160px;top:-210px;background:rgba(255,255,255,.09);pointer-events:none}.trial-layout{position:relative;z-index:1;width:min(var(--outer-w),100%);margin:0 auto;display:grid;grid-template-columns:minmax(0,.82fr) minmax(560px,1.18fr);gap:72px;align-items:center}.trial-copy h1{max-width:600px;margin:0 0 24px;font-size:clamp(48px,5.4vw,76px);line-height:1.02;letter-spacing:-.035em}.trial-copy>p{max-width:540px;margin:0 0 34px;font-size:clamp(20px,2vw,26px);line-height:1.45}.trial-points{display:grid;gap:13px;margin:0;padding:0;list-style:none;font-size:18px;font-weight:700}.trial-points li{display:flex;align-items:center;gap:12px}.trial-points li:before{content:'✓';display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;font-size:17px}.trial-card{padding:42px 44px 44px;border-radius:34px;background:linear-gradient(120deg,rgba(255,255,255,.99) 14%,rgba(243,248,255,.98) 48%,rgba(207,226,255,.97) 100%);box-shadow:0 28px 70px rgba(13,39,79,.25);color:var(--ink);backdrop-filter:blur(8px)}.trial-card h2{margin:0 0 8px;color:var(--primary-dark);font-size:clamp(28px,3vw,39px);line-height:1.12}.trial-card>p{margin:0 0 28px;color:var(--muted);font-size:18px;line-height:1.45}.trial-form{display:grid;grid-template-columns:1fr 1fr;gap:18px 20px}.trial-form label{display:grid;gap:8px;color:var(--primary-dark);font-size:16px;font-weight:700}.trial-form input,.trial-form textarea{width:100%;border:1px solid #cbd8ec;border-radius:15px;background:#f6f9ff;color:var(--ink);font:inherit;font-weight:400;padding:15px 17px;outline:none;transition:border-color .2s,box-shadow .2s,background .2s}.trial-form textarea{min-height:126px;resize:vertical}.trial-form input:focus,.trial-form textarea:focus{background:#fff;border-color:var(--green);box-shadow:0 0 0 4px rgba(32,166,106,.14)}.trial-form .full,.trial-form button{grid-column:1/-1}.trial-form button{justify-self:start;margin-top:4px;border:0;border-radius:var(--r-pill);padding:17px 30px;background:var(--green);color:#fff;font:700 18px 'Inria Sans',sans-serif;cursor:pointer;box-shadow:0 12px 25px rgba(21,116,74,.22);transition:transform .2s,box-shadow .2s}.trial-form button:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(21,116,74,.3)}
+    .required-mark{color:var(--primary-dark);font-weight:700}
+    @media(max-width:1000px){.trial-layout{grid-template-columns:1fr;gap:44px}.trial-copy{text-align:center}.trial-copy h1,.trial-copy>p{margin-left:auto;margin-right:auto}.trial-points{width:max-content;margin:0 auto;text-align:left}.trial-card{width:min(680px,100%);margin:0 auto}}@media(max-width:700px){:root{--pad:20px}.trial-stage{padding:118px var(--pad) 56px}.trial-layout{gap:34px}.trial-copy h1{font-size:clamp(42px,12vw,58px)}.trial-copy>p{margin-bottom:28px;font-size:19px}.trial-points{font-size:16px}.trial-card{padding:30px 22px;border-radius:26px}.trial-form{grid-template-columns:1fr;gap:16px}.trial-form .full,.trial-form button{grid-column:1}.trial-form button{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="trial-stage">
+    <div class="trial-layout">
+      <section class="trial-copy">
+        <h1>Ontdek Klaar voor Middelbaar</h1>
+        <p>Vraag een proefaccount aan en ervaar Klaar voor Middelbaar zelf!</p>
+        <ul class="trial-points">
+          <li>Bekijk het programma in je eigen tempo</li>
+          <li>Ontdek wat past bij jouw school</li>
+          <li>Stel meteen je vragen aan ons team</li>
+        </ul>
+      </section>
+      <section class="trial-card">
+        <h2>Proefaccount aanvragen</h2>
+        <form class="trial-form" action="/api/contact" method="post">
+          <input type="text" name="website" autocomplete="off" tabindex="-1" aria-hidden="true" style="position:absolute;left:-9999px">
+          <label><span>Naam <span class="required-mark" aria-hidden="true">*</span></span><input type="text" name="naam" placeholder="Je naam" required></label>
+          <label><span>School <span class="required-mark" aria-hidden="true">*</span></span><input type="text" name="school" placeholder="Naam van je school" required></label>
+          <label><span>E-mailadres <span class="required-mark" aria-hidden="true">*</span></span><input type="email" name="email" placeholder="naam@school.nl" required></label>
+          <label><span>Telefoonnummer <span class="required-mark" aria-hidden="true">*</span></span><input type="tel" name="telefoon" placeholder="06 12345678" required></label>
+          <label class="full">Heb je een vraag of opmerking?<textarea name="bericht" placeholder="Typ hier…"></textarea></label>
+          <button type="submit">Vraag proefaccount aan</button>
+        </form>
+      </section>
+    </div>
+  </main>
+  <script src="../shared-chrome.js?v=15"></script>
+</body>
+</html>

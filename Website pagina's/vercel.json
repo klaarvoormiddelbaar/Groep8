@@ -7,13 +7,16 @@
     { "source": "/brugklas/", "destination": "/brugklas", "permanent": true },
     { "source": "/brugklas/index.html", "destination": "/brugklas", "permanent": true },
     { "source": "/contact/", "destination": "/contact", "permanent": true },
-    { "source": "/contact/index.html", "destination": "/contact", "permanent": true }
+    { "source": "/contact/index.html", "destination": "/contact", "permanent": true },
+    { "source": "/proefaccount/", "destination": "/proefaccount", "permanent": false },
+    { "source": "/proefaccount/index.html", "destination": "/proefaccount", "permanent": false }
   ],
   "rewrites": [
     { "source": "/", "destination": "/Homepagina.html" },
     { "source": "/groep8", "destination": "/Homepagina-Groep8.html" },
     { "source": "/groep8-flyer", "destination": "/Groep8-flyer.html" },
     { "source": "/brugklas", "destination": "/brugklas/index.html" },
-    { "source": "/contact", "destination": "/contact/index.html" }
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/proefaccount", "destination": "/proefaccount/index.html" }
   ]
 }
