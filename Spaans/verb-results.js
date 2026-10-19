@@ -43,7 +43,7 @@
           <div class="rm-lijst">
             ${struggleItems.map(item => `
               <div class="rm-item">
-                <span class="rm-nl">${escapeHtml(item.infinitive)} · ${escapeHtml(SPAANS_TIJDEN[item.tense].label)} · ${escapeHtml(SPAANS_PERSONEN[item.personIdx])}</span>
+                <span class="rm-nl">${escapeHtml(item.infinitive)} · ${escapeHtml((SPAANS_TIJDEN[item.tense] || SPAANS_HERKEN_TIJDEN[item.tense]).label)} · ${escapeHtml(SPAANS_PERSONEN[item.personIdx])}</span>
                 <span class="rm-pijl">→</span>
                 <span class="rm-es">${escapeHtml(item.correctForm)}</span>
               </div>`).join('')}

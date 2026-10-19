@@ -14,6 +14,7 @@ REDIRECTS = {
     "/Dashboard":          "/Dashboard/",
     "/proef":              "/proef/",
     "/proeflicentie":      "/proef/",
+    "/spaans":             "/spaans/",
     "/les1/docent/quiz":   "/KvM%20Quiz/docent-sessie.html?les=les-1",
     "/les2/docent/quiz":   "/KvM%20Quiz/docent-sessie.html?les=les-2",
     "/les3/docent/quiz":   "/KvM%20Quiz/docent-sessie.html?les=les-3",
@@ -82,6 +83,7 @@ REWRITES = {
     "/pp/":                "/Planeten Planner/index.html",
     "/proef/":             "/Proeflicentie/dashboard.html",
     "/proef/inloggen":     "/Proeflicentie/inlogpagina.html",
+    "/spaans/":            "/Spaans/index.html",
     "/tips-en-tops/leerkracht":            "/Tips en Tops/leerkracht-deel-link.html",
     "/tips-en-tops/leerkracht/antwoorden": "/Tips en Tops/leerkracht-tips-en-tops.html",
 }

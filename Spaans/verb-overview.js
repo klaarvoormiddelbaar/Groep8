@@ -9,8 +9,12 @@
     { value: 'futuro', label: 'Futuro' },
     { value: 'imperfecto', label: 'Imperfecto' },
     { value: 'indefinido', label: 'Indefinido' },
+    { value: 'gebiedende_wijs', label: 'Gebiedende wijs' },
     { value: 'gemengd', label: 'Gemengd' }
   ];
+  const HERKEN_OPTIES = Object.keys(SPAANS_HERKEN_TIJDEN).map(key => ({
+    value: key, label: SPAANS_HERKEN_TIJDEN[key].label
+  })).concat([{ value: 'herken_gemengd', label: 'Gemengd' }]);
   const GROEP_VOLGORDE = ['ar-regelmatig', 'er-regelmatig', 'ir-regelmatig', 'onregelmatig'];
 
   function escapeHtml(t) {
@@ -28,18 +32,29 @@
     return a;
   }
 
-  function kiesTijdVoorItem(tijdFilter) {
+  function isHerkenTijd(tijdFilter) {
+    return tijdFilter === 'herken_gemengd' || !!SPAANS_HERKEN_TIJDEN[tijdFilter];
+  }
+
+  function kiesTijdVoorItem(tijdFilter, personIdx) {
     if (tijdFilter !== 'gemengd') return tijdFilter;
-    const tijden = Object.keys(SPAANS_TIJDEN);
+    const tijden = Object.keys(SPAANS_TIJDEN).filter(t => !(t === 'gebiedende_wijs' && personIdx === 0));
     return tijden[Math.floor(Math.random() * tijden.length)];
   }
 
-  /** Bouwt een resolved item-lijst (verb × persoon) voor een sessie. */
+  function kiesHerkenTijdVoorItem(tijdFilter) {
+    if (tijdFilter !== 'herken_gemengd') return tijdFilter;
+    const tijden = Object.keys(SPAANS_HERKEN_TIJDEN);
+    return tijden[Math.floor(Math.random() * tijden.length)];
+  }
+
+  /** Bouwt een resolved item-lijst (verb × persoon) voor een productie-sessie (typ de Spaanse vorm). */
   function bouwItems(verbs, tijdFilter) {
     const items = [];
     for (const verb of verbs) {
       for (let p = 0; p < SPAANS_PERSONEN.length; p++) {
-        const tense = kiesTijdVoorItem(tijdFilter);
+        if (tijdFilter === 'gebiedende_wijs' && p === 0) continue; // geen yo-vorm
+        const tense = kiesTijdVoorItem(tijdFilter, p);
         items.push({
           id: VerbStorage.itemKey(verb.id, tense, p),
           verbId: verb.id,
@@ -54,6 +69,57 @@
       }
     }
     return items;
+  }
+
+  /** Bouwt een resolved item-lijst voor een herken-sessie (Spaanse vorm getoond, typ de Nederlandse betekenis). */
+  function bouwHerkenItems(verbs, tijdFilter) {
+    const items = [];
+    for (const verb of verbs) {
+      for (let p = 0; p < SPAANS_PERSONEN.length; p++) {
+        const tense = kiesHerkenTijdVoorItem(tijdFilter);
+        items.push({
+          id: VerbStorage.itemKey(verb.id, tense, p),
+          verbId: verb.id,
+          infinitive: verb.infinitive,
+          dutch: verb.dutch,
+          tense,
+          personIdx: p,
+          mode: 'herkennen',
+          correctForm: verb.herkennenNl[tense][p],
+          alleVormen: verb.herkennenNl[tense],
+          spaansVorm: verb.herkennen[tense][p]
+        });
+      }
+    }
+    return items;
+  }
+
+  function bouwFoutItem(f) {
+    if (isHerkenTijd(f.tense) || SPAANS_HERKEN_TIJDEN[f.tense]) {
+      return {
+        id: VerbStorage.itemKey(f.verb.id, f.tense, f.personIdx),
+        verbId: f.verb.id,
+        infinitive: f.verb.infinitive,
+        dutch: f.verb.dutch,
+        tense: f.tense,
+        personIdx: f.personIdx,
+        mode: 'herkennen',
+        correctForm: f.verb.herkennenNl[f.tense][f.personIdx],
+        alleVormen: f.verb.herkennenNl[f.tense],
+        spaansVorm: f.verb.herkennen[f.tense][f.personIdx]
+      };
+    }
+    return {
+      id: VerbStorage.itemKey(f.verb.id, f.tense, f.personIdx),
+      verbId: f.verb.id,
+      infinitive: f.verb.infinitive,
+      dutch: f.verb.dutch,
+      tense: f.tense,
+      personIdx: f.personIdx,
+      correctForm: f.verb.conjugations[f.tense][f.personIdx],
+      alleVormen: f.verb.conjugations[f.tense],
+      omgekeerd: Math.random() < 0.5
+    };
   }
 
   function dedupeVerbs(verbs) {
@@ -113,20 +179,29 @@
   function render(container, alleWerkwoorden, callbacks) {
     const groepen = bouwGroepen(alleWerkwoorden);
     const tijdFilter = VerbStorage.getTijd();
+    const herkenModus = isHerkenTijd(tijdFilter);
     const fouteVormen = VerbStorage.getFouteVormen(alleWerkwoorden);
 
     container.innerHTML = `
       <div class="overzicht-view">
         <div class="overzicht-hero">
           <div class="overzicht-eyebrow">Werkwoorden oefenen</div>
-          <div class="overzicht-titel">Vervoegingen: presente, futuro, imperfecto &amp; indefinido</div>
+          <div class="overzicht-titel">Vervoegingen: presente, futuro, imperfecto, indefinido &amp; gebiedende wijs</div>
           <div class="overzicht-sub">Kies een tijd en een werkwoordgroep. Je krijgt steeds een werkwoord + persoon te zien en typt zelf de vervoegde vorm.</div>
         </div>
 
         <div class="richting-kaart">
-          <div class="richting-label">Tijd</div>
+          <div class="richting-label">Tijd (typ zelf de Spaanse vorm)</div>
           <div class="richting-opties" id="tijd-opties">
             ${TIJD_OPTIES.map(t => `
+              <button type="button" class="richting-btn ${t.value === tijdFilter ? 'actief' : ''}" data-tijd="${t.value}">${t.label}</button>`).join('')}
+          </div>
+        </div>
+
+        <div class="richting-kaart richting-kaart--herkennen">
+          <div class="richting-label">Herkennen (alleen Spaans → Nederlands)</div>
+          <div class="richting-opties" id="herken-tijd-opties">
+            ${HERKEN_OPTIES.map(t => `
               <button type="button" class="richting-btn ${t.value === tijdFilter ? 'actief' : ''}" data-tijd="${t.value}">${t.label}</button>`).join('')}
           </div>
         </div>
@@ -146,7 +221,7 @@
         </div>
       </div>`;
 
-    container.querySelectorAll('#tijd-opties .richting-btn').forEach(btn => {
+    container.querySelectorAll('#tijd-opties .richting-btn, #herken-tijd-opties .richting-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         VerbStorage.setTijd(btn.dataset.tijd);
         render(container, alleWerkwoorden, callbacks);
@@ -158,22 +233,12 @@
         const kaart = btn.closest('.cat-kaart');
         const groepNaam = kaart.dataset.groep;
         if (groepNaam === '__fouten__') {
-          const items = fouteVormen.map(f => ({
-            id: VerbStorage.itemKey(f.verb.id, f.tense, f.personIdx),
-            verbId: f.verb.id,
-            infinitive: f.verb.infinitive,
-            dutch: f.verb.dutch,
-            tense: f.tense,
-            personIdx: f.personIdx,
-            correctForm: f.verb.conjugations[f.tense][f.personIdx],
-            alleVormen: f.verb.conjugations[f.tense],
-            omgekeerd: Math.random() < 0.5
-          }));
+          const items = fouteVormen.map(bouwFoutItem);
           callbacks.onStart('Mijn foute werkwoordvormen', dedupeVerbs(fouteVormen.map(f => f.verb)), items, alleWerkwoorden);
           return;
         }
         const groep = groepen.find(g => g.naam === groepNaam);
-        const items = bouwItems(groep.woorden, tijdFilter);
+        const items = herkenModus ? bouwHerkenItems(groep.woorden, tijdFilter) : bouwItems(groep.woorden, tijdFilter);
         callbacks.onStart(SPAANS_WERKWOORDGROEPEN[groepNaam] || groepNaam, groep.woorden, items, alleWerkwoorden);
       });
     });
@@ -182,7 +247,7 @@
     if (mixBtn) {
       mixBtn.addEventListener('click', () => {
         const mixVerbs = shuffle(alleWerkwoorden).slice(0, Math.min(25, alleWerkwoorden.length));
-        const items = bouwItems(mixVerbs, tijdFilter);
+        const items = herkenModus ? bouwHerkenItems(mixVerbs, tijdFilter) : bouwItems(mixVerbs, tijdFilter);
         callbacks.onStart('Willekeurige mix', mixVerbs, items, alleWerkwoorden);
       });
     }

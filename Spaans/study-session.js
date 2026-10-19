@@ -88,6 +88,7 @@
       lastResult: null,
       lastUserAnswer: '',
       lastMatchedAnswer: '',
+      toonZin: false,
       finished: false
     };
 
@@ -101,6 +102,7 @@
     state.lastResult = null;
     state.lastUserAnswer = '';
     state.lastMatchedAnswer = '';
+    state.toonZin = false;
   }
 
   function huidigWoordAfgehandeld() {
@@ -230,6 +232,7 @@
       <div class="woordkaart">
         <div class="woordkaart-label">${richting === 'es-nl' ? 'Wat betekent dit?' : 'Vertaal naar het Spaans'}</div>
         <div class="woordkaart-prompt">${escapeHtml(prompt)}</div>
+        ${woord.exampleNl ? renderVoorbeeldzin(woord) : ''}
         <form id="antwoord-form" autocomplete="off">
           <input id="antwoord-input" class="antwoord-input" type="text"
                  autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
@@ -241,6 +244,16 @@
         <div class="antwoord-feedback${state.awaitingNext ? ' zichtbaar' : ''}${state.lastResult ? ' fb-' + state.lastResult : ''}">
           ${state.awaitingNext ? renderFeedback() : ''}
         </div>
+      </div>`;
+  }
+
+  function renderVoorbeeldzin(woord) {
+    return `
+      <div class="voorbeeldzin">
+        <div class="voorbeeldzin-nl">📘 ${escapeHtml(woord.exampleNl)}</div>
+        ${state.toonZin
+          ? `<div class="voorbeeldzin-es">🇪🇸 ${escapeHtml(woord.exampleEs)}</div>`
+          : `<button type="button" class="voorbeeldzin-toon-btn" id="voorbeeldzin-toon">👁️ Tik om de Spaanse zin te zien</button>`}
       </div>`;
   }
 
@@ -283,6 +296,14 @@
         checkAntwoord(waarde);
       }
     });
+
+    const zinBtn = document.getElementById('voorbeeldzin-toon');
+    if (zinBtn) {
+      zinBtn.addEventListener('click', () => {
+        state.toonZin = true;
+        render();
+      });
+    }
   }
 
   function escapeHtml(t) {

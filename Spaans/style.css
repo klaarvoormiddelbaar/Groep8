@@ -68,7 +68,7 @@ body {
 .btn-ghost:hover { background: #e7eaef; color: var(--dark); }
 
 /* ── Modus-tabs (Woorden / Werkwoorden) ── */
-.modus-tabs { display: flex; gap: 8px; margin-bottom: 22px; }
+.modus-tabs { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
 .modus-tab {
   border: 1.5px solid var(--border); background: var(--card-bg); color: var(--muted);
   border-radius: var(--r-pill); padding: 10px 20px; font-family: inherit; font-size: 14px; font-weight: 700;
@@ -88,6 +88,9 @@ body {
   box-shadow: var(--shadow-card); padding: 18px 22px; margin-bottom: 22px;
   display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
 }
+.richting-kaart--herkennen { border-color: rgba(245,158,11,0.35); background: #fffdf8; }
+.richting-kaart--herkennen .richting-label { color: #92660b; }
+.richting-kaart--herkennen .richting-btn.actief { background: var(--amber); border-color: var(--amber); }
 .richting-label { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
 .richting-opties { display: flex; gap: 8px; flex-wrap: wrap; }
 .richting-btn {
@@ -191,6 +194,24 @@ body {
 .werkwoordkaart-dutch { font-size: 15px; font-weight: 400; color: var(--muted); margin-top: -20px; margin-bottom: 32px; }
 .werkwoordkaart-vertaling { filter: blur(5px); cursor: pointer; user-select: none; transition: filter 0.15s ease; }
 .werkwoordkaart-vertaling:hover { filter: none; }
+
+.voorbeeldzin { margin: 0 auto 28px; max-width: 460px; }
+.voorbeeldzin-nl {
+  font-size: 15.5px; font-weight: 400; color: var(--muted); line-height: 1.4; margin-bottom: 10px;
+}
+.voorbeeldzin-toon-btn {
+  display: inline-flex; align-items: center; gap: 8px; border: 1.5px dashed var(--border);
+  background: #fafbfc; color: var(--primary-dark); border-radius: var(--r-pill); padding: 10px 18px;
+  font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer;
+  min-height: 44px; transition: border-color 0.15s, background 0.15s;
+}
+.voorbeeldzin-toon-btn:hover,
+.voorbeeldzin-toon-btn:active { border-color: var(--primary); background: var(--primary-soft); border-style: solid; }
+.voorbeeldzin-es {
+  font-size: 15.5px; font-weight: 700; color: var(--primary-dark); line-height: 1.4;
+  background: var(--primary-soft); border-radius: 14px; padding: 10px 16px;
+  animation: fadeUp 0.25s ease both;
+}
 
 .info-btn {
   display: inline-flex; align-items: center; gap: 6px; margin: 0 auto 28px; border: 1.5px solid var(--border);
@@ -311,4 +332,5 @@ body {
   .woordkaart { padding: 36px 24px; }
   .woordkaart-prompt { font-size: 30px; }
   .resultaat-statgrid { grid-template-columns: repeat(2, 1fr); }
+  .voorbeeldzin-nl, .voorbeeldzin-es { font-size: 14px; }
 }

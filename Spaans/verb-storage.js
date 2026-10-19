@@ -84,18 +84,23 @@
     return stat;
   }
 
+  const HERKEN_TIJDEN = typeof SPAANS_HERKEN_TIJDEN !== 'undefined' ? Object.keys(SPAANS_HERKEN_TIJDEN) : [];
+
   /**
    * @param {Array<object>} verbs - werkwoorden uit een groep
-   * @param {string} tenseFilter - één van SPAANS_TIJDEN of 'gemengd' (alle tijden samen)
+   * @param {string} tenseFilter - één van SPAANS_TIJDEN, SPAANS_HERKEN_TIJDEN, 'gemengd' of 'herken_gemengd'
    * @returns {{ learned:number, total:number, percent:number, status:'nieuw'|'bezig'|'beheerst' }}
    */
   function getGroepVoortgang(verbs, tenseFilter) {
     const alles = laadAlles();
-    const tijden = tenseFilter === 'gemengd' ? TIJDEN : [tenseFilter];
+    const tijden = tenseFilter === 'gemengd' ? TIJDEN
+      : tenseFilter === 'herken_gemengd' ? HERKEN_TIJDEN
+      : [tenseFilter];
     let total = 0, learned = 0;
     for (const v of verbs) {
       for (const tijd of tijden) {
         for (let p = 0; p < SPAANS_PERSONEN.length; p++) {
+          if (tijd === 'gebiedende_wijs' && p === 0) continue; // geen yo-vorm
           total += 1;
           const key = itemKey(v.id, tijd, p);
           if (alles[key] && alles[key].everCorrect) learned += 1;
@@ -130,7 +135,8 @@
   function getTijd() {
     try {
       const t = localStorage.getItem(TIJD_SLEUTEL);
-      return t && (SPAANS_TIJDEN[t] || t === 'gemengd') ? t : 'presente';
+      const geldig = t === 'gemengd' || t === 'herken_gemengd' || SPAANS_TIJDEN[t] || (typeof SPAANS_HERKEN_TIJDEN !== 'undefined' && SPAANS_HERKEN_TIJDEN[t]);
+      return t && geldig ? t : 'presente';
     } catch (e) {
       return 'presente';
     }

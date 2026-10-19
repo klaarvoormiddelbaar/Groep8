@@ -46,18 +46,25 @@
    * @param {HTMLElement} container
    * @param {Array<object>} alleWoorden
    * @param {{ onStart:function }} callbacks - onStart(naam, woorden, alleWoordenVoorVeiligheidsnet)
+   * @param {{ eyebrow:string, titel:string, sub:string, mixSub:string }} [teksten] - overschrijft de standaardteksten (voor een tweede woordenset)
    */
-  function render(container, alleWoorden, callbacks) {
+  function render(container, alleWoorden, callbacks, teksten) {
     const categorieen = bouwCategorieen(alleWoorden);
     const fouteWoorden = Storage.getFouteWoorden(alleWoorden);
     const richting = Storage.getRichting();
+    const t = Object.assign({
+      eyebrow: 'Spaans leren',
+      titel: '1000 woorden A2/B1 · Zuid-Amerika',
+      sub: 'Kies een categorie en typ steeds zelf het antwoord. Geen multiple choice — gewoon actief ophalen.',
+      mixSub: '20 willekeurige woorden uit alle categorieën, met voorrang voor woorden die je nog niet kent.'
+    }, teksten || {});
 
     container.innerHTML = `
       <div class="overzicht-view">
         <div class="overzicht-hero">
-          <div class="overzicht-eyebrow">Spaans leren</div>
-          <div class="overzicht-titel">1000 woorden A2/B1 · Zuid-Amerika</div>
-          <div class="overzicht-sub">Kies een categorie en typ steeds zelf het antwoord. Geen multiple choice — gewoon actief ophalen.</div>
+          <div class="overzicht-eyebrow">${escapeHtml(t.eyebrow)}</div>
+          <div class="overzicht-titel">${escapeHtml(t.titel)}</div>
+          <div class="overzicht-sub">${escapeHtml(t.sub)}</div>
         </div>
 
         <div class="richting-kaart">
@@ -73,7 +80,7 @@
         <div class="mix-kaart">
           <div class="mix-tekst">
             <div class="mix-titel">Willekeurige mix</div>
-            <div class="mix-sub">20 willekeurige woorden uit alle categorieën, met voorrang voor woorden die je nog niet kent.</div>
+            <div class="mix-sub">${escapeHtml(t.mixSub)}</div>
           </div>
           <button class="btn btn-blauw" id="mix-oefen-btn" type="button">Mix oefenen →</button>
         </div>
@@ -86,7 +93,7 @@
     container.querySelectorAll('#richting-opties .richting-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         Storage.setRichting(btn.dataset.richting);
-        render(container, alleWoorden, callbacks);
+        render(container, alleWoorden, callbacks, teksten);
       });
     });
 

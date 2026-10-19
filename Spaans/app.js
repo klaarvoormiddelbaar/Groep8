@@ -8,6 +8,7 @@
     return `
       <div class="modus-tabs">
         <button type="button" class="modus-tab ${actief === 'woorden' ? 'actief' : ''}" data-modus="woorden">📚 Woorden</button>
+        <button type="button" class="modus-tab ${actief === 'woorden2' ? 'actief' : ''}" data-modus="woorden2">📗 Woorden 2</button>
         <button type="button" class="modus-tab ${actief === 'werkwoorden' ? 'actief' : ''}" data-modus="werkwoorden">🔤 Werkwoorden</button>
       </div>`;
   }
@@ -16,6 +17,7 @@
     container.querySelectorAll('.modus-tabs .modus-tab').forEach(btn => {
       btn.addEventListener('click', () => {
         if (btn.dataset.modus === 'woorden') toonOverzicht();
+        else if (btn.dataset.modus === 'woorden2') toonOverzicht2();
         else toonWerkwoordOverzicht();
       });
     });
@@ -50,6 +52,45 @@
         Spaans.SessionResults.render(app, resultaat, {
           onTerug: toonOverzicht,
           onNogEenKeer() { startSessie(naam, woorden, alleWoorden); }
+        });
+      }
+    });
+  }
+
+  // ── Woorden 2 (vervolg, B1/B2, met voorbeeldzinnen) ─────────────────────
+  function toonOverzicht2() {
+    app.innerHTML = renderModusTabs('woorden2') + '<div id="modus-inhoud"></div>';
+    bindModusTabs(app);
+    Spaans.CategoryOverview.render(document.getElementById('modus-inhoud'), SPAANS_WOORDEN_2, {
+      onStart(naam, woorden, alleWoorden) {
+        toonWoordenlijst2(naam, woorden, alleWoorden);
+      }
+    }, {
+      eyebrow: 'Spaans leren · deel 2',
+      titel: '1000 woorden B1/B2 · vervolg',
+      sub: 'Elk woord heeft een voorbeeldzin: de Nederlandse zin staat altijd open, tik erop om ook de Spaanse zin te zien.',
+      mixSub: '20 willekeurige woorden uit alle categorieën van deel 2, met voorrang voor woorden die je nog niet kent.'
+    });
+  }
+
+  function toonWoordenlijst2(naam, woorden, alleWoorden) {
+    Spaans.WoordLijst.render(app, naam, woorden, {
+      onTerug: toonOverzicht2,
+      onStart() { startSessie2(naam, woorden, alleWoorden); }
+    });
+  }
+
+  function startSessie2(naam, woorden, alleWoorden) {
+    Spaans.StudySession.start(app, {
+      naam,
+      woorden,
+      alleWoorden,
+      richting: Spaans.Storage.getRichting(),
+      onTerug: toonOverzicht2,
+      onKlaar(resultaat) {
+        Spaans.SessionResults.render(app, resultaat, {
+          onTerug: toonOverzicht2,
+          onNogEenKeer() { startSessie2(naam, woorden, alleWoorden); }
         });
       }
     });

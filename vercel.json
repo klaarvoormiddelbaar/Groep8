@@ -14,6 +14,7 @@
     { "source": "/Dashboard",              "destination": "/Dashboard/",      "permanent": false },
     { "source": "/proef",                  "destination": "/proef/",          "permanent": false },
     { "source": "/proeflicentie",          "destination": "/proef/",          "permanent": false },
+    { "source": "/spaans",                 "destination": "/spaans/",         "permanent": false },
     { "source": "/les7/open-boek-quiz",    "destination": "/les7/quiz",       "permanent": false },
     { "source": "/les7/docent/open-boek-quiz", "destination": "/les7/docent/quiz", "permanent": false }
   ],
@@ -83,7 +84,7 @@
     { "source": "/planeten-planner/spel", "destination": "/Planeten Planner/index.html" },
     { "source": "/pp",                    "destination": "/Planeten Planner/uitleg.html" },
     { "source": "/pp/spel",               "destination": "/Planeten Planner/index.html" },
-    { "source": "/spaans", "destination": "/Spaans/index.html" },
+    { "source": "/spaans/", "destination": "/Spaans/index.html" },
     { "source": "/portugees", "destination": "/Portugees/index.html" }
   ]
 }

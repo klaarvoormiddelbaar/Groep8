@@ -151,7 +151,7 @@
     });
 
     const huidigItem = state.finished ? null : state.itemsById[state.currentItemId];
-    const tijdBadge = huidigItem ? SPAANS_TIJDEN[huidigItem.tense].label : '';
+    const tijdBadge = huidigItem ? (SPAANS_TIJDEN[huidigItem.tense] || SPAANS_HERKEN_TIJDEN[huidigItem.tense]).label : '';
 
     el.innerHTML = `
       <div class="oefen-view">
@@ -184,23 +184,29 @@
 
   function renderWerkwoordkaart() {
     const item = state.itemsById[state.currentItemId];
-    const tijdInfo = SPAANS_TIJDEN[item.tense];
+    const tijdInfo = SPAANS_TIJDEN[item.tense] || SPAANS_HERKEN_TIJDEN[item.tense];
     const persoon = SPAANS_PERSONEN[item.personIdx];
-    const grootWoord = item.omgekeerd ? item.dutch : item.infinitive;
-    const kleinWoord = item.omgekeerd ? item.infinitive : item.dutch;
+    const herkennen = item.mode === 'herkennen';
+
+    const grootWoord = herkennen ? item.spaansVorm : (item.omgekeerd ? item.dutch : item.infinitive);
+    const kleinWoord = herkennen ? item.infinitive : (item.omgekeerd ? item.infinitive : item.dutch);
+    const label = herkennen
+      ? `${escapeHtml(tijdInfo.label)} (${escapeHtml(tijdInfo.sub)}) — wat betekent dit?`
+      : `${escapeHtml(tijdInfo.label)} (${escapeHtml(tijdInfo.sub)})`;
+    const placeholder = herkennen ? 'Typ de Nederlandse betekenis…' : 'Typ de vervoegde vorm…';
 
     return `
       <div class="woordkaart">
-        <div class="woordkaart-label">${escapeHtml(tijdInfo.label)} (${escapeHtml(tijdInfo.sub)})</div>
+        <div class="woordkaart-label">${label}</div>
         <div class="woordkaart-prompt">${escapeHtml(grootWoord)}</div>
-        <div class="werkwoordkaart-dutch werkwoordkaart-vertaling">${escapeHtml(kleinWoord)}</div>
+        <div class="werkwoordkaart-dutch${herkennen ? '' : ' werkwoordkaart-vertaling'}">${escapeHtml(kleinWoord)}</div>
         <button type="button" class="info-btn" id="info-btn">ℹ️ Alle vervoegingen &amp; tijden</button>
         <form id="antwoord-form" autocomplete="off">
           <div class="antwoord-invoer-rij">
             <div class="persoon-badge">${escapeHtml(persoon)}</div>
             <input id="antwoord-input" class="antwoord-input" type="text"
                    autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
-                   placeholder="Typ de vervoegde vorm…"
+                   placeholder="${placeholder}"
                    ${state.awaitingNext ? 'readonly' : ''}
                    value="${escapeHtml(state.awaitingNext ? state.lastUserAnswer : '')}">
           </div>
@@ -264,7 +270,9 @@
     const item = state.itemsById[state.currentItemId];
     const verb = state.verbsById[item.verbId];
     if (!verb) return '';
-    const tijden = Object.keys(SPAANS_TIJDEN);
+    const tijden = Object.keys(SPAANS_TIJDEN).concat(Object.keys(SPAANS_HERKEN_TIJDEN));
+    const infoVoorTijd = t => SPAANS_TIJDEN[t] || SPAANS_HERKEN_TIJDEN[t];
+    const vormVoorTijd = (t, idx) => (SPAANS_TIJDEN[t] ? verb.conjugations[t][idx] : verb.herkennen[t][idx]);
 
     return `
       <div class="vervoegingen-overlay" id="vervoegingen-overlay">
@@ -281,14 +289,14 @@
               <thead>
                 <tr>
                   <th></th>
-                  ${tijden.map(t => `<th class="${t === item.tense ? 'kol-actief' : ''}">${escapeHtml(SPAANS_TIJDEN[t].label)}</th>`).join('')}
+                  ${tijden.map(t => `<th class="${t === item.tense ? 'kol-actief' : ''}">${escapeHtml(infoVoorTijd(t).label)}</th>`).join('')}
                 </tr>
               </thead>
               <tbody>
                 ${SPAANS_PERSONEN.map((persoon, idx) => `
                   <tr class="${idx === item.personIdx ? 'rij-actief' : ''}">
                     <td class="vervoegingen-persoon">${escapeHtml(persoon)}</td>
-                    ${tijden.map(t => `<td class="${t === item.tense && idx === item.personIdx ? 'cel-actief' : ''}">${escapeHtml(verb.conjugations[t][idx])}</td>`).join('')}
+                    ${tijden.map(t => `<td class="${t === item.tense && idx === item.personIdx ? 'cel-actief' : ''}">${escapeHtml(vormVoorTijd(t, idx) || '—')}</td>`).join('')}
                   </tr>`).join('')}
               </tbody>
             </table>
