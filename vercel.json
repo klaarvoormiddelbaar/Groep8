@@ -85,6 +85,7 @@
     { "source": "/pp",                    "destination": "/Planeten Planner/uitleg.html" },
     { "source": "/pp/spel",               "destination": "/Planeten Planner/index.html" },
     { "source": "/spaans/", "destination": "/Spaans/index.html" },
+    { "source": "/spaans/:path*", "destination": "/Spaans/:path*" },
     { "source": "/portugees", "destination": "/Portugees/index.html" }
   ]
 }

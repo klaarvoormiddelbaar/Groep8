@@ -133,6 +133,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
             serve_path = "/Voorspel de Klas/index.html"
         elif path.startswith("/woordwolk/") and path.count("/") == 2:
             serve_path = "/Wordcloud/index.html"
+        elif path.startswith("/spaans/") and path != "/spaans/":
+            # Vercel heeft hiervoor een losse wildcard-rewrite ("/spaans/:path*" ->
+            # "/Spaans/:path*"); macOS' hoofdletterongevoelige bestandssysteem
+            # verbergt anders dat dit expliciet moet, in tegenstelling tot Linux/Vercel.
+            serve_path = "/Spaans/" + path[len("/spaans/"):]
         else:
             # 2b. Statische rewrite (bestand serveren, URL blijft)
             serve_path = REWRITES.get(path, path)
