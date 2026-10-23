@@ -501,14 +501,35 @@
     .footer-links a:hover { color: var(--primary); }
     .footer-copy { font-size: 15px; color: var(--muted); justify-self: end; }
 
-    @media (max-width: 768px) {
+    @media (max-width: 640px) {
       :root { --pad: 20px; }
       .content-grid { grid-template-columns: 1fr; }
       .hero { padding: 36px 28px; }
       .hero-title { font-size: 34px; }
       .hero-jay { display: none; }
-      .header-inner { padding: 0 20px; }
+      .hero-btns { flex-direction: column; flex-wrap: nowrap; overflow-x: visible; align-items: stretch; padding: 0; }
+      .hero-btns .hero-btn, .hero-btns > a, .hero-btns > button, .hero-btns > div { flex-shrink: 1; width: 100%; }
+      .hero-btn { justify-content: center; }
+      .hero-btns > div { flex-direction: column; gap: 12px; }
+      .hero-btns .tut-help-btn { align-self: center; width: 44px; height: 44px; border-radius: 50%; flex: 0 0 44px; aspect-ratio: 1; }
+      .header-inner { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; gap: 10px; }
       .breadcrumb { display: none; }
+      .back-btn { font-size: 13px; padding: 8px 14px; white-space: nowrap; }
+
+      .footer-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 14px; }
+      .footer-links { gap: 20px; flex-wrap: wrap; justify-content: center; }
+      .footer-copy { justify-self: center; }
+
+      .mat-product-card { width: 112px; }
+      .mat-product-img-area { width: 112px; height: 112px; }
+      .lightbox-card { width: calc(100vw - 48px); max-width: 360px; }
+    }
+
+    /* ── TABLET STAAND (641px–900px) — raakt mobiel en desktop/laptop niet ── */
+    @media (min-width: 641px) and (max-width: 900px) {
+      .hero-content { max-width: 420px; }
+      .hero-jay { height: 170px; right: 24px; }
+      .hero-btns { flex-wrap: wrap; overflow-x: visible; }
     }
   
     .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }

@@ -295,6 +295,12 @@
       .podium { grid-template-columns: 1fr; }
       .podium-1 { transform: none; }
     }
+
+    /* ── TELEFOON (≤640px) — raakt tablet/desktop niet ── */
+    @media (max-width: 640px) {
+      .lobby-card { padding: 32px 28px !important; }
+      .lobby-card img[alt="Jay"] { display: none; }
+    }
   
     .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
   </style>

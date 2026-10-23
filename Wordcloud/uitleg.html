@@ -306,12 +306,17 @@
 
     @media (max-width: 680px) {
       :root { --pad: 20px; }
+      .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+      .breadcrumb { display: none; }
+      .back-btn { font-size: 13px; padding: 8px 14px; }
       .role-grid { grid-template-columns: 1fr; }
       .title { font-size: 30px; }
       .card { padding: 32px 24px; }
       .cta-sticky-inner { justify-content: stretch; }
       .cta-btn { width: 100%; justify-content: center; }
       .voorbeeld-row { grid-template-columns: 1fr; gap: 18px; }
+      .voorbeeld-row > :not(.voorbeeld-text) { order: 1; }
+      .voorbeeld-row > .voorbeeld-text { order: 2; border-top: 1px solid rgba(78,142,243,0.18); padding-top: 18px; }
     }
   </style>
 </head>

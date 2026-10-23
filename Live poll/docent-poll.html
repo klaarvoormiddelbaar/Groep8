@@ -458,6 +458,12 @@
       .chart-lbl { font-size: 12px; }
       .gem-nr { font-size: 40px; }
     }
+
+    /* ── TELEFOON (≤640px) — raakt tablet/desktop niet ── */
+    @media (max-width: 640px) {
+      .lobby-hero { padding: 32px 26px !important; min-height: 0; }
+      .lobby-hero img[alt="Jay"] { display: none; }
+    }
   
     .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
   </style>

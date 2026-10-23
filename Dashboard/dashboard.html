@@ -553,6 +553,49 @@
       transition: color 0.2s, background 0.2s;
     }
     .logout-btn:hover { color: #ef4444; background: rgba(239,68,68,0.08); }
+
+    /* ── MOBIEL (≤640px) — raakt desktop/laptop niet, want gescoped in media query ── */
+    @media (max-width: 640px) {
+      :root { --pad: 16px; }
+
+      .header-inner { gap: 8px; }
+      .breadcrumb { display: none; }
+
+      .main { padding: 24px var(--pad) 56px; }
+
+      .welcome-hero { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 26px 20px; }
+      .hero-content { width: auto; max-width: none; min-width: 0; flex-shrink: 1; }
+      .hero-illustration { display: block; position: relative; right: auto; top: auto; transform: translateX(-25px); width: 138px; height: 208px; flex-shrink: 0; }
+      .hero-title { font-size: 23px; word-break: break-word; margin-bottom: 16px; }
+      .hero-chips { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .hero-chip { font-size: 12px; padding: 7px 14px; }
+
+      .section-head { flex-wrap: wrap; gap: 12px; }
+      .section-title { font-size: 22px; }
+
+      .lessons-grid { grid-template-columns: 1fr; }
+
+      .detail-hero { padding: 28px 22px; }
+      .detail-title { font-size: 26px; }
+      .detail-title img { width: 32px !important; height: 32px !important; }
+      .detail-hero-bottom { flex-direction: column; align-items: flex-start; gap: 16px; }
+
+      .content-grid { grid-template-columns: 1fr; }
+      .content-card { padding: 22px; }
+
+      .cta-bar { flex-direction: column; align-items: flex-start; gap: 20px; padding: 24px; }
+      .btn-ga-naar { width: 100%; justify-content: center; }
+
+      .modal-card { padding: 28px; }
+    }
+
+    /* ── TABLET STAAND (641px–900px) — raakt mobiel en desktop/laptop niet ── */
+    @media (min-width: 641px) and (max-width: 900px) {
+      .hero-content { max-width: 360px; }
+      .hero-illustration { width: 170px; height: 220px; right: 28px; }
+
+      .lessons-grid { grid-template-columns: repeat(2, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -591,9 +634,6 @@
         <div class="deco-c1"></div>
         <div class="deco-c2"></div>
 
-        <!-- Dashboard image right side of hero -->
-        <img class="hero-illustration" src="jay-waving.png" alt="" aria-hidden="true">
-
         <div class="hero-content">
           <div class="hero-label">Docentendashboard</div>
           <div class="hero-title" id="hero-title">Welkom!</div>
@@ -603,6 +643,9 @@
             <div class="hero-chip"><img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/boeken.png" alt=""> 8 lessen beschikbaar</div>
           </div>
         </div>
+
+        <!-- Dashboard image right side of hero -->
+        <img class="hero-illustration" src="jay-waving.png" alt="" aria-hidden="true">
       </div>
 
       <!-- Section header -->
@@ -707,7 +750,8 @@
     function updateUI() {
       const uur = new Date().getHours();
       const begroeting = uur < 12 ? 'Goedemorgen' : uur < 18 ? 'Goedemiddag' : 'Goedenavond';
-      document.getElementById('hero-title').textContent  = `${begroeting} ${profiel.naam}!`;
+      const voornaam = (profiel.naam || '').trim().split(/\s+/)[0];
+      document.getElementById('hero-title').textContent  = `${begroeting} ${voornaam}!`;
       document.getElementById('chip-school').innerHTML = `<img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/school.png" alt=""> ${profiel.school || 'Jouw school'}`;
       document.getElementById('chip-groep').innerHTML  = `<img class="chip-emoji" src="/Afbeeldingen/emojis nieuw/kinderen.png" alt=""> Groep ${profiel.groep}`;
 
