@@ -473,6 +473,44 @@
     }
     .logout-btn:hover { color: #ef4444; background: rgba(239,68,68,0.08); }
 
+    /* ── MOBIEL (≤640px) — raakt desktop/laptop niet, want gescoped in media query ── */
+    @media (max-width: 640px) {
+      :root { --pad: 16px; }
+
+      .header-inner { gap: 8px; }
+      .breadcrumb { display: none; }
+      .nav-right { gap: 8px; }
+      .proef-badge { padding: 5px 10px; font-size: 10px; }
+
+      .main { padding: 24px var(--pad) 56px; }
+
+      .welcome-hero { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 26px 20px; }
+      .hero-content { width: auto; max-width: none; min-width: 0; flex-shrink: 1; }
+      .hero-illustration { display: block; position: relative; right: auto; top: auto; transform: translateX(-25px); width: 138px; height: 208px; flex-shrink: 0; }
+      .hero-title { font-size: 23px; word-break: break-word; margin-bottom: 16px; }
+      .hero-chips { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .hero-chip { font-size: 12px; padding: 7px 14px; }
+
+      .section-head { flex-wrap: wrap; gap: 12px; }
+      .section-title { font-size: 22px; }
+
+      .lessons-grid { grid-template-columns: 1fr; }
+
+      .footer-inner { grid-template-columns: 1fr; justify-items: center; text-align: center; gap: 14px; padding: 0 20px; }
+      .footer-links { gap: 20px; flex-wrap: wrap; justify-content: center; }
+      .footer-copy { justify-self: center; }
+
+      .modal-card { padding: 28px; }
+    }
+
+    /* ── TABLET STAAND (641px–900px) — raakt mobiel en desktop/laptop niet ── */
+    @media (min-width: 641px) and (max-width: 900px) {
+      .hero-content { max-width: 360px; }
+      .hero-illustration { width: 170px; height: 220px; right: 28px; }
+
+      .lessons-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
     /* ── UPGRADE MODAL ── */
     .upgrade-icon {
       font-size: 52px; margin: 0 auto 20px; display: block;

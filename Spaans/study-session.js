@@ -232,7 +232,7 @@
       <div class="woordkaart">
         <div class="woordkaart-label">${richting === 'es-nl' ? 'Wat betekent dit?' : 'Vertaal naar het Spaans'}</div>
         <div class="woordkaart-prompt">${escapeHtml(prompt)}</div>
-        ${woord.exampleNl ? renderVoorbeeldzin(woord) : ''}
+        ${woord.exampleNl ? renderVoorbeeldzin(woord, richting) : ''}
         <form id="antwoord-form" autocomplete="off">
           <input id="antwoord-input" class="antwoord-input" type="text"
                  autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false"
@@ -247,13 +247,22 @@
       </div>`;
   }
 
-  function renderVoorbeeldzin(woord) {
+  function renderVoorbeeldzin(woord, richting) {
+    // In 'es-nl' is de prompt het Spaanse woord, dus staat de Spaanse zin open
+    // (de Nederlandse zou het antwoord verklappen) — omgekeerd bij 'nl-es'.
+    const omgekeerd = richting === 'es-nl';
+    const openZin = omgekeerd ? woord.exampleEs : woord.exampleNl;
+    const openIcoon = omgekeerd ? '🇪🇸' : '📘';
+    const verborgenZin = omgekeerd ? woord.exampleNl : woord.exampleEs;
+    const verborgenIcoon = omgekeerd ? '📘' : '🇪🇸';
+    const verborgenTaal = omgekeerd ? 'Nederlandse' : 'Spaanse';
+
     return `
       <div class="voorbeeldzin">
-        <div class="voorbeeldzin-nl">📘 ${escapeHtml(woord.exampleNl)}</div>
+        <div class="voorbeeldzin-nl">${openIcoon} ${escapeHtml(openZin)}</div>
         ${state.toonZin
-          ? `<div class="voorbeeldzin-es">🇪🇸 ${escapeHtml(woord.exampleEs)}</div>`
-          : `<button type="button" class="voorbeeldzin-toon-btn" id="voorbeeldzin-toon">👁️ Tik om de Spaanse zin te zien</button>`}
+          ? `<div class="voorbeeldzin-es">${verborgenIcoon} ${escapeHtml(verborgenZin)}</div>`
+          : `<button type="button" class="voorbeeldzin-toon-btn" id="voorbeeldzin-toon">👁️ Tik om de ${verborgenTaal} zin te zien</button>`}
       </div>`;
   }
 
