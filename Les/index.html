@@ -539,6 +539,11 @@
       .mat-product-card { width: 112px; }
       .mat-product-img-area { width: 112px; height: 112px; }
       .lightbox-card { width: calc(100vw - 48px); max-width: 360px; }
+
+      /* Canva toont op touchscreens zijn eigen vorige/volgende- en
+         volledig-scherm-knoppen onderin de presentatie — onze eigen balk
+         bedekte die daar, waardoor slides niet te wisselen waren. */
+      .canva-bottom-bar { display: none; }
     }
 
     /* ── TABLET STAAND (641px–900px) — raakt mobiel en desktop/laptop niet ── */
@@ -546,6 +551,7 @@
       .hero-content { max-width: 420px; }
       .hero-jay { height: 170px; right: 24px; }
       .hero-btns { flex-wrap: wrap; overflow-x: visible; }
+      .canva-bottom-bar { display: none; }
     }
   
     .ei { height: 1.15em; width: auto; object-fit: contain; vertical-align: -0.2em; display: inline-block; }
@@ -767,7 +773,7 @@
       const canvaHtml = L.canva ? `
         <div class="canva-stage" id="canva-stage">
           <div class="canva-screen">
-            <iframe class="canva-frame" src="${L.canva}" loading="lazy"></iframe>
+            <iframe class="canva-frame" src="${L.canva}"></iframe>
           </div>
           <div class="canva-bottom-bar">
             <button class="canva-fs-btn" id="canva-fs-btn" onclick="toggleCanvaFullscreen()" aria-label="Volledig scherm">
@@ -1308,7 +1314,10 @@
 
     /* ── Rondleiding: knoppen + informatieblokken + presentatie samen ── */
     function buildTutSteps() {
-      var exists = function (s) { return !!document.getElementById(s.id); };
+      var exists = function (s) {
+        var el = document.getElementById(s.id);
+        return !!el && el.offsetParent !== null;
+      };
       return ALL_STEPS.filter(exists)
         .concat(exists(CONTENT_STEP) ? [CONTENT_STEP] : [])
         .concat(CANVA_STEPS.filter(exists));
