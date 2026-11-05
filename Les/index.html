@@ -191,6 +191,7 @@
     .canva-frame {
       display: block; width: 100%; border: none;
       aspect-ratio: 16 / 9;
+      touch-action: manipulation;
     }
     /* Eigen balk die alle Canva-controls bedekt */
     .canva-bottom-bar {
@@ -214,6 +215,7 @@
       color: rgba(255,255,255,0.60);
       cursor: pointer; letter-spacing: 0.2px;
       transition: background 0.18s, color 0.18s, border-color 0.18s;
+      touch-action: manipulation;
     }
     .canva-fs-btn:hover {
       background: rgba(255,255,255,0.13);
@@ -233,6 +235,19 @@
     }
     .canva-stage:fullscreen .canva-frame,
     .canva-stage:-webkit-full-screen .canva-frame {
+      width: 100%; height: 100%; aspect-ratio: unset;
+    }
+    /* Fallback voor toestellen zonder Fullscreen API (o.a. iPhone Safari) */
+    .canva-stage.fake-fs {
+      position: fixed; inset: 0; z-index: 2000;
+      border-radius: 0; background: #0d1117;
+      width: 100vw; height: 100vh;
+    }
+    .canva-stage.fake-fs .canva-screen {
+      position: absolute; inset: 0; padding: 0;
+      display: flex;
+    }
+    .canva-stage.fake-fs .canva-frame {
       width: 100%; height: 100%; aspect-ratio: unset;
     }
 
@@ -339,6 +354,7 @@
       cursor: pointer; z-index: 3;
       transition: background 0.18s, border-color 0.18s, box-shadow 0.18s, opacity 0.18s;
       padding: 0;
+      touch-action: manipulation;
     }
     .mat-carousel-btn:hover {
       background: var(--primary-soft);
@@ -956,26 +972,74 @@
     const ICON_EXPAND   = `<path d="M1 5.5V1H5.5M9.5 1H14V5.5M14 9.5V14H9.5M5.5 14H1V9.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
     const ICON_COLLAPSE = `<path d="M5.5 1V5.5H1M14 5.5H9.5V1M1 9.5H5.5V14M9.5 14V9.5H14" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`;
 
-    function toggleCanvaFullscreen() {
-      const stage = document.getElementById('canva-stage');
-      if (!stage) return;
-      if (!document.fullscreenElement) {
-        stage.requestFullscreen().catch(() => {});
-      } else {
-        document.exitFullscreen();
-      }
+    function fsRequestFn(el) {
+      return el.requestFullscreen || el.webkitRequestFullscreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
     }
-
-    document.addEventListener('fullscreenchange', () => {
-      const isFS = !!document.fullscreenElement;
+    function fsExitFn() {
+      return document.exitFullscreen || document.webkitExitFullscreen || document.webkitCancelFullScreen || document.mozCancelFullScreen || document.msExitFullscreen;
+    }
+    function fsElement() {
+      return document.fullscreenElement || document.webkitFullscreenElement || document.webkitCurrentFullScreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+    }
+    function updateFsUI(isFS) {
       const icon  = document.getElementById('canva-fs-icon');
       const label = document.getElementById('canva-fs-label');
       if (icon)  icon.innerHTML  = isFS ? ICON_COLLAPSE : ICON_EXPAND;
       if (label) label.textContent = isFS ? 'Sluiten' : 'Volledig scherm';
-      if (isFS) {
-        const frame = document.querySelector('.canva-frame');
-        if (frame) frame.focus();
+    }
+    function enterFakeFullscreen(stage) {
+      stage.classList.add('fake-fs');
+      document.body.style.overflow = 'hidden';
+      updateFsUI(true);
+    }
+    function exitFakeFullscreen(stage) {
+      stage.classList.remove('fake-fs');
+      document.body.style.overflow = '';
+      updateFsUI(false);
+    }
+    function toggleCanvaFullscreen() {
+      const stage = document.getElementById('canva-stage');
+      if (!stage) return;
+
+      if (stage.classList.contains('fake-fs')) {
+        exitFakeFullscreen(stage);
+        return;
       }
+      if (fsElement()) {
+        const exit = fsExitFn();
+        if (exit) exit.call(document);
+        return;
+      }
+      const request = fsRequestFn(stage);
+      if (!request) {
+        enterFakeFullscreen(stage);
+        return;
+      }
+      try {
+        const result = request.call(stage);
+        if (result && typeof result.catch === 'function') result.catch(() => {});
+      } catch (e) { /* sommige browsers gooien hier synchroon i.p.v. de promise te weigeren */ }
+      // Niet elke browser weigert het verzoek via een promise-rejection (bv. stil
+      // genegeerd door een user-gesture-check) — na een korte check alsnog de
+      // CSS-fallback gebruiken als er geen echte fullscreen tot stand kwam.
+      setTimeout(() => { if (!fsElement()) enterFakeFullscreen(stage); }, 400);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key !== 'Escape') return;
+      const stage = document.getElementById('canva-stage');
+      if (stage && stage.classList.contains('fake-fs')) exitFakeFullscreen(stage);
+    });
+
+    ['fullscreenchange', 'webkitfullscreenchange', 'mozfullscreenchange', 'MSFullscreenChange'].forEach(evt => {
+      document.addEventListener(evt, () => {
+        const isFS = !!fsElement();
+        updateFsUI(isFS);
+        if (isFS) {
+          const frame = document.querySelector('.canva-frame');
+          if (frame) frame.focus();
+        }
+      });
     });
   </script>
 
