@@ -1338,7 +1338,8 @@
 
     // ── Tutorial rondleiding ─────────────────────────────────────────────────
     (function () {
-      var TUT_KEY = 'kvm_missie1_tut_v1';
+      // Per groepje onthouden, niet per apparaat: een nieuw groepje op dezelfde laptop krijgt de rondleiding dus weer automatisch.
+      var TUT_KEY = 'kvm_missie1_tut_v2_' + (function () { try { return sessionStorage.getItem('missie_groep_id') || ''; } catch (e) { return ''; } })();
       var step = 0;
       var activeSteps = [];
 

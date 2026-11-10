@@ -1648,7 +1648,8 @@
 
     /* ── TUTORIAL ── */
     (function () {
-      var TUT_KEY = 'kvm_missie3_tut_v1';
+      // Per groepje onthouden, niet per apparaat: een nieuw groepje op dezelfde laptop krijgt de rondleiding dus weer automatisch.
+      var TUT_KEY = 'kvm_missie3_tut_v2_' + (function () { try { return sessionStorage.getItem('missie_groep_id') || ''; } catch (e) { return ''; } })();
       var step = 0, activeSteps = [];
       var overlay=document.getElementById('tut-overlay'), spotlight=document.getElementById('tut-spotlight');
       var card=document.getElementById('tut-card'), closeBtn=document.getElementById('tut-close');
