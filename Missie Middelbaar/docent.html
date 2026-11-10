@@ -373,7 +373,7 @@
 
     const MISSIE_INFO = {
       1: { titel: 'Ik begrijp de uitleg niet', tool: 'Math with Menno',    kleur: 'blauw'  },
-      2: { titel: 'Ik wil woordjes leren',       tool: 'Online woordjestrainer', kleur: 'paars'  },
+      2: { titel: 'Ik wil woordjes leren',       tool: 'KvM Woordjestrainer', kleur: 'paars'  },
       3: { titel: 'Ik wil een leercoach',       tool: 'Jay I',             kleur: 'oranje' },
     };
 
@@ -650,7 +650,7 @@
             (v.type === 'open' ? escapeHtml(a[v.id]) : v.labels[a[v.id]]) || '<span class="placeholder-tekst">Niet ingevuld</span>'}</div>`).join('')}`;
       }
       return `<div class="missie-blok">
-        <div class="missie-blok-kop"><div class="missie-blok-titel">Missie 2 · Online woordjestrainer</div><div class="missie-blok-status" style="background:${s.bg};color:${s.kleur}">${s.tekst}</div></div>
+        <div class="missie-blok-kop"><div class="missie-blok-titel">Missie 2 · KvM Woordjestrainer</div><div class="missie-blok-status" style="background:${s.bg};color:${s.kleur}">${s.tekst}</div></div>
         ${inhoud}
       </div>`;
     }
