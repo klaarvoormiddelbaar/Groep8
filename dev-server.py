@@ -73,6 +73,7 @@ REWRITES = {
     "/les8/poll":         "/Live poll/join.html",
     "/les3/missie":       "/Missie Middelbaar/index.html",
     "/les3/docent/missie": "/Missie Middelbaar/docent.html",
+    "/les3/docent/missie/uitleg": "/Missie Middelbaar/uitleg.html",
     "/les5/docent/voorspel": "/Voorspel de Klas/docent.html",
     "/les5/docent/woordwolk": "/Wordcloud/docent.html",
     "/Inlogpagina":        "/Inlogpagina/index.html",
