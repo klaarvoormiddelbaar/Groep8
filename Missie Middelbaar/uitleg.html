@@ -314,6 +314,28 @@
     .mock-jay-inputfield { flex: 1; background: #f4f6f8; border-radius: 9999px; padding: 4px 8px; font-size: 6.5px; color: var(--muted); }
     .mock-jay-send { width: 14px; height: 14px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
 
+    /* werkend voorbeeld-flashkaartje bij Missie 2 */
+    .fk { height: 100%; perspective: 900px; cursor: pointer; font-size: 14px; }
+    .fk-binnen { position: relative; height: 100%; transition: transform .55s cubic-bezier(.3,.7,.2,1); transform-style: preserve-3d; }
+    .fk.omgedraaid .fk-binnen { transform: rotateY(180deg); }
+    .fk-zijde { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 1.1em;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .15em; }
+    .fk-voor { background: #eaf1fe; border: 2px solid #c9dcfb; box-shadow: 0 8px 16px -8px rgba(0,0,0,.25); }
+    .fk-achter { background: linear-gradient(135deg, #1e4a8a 0%, #4e8ef3 100%); color: #fff; transform: rotateY(180deg); box-shadow: 0 8px 16px -8px rgba(30,74,138,.5); }
+    .fk .plaatje { height: 2.5em; width: auto; }
+    .fk-woord { font-size: 1.7em; font-weight: 700; line-height: 1.1; }
+    .fk-hint { font-size: .72em; color: var(--muted); font-weight: 700; }
+    .fk-hint img { height: 1em; width: auto; vertical-align: -.15em; margin-right: .25em; }
+    .fk-klein { font-size: .8em; color: rgba(255,255,255,.75); }
+    .fk-luister { margin-top: .5em; display: inline-flex; align-items: center; gap: .4em; font-family: inherit; font-size: .72em; font-weight: 700; color: #fff;
+      background: rgba(255,255,255,.18); border: 1.5px solid rgba(255,255,255,.5); border-radius: 9999px; padding: .4em 1.1em; cursor: pointer; }
+    .fk-luister:hover { background: rgba(255,255,255,.3); }
+    .fk-luister img { height: 1.2em; width: auto; }
+    /* in het kleine voorbeeld past de achterkant zonder plaatje; in de vergrote weergave staat alles erop */
+    .missie-info-visual .fk-achter { gap: .1em; }
+    .missie-info-visual .fk-achter .plaatje { display: none; }
+    .missie-info-visual .fk-luister { margin-top: .35em; }
+    .missie-lightbox-visual .fk { font-size: 24px; }
     /* lightbox */
     .missie-lightbox {
       display: none; position: fixed; inset: 0; z-index: 500;
@@ -517,7 +539,7 @@
               <div class="mock-mission-dot paars">2</div>
               <div class="mock-mission-info">
                 <div class="mock-mission-titel">Ik wil woordjes leren</div>
-                <div class="mock-mission-tool">Woordjes leren</div>
+                <div class="mock-mission-tool">Online woordjestrainer</div>
               </div>
               <div class="mock-mission-status vergrendeld">Vergrendeld</div>
             </div>
@@ -539,7 +561,7 @@
               <span class="missie-info-dot"></span>Math with Menno
             </button>
             <button type="button" class="missie-info-btn paars" onclick="toonMissieInfo(this, 2)">
-              <span class="missie-info-dot"></span>Woordjes leren
+              <span class="missie-info-dot"></span>Online woordjestrainer
             </button>
             <button type="button" class="missie-info-btn oranje" onclick="toonMissieInfo(this, 3)">
               <span class="missie-info-dot"></span>Jay I
@@ -557,16 +579,25 @@
           </div>
           <div class="missie-info-panel" id="missie-info-2" onclick="toonLightbox(2)">
             <div class="missie-info-visual">
-              <div class="mock-website-grid">
-                <div class="mock-website-chip"><span class="mock-website-badge blauw"><img src="/Afbeeldingen/EMOJI PACK IOS/spiral-calendar_1f5d3-fe0f.png" alt="" style="height:18px;width:auto;object-fit:contain"></span><span class="mock-website-name">rooster → timetable</span></div>
-                <div class="mock-website-chip"><span class="mock-website-badge oranje"><img src="/Afbeeldingen/EMOJI PACK IOS/locked-with-key_1f510.png" alt="" style="height:18px;width:auto;object-fit:contain"></span><span class="mock-website-name">kluisje → locker</span></div>
-                <div class="mock-website-chip"><span class="mock-website-badge paars"><img src="/Afbeeldingen/EMOJI PACK IOS/pencil_270f-fe0f.png" alt="" style="height:18px;width:auto;object-fit:contain"></span><span class="mock-website-name">toets → test</span></div>
-                <div class="mock-website-chip"><span class="mock-website-badge groen"><img src="/Afbeeldingen/EMOJI PACK IOS/mirror_1fa9e.png" alt="" style="height:18px;width:auto;object-fit:contain"></span><span class="mock-website-name">spiegel → mirror</span></div>
+              <div class="fk">
+                <div class="fk-binnen">
+                  <div class="fk-zijde fk-voor">
+                    <img class="plaatje" src="/Afbeeldingen/EMOJI PACK IOS/locked-with-key_1f510.png" alt="">
+                    <span class="fk-woord">kluisje</span>
+                    <span class="fk-hint"><img src="/Afbeeldingen/EMOJI PACK IOS/backhand-index-pointing-up_1f446.png" alt="">Tik om om te draaien</span>
+                  </div>
+                  <div class="fk-zijde fk-achter">
+                    <img class="plaatje" src="/Afbeeldingen/EMOJI PACK IOS/locked-with-key_1f510.png" alt="">
+                    <span class="fk-woord">locker</span>
+                    <span class="fk-klein">kluisje</span>
+                    <button type="button" class="fk-luister"><img src="/Afbeeldingen/EMOJI PACK IOS/speaker-medium-volume_1f509.png" alt="">Luister</button>
+                  </div>
+                </div>
               </div>
             </div>
             <div>
-              <div class="missie-info-panel-titel">Woordjes leren</div>
-              <div class="missie-info-panel-tekst">Leerlingen leren 10 Engelse woorden online. Eerst oefenen ze zelf met omdraaikaartjes, geluid en een woordenlijst. Daarna maken ze een toets waarin ze de Engelse vertaling typen: een goed woord is 1 punt, een kleine spelfout een half punt. Fout beantwoorde woorden komen later in de toets terug. Met minimaal een 7 kunnen ze de missie afronden; lukt dat niet, dan leren ze de woorden nog even en doen ze de toets opnieuw. Daarna volgen een paar reflectievragen over hoe ze woordjes leren.</div>
+              <div class="missie-info-panel-titel">Online woordjestrainer</div>
+              <div class="missie-info-panel-tekst">Leerlingen leren 10 Engelse woorden online. Eerst oefenen ze zelf met flashcards, geluid en een woordenlijst. Daarna maken ze een toets waarin ze de vertalingen typen: een goed woord is 1 punt, een kleine spelfout een half punt. Fout beantwoorde woorden komen later in de toets terug. Met minimaal een 7 kunnen ze de missie afronden; lukt dat niet, dan leren ze de woorden nog even en doen ze de toets opnieuw. Afsluitend volgen een paar reflectievragen over hoe ze woordjes leren.</div>
             </div>
           </div>
           <div class="missie-info-panel" id="missie-info-3" onclick="toonLightbox(3)">
@@ -611,7 +642,7 @@
               <div class="mock-group-names">Ayoub, Sanne</div>
               <div class="mock-group-badge" style="background:var(--paars-soft); color:var(--paars-dark);">Bezig met Missie 2</div>
             </div>
-            <div class="mock-group-missie">Woordjes leren</div>
+            <div class="mock-group-missie">Online woordjestrainer</div>
             <div class="mock-group-bar-track"><div class="mock-group-bar-fill" style="background:var(--paars); width:66%;"></div></div>
             <div class="mock-group-foot"><span>3 min geleden</span><span>66%</span></div>
           </div>
@@ -696,6 +727,18 @@
       btn.classList.add('actief');
       document.getElementById('missie-info-' + nummer).classList.add('actief');
     }
+    // Flashkaartje bij Missie 2: klikken draait het om (werkt ook in de vergrote weergave); het kaartje opent zelf geen lightbox.
+    document.addEventListener('click', e => {
+      const k = e.target.closest && e.target.closest('.fk');
+      if (!k) return;
+      e.stopPropagation();
+      if (e.target.closest('.fk-luister')) {          // geluid afspelen, kaartje blijft omgedraaid
+        try { new Audio('/Missie%20Middelbaar/audio-missie-2/locker.m4a').play().catch(() => {}); } catch (err) {}
+        return;
+      }
+      k.classList.toggle('omgedraaid');
+    }, true);
+
     function toonLightbox(nummer) {
       const paneel = document.getElementById('missie-info-' + nummer);
       document.getElementById('missie-lightbox-visual').innerHTML = paneel.querySelector('.missie-info-visual').innerHTML;

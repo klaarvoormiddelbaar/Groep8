@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Missie 2 – Woordjes leren</title>
+  <title>Missie 2 – Ik wil woordjes leren</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -216,10 +216,19 @@
     .open-tekst:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(114,168,249,.18); background:#fff; }
     @media (max-width:768px) { .opties.schaal { grid-template-columns:1fr; } }
 
-    .modal-overlay { position:fixed; inset:0; background:rgba(25,28,29,.55); display:none; align-items:center; justify-content:center; z-index:500; padding:20px; }
-    .modal-overlay.zichtbaar { display:flex; }
-    .modal { background:#fff; border-radius:var(--r-card); padding:36px 40px; text-align:center; max-width:420px; animation:pop .4s both; }
-    .modal h2 { margin:6px 0; } .modal p { color:var(--muted); }
+    /* Afrondkaart (zelfde als Missie 1 en 3) */
+    .modal-overlay { position:fixed; inset:0; z-index:1000; background:rgba(15,23,42,.50); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+      display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .3s ease; }
+    .modal-overlay.zichtbaar { opacity:1; pointer-events:auto; }
+    .modal-kaart { background:#fff; border-radius:var(--r-card); padding:52px 44px 44px; text-align:center; max-width:380px; width:90%;
+      box-shadow:0 32px 64px rgba(0,0,0,.22); display:flex; flex-direction:column; align-items:center; gap:16px; animation:pop .45s cubic-bezier(.22,1,.36,1) both; }
+    .modal-vink { width:80px; height:80px; background:linear-gradient(135deg,#059669 0%,var(--green) 100%); border-radius:50%;
+      display:flex; align-items:center; justify-content:center; box-shadow:0 12px 28px rgba(16,163,127,.35); animation:pop .5s .1s cubic-bezier(.22,1,.36,1) both; }
+    .modal-titel { font-size:28px; font-weight:700; color:var(--dark); }
+    .modal-sub { font-size:15px; color:var(--muted); line-height:1.6; }
+    .modal-voortgang { width:100%; height:4px; background:var(--border); border-radius:9999px; overflow:hidden; margin-top:8px; }
+    .modal-voortgang-balk { height:100%; background:var(--green); border-radius:9999px; width:100%; transform-origin:left; animation:aftel 3.5s linear forwards; }
+    @keyframes aftel { from { transform:scaleX(1); } to { transform:scaleX(0); } }
 
     @media (max-width:640px) {
       .main { padding:18px 14px 60px; } .hero, .kaart { padding:22px 18px; }
@@ -331,9 +340,13 @@
   </main>
 
   <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <h2>Missie 2 voltooid!</h2>
-      <p>Jullie gaan nu terug naar het missiescherm.</p>
+    <div class="modal-kaart">
+      <div class="modal-vink">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="modal-titel">Missie 2 voltooid!</div>
+      <p class="modal-sub">Jullie gaan nu automatisch terug naar het missiescherm.</p>
+      <div class="modal-voortgang"><div class="modal-voortgang-balk"></div></div>
     </div>
   </div>
 
