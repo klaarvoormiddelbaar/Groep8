@@ -248,7 +248,7 @@
     function renderChart(titel, rangschikking, kleur) {
       const totaal = rangschikking.reduce((s, [, n]) => s + n, 0);
       if (totaal === 0) return '';
-      const max = Math.max(1, rangschikking[0][1]);
+      const max = Math.max(1, ...rangschikking.map(r => r[1]));
       const accent = KLEUR_ACCENT[kleur] || KLEUR_ACCENT.blauw;
       return `
         <div class="sectie">
@@ -271,7 +271,7 @@
     function renderOpenVragen(titel, groepen, path) {
       const antwoorden = groepen
         .map(g => ({ namen: (g.namen || []).join(' & '), tekst: pad(g, path) }))
-        .filter(a => a.tekst && a.tekst.trim());
+        .filter(a => typeof a.tekst === 'string' && a.tekst.trim());
       if (antwoorden.length === 0) return '';
       return `
         <div class="sectie">
@@ -299,6 +299,61 @@
         <div class="stat-kaart"><div class="stat-label">Aantal groepjes</div><div class="stat-getal">${aantalGroepjes}</div></div>
         <div class="stat-kaart"><div class="stat-label">Groepjes helemaal klaar</div><div class="stat-getal" style="color:var(--groen-dark)">${aantalKlaar} / ${aantalGroepjes}</div></div>
       `;
+    }
+
+    /* ── Missie 2: woordjes leren ── */
+    const SCHAAL_LABELS = ['1 · Helemaal mee oneens', '2 · Mee oneens', '3 · Neutraal', '4 · Mee eens', '5 · Helemaal mee eens'];
+    const LEERVORM_OPTIES = [['papier', 'Opschrijven op papier'], ['online', 'Online oefenen'], ['hardop', 'Hardop overhoren met iemand'], ['mix', 'Een mix van al deze manieren']];
+
+    function telVaste(groepen, path, opties) {          // [[waarde, label], ...] in vaste volgorde
+      return opties.map(([w, label]) => [label, groepen.filter(g => String(pad(g, path)) === String(w)).length]);
+    }
+    function gemSchaal(groepen, path) {
+      const w = groepen.map(g => Number(pad(g, path))).filter(n => n >= 1 && n <= 5);
+      return w.length ? (w.reduce((t, n) => t + n, 0) / w.length).toFixed(1).replace('.', ',') : null;
+    }
+    function schaalChart(groepen, titel, path) {
+      const gem = gemSchaal(groepen, path);
+      return renderChart(titel + (gem ? ` (gemiddeld ${gem})` : ''), telVaste(groepen, path, SCHAAL_LABELS.map((l, i) => [i + 1, l])), 'paars');
+    }
+
+    function renderMissie2Sectie(alle) {
+      const groepen = alle.filter(g => pad(g, 'antwoorden.missie2.type') === 'woordjes');
+      if (groepen.length === 0) return '';
+      const n = groepen.length;
+      const num = v => (typeof v === 'number' && Number.isFinite(v)) ? v : 0;      // leerlingdata is niet vertrouwd
+      const gem = k => groepen.reduce((t, g) => t + num(pad(g, 'antwoorden.missie2.' + k)), 0) / n;
+      const tijd = sec => Math.floor(sec / 60) + ':' + String(Math.round(sec) % 60).padStart(2, '0') + ' min';
+
+      const telling = Object.create(null);
+      groepen.forEach(g => {
+        const lijst = pad(g, 'antwoorden.missie2.moeilijkste_woorden');
+        (Array.isArray(lijst) ? lijst : []).filter(w => w && typeof w === 'object').forEach(w => {
+          const sleutel = String(w.nl);
+          const t = (telling[sleutel] = telling[sleutel] || { nl: sleutel, en: String(w.en), score: 0 });
+          t.score += num(w.fouten) + num(w.bijna) / 2;
+        });
+      });
+      const moeilijk = Object.values(telling).sort((x, y) => y.score - x.score).slice(0, 8)
+        .map(w => [`${w.nl} → ${w.en}`, Math.round(w.score * 10) / 10]);
+
+      return `
+        <div class="sectie">
+          <div class="sectie-titel">Voortgang met de woordjes</div>
+          <div style="display:flex;gap:32px;flex-wrap:wrap">
+            <div><div class="stat-label">Gem. cijfer</div><div class="stat-getal" style="color:var(--paars-dark)">${gem('cijfer').toFixed(1).replace('.', ',')}</div></div>
+            <div><div class="stat-label">Gem. aantal toetsen</div><div class="stat-getal" style="color:var(--paars-dark)">${gem('aantal_toetsen').toFixed(1).replace('.', ',')}</div></div>
+            <div><div class="stat-label">Gem. tijd leren</div><div class="stat-getal" style="color:var(--paars-dark)">${tijd(gem('leertijd_sec'))}</div></div>
+            <div><div class="stat-label">Gem. tijd toetsen</div><div class="stat-getal" style="color:var(--paars-dark)">${tijd(gem('tijd_sec'))}</div></div>
+            <div><div class="stat-label">Groepjes klaar</div><div class="stat-getal" style="color:var(--paars-dark)">${n}</div></div>
+          </div>
+        </div>` +
+        renderChart('Woorden die de klas het moeilijkst vond (fouten, "bijna" telt half)', moeilijk, 'paars') +
+        renderOpenVragen('Hoe leer je thuis woordjes en ga je dat anders doen?', groepen, 'antwoorden.missie2.v3_thuis_leren') +
+        schaalChart(groepen, 'Stelling: "Woordjes online leren vind ik fijner dan op papier."', 'antwoorden.missie2.v2_stelling') +
+        schaalChart(groepen, 'Stelling: "Het is fijn dat een fout woord terugkomt, zodat ik het nog een keer kan oefenen."', 'antwoorden.missie2.v4_fout_terug') +
+        schaalChart(groepen, 'Stelling: "Ik ga op de middelbare school ook woordjes online oefenen."', 'antwoorden.missie2.v5_middelbaar_online') +
+        renderChart('Hoe leer jij woordjes het liefst?', telVaste(groepen, 'antwoorden.missie2.v6_leervorm', LEERVORM_OPTIES), 'paars');
     }
 
     function renderMissie3Sectie(groepen) {
@@ -343,14 +398,8 @@
         renderChart('Bij welke vakken denken jullie uitlegvideo\'s te gaan gebruiken?', telMeerkeuze(groepen, 'antwoorden.missie1.v2_vakken', VAKKEN), 'blauw'),
         renderOpenVragen('Wat is het grootste voordeel van uitlegvideo\'s?', groepen, 'antwoorden.missie1.v3_voordeel'),
 
-        `<div class="missie-sectie-kop paars">Missie 2 · Online oefenwebsites</div>`,
-        renderChart('Welke oefenwebsites zijn bekeken?', telMeerkeuze(groepen, 'antwoorden.missie2.bekeken_sites', WEBSITES), 'paars'),
-        renderChart('Waar letten jullie op bij een goede oefenwebsite?', telMeerkeuze(groepen, 'antwoorden.missie2.v4_criteria', CRITERIA), 'paars'),
-        renderChart('Stelling: "Ik vind het belangrijk dat een oefenwebsite er mooi en overzichtelijk uitziet."', telEnkelkeuze(groepen, 'antwoorden.missie2.v5_stelling', STELLING), 'paars'),
-        renderChart('Welke website ga je volgend schooljaar het vaakst gebruiken?', telEnkelkeuze(groepen, 'antwoorden.missie2.v7_volgend_jaar', WEBSITES), 'paars'),
-        renderOpenVragen('Wat vonden jullie het fijnst?', groepen, 'antwoorden.missie2.v2_fijnst'),
-        renderOpenVragen('Wat vonden jullie minder fijn?', groepen, 'antwoorden.missie2.v3_minst_fijn'),
-        renderOpenVragen('Kennen jullie nog andere leerwebsites?', groepen, 'antwoorden.missie2.v6_andere_sites'),
+        `<div class="missie-sectie-kop paars">Missie 2 · Woordjes leren</div>`,
+        renderMissie2Sectie(groepen),
 
         (missie3Inhoud ? `<div class="missie-sectie-kop oranje">Missie 3 · Jay I</div>` + missie3Inhoud : ''),
       ].join('');
