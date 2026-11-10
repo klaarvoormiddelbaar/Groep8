@@ -118,26 +118,14 @@ const QUIZZES = {
     },
     {
       type: 'multiple_choice',
-      vraag: 'Wat doe je in Missie 2, "Ik wil extra oefenen"?',
+      vraag: 'Je beantwoordt een woord fout in Missie 2. Wat gebeurt er?',
       opties: [
-        'Je maakt een weekplanning voor thuis',
-        'Je onderzoekt vier oefenwebsites en vergelijkt ze',
-        'Je bekijkt een film over de middelbare school',
-        'Je stelt vragen aan je mentor'
+        'Het woord komt later in de toets terug',
+        'Het woord wordt overgeslagen',
+        'Je moet de hele toets opnieuw beginnen',
+        'Je krijgt een punt minder voor de volgende woorden'
       ],
-      goed_index: 1,
-      tijdslimiet_seconden: 20
-    },
-    {
-      type: 'multiple_choice',
-      vraag: 'Wat is GEEN kenmerk waar je op kunt letten bij een goede oefenwebsite?',
-      opties: [
-        'Duidelijke uitleg',
-        'Direct feedback op je antwoorden',
-        'De website moet betaald zijn',
-        'Overzichtelijke website'
-      ],
-      goed_index: 2,
+      goed_index: 0,
       tijdslimiet_seconden: 20
     },
     {
