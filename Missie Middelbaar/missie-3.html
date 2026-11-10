@@ -412,6 +412,9 @@
     }
     .quiz-opt:hover:not(:disabled) { background: rgba(78,142,243,.18); border-color: rgba(78,142,243,.40); transform: translateX(3px); }
     .quiz-opt:disabled { cursor: default; }
+    .quiz-stop { margin-top: 12px; align-self: flex-start; font-family: inherit; font-size: 13px; font-weight: 700; color: var(--muted, #6d747a); background: none;
+      border: 1.5px solid var(--border, #eceeee); border-radius: 9999px; padding: 6px 14px; cursor: pointer; transition: border-color .15s, color .15s; }
+    .quiz-stop:hover { border-color: #ef4444; color: #b91c1c; }
     .quiz-opt.correct { background: rgba(16,163,127,.12); border-color: #10a37f; color: #0a6b52; }
     .quiz-opt.wrong   { background: rgba(239,68,68,.08);  border-color: #ef4444; color: #b91c1c; }
 
@@ -1445,12 +1448,23 @@
       vorigeIndices = new Set(gekozen);
       return gekozen.map(i => vragenBank[i]);
     }
+    /* Uit de quiz stappen: knop "Stop de quiz", of typen (stop, eruit, ik wil uit de quiz ...). Oude antwoordknoppen worden uitgezet. */
+    const QUIZ_STOP_ZIN = /\b(stop|stoppen|stopt|eruit|er uit|uit de quiz|uit de oefen|niet meer|geen zin|klaar met|afsluiten|afbreken|verlaten|ophouden|quit|exit)\b/i;
+    function stopQuiz(met_bericht = true) {
+      const wasBezig = quizMode;
+      quizMode = false; quizStep = 0; quizScore = 0; fouteOnderwerpen = [];
+      document.querySelectorAll('.quiz-opt').forEach(b => { b.disabled = true; b.onclick = null; });
+      document.querySelectorAll('.quiz-stop').forEach(b => b.remove());
+      if (wasBezig && met_bericht) typeResponse('Oké, we stoppen met de quiz. Wil je later weer oefenen? Klik dan op <strong>Oefenvragen</strong>.', 700);
+    }
     function buildQuizMsg(i) {
       const v = activeVragen[i];
       const opties = v.opties.map((o,idx) => `<button class="quiz-opt" onclick="beantwoordQuiz(${i},${idx},this)">${String.fromCharCode(65+idx)}) ${o}</button>`).join('');
-      return `<strong>Vraag ${i+1} van 5</strong><br><br>${v.vraag}<div class="quiz-options">${opties}</div>`;
+      return `<strong>Vraag ${i+1} van 5</strong><br><br>${v.vraag}<div class="quiz-options">${opties}</div><button type="button" class="quiz-stop" onclick="stopQuiz()">Stop de quiz</button>`;
     }
     function beantwoordQuiz(vraagIdx, antwoordIdx, clickedBtn) {
+      if (!quizMode) return;
+      document.querySelectorAll('.quiz-stop').forEach(b => b.remove());      // alleen bij de vraag waar je mee bezig bent
       const v = activeVragen[vraagIdx];
       const goed = antwoordIdx === v.goed;
       const container = clickedBtn.closest('.quiz-options');
@@ -1462,12 +1476,14 @@
       if (goed) quizScore++; else fouteOnderwerpen.push(v.onderwerp);
       const fb = goed ? `Goed! ${v.uitleg}` : `Niet helemaal. Het goede antwoord was: <strong>${String.fromCharCode(65+v.goed)}) ${v.opties[v.goed]}</strong><br><br>${v.uitleg}`;
       setTimeout(() => {
+        if (!quizMode) return;
         addMsg(fb, false, false, true);
         quizStep++;
         if (quizStep < 5) {
-          setTimeout(() => typeResponse(buildQuizMsg(quizStep), 900, true), 500);
+          setTimeout(() => { if (quizMode) typeResponse(buildQuizMsg(quizStep), 900, true); }, 500);
         } else {
           setTimeout(() => {
+            if (!quizMode) return;
             if (quizScore >= 4) {
               savedQuizScore = quizScore;
               autoCheck(5);
@@ -1487,7 +1503,7 @@
     const samenvattingBullets = `<strong>Samenvatting – Het ontstaan van de Tweede Wereldoorlog</strong><br><br>• Na de Eerste Wereldoorlog kreeg Duitsland de schuld van de oorlog.<br>• In het Verdrag van Versailles (1919) moest Duitsland schadevergoeding betalen, gebieden afstaan en het leger verkleinen.<br>• Dit leidde tot armoede, werkloosheid en ontevredenheid.<br>• In 1933 kwam Adolf Hitler aan de macht en maakte van Duitsland een dictatuur.<br>• Hitler hield zich niet aan het Verdrag van Versailles en bewapende Duitsland opnieuw.<br>• Hij wilde meer lebensraum en bezette Oostenrijk en delen van Tsjechoslowakije.<br>• Op 1 september 1939 viel Duitsland Polen binnen.<br>• Groot-Brittannië en Frankrijk verklaarden Duitsland de oorlog: de Tweede Wereldoorlog begon.<br>• Op 10 mei 1940 viel Duitsland ook Nederland binnen.<br>• De oorlog duurde tot 1945 en kostte meer dan 60 miljoen mensen het leven.`;
 
     function geefSamenvatting() {
-      quizMode = false; quizStep = 0;
+      stopQuiz(false);
       telVraag();
       wachtOpSamenvattingKeuze = true;
       const html = `Hoe wil je de samenvatting?<div class="sam-keuze"><button class="sam-btn" onclick="kiesSamenvatting('verhaal',this)"><div class="sam-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="10" x2="20" y2="10"/><line x1="4" y1="14" x2="17" y2="14"/><line x1="4" y1="18" x2="14" y2="18"/></svg></div><div class="sam-label">Verhaaltje</div><div class="sam-sub">in lopende zinnen</div></button><button class="sam-btn" onclick="kiesSamenvatting('bullets',this)"><div class="sam-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4.5" cy="6" r="1.5" fill="currentColor" stroke="none"/><circle cx="4.5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="4.5" cy="18" r="1.5" fill="currentColor" stroke="none"/></svg></div><div class="sam-label">Bulletpoints</div><div class="sam-sub">punten op een rij</div></button></div>`;
@@ -1501,14 +1517,14 @@
       typeResponse(keuze === 'bullets' ? samenvattingBullets : samenvattingVerhaal, 1200);
     }
     function geefTijdlijn() {
-      quizMode = false; quizStep = 0;
+      stopQuiz(false);
       telVraag();
       autoCheck(3);
       const thumb = `<div class="chat-thumb" onclick="openTijdlijn()"><img src="/Missie Middelbaar/Jay AI/Tijdlijn.png" alt="Tijdlijn WO2"><div class="chat-thumb-badge"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Vergroten</div></div>`;
       typeResponse(`Hier is de tijdlijn van <strong>het ontstaan van de Tweede Wereldoorlog</strong>.<br><br>${thumb}`, 900, true);
     }
     function startOefenronde() {
-      quizMode = false; quizStep = 0; quizScore = 0; fouteOnderwerpen = [];
+      stopQuiz(false);
       telVraag();
       autoCheck(4);
       activeVragen = selecteerVragen();
@@ -1604,7 +1620,14 @@
         wachtOpSamenvattingKeuze = false;
         document.querySelectorAll('.sam-btn').forEach(b => b.disabled = true);
       }
-      if (quizMode) { typeResponse(`Je bent nog in de quiz. Klik op een antwoordknop om verder te gaan.`, 700); return; }
+      if (quizMode) {
+        const q = tekst.toLowerCase();
+        if (QUIZ_STOP_ZIN.test(q)) { stopQuiz(); return; }                                                    // "stop", "ik wil eruit", "ik wil uit de quiz" ...
+        if (/samenvatten|samenvatting|vat samen|overzicht|hoofdpunten/.test(q)) { geefSamenvatting(); return; }   // vraagt om iets anders: de quiz stopt, dat wordt gedaan
+        if (/tijdlijn/.test(q)) { geefTijdlijn(); return; }
+        typeResponse(`Je bent bezig met de quiz. Klik op een antwoord om verder te gaan, of klik op <strong>Stop de quiz</strong> (of typ "stop") als je wilt stoppen.`, 700);
+        return;
+      }
       const l = tekst.toLowerCase();
       if (/samenvatten|samenvatting|vat samen|overzicht|hoofdpunten/.test(l)) { geefSamenvatting(); return; }
       if (/oefenvragen|oefenvraag|maak vragen|geef vragen|toets mij|test mij|overhoor/.test(l)) { startOefenronde(); return; }
