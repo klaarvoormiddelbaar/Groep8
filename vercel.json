@@ -81,9 +81,9 @@
     { "source": "/poll/:nummer", "destination": "/Live poll/join.html" },
     { "source": "/woordwolk/:nummer", "destination": "/Wordcloud/index.html" },
     { "source": "/planeten-planner",      "destination": "/Planeten Planner/uitleg.html" },
-    { "source": "/planeten-planner/spel", "destination": "/Planeten Planner/index.html" },
+    { "source": "/planeten-planner/spel", "destination": "/Planeten Planner v2/index.html" },
     { "source": "/pp",                    "destination": "/Planeten Planner/uitleg.html" },
-    { "source": "/pp/spel",               "destination": "/Planeten Planner/index.html" },
+    { "source": "/pp/spel",               "destination": "/Planeten Planner v2/index.html" },
     { "source": "/spaans/", "destination": "/Spaans/index.html" },
     { "source": "/spaans/:path*", "destination": "/Spaans/:path*" },
     { "source": "/portugees", "destination": "/Portugees/index.html" }
