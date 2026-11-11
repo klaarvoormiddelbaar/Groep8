@@ -1,0 +1,282 @@
+/* Stap-voor-stap uitleg ('rondleiding'), zelfde patroon als bij Missie
+   Middelbaar: een spotlight die de rest van het scherm verduistert, plus een
+   kaartje met een pijl dat naar het besproken deel van het speelveld wijst.
+   Hier in de eigen glazen ruimtestijl van Planeten Planner (KvM-merkkleuren,
+   Inria Sans) i.p.v. Missie Middelbaar's witte kaart. */
+
+.tut-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tut-overlay.tut-visible {
+  opacity: 1;
+}
+
+.tut-spotlight {
+  position: fixed;
+  border-radius: 16px;
+  box-shadow: 0 0 0 9999px rgba(3, 5, 12, 0.72);
+  border: 2px solid rgba(114, 168, 249, 0.7);
+  transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+  pointer-events: none;
+}
+
+/* Eén gedeelde dimlaag voor de gelijktijdige rondleiding (meerdere kaartjes
+   tegelijk in beeld): de gaten worden geponst via clip-path (zie
+   buildHoleyClipPath in tutorial.js) i.p.v. losse box-shadow-cutouts per
+   spotlight, die elkaars gat anders juist weer zouden verduisteren. */
+.tut-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 12, 0.72);
+  pointer-events: none;
+  transition: clip-path 0.25s ease;
+}
+
+/* Alleen de rand van een uitgelicht gebied bij de gelijktijdige rondleiding
+   (het gat zelf komt al van .tut-backdrop hierboven). */
+.tut-spotlight-outline {
+  position: fixed;
+  border-radius: 16px;
+  border: 2px solid rgba(114, 168, 249, 0.7);
+  transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+  pointer-events: none;
+}
+
+.tut-overlay.tut-variant-warning .tut-spotlight-outline {
+  border-color: rgba(245, 158, 11, 0.75);
+}
+
+.tut-overlay.tut-variant-danger .tut-spotlight-outline {
+  border-color: rgba(239, 68, 68, 0.75);
+}
+
+.tut-card {
+  position: fixed;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  background: rgba(15, 20, 34, 0.97);
+  border: 1.5px solid rgba(148, 163, 184, 0.24);
+  border-radius: 18px;
+  padding: 18px 20px 16px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(114, 168, 249, 0.14);
+  font-family: 'Inria Sans', sans-serif;
+  color: #f1f5f9;
+  pointer-events: auto;
+  transition: top 0.25s ease, left 0.25s ease;
+}
+
+.tut-card::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: inherit;
+  transform: rotate(45deg);
+}
+
+.tut-card.tut-arrow-top::before {
+  top: -9px;
+  left: var(--tut-ax, 24px);
+  border-left: 1.5px solid rgba(148, 163, 184, 0.24);
+  border-top: 1.5px solid rgba(148, 163, 184, 0.24);
+}
+
+.tut-card.tut-arrow-bottom::before {
+  bottom: -9px;
+  left: var(--tut-ax, 24px);
+  border-right: 1.5px solid rgba(148, 163, 184, 0.24);
+  border-bottom: 1.5px solid rgba(148, 163, 184, 0.24);
+}
+
+.tut-close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(148, 163, 184, 0.14);
+  color: #a3abc0;
+  font-size: 13px;
+  font-family: 'Inria Sans', sans-serif;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tut-close:hover {
+  background: rgba(148, 163, 184, 0.24);
+  color: #f1f5f9;
+}
+
+.tut-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #72a8f9;
+  margin-bottom: 8px;
+  padding-right: 20px;
+}
+
+.tut-body {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #f1f5f9;
+  margin-bottom: 16px;
+}
+
+/* Niet-wegklikbaar: geen kruisje, geen knoppen — deze kaart gaat pas dicht als
+   de code zelf close() aanroept (bijv. zodra de laadruimte leeg is), niet op
+   verzoek van de speler. De tekst zelf legt uit wat er moet gebeuren. */
+.tut-card.tut-non-dismissible .tut-close,
+.tut-card.tut-non-dismissible .tut-footer {
+  display: none;
+}
+
+.tut-card.tut-non-dismissible .tut-body {
+  margin-bottom: 0;
+}
+
+.tut-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tut-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.tut-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(148, 163, 184, 0.3);
+  transition: width 0.2s ease, background 0.2s ease;
+}
+
+.tut-dot.tut-dot-active {
+  background: #72a8f9;
+  width: 16px;
+  border-radius: 4px;
+}
+
+/* Warning-variant: voor momenten die om extra aandacht vragen (bijv. 'je
+   laadruimte zit vol'), amber i.p.v. het rustige blauw van gewone uitleg. De
+   knop blijft bewust groen — dat is overal in het spel de kleur van 'doorgaan'. */
+.tut-overlay.tut-variant-warning .tut-spotlight {
+  border-color: rgba(245, 158, 11, 0.75);
+}
+
+.tut-overlay.tut-variant-warning .tut-card {
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(245, 158, 11, 0.18);
+}
+
+.tut-overlay.tut-variant-warning .tut-label {
+  color: #f59e0b;
+}
+
+/* Danger-variant: voor momenten die een speler echt iets kosten (bijv. een leven
+   bij een vastgelopen planning) — rood, nog dwingender dan de amber warning. */
+.tut-overlay.tut-variant-danger .tut-spotlight {
+  border-color: rgba(239, 68, 68, 0.75);
+}
+
+.tut-overlay.tut-variant-danger .tut-card {
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(239, 68, 68, 0.2);
+}
+
+.tut-overlay.tut-variant-danger .tut-label {
+  color: #ef4444;
+}
+
+.tut-overlay.tut-variant-danger .tut-dot.tut-dot-active {
+  background: #ef4444;
+}
+
+.tut-overlay.tut-variant-warning .tut-dot.tut-dot-active {
+  background: #f59e0b;
+}
+
+.tut-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.tut-nav button {
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-family: 'Inria Sans', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.tut-prev {
+  background: transparent;
+  color: #a3abc0;
+}
+
+.tut-prev:hover {
+  color: #f1f5f9;
+}
+
+.tut-prev:disabled {
+  visibility: hidden;
+}
+
+.tut-next {
+  background: #10a37f;
+  color: #ffffff;
+}
+
+.tut-next:hover {
+  background: #0d8a6b;
+}
+
+@media (max-width: 520px) {
+  .tut-card {
+    width: calc(100vw - 32px);
+  }
+}
+
+/* Klein power-upicoon naast de titel van een uitlegkaartje. */
+.tut-label .tut-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* Geen pijltje als het kaartje niet naar iets wijst (bijv. de power-up-uitleg): anders
+   zit het driehoekje als een zwarte vlek linksboven in de kaart. */
+.tut-card:not(.tut-arrow-top):not(.tut-arrow-bottom)::before {
+  display: none;
+}
+
+/* Als een stap meerdere gebieden uitlicht (step.extraRegions) neemt .tut-backdrop het dimmen over. */
+.tut-spotlight.tut-spotlight-nodim {
+  box-shadow: none;
+}
+
+/* Alle kaartjes met knoppen (Vorige/Volgende) zijn even hoog (zie fitCardHeight in tutorial.js), en de knoppenrij
+   zit altijd onderaan, zodat 'Volgende' op elke stap op dezelfde plek staat. */
+.tut-card:not(.tut-non-dismissible) {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+.tut-card:not(.tut-non-dismissible) .tut-body {
+  flex: 1 0 auto;
+}

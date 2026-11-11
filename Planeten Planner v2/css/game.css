@@ -1,0 +1,33 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #05070d;
+  font-family: 'Inria Sans', sans-serif;
+  overflow: hidden; /* geen scrollbalken naast het spel op kleine schermen */
+  padding: 16px;
+}
+
+#game-canvas {
+  display: block;
+  background: #0b1220;
+  border: 2px solid #1e293b;
+  border-radius: 8px;
+  max-width: 100%;
+  /* laat ruimte over voor browser-UI op kleinere Chromebook/laptopschermen */
+  max-height: calc(100vh - 32px);
+  width: auto;
+  height: auto;
+  touch-action: none; /* voorkomt scroll-gestures op touchschermen tijdens spelen */
+}
