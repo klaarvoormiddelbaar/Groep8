@@ -53,7 +53,7 @@ export default async function contact(request) {
   const telefoon = clean(body.telefoon, 50);
   const bericht = clean(body.bericht, 4000);
 
-  if (!naam || !school || !EMAIL_PATTERN.test(email) || !bericht) {
+  if (!naam || !school || !EMAIL_PATTERN.test(email)) {
     return json({ success: false, message: 'Controleer de verplichte velden.' }, 400);
   }
 
