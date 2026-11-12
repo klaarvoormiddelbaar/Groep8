@@ -11,6 +11,8 @@
     }
   ],
   "redirects": [
+    { "source": "/ouderportaal/", "destination": "/ouderportaal", "permanent": false },
+    { "source": "/ouderportaal/index.html", "destination": "/ouderportaal", "permanent": false },
     { "source": "/Dashboard",              "destination": "/Dashboard/",      "permanent": false },
     { "source": "/proef",                  "destination": "/proef/",          "permanent": false },
     { "source": "/proeflicentie",          "destination": "/proef/",          "permanent": false },
@@ -23,6 +25,8 @@
     { "source": "/pp/",                    "destination": "/pp",              "permanent": false }
   ],
   "rewrites": [
+    { "source": "/ouderportaal", "destination": "/Website pagina's/ouderportaal/index.html" },
+    { "source": "/ouderportaal/:path*", "destination": "/Website pagina's/ouderportaal/:path*" },
     { "source": "/",                "destination": "/Inlogpagina/index.html" },
     { "source": "/Dashboard/",      "destination": "/Dashboard/dashboard.html" },
     { "source": "/proef/",          "destination": "/Proeflicentie/dashboard.html" },
