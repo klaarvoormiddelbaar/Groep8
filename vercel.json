@@ -18,7 +18,9 @@
     { "source": "/les7/open-boek-quiz",    "destination": "/les7/quiz",       "permanent": false },
     { "source": "/les7/docent/open-boek-quiz", "destination": "/les7/docent/quiz", "permanent": false },
     { "source": "/planeten-planner",       "destination": "/pp",              "permanent": false },
-    { "source": "/planeten-planner/spel",  "destination": "/pp",              "permanent": false }
+    { "source": "/planeten-planner/spel",  "destination": "/pp",              "permanent": false },
+    { "source": "/planeten-planner/",      "destination": "/pp",              "permanent": false },
+    { "source": "/pp/",                    "destination": "/pp",              "permanent": false }
   ],
   "rewrites": [
     { "source": "/",                "destination": "/Inlogpagina/index.html" },
