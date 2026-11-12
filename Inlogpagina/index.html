@@ -441,6 +441,10 @@
 
     .btn-label { display: flex; align-items: center; gap: 10px; }
 
+    .parent-portal-prompt { margin: 22px 0 0; text-align: center; color: var(--muted); font-size: 15px; line-height: 1.5; }
+    .parent-portal-prompt a { color: var(--muted); font-weight: 700; text-decoration: underline; }
+    .parent-portal-prompt a:hover, .parent-portal-prompt a:focus-visible { text-decoration: underline; }
+
     /* Loading state */
     .btn-inloggen.is-loading .btn-spinner { display: block; }
     .btn-inloggen.is-loading .btn-label  { display: none; }
@@ -600,7 +604,7 @@
         <img src="/Inlogpagina/KvM logo no background.png" alt="Klaar voor Middelbaar" class="card-logo">
 
         <div id="loginView">
-        <h1 class="card-title card-title--login">Inloggen<span class="login-suffix"> voor docenten</span></h1>
+        <h1 class="card-title card-title--login">Inloggen<span class="login-suffix"> voor leerkrachten</span></h1>
 
         <form id="loginForm" novalidate>
 
@@ -694,6 +698,8 @@
               </svg>
             </span>
           </button>
+
+          <p class="parent-portal-prompt">Ben je ouder/verzorger? Ga naar het <a href="https://groep8.klaarvoormiddelbaar.nl/ouderportaal" target="_blank" rel="noopener">ouderportaal</a>.</p>
 
         </form>
         </div><!-- /loginView -->

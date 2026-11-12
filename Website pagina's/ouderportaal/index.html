@@ -31,7 +31,7 @@
     .code-form input::placeholder{color:rgba(109,116,122,.45)}
     .primary{width:100%;height:56px;border-radius:9999px;background:#10a37f;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1);font-size:20px}
     .primary:hover{background:#10a37f;box-shadow:0 14px 20px -3px rgba(16,163,127,.3),0 4px 6px -4px rgba(0,0,0,.1)}
-    .login-card>p{font-size:15px;line-height:1.55;color:#6d747a;text-align:left;max-width:none;margin:24px 0 0}.demo-note{font-size:13px!important;text-align:center!important}.error{text-align:left;color:#b91c1c;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.22);border-radius:14px;padding:12px 14px;line-height:1.45}
+    .login-card>p{font-size:15px;line-height:1.55;color:#6d747a;text-align:left;max-width:none;margin:24px 0 0}.demo-note{font-size:13px!important;text-align:center!important}.error{text-align:left;color:#b91c1c;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.22);border-radius:14px;padding:12px 14px;line-height:1.45}.teacher-login-prompt{text-align:center!important;color:#68747d!important;margin:22px 0 0!important}.teacher-login-prompt a{color:#68747d;font-weight:700;text-decoration:underline}
     .app-shell{position:relative;z-index:1}.topbar+main{position:relative;z-index:1}
     /* Alleen de inlogachtergrond is viewport-breed; de portalinhoud blijft gecentreerd. */
     main.page{width:auto;max-width:1184px;margin:0 auto;padding:0 32px}
@@ -52,7 +52,7 @@
         <h1>Ouderportaal</h1>
         <p>Ontdek wat jouw kind heeft geleerd en praat er thuis samen over door.</p>
         <form class="code-form" id="loginForm"><label class="hidden" for="accessCode">Toegangscode</label><input id="accessCode" placeholder="JOUW TOEGANGSCODE" autocomplete="off" required><button class="primary" type="submit">Naar mijn klas</button></form>
-        <p class="demo-note">Voor deze demo is de toegangscode <strong>8A-KVM</strong>.</p><p id="loginError" class="error hidden" role="alert">Deze code herken ik niet. Controleer de code en probeer opnieuw.</p>
+        <p class="demo-note">Voor deze demo is de toegangscode <strong>8A-KVM</strong>.</p><p class="teacher-login-prompt">Ben je leerkracht? Ga naar de <a href="https://groep8.klaarvoormiddelbaar.nl" target="_blank" rel="noopener">leeromgeving</a>.</p><p id="loginError" class="error hidden" role="alert">Deze code herken ik niet. Controleer de code en probeer opnieuw.</p>
       </div>
     </section>
     <section id="app" class="app-shell hidden">
