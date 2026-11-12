@@ -70,7 +70,9 @@ const playAreaHeight = LOGICAL_HEIGHT - WEEKPLANNING_PANEL_HEIGHT;
 // kaart-onderkant) zodat lay-outwijzigingen aan één kant nooit de knop laten
 // losraken van de kaart.
 const START_CARD = { width: 440, height: 400, x: LOGICAL_WIDTH / 2 - 220, y: 60 };
-const START_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: START_CARD.y + START_CARD.height - 80, width: 200, height: 56 };
+const START_BUTTON = { x: START_CARD.x + 20, y: START_CARD.y + START_CARD.height - 80, width: 210, height: 56 };
+// De oefenronde is op het startscherm altijd te kiezen, ook als je hem al eens gespeeld hebt.
+const START_PRACTICE_BUTTON = { x: START_CARD.x + 20 + 210 + 12, y: START_CARD.y + START_CARD.height - 80, width: 178, height: 56 };
 
 const PAUSE_CARD = { width: 320, height: 170, x: LOGICAL_WIDTH / 2 - 160, y: LOGICAL_HEIGHT / 2 - 95 };
 // Keuzemenu achter het vraagteken-knopje: "Nog een keer de oefenronde spelen?" met Nee / Ja.
@@ -848,7 +850,7 @@ function hitTest(px, py, rect) {
 function clickableRectsNow() {
   const rects = [];
   if (gameMode === 'start') {
-    rects.push(START_BUTTON);
+    rects.push(START_BUTTON, START_PRACTICE_BUTTON);
     if (extremeUnlocked()) rects.push(EXTREME_BUTTON);
   } else if (gameMode === 'gameOver') {
     rects.push(RESTART_BUTTON);
@@ -895,6 +897,10 @@ canvas.addEventListener('click', (event) => {
 
   if ((gameMode === 'start' || gameMode === 'gameOver') && extremeUnlocked() && hitTest(px, py, EXTREME_BUTTON)) {
     startExtremeGame();
+    return;
+  }
+  if (gameMode === 'start' && hitTest(px, py, START_PRACTICE_BUTTON)) {
+    startPractice();
     return;
   }
   if (gameMode === 'start' && hitTest(px, py, START_BUTTON) && !isPracticeDone()) {
@@ -2391,6 +2397,7 @@ function renderStartScreen() {
   }
 
   drawButton(START_BUTTON, 'Start');
+  drawGhostButton(START_PRACTICE_BUTTON, 'Oefenronde', { font: 'bold 16px \'Inria Sans\', sans-serif', textDy: 6 });
   if (extremeUnlocked()) drawExtremeButton();
 }
 

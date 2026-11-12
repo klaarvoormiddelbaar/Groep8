@@ -16,7 +16,9 @@
     { "source": "/proeflicentie",          "destination": "/proef/",          "permanent": false },
     { "source": "/spaans",                 "destination": "/spaans/",         "permanent": false },
     { "source": "/les7/open-boek-quiz",    "destination": "/les7/quiz",       "permanent": false },
-    { "source": "/les7/docent/open-boek-quiz", "destination": "/les7/docent/quiz", "permanent": false }
+    { "source": "/les7/docent/open-boek-quiz", "destination": "/les7/docent/quiz", "permanent": false },
+    { "source": "/planeten-planner",       "destination": "/pp",              "permanent": false },
+    { "source": "/planeten-planner/spel",  "destination": "/pp",              "permanent": false }
   ],
   "rewrites": [
     { "source": "/",                "destination": "/Inlogpagina/index.html" },
@@ -80,9 +82,7 @@
     { "source": "/voorspel/:nummer", "destination": "/Voorspel de Klas/index.html" },
     { "source": "/poll/:nummer", "destination": "/Live poll/join.html" },
     { "source": "/woordwolk/:nummer", "destination": "/Wordcloud/index.html" },
-    { "source": "/planeten-planner",      "destination": "/Planeten Planner v2/index.html" },
     { "source": "/planeten-planner/docent/uitleg", "destination": "/Planeten Planner/uitleg.html" },
-    { "source": "/planeten-planner/spel", "destination": "/Planeten Planner v2/index.html" },
     { "source": "/pp",                    "destination": "/Planeten Planner v2/index.html" },
     { "source": "/pp/spel",               "destination": "/Planeten Planner v2/index.html" },
     { "source": "/spaans/", "destination": "/Spaans/index.html" },
