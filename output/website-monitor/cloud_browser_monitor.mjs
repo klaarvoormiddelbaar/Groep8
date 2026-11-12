@@ -6,7 +6,7 @@ if (!email || !password) throw new Error('TEST_ACCOUNT_EMAIL of TEST_ACCOUNT_PAS
 
 const base = 'https://groep8.klaarvoormiddelbaar.nl';
 const pages = [
-  '/les1/docent/poll/uitleg', '/les1/docent/quiz/uitleg', '/planeten-planner',
+  '/les1/docent/poll/uitleg', '/les1/docent/quiz/uitleg', '/planeten-planner/docent/uitleg',
   '/les3/docent/missie/uitleg', '/les3/docent/quiz/uitleg',
   '/les5/docent/woordwolk/uitleg', '/les5/docent/voorspel/uitleg', '/les5/docent/quiz/uitleg',
   '/les7/docent/formele-mail/uitleg', '/les7/docent/quiz/uitleg',
