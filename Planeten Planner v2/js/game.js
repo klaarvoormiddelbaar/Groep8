@@ -70,9 +70,7 @@ const playAreaHeight = LOGICAL_HEIGHT - WEEKPLANNING_PANEL_HEIGHT;
 // kaart-onderkant) zodat lay-outwijzigingen aan één kant nooit de knop laten
 // losraken van de kaart.
 const START_CARD = { width: 440, height: 400, x: LOGICAL_WIDTH / 2 - 220, y: 60 };
-const START_BUTTON = { x: START_CARD.x + 20, y: START_CARD.y + START_CARD.height - 80, width: 210, height: 56 };
-// De oefenronde is op het startscherm altijd te kiezen, ook als je hem al eens gespeeld hebt.
-const START_PRACTICE_BUTTON = { x: START_CARD.x + 20 + 210 + 12, y: START_CARD.y + START_CARD.height - 80, width: 178, height: 56 };
+const START_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: START_CARD.y + START_CARD.height - 80, width: 200, height: 56 };
 
 const PAUSE_CARD = { width: 320, height: 170, x: LOGICAL_WIDTH / 2 - 160, y: LOGICAL_HEIGHT / 2 - 95 };
 // Keuzemenu achter het vraagteken-knopje: "Nog een keer de oefenronde spelen?" met Nee / Ja.
@@ -850,7 +848,7 @@ function hitTest(px, py, rect) {
 function clickableRectsNow() {
   const rects = [];
   if (gameMode === 'start') {
-    rects.push(START_BUTTON, START_PRACTICE_BUTTON);
+    rects.push(START_BUTTON);
     if (extremeUnlocked()) rects.push(EXTREME_BUTTON);
   } else if (gameMode === 'gameOver') {
     rects.push(RESTART_BUTTON);
@@ -899,12 +897,8 @@ canvas.addEventListener('click', (event) => {
     startExtremeGame();
     return;
   }
-  if (gameMode === 'start' && hitTest(px, py, START_PRACTICE_BUTTON)) {
-    startPractice();
-    return;
-  }
-  if (gameMode === 'start' && hitTest(px, py, START_BUTTON) && !isPracticeDone()) {
-    gameMode = 'practiceChoice'; // eerste keer: oefenronde aanbieden
+  if (gameMode === 'start' && hitTest(px, py, START_BUTTON)) {
+    gameMode = 'practiceChoice'; // elke keer eerst de keuze: oefenronde spelen of 'niet de eerste keer'
     return;
   }
   if (gameMode === 'practiceChoice') {
@@ -1045,7 +1039,7 @@ const PRACTICE_DAYS = 3;
 const PRACTICE_FORCED = new URLSearchParams(window.location.search).has('oefenen');
 
 const PRACTICE_PLAY_BUTTON = { x: LOGICAL_WIDTH / 2 - 110, y: 275, width: 220, height: 56 };
-const PRACTICE_SKIP_LINK = { x: LOGICAL_WIDTH / 2 - 70, y: 350, width: 140, height: 28 };
+const PRACTICE_SKIP_LINK = { x: LOGICAL_WIDTH / 2 - 90, y: 350, width: 180, height: 28 };
 const PRACTICE_SKIP_BUTTON = { x: 20, y: 66, width: 92, height: 24 };
 const PRACTICE_DONE_CARD = { width: 400, height: 200, x: LOGICAL_WIDTH / 2 - 200, y: 110 };
 const PRACTICE_DONE_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: PRACTICE_DONE_CARD.y + PRACTICE_DONE_CARD.height - 76, width: 200, height: 56 };
@@ -1805,7 +1799,7 @@ function renderPracticeChoice() {
   ctx.fillText('dan snap je zo hoe het werkt (ongeveer 1 minuut).', centerX, rocketTop + rocketHeight + 84);
 
   drawButton(PRACTICE_PLAY_BUTTON, 'Oefenronde spelen');
-  drawGhostButton(PRACTICE_SKIP_LINK, 'Overslaan');
+  drawGhostButton(PRACTICE_SKIP_LINK, 'Niet de eerste keer');
 }
 
 // ── Bereikbaarheid ──────────────────────────────────────────────────────────────
@@ -2397,7 +2391,6 @@ function renderStartScreen() {
   }
 
   drawButton(START_BUTTON, 'Start');
-  drawGhostButton(START_PRACTICE_BUTTON, 'Oefenronde', { font: 'bold 16px \'Inria Sans\', sans-serif', textDy: 6 });
   if (extremeUnlocked()) drawExtremeButton();
 }
 
