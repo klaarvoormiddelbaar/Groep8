@@ -73,6 +73,11 @@ const START_CARD = { width: 440, height: 400, x: LOGICAL_WIDTH / 2 - 220, y: 60 
 const START_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: START_CARD.y + START_CARD.height - 80, width: 200, height: 56 };
 
 const PAUSE_CARD = { width: 320, height: 170, x: LOGICAL_WIDTH / 2 - 160, y: LOGICAL_HEIGHT / 2 - 95 };
+// Keuzemenu achter het vraagteken-knopje: "Nog een keer de oefenronde spelen?" met Nee / Ja.
+const ASK_CARD = { width: 440, height: 210, x: LOGICAL_WIDTH / 2 - 220, y: 150 };
+const ASK_NO_BUTTON = { x: ASK_CARD.x + 36, y: ASK_CARD.y + ASK_CARD.height - 76, width: 170, height: 56 };
+const ASK_YES_BUTTON = { x: ASK_CARD.x + ASK_CARD.width - 36 - 170, y: ASK_CARD.y + ASK_CARD.height - 76, width: 170, height: 56 };
+let askPractice = false; // true: de pauzestand toont het keuzemenu i.p.v. 'Gepauzeerd'
 const RESUME_BUTTON = { x: LOGICAL_WIDTH / 2 - 100, y: PAUSE_CARD.y + PAUSE_CARD.height - 74, width: 200, height: 56 };
 
 const GAME_OVER_CARD = { width: 420, height: 380, x: LOGICAL_WIDTH / 2 - 210, y: LOGICAL_HEIGHT / 2 - 190 };
@@ -816,7 +821,7 @@ window.addEventListener('keydown', (event) => {
 
   if (event.key === 'Escape') {
     if (gameMode === 'playing') gameMode = 'paused';
-    else if (gameMode === 'paused') gameMode = 'playing';
+    else if (gameMode === 'paused') { askPractice = false; gameMode = 'playing'; }
     return;
   }
 
@@ -849,7 +854,8 @@ function clickableRectsNow() {
     rects.push(RESTART_BUTTON);
     if (extremeUnlocked()) rects.push(EXTREME_BUTTON);
   } else if (gameMode === 'paused') {
-    rects.push(RESUME_BUTTON, MUTE_ICON_BUTTON);
+    if (askPractice) rects.push(ASK_NO_BUTTON, ASK_YES_BUTTON);
+    else rects.push(RESUME_BUTTON, MUTE_ICON_BUTTON);
   } else if (gameMode === 'practiceChoice') {
     rects.push(PRACTICE_PLAY_BUTTON, PRACTICE_SKIP_LINK);
   } else if (gameMode === 'practice' && practice) {
@@ -915,6 +921,16 @@ canvas.addEventListener('click', (event) => {
     if (!level1Tutorial.hasBeenSeen()) level1Tutorial.open(); // legt level 1 uit, maar alleen de allereerste keer
     return;
   }
+  if (gameMode === 'paused' && askPractice) {
+    if (hitTest(px, py, ASK_YES_BUTTON)) {
+      askPractice = false;
+      startPractice();
+    } else if (hitTest(px, py, ASK_NO_BUTTON)) {
+      askPractice = false;
+      gameMode = 'playing';
+    }
+    return;
+  }
   if (gameMode === 'paused' && hitTest(px, py, RESUME_BUTTON)) {
     gameMode = 'playing';
     return;
@@ -926,7 +942,8 @@ canvas.addEventListener('click', (event) => {
     return;
   }
   if (gameMode === 'playing' && hitTest(px, py, HELP_ICON_BUTTON)) {
-    getTutorialForLevel(currentLevel).open(); // op elk moment opnieuw op te vragen, past zich aan het huidige level aan
+    askPractice = true; // vraagteken: de oefenronde nog een keer spelen? (het spel staat intussen stil)
+    gameMode = 'paused';
     return;
   }
   if (gameMode === 'playing' && isShowingLevelSummary && weekSummaryButtonRect && hitTest(px, py, weekSummaryButtonRect)) {
@@ -2273,7 +2290,7 @@ function drawButton(rect, label) {
 
 // Klein glazen "chip"-knopje voor pauze/geluid, zelfde afgeronde taal als de rest.
 // icon: optionele asset-sleutel (iOS-emoji-pack) i.p.v. Unicode-emoji in het label.
-function drawGhostButton(rect, label, { active = false, icon = null } = {}) {
+function drawGhostButton(rect, label, { active = false, icon = null, font = null, textDy = 4 } = {}) {
   drawRoundedRect(ctx, rect.x, rect.y, rect.width, rect.height, rect.height / 2, {
     fill: active ? THEME.color.accentBlueSoft : THEME.color.surface,
     stroke: active ? THEME.color.accentBlue : THEME.color.border,
@@ -2282,7 +2299,7 @@ function drawGhostButton(rect, label, { active = false, icon = null } = {}) {
   });
 
   ctx.fillStyle = active ? THEME.color.accentBlue : THEME.color.textMuted;
-  ctx.font = '11px \'Inria Sans\', sans-serif';
+  ctx.font = font || '11px \'Inria Sans\', sans-serif';
 
   const iconImage = icon ? getImage(icon) : null;
   if (iconImage) {
@@ -2295,7 +2312,7 @@ function drawGhostButton(rect, label, { active = false, icon = null } = {}) {
     ctx.fillText(label, startX + iconSize + 5, rect.y + rect.height / 2 + 4);
   } else {
     ctx.textAlign = 'center';
-    ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + 4);
+    ctx.fillText(label, rect.x + rect.width / 2, rect.y + rect.height / 2 + textDy);
   }
 }
 
@@ -2394,6 +2411,29 @@ function renderPauseOverlay() {
   ctx.fillText('Gepauzeerd', LOGICAL_WIDTH / 2, PAUSE_CARD.y + 50);
 
   drawButton(RESUME_BUTTON, 'Verder');
+}
+
+function renderPracticeAskOverlay() {
+  ctx.fillStyle = 'rgba(7, 10, 20, 0.55)';
+  ctx.fillRect(0, 0, LOGICAL_WIDTH, LOGICAL_HEIGHT);
+
+  drawRoundedRect(ctx, ASK_CARD.x, ASK_CARD.y, ASK_CARD.width, ASK_CARD.height, THEME.radius.lg, {
+    fill: THEME.color.surfaceStrong,
+    stroke: THEME.color.border,
+    strokeWidth: 1.5,
+    shadow: THEME.shadow.card
+  });
+
+  ctx.textAlign = 'center';
+  ctx.fillStyle = THEME.color.textPrimary;
+  ctx.font = 'bold 20px \'Inria Sans\', sans-serif';
+  ctx.fillText('Nog een keer de oefenronde spelen?', LOGICAL_WIDTH / 2, ASK_CARD.y + 56);
+  ctx.fillStyle = THEME.color.textMuted;
+  ctx.font = '13px \'Inria Sans\', sans-serif';
+  ctx.fillText('Je huidige spel stopt dan.', LOGICAL_WIDTH / 2, ASK_CARD.y + 84);
+
+  drawGhostButton(ASK_NO_BUTTON, 'Nee', { font: 'bold 16px \'Inria Sans\', sans-serif', textDy: 6 });
+  drawButton(ASK_YES_BUTTON, 'Ja');
 }
 
 // Kleine pil-badges met een echt icoon (i.p.v. Unicode-emoji) + tekst, gecentreerd
@@ -2677,8 +2717,8 @@ function renderHud() {
     icon: 'iconSpeaker'
   });
 
-  // Lampje: vraagt op elk moment de rondleiding (tutorial.js) opnieuw op.
-  drawGhostButton(HELP_ICON_BUTTON, '', { icon: 'iconLightbulb' });
+  // Vraagteken: biedt op elk moment de oefenronde nog een keer aan.
+  drawGhostButton(HELP_ICON_BUTTON, '?', { font: 'bold 15px \'Inria Sans\', sans-serif', textDy: 5 });
 }
 
 function renderScorePopups() {
@@ -2848,7 +2888,8 @@ function render() {
   }
 
   if (gameMode === 'paused') {
-    renderPauseOverlay();
+    if (askPractice) renderPracticeAskOverlay();
+    else renderPauseOverlay();
   }
 
   if (gameMode === 'gameOver') {
