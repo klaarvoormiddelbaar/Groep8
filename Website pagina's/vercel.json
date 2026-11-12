@@ -14,7 +14,7 @@
     { "source": "/ouderportaal/index.html", "destination": "/ouderportaal", "permanent": false }
   ],
   "rewrites": [
-    { "source": "/", "destination": "/Homepagina.html" },
+    { "source": "/", "destination": "/Homepagina-Groep8.html" },
     { "source": "/groep8", "destination": "/Homepagina-Groep8.html" },
     { "source": "/ouderportaal", "destination": "/ouderportaal/index.html" },
     { "source": "/groep8-flyer", "destination": "/Groep8-flyer.html" },
