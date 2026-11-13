@@ -58,6 +58,12 @@
   ],
   "benodigdheden": [
     {
+      "naam": "Uitlegvideo",
+      "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Les 2 - uitlegvideo.png",
+      "video": "/Afbeeldingen/Benodigdheden lessen/Uitlegvideo's/Les 2_ Planning maken met KVM-plagenda.mp4",
+      "beschrijving": "Bekijk de uitlegvideo van les 2"
+    },
+    {
       "naam": "Wisbordje",
       "afbeelding": "/Afbeeldingen/Benodigdheden lessen/Wisbordje.png",
       "beschrijving": "Met het wisbordje gaan de leerlingen kijken wat er goed en niet goed is aan de planning van Jay."
