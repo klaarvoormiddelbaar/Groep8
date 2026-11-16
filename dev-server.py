@@ -37,6 +37,7 @@ REDIRECTS = {
 # ── Rewrites: server serveert ander bestand, browser-URL blijft hetzelfde ──
 REWRITES = {
     "/":                  "/index.html",
+    "/vacature":          "/Website pagina's/documenten/Vacature-KvM-docenten-2026.pdf",
     "/Dashboard/":        "/Dashboard/dashboard.html",
     "/les1":              "/Les/index.html",
     "/les1/":             "/Les/index.html",
@@ -105,6 +106,7 @@ MIME = {
     ".woff2":"font/woff2",
     ".woff": "font/woff",
     ".ttf":  "font/ttf",
+    ".pdf":  "application/pdf",
 }
 
 

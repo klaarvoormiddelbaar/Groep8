@@ -25,6 +25,7 @@
     { "source": "/pp/",                    "destination": "/pp",              "permanent": false }
   ],
   "rewrites": [
+    { "source": "/vacature", "destination": "/Website pagina's/documenten/Vacature-KvM-docenten-2026.pdf" },
     { "source": "/ouderportaal", "destination": "/Website pagina's/ouderportaal/index.html" },
     { "source": "/ouderportaal/:path*", "destination": "/Website pagina's/ouderportaal/:path*" },
     { "source": "/",                "destination": "/Inlogpagina/index.html" },
